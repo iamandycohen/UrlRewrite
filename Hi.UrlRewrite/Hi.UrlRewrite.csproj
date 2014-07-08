@@ -1,0 +1,99 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{6AF4A433-0D10-4B1F-8517-7A1F05EF5AB5}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>Hi.UrlRewrite</RootNamespace>
+    <AssemblyName>Hi.UrlRewrite</AssemblyName>
+    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <SccProjectName>SAK</SccProjectName>
+    <SccLocalPath>SAK</SccLocalPath>
+    <SccAuxPath>SAK</SccAuxPath>
+    <SccProvider>SAK</SccProvider>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="Sitecore.Kernel">
+      <HintPath>..\Solution Files\sc.lib\Sitecore.Kernel.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Web" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Caching\CacheProvider`.cs" />
+    <Compile Include="Caching\HttpCache.cs" />
+    <Compile Include="Caching\ICacheProvider.cs" />
+    <Compile Include="Configuration.cs" />
+    <Compile Include="Constants.cs" />
+    <Compile Include="Entities\BaseAction.cs" />
+    <Compile Include="Entities\BaseRedirectAction.cs" />
+    <Compile Include="Entities\BaseStopProcessingAction.cs" />
+    <Compile Include="Entities\CheckIfInputStringType.cs" />
+    <Compile Include="Entities\Condition.cs" />
+    <Compile Include="Entities\ConditionInputType.cs" />
+    <Compile Include="Entities\InboundRule.cs" />
+    <Compile Include="Entities\LogicalGrouping.cs" />
+    <Compile Include="Entities\RedirectAction.cs" />
+    <Compile Include="Entities\RedirectType.cs" />
+    <Compile Include="Entities\RequestedUrl.cs" />
+    <Compile Include="Entities\Using.cs" />
+    <Compile Include="Extensions\ItemExtensions.cs" />
+    <Compile Include="Templates\BaseUrlRewriteItem.cs" />
+    <Compile Include="UrlRewriteHandler.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="RulesEngine.cs" />
+    <Compile Include="Templates\SimpleRedirectItem.cs" />
+    <Compile Include="UrlRewriteItemEventHandler.cs" />
+    <Compile Include="UrlRewriter.cs" />
+    <Compile Include="Templates\Action\Base\BaseActionItem.cs" />
+    <Compile Include="Templates\Action\Base\BaseRedirectActionItem.cs" />
+    <Compile Include="Templates\Action\Base\BaseStopProcessingActionItem.cs" />
+    <Compile Include="Templates\Action\RedirectItem.cs" />
+    <Compile Include="Templates\Action\RedirectType\RedirectTypeItem.cs" />
+    <Compile Include="Templates\Conditions\CheckIfInputStringTypeItem.cs" />
+    <Compile Include="Templates\Conditions\ConditionInputType.cs" />
+    <Compile Include="Templates\Conditions\ConditionItem.cs" />
+    <Compile Include="Templates\Conditions\LogicalGroupingTypeItem.cs" />
+    <Compile Include="Templates\FolderItem.cs" />
+    <Compile Include="Templates\InboundRuleItem.cs" />
+    <Compile Include="Templates\MatchUrl\RequestedUrlTypeItem.cs" />
+    <Compile Include="Templates\MatchUrl\UsingTypeItem.cs" />
+    <Compile Include="Templates\RedirectFolderItem.cs" />
+    <Compile Include="UrlRewriteProcessor.cs" />
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>
