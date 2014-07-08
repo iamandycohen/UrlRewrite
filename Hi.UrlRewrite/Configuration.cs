@@ -24,5 +24,13 @@ namespace Hi.UrlRewrite
                 return Settings.GetSetting("Hi.UrlRewrite.IgnoreUrlPrefixes", "/sitecore").Split('|');
             }
         }
+
+        public static string RewriteFolderSearchRoot
+        {
+            get
+            {
+                return Settings.GetSetting("Hi.UrlRewrite.RewriteFolderSearchRoot", "/sitecore");
+            }
+        }
     }
 }
