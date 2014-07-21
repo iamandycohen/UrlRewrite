@@ -31,7 +31,8 @@ namespace Hi.UrlRewrite
             Item[] redirectFolderItems;
             using (new SecurityDisabler())
             {
-                redirectFolderItems = db.SelectItems(string.Format(string.Format(Constants.RedirectFolderItemsQuery, Configuration.RewriteFolderSearchRoot), Constants.RedirectFolderTemplateId));
+                var query = string.Format(Constants.RedirectFolderItemsQuery, Configuration.RewriteFolderSearchRoot, Constants.RedirectFolderTemplateId);
+                redirectFolderItems = db.SelectItems(query);
             }
 
             if (redirectFolderItems == null)

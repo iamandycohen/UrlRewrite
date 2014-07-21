@@ -8,7 +8,7 @@ namespace Hi.UrlRewrite
 {
     public static class Constants
     {
-        public const string RedirectFolderItemsQuery = "fast:{0}//*[@@templateid = '{0}']";
+        public const string RedirectFolderItemsQuery = "fast:{0}//*[@@templateid = '{1}']";
         public const string RedirectFolderTemplateId = "{CBE995D0-FCE0-4061-B807-B4BBC89962A7}";
         public const string RedirectFolderConditionItemsQuery = "*[@@templateid = '{0}']";
         public const string ConditionItemTemplateId = "{2083F66B-0A94-4F9C-9833-EF53FAD05D70}";
