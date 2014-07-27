@@ -200,8 +200,9 @@
   <ItemGroup>
     <Content Include="App_Config\Include\Hi.UrlRewrite.config" />
   </ItemGroup>
+  <ItemGroup />
   <ItemGroup>
-    <Folder Include="Properties\PublishProfiles\" />
+    <None Include="Properties\PublishProfiles\Deploy.pubxml" />
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
@@ -235,19 +236,14 @@
   <Target Name="AfterBuild">
   </Target>
   -->
-
-  <Target Name="AfterBuild">
+  <!--<Target Name="AfterBuild">
     <ItemGroup>
       <MyBinDllFiles Include="$(ProjectDir)\bin\**\*.*" />
-      <!--<MyLayoutFiles Include="$(ProjectDir)\CSOA\**\*.*" Exclude="$(ProjectDir)\CSOA\**\*.cs" />-->
       <MyConfigFiles Include="$(ProjectDir)\App_Config\Include\*.config" />
     </ItemGroup>
     <Copy SourceFiles="@(MyBinDllFiles)" DestinationFiles="@(MyBinDllFiles->'C:\inetpub\wwwroot\AndysPlayground\Website\bin\%(Filename)%(Extension)')">
     </Copy>
-    <!--<Copy SourceFiles="@(MyLayoutFiles)" DestinationFiles="@(MyLayoutFiles->'C:\inetpub\wwwroot\AndysPlayground\Website\CSOA\%(RecursiveDir)%(Filename)%(Extension)')">
-    </Copy>-->
     <Copy SourceFiles="@(MyConfigFiles)" DestinationFiles="@(MyConfigFiles->'C:\inetpub\wwwroot\AndysPlayground\Website\App_Config\Include\%(RecursiveDir)%(Filename)%(Extension)')">
     </Copy>
-  </Target>
-
+  </Target>-->
 </Project>
