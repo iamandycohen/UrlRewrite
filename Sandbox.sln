@@ -3,7 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 2013
 VisualStudioVersion = 12.0.30501.0
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Sandbox", "AndysPlayground\Sandbox.csproj", "{B474355D-8F8F-411B-A062-30002AA17B71}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Sandbox", "Sandbox\Sandbox.csproj", "{B474355D-8F8F-411B-A062-30002AA17B71}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Hi.UrlRewrite", "Hi.UrlRewrite\Hi.UrlRewrite.csproj", "{6AF4A433-0D10-4B1F-8517-7A1F05EF5AB5}"
 EndProject
