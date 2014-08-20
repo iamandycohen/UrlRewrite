@@ -100,8 +100,8 @@ namespace Hi.UrlRewrite
 
             string rewrittenUrl = null;
 
-            var absolutePath = requestUri.AbsolutePath;
-            var uriPath = absolutePath.Substring(1); // remove starting "/"
+            var absolutePath = HttpUtility.UrlDecode(requestUri.AbsolutePath);
+            var uriPath = (absolutePath ?? string.Empty).Substring(1); // remove starting "/"
             var host = requestUri.Host;
             var inboundRuleRegex = new Regex(inboundRule.Pattern, inboundRule.IgnoreCase ? RegexOptions.IgnoreCase : RegexOptions.None);
             var inboundRuleMatch = inboundRuleRegex.Match(uriPath);
