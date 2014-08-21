@@ -103,9 +103,13 @@ namespace Hi.UrlRewrite
             var absolutePath = HttpUtility.UrlDecode(requestUri.AbsolutePath);
             var uriPath = (absolutePath ?? string.Empty).Substring(1); // remove starting "/"
             var host = requestUri.Host;
-            var inboundRuleRegex = new Regex(inboundRule.Pattern, inboundRule.IgnoreCase ? RegexOptions.IgnoreCase : RegexOptions.None);
+            var pattern = inboundRule.Pattern;
+            var inboundRuleRegex = new Regex(pattern, inboundRule.IgnoreCase ? RegexOptions.IgnoreCase : RegexOptions.None);
             var inboundRuleMatch = inboundRuleRegex.Match(uriPath);
             var isInboundRuleMatch = inboundRuleMatch.Success; // inboundRuleRegex.IsMatch(uriPath);
+
+            Log.Debug(string.Format("UrlRewrite - Regex - Pattern: '{0}' Input: '{1}' Success: {2}", pattern, uriPath, isInboundRuleMatch), thisType);
+
             var conditionLogicalGrouping = inboundRule.LogicalGrouping.HasValue ? inboundRule.LogicalGrouping.Value : LogicalGrouping.MatchAll;
             var query = requestUri.Query;
             var https = requestUri.Scheme.Equals("https", StringComparison.InvariantCultureIgnoreCase) ? "on" : "off"; //HttpContext.Current.Request.ServerVariables["HTTPS"];
