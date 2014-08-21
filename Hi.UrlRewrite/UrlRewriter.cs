@@ -119,17 +119,11 @@ namespace Hi.UrlRewrite
                 var conditionMatches = false;
                 if (conditionLogicalGrouping == LogicalGrouping.MatchAll)
                 {
-                    conditionMatches = inboundRule.Conditions.All(condition =>
-                    {
-                        return ConditionMatch(host, query, https, condition);
-                    });
+                    conditionMatches = inboundRule.Conditions.All(condition => ConditionMatch(host, query, https, condition));
                 }
                 else
                 {
-                    conditionMatches = inboundRule.Conditions.Any(condition =>
-                    {
-                        return ConditionMatch(host, query, https, condition);
-                    });
+                    conditionMatches = inboundRule.Conditions.Any(condition => ConditionMatch(host, query, https, condition));
                 }
 
                 isInboundRuleMatch = conditionMatches;
