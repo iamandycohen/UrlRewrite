@@ -34,7 +34,7 @@ namespace Hi.UrlRewrite.Caching
         /// <typeparam name="T">Type of cached item</typeparam>
         /// <param name="key">Item to be cached</param>
         /// <param name="value">Name of item</param>
-        /// <param name="duration">Cache duration in seconds</param>
+        /// <param name="durationInSeconds">Cache duration in seconds</param>
         void Set<T>(string key, T value, int durationInSeconds);
 
         /// <summary>

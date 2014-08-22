@@ -40,7 +40,7 @@ namespace Hi.UrlRewrite
                 return null;
             }
 
-            List<InboundRule> inboundRules = new List<InboundRule>();
+            var inboundRules = new List<InboundRule>();
 
             foreach (var redirectFolderItem in redirectFolderItems)
             {

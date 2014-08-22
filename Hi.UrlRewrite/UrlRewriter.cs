@@ -33,16 +33,15 @@ namespace Hi.UrlRewrite
 
             Log.Debug(string.Format("UrlRewrite - Processing {0}", requestUri), thisType);
 
-            bool stopProcessing = false;
             bool hasAtLeastOneRewrite = false;
-            string rewrittenUrl = null;
             int? statusCode = null;
 
             using (new SecurityDisabler())
             {
                 foreach (var inboundRule in inboundRules)
                 {
-                    rewrittenUrl = ProcessInboundRule(requestUri, inboundRule, out statusCode, out stopProcessing);
+                    bool stopProcessing = false;
+                    string rewrittenUrl = ProcessInboundRule(requestUri, inboundRule, out statusCode, out stopProcessing);
 
                     if (rewrittenUrl != null)
                     {
@@ -213,7 +212,7 @@ namespace Hi.UrlRewrite
         private static bool ConditionMatch(string host, string query, string https, Condition condition)
         {
             var conditionRegex = new Regex(condition.Pattern, condition.IgnoreCase ? RegexOptions.IgnoreCase : RegexOptions.None);
-            var matchesThePattern = condition.CheckIfInputString.HasValue ? condition.CheckIfInputString.Value == CheckIfInputStringType.MatchesThePattern : false;
+            var matchesThePattern = condition.CheckIfInputString.HasValue && condition.CheckIfInputString.Value == CheckIfInputStringType.MatchesThePattern;
 
             bool isMatch = false;
             switch (condition.ConditionInput)
