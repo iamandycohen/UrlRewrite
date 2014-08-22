@@ -116,7 +116,7 @@ namespace Hi.UrlRewrite
 
             Log.Debug(string.Format("UrlRewrite - Regex - Pattern: '{0}' Input: '{1}' Success: {2}", pattern, uriPath, isInboundRuleMatch), thisType);
 
-            if (!isInboundRuleMatch)
+            if (!isInboundRuleMatch && !uriPath.Equals(escapedUriPath, StringComparison.InvariantCultureIgnoreCase))
             {
                 inboundRuleMatch = inboundRuleRegex.Match(escapedUriPath);
                 isInboundRuleMatch = inboundRuleMatch.Success;
