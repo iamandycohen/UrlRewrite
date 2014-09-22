@@ -32,6 +32,14 @@ namespace Hi.UrlRewrite
         public const string RedirectType_SeeOther_ItemId = "{6AC362BB-AFFD-4FE7-AB23-C2B2B6E33105}";
         public const string RedirectType_Temporary_ItemId = "{5A6BE6F1-9D9A-460F-B990-C40BBF78FC6E}";
 
+        public const string HttpCacheabilityType_NoCache_ItemId = "{9FF1B0F9-D0B5-417C-9DD6-5228931F23BF}";
+        public const string HttpCacheabilityType_Private_ItemId = "{E0450AB3-1573-4FBB-BC8F-BDFCBDDACE17}";
+        public const string HttpCacheabilityType_Server_ItemId = "{E9F6A9D3-11A5-4CB1-B1B6-2C017C0506E0}";
+        public const string HttpCacheabilityType_ServerAndNoCache_ItemId = "{2C41C9F2-7CCC-494D-843C-20EE7CA236C5}";
+        public const string HttpCacheabilityType_Public_ItemId = "{6BCFC758-B190-44D4-88DF-B34E977D9202}";
+        public const string HttpCacheabilityType_ServerAndPrivate_ItemId = "{E2BF5631-ACC2-4906-8B66-FC23A65163EE}";
+
+
         public const string CheckIfInputStringType_IsAFile_ItemId = "{B8D9255F-03CF-4331-AE54-B771E9815A55}";
         public const string CheckIfInputStringType_IsNotAFile_ItemId = "{4F431A8F-3DA5-439B-9640-B5B3D2FDF643}";
         public const string CheckIfInputStringType_IsADirectory_ItemId = "{60952AD2-8862-4B24-AD28-27B69678C6BC}";

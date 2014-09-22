@@ -29,9 +29,6 @@ namespace Hi.UrlRewrite
             Sitecore.Context.Site = siteContext;
 
             urlRewriteProcessor.Process(requestArgs);
-
-            // if it gets this far, it was the correct extension, but there was no redirect match
-            throw new HttpException(404, string.Empty);
         }
     }
 }

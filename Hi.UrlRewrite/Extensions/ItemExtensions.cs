@@ -10,6 +10,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Web;
 
 namespace Hi.UrlRewrite
 {
@@ -139,8 +140,8 @@ namespace Hi.UrlRewrite
 
             RulesEngine.GetRedirectUrlOrItemId(redirectTo, out actionRewriteUrl, out redirectItemId, out redirectItemAnchor);
 
-            var redirectAction = new RedirectAction
-            {
+            var redirectAction = new RedirectAction 
+            { 
                 Name = redirectItem.Name,
                 AppendQueryString = redirectItem.BaseRedirectAction.AppendQueryString.Checked,
                 RewriteUrl = actionRewriteUrl,
@@ -172,6 +173,36 @@ namespace Hi.UrlRewrite
                 }
             }
             redirectAction.RedirectType = redirectType;
+
+            var httpCacheabilityTypeItem = redirectItem.BaseRedirectAction.BaseCacheItem.HttpCacheability.TargetItem;
+            HttpCacheability? httpCacheability = null;
+            if (httpCacheabilityTypeItem != null)
+            {
+                switch (httpCacheabilityTypeItem.ID.ToString())
+                {
+                    case Constants.HttpCacheabilityType_NoCache_ItemId:
+                        httpCacheability = HttpCacheability.NoCache;
+                        break;
+                    case Constants.HttpCacheabilityType_Private_ItemId:
+                        httpCacheability = HttpCacheability.Private;
+                        break;
+                    case Constants.HttpCacheabilityType_Server_ItemId:
+                        httpCacheability = HttpCacheability.Server;
+                        break;
+                    case Constants.HttpCacheabilityType_ServerAndNoCache_ItemId:
+                        httpCacheability = HttpCacheability.ServerAndNoCache;
+                        break;
+                    case Constants.HttpCacheabilityType_Public_ItemId:
+                        httpCacheability = HttpCacheability.Public;
+                        break;
+                    case Constants.HttpCacheabilityType_ServerAndPrivate_ItemId:
+                        httpCacheability = HttpCacheability.ServerAndPrivate;
+                        break;
+                    default:
+                        break;
+                }
+            }
+            redirectAction.HttpCacheability = httpCacheability;
 
             return redirectAction;
         }

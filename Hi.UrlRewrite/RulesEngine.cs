@@ -13,6 +13,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Web;
 
 namespace Hi.UrlRewrite
 {
@@ -40,7 +41,7 @@ namespace Hi.UrlRewrite
                 return null;
             }
 
-            var inboundRules = new List<InboundRule>();
+            List<InboundRule> inboundRules = new List<InboundRule>();
 
             foreach (var redirectFolderItem in redirectFolderItems)
             {
@@ -106,7 +107,8 @@ namespace Hi.UrlRewrite
                     RewriteUrl = actionRewriteUrl,
                     RewriteItemId = redirectItem,
                     RewriteItemAnchor = redirectItemAnchor,
-                    StopProcessingOfSubsequentRules = true
+                    StopProcessingOfSubsequentRules = true,
+                    HttpCacheability = HttpCacheability.NoCache
                 },
                 Conditions = siteCondition != null ? new List<Condition> { siteCondition } : new List<Condition>(),
                 Enabled = true,

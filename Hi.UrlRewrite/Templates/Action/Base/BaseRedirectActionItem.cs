@@ -16,6 +16,9 @@ namespace Hi.UrlRewrite.Templates.Action.Base
         private readonly BaseStopProcessingActionItem _BaseStopProcessingAction;
         public BaseStopProcessingActionItem BaseStopProcessingAction { get { return _BaseStopProcessingAction; } }
 
+        private readonly BaseCacheItem _BaseCacheItem;
+        public BaseCacheItem BaseCacheItem { get { return _BaseCacheItem; } }
+
         #endregion
 
         #region Boilerplate CustomItem Code
@@ -24,7 +27,7 @@ namespace Hi.UrlRewrite.Templates.Action.Base
             : base(innerItem)
         {
             _BaseStopProcessingAction = new BaseStopProcessingActionItem(innerItem);
-
+            _BaseCacheItem = new BaseCacheItem(innerItem);
         }
 
         public static implicit operator BaseRedirectActionItem(Item innerItem)

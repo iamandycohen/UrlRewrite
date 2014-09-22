@@ -33,15 +33,17 @@ namespace Hi.UrlRewrite
 
             Log.Debug(string.Format("UrlRewrite - Processing {0}", requestUri), thisType);
 
+            bool stopProcessing = false;
             bool hasAtLeastOneRewrite = false;
+            string rewrittenUrl = null;
             int? statusCode = null;
+            HttpCacheability? httpCacheability = null;
 
             using (new SecurityDisabler())
             {
                 foreach (var inboundRule in inboundRules)
                 {
-                    bool stopProcessing = false;
-                    string rewrittenUrl = ProcessInboundRule(requestUri, inboundRule, out statusCode, out stopProcessing);
+                    rewrittenUrl = ProcessInboundRule(requestUri, inboundRule, out statusCode, out stopProcessing, out httpCacheability);
 
                     if (rewrittenUrl != null)
                     {
@@ -61,23 +63,24 @@ namespace Hi.UrlRewrite
 
             if (hasAtLeastOneRewrite && !string.IsNullOrEmpty(redirectedUrl))
             {
-                ExecuteRedirect(originalUrl, redirectedUrl, statusCode ?? (int)HttpStatusCode.MovedPermanently);
+                ExecuteRedirect(originalUrl, redirectedUrl, statusCode ?? (int)HttpStatusCode.MovedPermanently, httpCacheability);
             }
         }
 
-        private static string ProcessInboundRule(Uri requestUri, InboundRule inboundRule, out int? statusCode, out bool stopProcessing)
+        private static string ProcessInboundRule(Uri requestUri, InboundRule inboundRule, out int? statusCode, out bool stopProcessing, out HttpCacheability? httpCacheability)
         {
             Log.Debug(string.Format("UrlRewrite - Processing inbound rule - requestUri: {0} inboundRule: {1}", requestUri, inboundRule.Name), thisType);
 
             statusCode = null;
             stopProcessing = false;
+            httpCacheability = null;
             string rewrittenUrl = null;
 
             //TODO: Right now we are only processing regular expression rules... need to implement the others
             switch (inboundRule.Using)
             {
                 case Using.RegularExpressions:
-                    rewrittenUrl = ProcessRegularExpressionInboundRule(requestUri, inboundRule, out statusCode, out stopProcessing);
+                    rewrittenUrl = ProcessRegularExpressionInboundRule(requestUri, inboundRule, out statusCode, out stopProcessing, out httpCacheability);
                     break;
                 case Using.Wildcards:
                     break;
@@ -92,10 +95,11 @@ namespace Hi.UrlRewrite
             return rewrittenUrl;
         }
 
-        private static string ProcessRegularExpressionInboundRule(Uri requestUri, InboundRule inboundRule, out int? statusCode, out bool stopProcessing)
+        private static string ProcessRegularExpressionInboundRule(Uri requestUri, InboundRule inboundRule, out int? statusCode, out bool stopProcessing, out HttpCacheability? httpCacheability)
         {
             statusCode = null;
             stopProcessing = false;
+            httpCacheability = null;
 
             string rewrittenUrl = null;
 
@@ -203,6 +207,7 @@ namespace Hi.UrlRewrite
 
                     rewrittenUrl = rewriteUrl;
                     stopProcessing = redirectAction.StopProcessingOfSubsequentRules;
+                    httpCacheability = redirectAction.HttpCacheability;
                 }
             }
 
@@ -212,7 +217,7 @@ namespace Hi.UrlRewrite
         private static bool ConditionMatch(string host, string query, string https, Condition condition)
         {
             var conditionRegex = new Regex(condition.Pattern, condition.IgnoreCase ? RegexOptions.IgnoreCase : RegexOptions.None);
-            var matchesThePattern = condition.CheckIfInputString.HasValue && condition.CheckIfInputString.Value == CheckIfInputStringType.MatchesThePattern;
+            var matchesThePattern = condition.CheckIfInputString.HasValue ? condition.CheckIfInputString.Value == CheckIfInputStringType.MatchesThePattern : false;
 
             bool isMatch = false;
             switch (condition.ConditionInput)
@@ -233,7 +238,7 @@ namespace Hi.UrlRewrite
             return matchesThePattern ? isMatch : !isMatch;
         }
 
-        private static void ExecuteRedirect(string originalUrl, string rewriteUrl, int statusCode)
+        private static void ExecuteRedirect(string originalUrl, string rewriteUrl, int statusCode, HttpCacheability? httpCacheability)
         {
             var context = HttpContext.Current;
             var response = context.Response;
@@ -242,6 +247,10 @@ namespace Hi.UrlRewrite
             response.Clear();
             response.RedirectLocation = rewriteUrl;
             response.StatusCode = statusCode;
+            if (httpCacheability.HasValue)
+            {
+                response.Cache.SetCacheability(httpCacheability.Value);
+            }
             response.End();
         }
     }
