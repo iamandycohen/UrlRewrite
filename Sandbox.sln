@@ -9,7 +9,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Hi.UrlRewrite", "Hi.UrlRewr
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Package", "Package", "{E5865C46-58B9-4B41-9762-579DBE7F0008}"
 	ProjectSection(SolutionItems) = preProject
-		Package\Url Rewrite-1.0.zip = Package\Url Rewrite-1.0.zip
+		Package\URL Rewrite 1.1.xml = Package\URL Rewrite 1.1.xml
+		Package\URL Rewrite-1.1.zip = Package\URL Rewrite-1.1.zip
 	EndProjectSection
 EndProject
 Global
