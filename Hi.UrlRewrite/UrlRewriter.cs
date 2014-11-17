@@ -116,18 +116,23 @@ namespace Hi.UrlRewrite
             var matchesThePattern = inboundRule.RequestedUrl.HasValue &&
                                     inboundRule.RequestedUrl.Value == RequestedUrl.MatchesThePattern;
 
+            if (!matchesThePattern)
+            {
+                throw new NotImplementedException("Have not yet implemented 'Does Not Match the Pattern' because of possible redirect loops");
+            }
+
             var pattern = inboundRule.Pattern;
             var inboundRuleRegex = new Regex(pattern, inboundRule.IgnoreCase ? RegexOptions.IgnoreCase : RegexOptions.None);
 
             var inboundRuleMatch = inboundRuleRegex.Match(uriPath);
-            var isInboundRuleMatch = inboundRuleMatch.Success && matchesThePattern;
+            var isInboundRuleMatch = matchesThePattern ? inboundRuleMatch.Success : !inboundRuleMatch.Success;
 
             Log.Debug(string.Format("UrlRewrite - Regex - Pattern: '{0}' Input: '{1}' Success: {2}", pattern, uriPath, isInboundRuleMatch), thisType);
 
             if (!isInboundRuleMatch && !uriPath.Equals(escapedUriPath, StringComparison.InvariantCultureIgnoreCase))
             {
                 inboundRuleMatch = inboundRuleRegex.Match(escapedUriPath);
-                isInboundRuleMatch = inboundRuleMatch.Success && matchesThePattern;
+                isInboundRuleMatch = matchesThePattern ? inboundRuleMatch.Success : !inboundRuleMatch.Success;
 
                 Log.Debug(string.Format("UrlRewrite - Regex - Pattern: '{0}' Input: '{1}' Success: {2}", pattern, escapedUriPath, isInboundRuleMatch), thisType);
             }
