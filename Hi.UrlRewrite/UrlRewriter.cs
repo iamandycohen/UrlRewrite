@@ -156,7 +156,7 @@ namespace Hi.UrlRewrite
 
                 Log.Debug(string.Format("UrlRewrite - INBOUND RULE MATCH - requestUri: {0} inboundRule: {1}", requestUri, inboundRule.Name), thisType);
 
-                //TODO: create other Actions
+                // TODO: Need to implement Rewrite, None, Custom Response and Abort Request
                 // process the action if it is a RedirectAction
                 if (inboundRule.Action is RedirectAction)
                 {
@@ -174,7 +174,8 @@ namespace Hi.UrlRewrite
                             var rewriteItem = db.GetItem(new ID(rewriteItemId.Value));
                             if (rewriteItem != null)
                             {
-                                rewriteUrl = string.Format("http://{{HTTP_HOST}}{0}", LinkManager.GetItemUrl(rewriteItem));
+                                rewriteUrl = string.Format("http://{{HTTP_HOST}}{0}",
+                                    LinkManager.GetItemUrl(rewriteItem));
                                 if (!string.IsNullOrEmpty(rewriteItmAnchor))
                                 {
                                     rewriteUrl += string.Format("#{0}", rewriteItmAnchor);
@@ -203,7 +204,7 @@ namespace Hi.UrlRewrite
 
                     var redirectType = redirectAction.RedirectType;
                     // get the status code
-                    statusCode = redirectType.HasValue ? (int)redirectType : (int)HttpStatusCode.MovedPermanently;
+                    statusCode = redirectType.HasValue ? (int) redirectType : (int) HttpStatusCode.MovedPermanently;
 
                     if (redirectAction.AppendQueryString)
                     {
@@ -213,6 +214,10 @@ namespace Hi.UrlRewrite
                     rewrittenUrl = rewriteUrl;
                     stopProcessing = redirectAction.StopProcessingOfSubsequentRules;
                     httpCacheability = redirectAction.HttpCacheability;
+                }
+                else
+                {
+                    throw new NotImplementedException("Redirect Action is currently the only supported type of redirect");
                 }
             }
 
@@ -225,25 +230,43 @@ namespace Hi.UrlRewrite
             // TODO : I have only implemented "MatchesThePattern" - need to implement the other types
 
             var conditionRegex = new Regex(condition.Pattern, condition.IgnoreCase ? RegexOptions.IgnoreCase : RegexOptions.None);
-            var matchesThePattern = condition.CheckIfInputString.HasValue ? condition.CheckIfInputString.Value == CheckIfInputStringType.MatchesThePattern : false;
 
             bool isMatch = false;
-            switch (condition.ConditionInput)
+
+            if (condition.CheckIfInputString.HasValue)
             {
-                case Hi.UrlRewrite.Entities.ConditionInputType.HTTP_HOST:
-                    isMatch = conditionRegex.IsMatch(host);
-                    break;
-                case Hi.UrlRewrite.Entities.ConditionInputType.QUERY_STRING:
-                    isMatch = conditionRegex.IsMatch(query);
-                    break;
-                case Hi.UrlRewrite.Entities.ConditionInputType.HTTPS:
-                    isMatch = conditionRegex.IsMatch(https);
-                    break;
-                default:
-                    break;
+                switch (condition.CheckIfInputString.Value)
+                {
+                    case CheckIfInputStringType.MatchesThePattern:
+                    case CheckIfInputStringType.DoesNotMatchThePattern:
+                        switch (condition.ConditionInput)
+                        {
+                            case Hi.UrlRewrite.Entities.ConditionInputType.HTTP_HOST:
+                                isMatch = conditionRegex.IsMatch(host);
+                                break;
+                            case Hi.UrlRewrite.Entities.ConditionInputType.QUERY_STRING:
+                                isMatch = conditionRegex.IsMatch(query);
+                                break;
+                            case Hi.UrlRewrite.Entities.ConditionInputType.HTTPS:
+                                isMatch = conditionRegex.IsMatch(https);
+                                break;
+                            default:
+                                break;
+                        }
+
+                        if (condition.CheckIfInputString.Value == CheckIfInputStringType.DoesNotMatchThePattern)
+                        {
+                            isMatch = !isMatch;
+                        }
+                        break;
+                    default:
+                        throw new NotImplementedException("Only 'Matches the Pattern' and 'Does Not Match the Pattern' have been implemented.");
+                        break;
+                }
+
             }
 
-            return matchesThePattern ? isMatch : !isMatch;
+            return isMatch;
         }
 
         private static void ExecuteRedirect(string originalUrl, string rewriteUrl, int statusCode, HttpCacheability? httpCacheability)
