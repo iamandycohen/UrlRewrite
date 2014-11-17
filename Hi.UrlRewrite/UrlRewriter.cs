@@ -83,8 +83,10 @@ namespace Hi.UrlRewrite
                     rewrittenUrl = ProcessRegularExpressionInboundRule(requestUri, inboundRule, out statusCode, out stopProcessing, out httpCacheability);
                     break;
                 case Using.Wildcards:
+                    throw new NotImplementedException("Using Wildcards has not been implemented");
                     break;
                 case Using.ExactMatch:
+                    throw new NotImplementedException("Using ExactMatch has not been implemented");
                     break;
                 default:
                     break;
@@ -111,18 +113,21 @@ namespace Hi.UrlRewrite
             var escapedAbsolutePath = HttpUtility.UrlDecode(absolutePath);
             var escapedUriPath = (escapedAbsolutePath ?? string.Empty).Substring(1); // remove starting "/"
 
+            var matchesThePattern = inboundRule.RequestedUrl.HasValue &&
+                                    inboundRule.RequestedUrl.Value == RequestedUrl.MatchesThePattern;
+
             var pattern = inboundRule.Pattern;
             var inboundRuleRegex = new Regex(pattern, inboundRule.IgnoreCase ? RegexOptions.IgnoreCase : RegexOptions.None);
 
             var inboundRuleMatch = inboundRuleRegex.Match(uriPath);
-            var isInboundRuleMatch = inboundRuleMatch.Success;
+            var isInboundRuleMatch = inboundRuleMatch.Success && matchesThePattern;
 
             Log.Debug(string.Format("UrlRewrite - Regex - Pattern: '{0}' Input: '{1}' Success: {2}", pattern, uriPath, isInboundRuleMatch), thisType);
 
             if (!isInboundRuleMatch && !uriPath.Equals(escapedUriPath, StringComparison.InvariantCultureIgnoreCase))
             {
                 inboundRuleMatch = inboundRuleRegex.Match(escapedUriPath);
-                isInboundRuleMatch = inboundRuleMatch.Success;
+                isInboundRuleMatch = inboundRuleMatch.Success && matchesThePattern;
 
                 Log.Debug(string.Format("UrlRewrite - Regex - Pattern: '{0}' Input: '{1}' Success: {2}", pattern, escapedUriPath, isInboundRuleMatch), thisType);
             }
@@ -216,6 +221,9 @@ namespace Hi.UrlRewrite
 
         private static bool ConditionMatch(string host, string query, string https, Condition condition)
         {
+
+            // TODO : I have only implemented "MatchesThePattern" - need to implement the other types
+
             var conditionRegex = new Regex(condition.Pattern, condition.IgnoreCase ? RegexOptions.IgnoreCase : RegexOptions.None);
             var matchesThePattern = condition.CheckIfInputString.HasValue ? condition.CheckIfInputString.Value == CheckIfInputStringType.MatchesThePattern : false;
 
