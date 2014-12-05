@@ -14,5 +14,6 @@ namespace Hi.UrlRewrite
         public HttpCacheability? HttpCacheability { get; set; }
         public Uri OriginalUri { get; set; }
         public Uri RewrittenUri { get; set; }
+        public Guid ItemId { get; set; }
     }
 }

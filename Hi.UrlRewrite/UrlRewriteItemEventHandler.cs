@@ -38,6 +38,7 @@ namespace Hi.UrlRewrite
 
             var itemId = itemSavedRemoteEventArg.Item.ID;
             Item item;
+
             using (new SecurityDisabler())
             {
                 var db = Database.GetDatabase(Configuration.Database);
@@ -49,40 +50,48 @@ namespace Hi.UrlRewrite
 
         private void RunItemSaved(Item item)
         {
-            if (item.Database.Name.Equals(Configuration.Database, StringComparison.InvariantCultureIgnoreCase))
+            var db = item.Database;
+
+            try
             {
-                try
+                using (new SecurityDisabler())
                 {
-                    using (new SecurityDisabler())
+                    if (IsRedirectFolderItem(item))
                     {
-                        if (IsRedirectFolderItem(item))
-                        {
-                            Log.Info(string.Format("UrlRewrite - Refreshing Redirect Folder [{0}] after save event", item.Paths.FullPath), this);
-                            UrlRewriteProcessor.RefreshInboundRulesCache();
-                        }
-                        else if (IsSimpleRedirectItem(item))
-                        {
-                            Log.Info(string.Format("UrlRewrite - Refreshing Simple Redirect [{0}] after save event", item.Paths.FullPath), this);
-                            UrlRewriteProcessor.RefreshSimpleRedirect(item);
-                        }
-                        else if (IsInboundRuleItem(item))
-                        {
-                            Log.Info(string.Format("UrlRewrite - Refreshing Inbound Rule [{0}] after save event", item.Paths.FullPath), this);
-                            UrlRewriteProcessor.RefreshInboundRule(item);
-                        }
-                        else if (IsInboundRuleItemChild(item))
-                        {
-                            Log.Info(string.Format("UrlRewrite - Refreshing Inbound Rule [{0}] after save event", item.Parent.Paths.FullPath), this);
-                            UrlRewriteProcessor.RefreshInboundRule(item.Parent);
-                        }
+                        Log.Info(
+                            string.Format("UrlRewrite - Refreshing Redirect Folder [{0}] after save event",
+                                item.Paths.FullPath), this);
+                        UrlRewriteProcessor.RefreshInboundRulesCache(db);
                     }
-                }
-                catch (Exception ex)
-                {
-                    Log.Error(string.Format("UrlRewrite - Exception occured when saving item after save - Item ID: {0} Item Path: {1}", item.ID, item.Paths.FullPath), ex, this);
+                    else if (IsSimpleRedirectItem(item))
+                    {
+                        Log.Info(
+                            string.Format("UrlRewrite - Refreshing Simple Redirect [{0}] after save event",
+                                item.Paths.FullPath), this);
+                        UrlRewriteProcessor.RefreshSimpleRedirect(item);
+                    }
+                    else if (IsInboundRuleItem(item))
+                    {
+                        Log.Info(
+                            string.Format("UrlRewrite - Refreshing Inbound Rule [{0}] after save event",
+                                item.Paths.FullPath), this);
+                        UrlRewriteProcessor.RefreshInboundRule(item);
+                    }
+                    else if (IsInboundRuleItemChild(item))
+                    {
+                        Log.Info(
+                            string.Format("UrlRewrite - Refreshing Inbound Rule [{0}] after save event",
+                                item.Parent.Paths.FullPath), this);
+                        UrlRewriteProcessor.RefreshInboundRule(item.Parent);
+                    }
                 }
 
             }
+            catch (Exception ex)
+            {
+                Log.Error(string.Format("UrlRewrite - Exception occured when saving item after save - Item ID: {0} Item Path: {1}", item.ID, item.Paths.FullPath), ex, this);
+            }
+
         }
 
         #endregion

@@ -2,6 +2,7 @@
 using Hi.UrlRewrite.Entities;
 using Hi.UrlRewrite.Templates;
 using Sitecore;
+using Sitecore.Data;
 using Sitecore.Data.Items;
 using Sitecore.Diagnostics;
 using Sitecore.Pipelines.HttpRequest;
@@ -27,42 +28,20 @@ namespace Hi.UrlRewrite
         {
             try
             {
-                List<InboundRule> inboundRules = null;
+                var db = Sitecore.Context.Database;
 
-                if (!cache.Get(rulesCacheKey, out inboundRules))
-                {
-                    Log.Info("UrlRewrite - Initializing", this);
-                    using (new SecurityDisabler())
-                    {
-                        inboundRules = RefreshInboundRulesCache();
-                    }
-                }
+                if (args.Context == null || db == null) return;
 
-                if (args.Context != null)
-                {
-                    if (Configuration.IgnoreUrlPrefixes.Length > 0 && Configuration.IgnoreUrlPrefixes.Any(prefix => args.Context.Request.FilePath.StartsWith(prefix, StringComparison.InvariantCultureIgnoreCase)))
-                    {
-                        return;
-                    }
+                var httpContext = new HttpContextWrapper(args.Context);
+                var urlRewriter = new UrlRewriter();
 
-                    if (inboundRules != null)
-                    {
-                        var httpContext = new HttpContextWrapper(args.Context);
-                        var rewriter = new UrlRewriter();
-                        var requestResult = rewriter.ProcessRequestUrl(httpContext.Request, inboundRules);
+                var requestResult = ProcessUri(httpContext.Request.Url, db, urlRewriter);
 
-                        if (!requestResult.HasOneRedirect || requestResult.RewrittenUri == null || requestResult.RewrittenUri.ToString().Equals(requestResult.OriginalUri.ToString(), StringComparison.InvariantCultureIgnoreCase)) return;
+                if (requestResult == null || !requestResult.HasOneRedirect || requestResult.RewrittenUri == null || requestResult.RewrittenUri.ToString().Equals(requestResult.OriginalUri.ToString(), StringComparison.InvariantCultureIgnoreCase)) return;
 
-                        Log.Info(string.Format("UrlRewrite - Redirecting {0} to {1} [{2}]", requestResult.OriginalUri, requestResult.RewrittenUri, requestResult.StatusCode), thisType);
+                Log.Info(string.Format("UrlRewrite - Redirecting {0} to {1} [{2}]", requestResult.OriginalUri, requestResult.RewrittenUri, requestResult.StatusCode), thisType);
 
-                        rewriter.ExecuteRedirect(httpContext.Response, requestResult);
-
-                    }
-                }
-            }
-            catch (ThreadAbortException)
-            {
-                // swallow this exception because we may have called Response.End
+                urlRewriter.ExecuteRedirect(httpContext.Response, requestResult);
             }
             catch (Exception ex)
             {
@@ -70,18 +49,40 @@ namespace Hi.UrlRewrite
             }
         }
 
-        internal static List<InboundRule> RefreshInboundRulesCache()
+        internal ProcessRequestResult ProcessUri(Uri requestUri, Database db, UrlRewriter urlRewriter)
         {
-            var inboundRules = RulesEngine.GetInboundRules();
+            List<InboundRule> inboundRules;
+
+            if (!cache.Get(rulesCacheKey + ":" + db.Name, out inboundRules))
+            {
+                Log.Info(string.Format("UrlRewrite - Initializing [{0}]", db.Name), this);
+
+                using (new SecurityDisabler())
+                {
+                    inboundRules = RefreshInboundRulesCache(db);
+                }
+            }
+
+            if (inboundRules == null || Configuration.IgnoreUrlPrefixes.Length > 0 && Configuration.IgnoreUrlPrefixes.Any(prefix => requestUri.PathAndQuery.StartsWith(prefix, StringComparison.InvariantCultureIgnoreCase)))
+            {
+                return null;
+            }
+
+            return urlRewriter.ProcessRequestUrl(requestUri, inboundRules);
+        }
+
+        internal static List<InboundRule> RefreshInboundRulesCache(Database db)
+        {
+            var inboundRules = RulesEngine.GetInboundRules(db);
 
             if (inboundRules != null)
             {
-                Log.Info(string.Format("UrlRewrite - Adding {0} rules to Cache", inboundRules.Count()), thisType);
-                cache.Set(rulesCacheKey, inboundRules, 86400);
+                Log.Info(string.Format("UrlRewrite - Adding {0} rules to Cache [{0}]", db.Name, inboundRules.Count()), thisType);
+                cache.Set(rulesCacheKey + ":" + db.Name, inboundRules, 86400);
             }
             else
             {
-                Log.Info("UrlRewrite - Found no rules", thisType);
+                Log.Info(string.Format("UrlRewrite - Found no rules [{0}]", db.Name), thisType);
             }
 
             return inboundRules;
@@ -105,9 +106,9 @@ namespace Hi.UrlRewrite
         private static void UpdateRulesCache(Item item, Action<Item, List<InboundRule>> action)
         {
             List<InboundRule> inboundRules = null;
-            if (!cache.Get(rulesCacheKey, out inboundRules))
+            if (!cache.Get(rulesCacheKey + ":" + item.Database.Name, out inboundRules))
             {
-                inboundRules = RulesEngine.GetInboundRules();
+                inboundRules = RulesEngine.GetInboundRules(item.Database);
             }
 
             if (inboundRules != null)
@@ -117,7 +118,7 @@ namespace Hi.UrlRewrite
                 Log.Debug(string.Format("UrlRewrite - Updating Rules Cache - count: {0}", inboundRules.Count), thisType);
 
                 // update the cache
-                cache.Set(rulesCacheKey, inboundRules);
+                cache.Set(rulesCacheKey + ":" + item.Database.Name, inboundRules);
             }
         }
 

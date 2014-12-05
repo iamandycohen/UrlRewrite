@@ -21,9 +21,8 @@ namespace Hi.UrlRewrite
     {
         private static object thisType = typeof(RulesEngine);
 
-        internal static List<InboundRule> GetInboundRules()
+        internal static List<InboundRule> GetInboundRules(Database db)
         {
-            var db = Sitecore.Data.Database.GetDatabase(Configuration.Database);
             if (db == null)
             {
                 return null;
@@ -31,7 +30,6 @@ namespace Hi.UrlRewrite
 
             var query = string.Format(Constants.RedirectFolderItemsQuery, Configuration.RewriteFolderSearchRoot, Constants.RedirectFolderTemplateId);
             Item[] redirectFolderItems = db.SelectItems(query);
-
 
             if (redirectFolderItems == null)
             {
@@ -43,8 +41,6 @@ namespace Hi.UrlRewrite
             foreach (var redirectFolderItem in redirectFolderItems)
             {
                 Log.Debug(string.Format("UrlRewrite - Processing RedirectFolder: {0}", redirectFolderItem.Name), thisType);
-
-                var redirectFolder = new RedirectFolderItem(redirectFolderItem);
 
                 var folderDescendants = redirectFolderItem.Axes.GetDescendants();
 
@@ -103,7 +99,7 @@ namespace Hi.UrlRewrite
                     RewriteUrl = actionRewriteUrl,
                     RewriteItemId = redirectItem,
                     RewriteItemAnchor = redirectItemAnchor,
-                    StopProcessingOfSubsequentRules = true,
+                    StopProcessingOfSubsequentRules = false,
                     HttpCacheability = HttpCacheability.NoCache
                 },
                 Conditions = siteCondition != null ? new List<Condition> { siteCondition } : new List<Condition>(),
