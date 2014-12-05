@@ -20,95 +20,111 @@ namespace Hi.UrlRewrite
 {
     public class UrlRewriter
     {
-        private static object thisType = typeof(UrlRewriter);
 
-        public static void ProcessRequestUrl(List<InboundRule> inboundRules, Uri requestUri)
+        public ProcessRequestResult ProcessRequestUrl(HttpRequestBase httpRequest, List<InboundRule> inboundRules)
         {
-
-            string originalUrl = requestUri.ToString();
             if (inboundRules == null)
             {
                 throw new ArgumentNullException("inboundRules");
             }
 
-            Log.Debug(string.Format("UrlRewrite - Processing {0}", requestUri), thisType);
+            var originalUri = httpRequest.Url;
 
-            bool stopProcessing = false;
-            bool hasAtLeastOneRewrite = false;
-            string rewrittenUrl = null;
-            int? statusCode = null;
-            HttpCacheability? httpCacheability = null;
+            Log.Debug(string.Format("UrlRewrite - Processing url: {0}", originalUri), this);
 
-            using (new SecurityDisabler())
+            var hasAtLeastOneRewrite = false;
+
+            var ruleResult = new RuleResult
             {
-                foreach (var inboundRule in inboundRules)
+                RewrittenUri = originalUri
+            };
+
+            foreach (var inboundRule in inboundRules)
+            {
+                ruleResult = ProcessInboundRule(ruleResult.RewrittenUri, inboundRule);
+
+                if (ruleResult.RewrittenUri == null) 
+                    continue;
+
+                hasAtLeastOneRewrite = true;
+
+                if (ruleResult.StopProcessing)
                 {
-                    rewrittenUrl = ProcessInboundRule(requestUri, inboundRule, out statusCode, out stopProcessing, out httpCacheability);
-
-                    if (rewrittenUrl != null)
-                    {
-                        hasAtLeastOneRewrite = true;
-                        requestUri = new Uri(rewrittenUrl);
-
-                        if (stopProcessing)
-                        {
-                            break;
-                        }
-                    }
+                    break;
                 }
             }
 
-            var redirectedUrl = requestUri.ToString();
-            Log.Debug(string.Format("UrlRewrite - Processed originalUrl: {0} redirectedUrl: {1}", originalUrl, redirectedUrl), thisType);
+            // reset the orignal uri
+            ruleResult.OriginalUri = originalUri;
 
-            if (hasAtLeastOneRewrite && !string.IsNullOrEmpty(redirectedUrl))
-            {
-                ExecuteRedirect(originalUrl, redirectedUrl, statusCode ?? (int)HttpStatusCode.MovedPermanently, httpCacheability);
-            }
+            Log.Debug(string.Format("UrlRewrite - Processed originalUrl: {0} redirectedUrl: {1}", ruleResult.OriginalUri, ruleResult.RewrittenUri), this);
+
+            var finalResult = new ProcessRequestResult(ruleResult, hasAtLeastOneRewrite);
+
+            return finalResult;
         }
 
-        private static string ProcessInboundRule(Uri requestUri, InboundRule inboundRule, out int? statusCode, out bool stopProcessing, out HttpCacheability? httpCacheability)
+        public void ExecuteRedirect(HttpResponseBase httpResponse, ProcessRequestResult ruleResult)
         {
-            Log.Debug(string.Format("UrlRewrite - Processing inbound rule - requestUri: {0} inboundRule: {1}", requestUri, inboundRule.Name), thisType);
+            httpResponse.Clear();
+            httpResponse.RedirectLocation = ruleResult.RewrittenUri.ToString();
+            httpResponse.StatusCode = ruleResult.StatusCode ?? (int)HttpStatusCode.MovedPermanently;
 
-            statusCode = null;
-            stopProcessing = false;
-            httpCacheability = null;
-            string rewrittenUrl = null;
+            if (ruleResult.HttpCacheability.HasValue)
+            {
+                httpResponse.Cache.SetCacheability(ruleResult.HttpCacheability.Value);
+            }
 
-            //TODO: Right now we are only processing regular expression rules... need to implement the others
+            httpResponse.End();
+        }
+
+        private RuleResult ProcessInboundRule(Uri originalUri, InboundRule inboundRule)
+        {
+            Log.Debug(string.Format("UrlRewrite - Processing inbound rule - requestUri: {0} inboundRule: {1}", originalUri, inboundRule.Name), this);
+
+            var ruleResult = new RuleResult
+            {
+                OriginalUri = originalUri
+            };
+
             switch (inboundRule.Using)
             {
                 case Using.RegularExpressions:
-                    rewrittenUrl = ProcessRegularExpressionInboundRule(requestUri, inboundRule, out statusCode, out stopProcessing, out httpCacheability);
+
+                    ruleResult = ProcessRegularExpressionInboundRule(ruleResult.OriginalUri, inboundRule);
+
                     break;
                 case Using.Wildcards:
+                    //TODO: Implement Wildcards
                     throw new NotImplementedException("Using Wildcards has not been implemented");
                     break;
                 case Using.ExactMatch:
+                    //TODO: Implement Exact Match
                     throw new NotImplementedException("Using ExactMatch has not been implemented");
                     break;
                 default:
                     break;
             }
 
-            Log.Debug(string.Format("UrlRewrite - Processing inbound rule - requestUri: {0} inboundRule: {1} rewrittenUrl: {2}", requestUri, inboundRule.Name, rewrittenUrl), thisType);
+            Log.Debug(string.Format("UrlRewrite - Processing inbound rule - requestUri: {0} inboundRule: {1} rewrittenUrl: {2}", ruleResult.OriginalUri, inboundRule.Name, ruleResult.RewrittenUri), this);
 
-            return rewrittenUrl;
+            return ruleResult;
         }
 
-        private static string ProcessRegularExpressionInboundRule(Uri requestUri, InboundRule inboundRule, out int? statusCode, out bool stopProcessing, out HttpCacheability? httpCacheability)
+        private RuleResult ProcessRegularExpressionInboundRule(Uri originalUri, InboundRule inboundRule)
         {
-            statusCode = null;
-            stopProcessing = false;
-            httpCacheability = null;
+
+            var ruleResult = new RuleResult
+            {
+                OriginalUri = originalUri
+            };
 
             string rewrittenUrl = null;
 
-            var host = requestUri.Host;
+            var host = originalUri.Host;
 
-            var absolutePath = requestUri.AbsolutePath;
-            var uriPath = (absolutePath ?? string.Empty).Substring(1); // remove starting "/"
+            var absolutePath = originalUri.AbsolutePath;
+            var uriPath = absolutePath.Substring(1); // remove starting "/"
 
             var escapedAbsolutePath = HttpUtility.UrlDecode(absolutePath);
             var escapedUriPath = (escapedAbsolutePath ?? string.Empty).Substring(1); // remove starting "/"
@@ -127,19 +143,19 @@ namespace Hi.UrlRewrite
             var inboundRuleMatch = inboundRuleRegex.Match(uriPath);
             var isInboundRuleMatch = matchesThePattern ? inboundRuleMatch.Success : !inboundRuleMatch.Success;
 
-            Log.Debug(string.Format("UrlRewrite - Regex - Pattern: '{0}' Input: '{1}' Success: {2}", pattern, uriPath, isInboundRuleMatch), thisType);
+            Log.Debug(string.Format("UrlRewrite - Regex - Pattern: '{0}' Input: '{1}' Success: {2}", pattern, uriPath, isInboundRuleMatch), this);
 
             if (!isInboundRuleMatch && !uriPath.Equals(escapedUriPath, StringComparison.InvariantCultureIgnoreCase))
             {
                 inboundRuleMatch = inboundRuleRegex.Match(escapedUriPath);
                 isInboundRuleMatch = matchesThePattern ? inboundRuleMatch.Success : !inboundRuleMatch.Success;
 
-                Log.Debug(string.Format("UrlRewrite - Regex - Pattern: '{0}' Input: '{1}' Success: {2}", pattern, escapedUriPath, isInboundRuleMatch), thisType);
+                Log.Debug(string.Format("UrlRewrite - Regex - Pattern: '{0}' Input: '{1}' Success: {2}", pattern, escapedUriPath, isInboundRuleMatch), this);
             }
 
             var conditionLogicalGrouping = inboundRule.LogicalGrouping.HasValue ? inboundRule.LogicalGrouping.Value : LogicalGrouping.MatchAll;
-            var query = requestUri.Query;
-            var https = requestUri.Scheme.Equals("https", StringComparison.InvariantCultureIgnoreCase) ? "on" : "off"; //HttpContext.Current.Request.ServerVariables["HTTPS"];
+            var query = originalUri.Query;
+            var https = originalUri.Scheme.Equals("https", StringComparison.InvariantCultureIgnoreCase) ? "on" : "off"; //HttpContext.Current.Request.ServerVariables["HTTPS"];
 
             if (isInboundRuleMatch && inboundRule.Conditions.Count > 0)
             {
@@ -159,9 +175,10 @@ namespace Hi.UrlRewrite
             if (isInboundRuleMatch)
             {
 
-                Log.Debug(string.Format("UrlRewrite - INBOUND RULE MATCH - requestUri: {0} inboundRule: {1}", requestUri, inboundRule.Name), thisType);
+                Log.Debug(string.Format("UrlRewrite - INBOUND RULE MATCH - requestUri: {0} inboundRule: {1}", originalUri, inboundRule.Name), this);
 
                 // TODO: Need to implement Rewrite, None, Custom Response and Abort Request
+
                 // process the action if it is a RedirectAction
                 if (inboundRule.Action is RedirectAction)
                 {
@@ -177,10 +194,17 @@ namespace Hi.UrlRewrite
                         if (db != null)
                         {
                             var rewriteItem = db.GetItem(new ID(rewriteItemId.Value));
+
                             if (rewriteItem != null)
                             {
-                                rewriteUrl = string.Format("http://{{HTTP_HOST}}{0}",
-                                    LinkManager.GetItemUrl(rewriteItem));
+                                var urlOptions = new UrlOptions
+                                {
+                                    AlwaysIncludeServerUrl = true, 
+                                    SiteResolving = true
+                                };
+
+                                rewriteUrl = LinkManager.GetItemUrl(rewriteItem, urlOptions);
+
                                 if (!string.IsNullOrEmpty(rewriteItmAnchor))
                                 {
                                     rewriteUrl += string.Format("#{0}", rewriteItmAnchor);
@@ -208,17 +232,18 @@ namespace Hi.UrlRewrite
                     }
 
                     var redirectType = redirectAction.RedirectType;
+
                     // get the status code
-                    statusCode = redirectType.HasValue ? (int) redirectType : (int) HttpStatusCode.MovedPermanently;
+                    ruleResult.StatusCode = redirectType.HasValue ? (int) redirectType : (int) HttpStatusCode.MovedPermanently;
 
                     if (redirectAction.AppendQueryString)
                     {
                         rewriteUrl += query;
                     }
 
-                    rewrittenUrl = rewriteUrl;
-                    stopProcessing = redirectAction.StopProcessingOfSubsequentRules;
-                    httpCacheability = redirectAction.HttpCacheability;
+                    ruleResult.RewrittenUri = new Uri(rewriteUrl);
+                    ruleResult.StopProcessing = redirectAction.StopProcessingOfSubsequentRules;
+                    ruleResult.HttpCacheability = redirectAction.HttpCacheability;
                 }
                 else
                 {
@@ -226,10 +251,10 @@ namespace Hi.UrlRewrite
                 }
             }
 
-            return rewrittenUrl;
+            return ruleResult;
         }
 
-        private static bool ConditionMatch(string host, string query, string https, Condition condition)
+        private bool ConditionMatch(string host, string query, string https, Condition condition)
         {
 
             // TODO : I have only implemented "MatchesThePattern" - need to implement the other types
@@ -263,6 +288,7 @@ namespace Hi.UrlRewrite
                         {
                             isMatch = !isMatch;
                         }
+
                         break;
                     default:
                         throw new NotImplementedException("Only 'Matches the Pattern' and 'Does Not Match the Pattern' have been implemented.");
@@ -274,20 +300,5 @@ namespace Hi.UrlRewrite
             return isMatch;
         }
 
-        private static void ExecuteRedirect(string originalUrl, string rewriteUrl, int statusCode, HttpCacheability? httpCacheability)
-        {
-            var context = HttpContext.Current;
-            var response = context.Response;
-
-            Log.Info(string.Format("UrlRewrite - Redirecting {0} to {1} [{2}]", originalUrl, rewriteUrl, statusCode), thisType);
-            response.Clear();
-            response.RedirectLocation = rewriteUrl;
-            response.StatusCode = statusCode;
-            if (httpCacheability.HasValue)
-            {
-                response.Cache.SetCacheability(httpCacheability.Value);
-            }
-            response.End();
-        }
     }
 }

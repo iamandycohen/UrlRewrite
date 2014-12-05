@@ -43,8 +43,8 @@ namespace Hi.UrlRewrite
                 var db = Database.GetDatabase(Configuration.Database);
                 item = db.GetItem(itemId);
             }
+
             RunItemSaved(item);
-            //RunItemSaved(itemSavedRemoteEventArg.Item);
         }
 
         private void RunItemSaved(Item item)
@@ -107,6 +107,7 @@ namespace Hi.UrlRewrite
             {
                 return;
             }
+
             RunItemDeleted(itemDeletedRemoteEventArg.Item);
         }
 
@@ -119,13 +120,6 @@ namespace Hi.UrlRewrite
 
                     using (new SecurityDisabler())
                     {
-
-                        //if (IsRedirectFolderItem(item))
-                        //{
-                        //    Log.Info(string.Format("UrlRewrite - Refreshing Redirect Folder [{0}] after publish", item.Name), this);
-                        //    UrlRewriteProcessor.RefreshInboundRulesCache();
-                        //}
-                        //else 
                         if (IsInboundRuleItem(item) || IsSimpleRedirectItem(item))
                         {
                             Log.Info(string.Format("UrlRewrite - Removing Inbound Rule [{0}] after delete event", item.Paths.FullPath), this);

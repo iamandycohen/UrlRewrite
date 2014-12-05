@@ -26,9 +26,11 @@ namespace Hi.UrlRewrite
             var requestUri = context.Request.Url;
 
             var siteContext = SiteContextFactory.GetSiteContext(requestUri.Host, requestUri.AbsolutePath, requestUri.Port);
-            Sitecore.Context.Site = siteContext;
 
-            urlRewriteProcessor.Process(requestArgs);
+            using (new SiteContextSwitcher(siteContext))
+            {
+                urlRewriteProcessor.Process(requestArgs);
+            }
         }
     }
 }

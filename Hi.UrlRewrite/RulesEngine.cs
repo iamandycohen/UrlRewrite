@@ -29,32 +29,24 @@ namespace Hi.UrlRewrite
                 return null;
             }
 
-            Item[] redirectFolderItems;
-            using (new SecurityDisabler())
-            {
-                var query = string.Format(Constants.RedirectFolderItemsQuery, Configuration.RewriteFolderSearchRoot, Constants.RedirectFolderTemplateId);
-                redirectFolderItems = db.SelectItems(query);
-            }
+            var query = string.Format(Constants.RedirectFolderItemsQuery, Configuration.RewriteFolderSearchRoot, Constants.RedirectFolderTemplateId);
+            Item[] redirectFolderItems = db.SelectItems(query);
+
 
             if (redirectFolderItems == null)
             {
                 return null;
             }
 
-            List<InboundRule> inboundRules = new List<InboundRule>();
+            var inboundRules = new List<InboundRule>();
 
             foreach (var redirectFolderItem in redirectFolderItems)
             {
                 Log.Debug(string.Format("UrlRewrite - Processing RedirectFolder: {0}", redirectFolderItem.Name), thisType);
 
                 var redirectFolder = new RedirectFolderItem(redirectFolderItem);
-                Condition siteCondition = GetSiteCondition(redirectFolder);
 
-                Item[] folderDescendants;
-                using (new SecurityDisabler())
-                {
-                    folderDescendants = redirectFolderItem.Axes.GetDescendants();
-                }
+                var folderDescendants = redirectFolderItem.Axes.GetDescendants();
 
                 foreach (var simpleRedirectInternalItem in folderDescendants
                     .Where(x => x.TemplateID == new ID(new Guid(Constants.SimpleRedirectInternalTemplateId)))
@@ -62,7 +54,7 @@ namespace Hi.UrlRewrite
                 {
                     Log.Debug(string.Format("UrlRewrite - Processing Simple Redirect: {0}", simpleRedirectInternalItem.Name), thisType);
 
-                    var inboundRule = CreateInboundRuleFromSimpleRedirectItem(simpleRedirectInternalItem, siteCondition);
+                    var inboundRule = CreateInboundRuleFromSimpleRedirectItem(simpleRedirectInternalItem);
 
                     inboundRules.Add(inboundRule);
                 }
@@ -73,7 +65,7 @@ namespace Hi.UrlRewrite
                 {
                     Log.Debug(string.Format("UrlRewrite - Processing InboundRule: {0}", inboundRuleItem.Name), thisType);
 
-                    var inboundRule = CreateInboundRuleFromInboundRuleItem(inboundRuleItem, siteCondition);
+                    var inboundRule = CreateInboundRuleFromInboundRuleItem(inboundRuleItem);
 
                     if (inboundRule.Enabled)
                     {
@@ -85,15 +77,19 @@ namespace Hi.UrlRewrite
             return inboundRules;
         }
 
-        internal static InboundRule CreateInboundRuleFromSimpleRedirectItem(SimpleRedirectItem simpleRedirectInternalItem, Condition siteCondition = null)
+        internal static InboundRule CreateInboundRuleFromSimpleRedirectItem(SimpleRedirectItem simpleRedirectInternalItem)
         {
             string inboundRulePattern = string.Format("^{0}/?$", simpleRedirectInternalItem.Path.Value);
+
+            var redirectFolderItem = new RedirectFolderItem(simpleRedirectInternalItem.InnerItem.Parent);
+            var siteCondition = GetSiteCondition(redirectFolderItem);
 
             var redirectTo = simpleRedirectInternalItem.Target;
             string actionRewriteUrl = null;
             Guid? redirectItem = null;
             string redirectItemAnchor;
-            RulesEngine.GetRedirectUrlOrItemId(redirectTo, out actionRewriteUrl, out redirectItem, out redirectItemAnchor);
+
+            GetRedirectUrlOrItemId(redirectTo, out actionRewriteUrl, out redirectItem, out redirectItemAnchor);
 
             Log.Debug(string.Format("UrlRewrite - Creating Inbound Rule From Simple Redirect Item - {0} - id: {1} actionRewriteUrl: {2} redirectItem: {3}", simpleRedirectInternalItem.Name, simpleRedirectInternalItem.ID.Guid, actionRewriteUrl, redirectItem), thisType);
 
@@ -120,18 +116,18 @@ namespace Hi.UrlRewrite
                 RequestedUrl = RequestedUrl.MatchesThePattern,
                 Using = Using.RegularExpressions
             };
+
             return inboundRule;
         }
 
-        internal static InboundRule CreateInboundRuleFromInboundRuleItem(InboundRuleItem inboundRuleItem, Condition siteCondition = null)
+        internal static InboundRule CreateInboundRuleFromInboundRuleItem(InboundRuleItem inboundRuleItem)
         {
             IEnumerable<ConditionItem> conditionItems = null;
 
-            Item[] items;
-            using (new SecurityDisabler())
-            {
-                items = inboundRuleItem.InnerItem.Axes.SelectItems(string.Format(Constants.RedirectFolderConditionItemsQuery, Constants.ConditionItemTemplateId));
-            }
+            var redirectFolderItem = new RedirectFolderItem(inboundRuleItem.InnerItem.Parent);
+            var siteCondition = GetSiteCondition(redirectFolderItem);
+
+            Item[] items = inboundRuleItem.InnerItem.Axes.SelectItems(string.Format(Constants.RedirectFolderConditionItemsQuery, Constants.ConditionItemTemplateId));
 
             if (items != null)
             {

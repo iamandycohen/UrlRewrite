@@ -66,6 +66,8 @@
     <Compile Include="Entities\RequestedUrl.cs" />
     <Compile Include="Entities\Using.cs" />
     <Compile Include="Extensions\ItemExtensions.cs" />
+    <Compile Include="ProcessRequestResult.cs" />
+    <Compile Include="RuleResult.cs" />
     <Compile Include="Templates\Action\Base\BaseCacheItem.cs" />
     <Compile Include="Templates\Action\HttpCacheabilityType\HttpCacheabilityTypeItem.cs" />
     <Compile Include="Templates\BaseUrlRewriteItem.cs" />

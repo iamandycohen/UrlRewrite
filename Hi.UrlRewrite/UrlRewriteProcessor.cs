@@ -19,7 +19,7 @@ namespace Hi.UrlRewrite
 {
     public class UrlRewriteProcessor : HttpRequestProcessor
     {
-        private static object thisType = typeof(UrlRewriteProcessor);
+        private static readonly object thisType = typeof(UrlRewriteProcessor);
         private static readonly HttpCache cache = new HttpCache();
         public const string rulesCacheKey = "Hi.UrlRewrite:Rules";
 
@@ -34,11 +34,11 @@ namespace Hi.UrlRewrite
                     Log.Info("UrlRewrite - Initializing", this);
                     using (new SecurityDisabler())
                     {
-                        inboundRules = RefreshInboundRulesCache(inboundRules);
+                        inboundRules = RefreshInboundRulesCache();
                     }
                 }
 
-                if (args.Context != null && args.Context.Request != null)
+                if (args.Context != null)
                 {
                     if (Configuration.IgnoreUrlPrefixes.Length > 0 && Configuration.IgnoreUrlPrefixes.Any(prefix => args.Context.Request.FilePath.StartsWith(prefix, StringComparison.InvariantCultureIgnoreCase)))
                     {
@@ -47,7 +47,16 @@ namespace Hi.UrlRewrite
 
                     if (inboundRules != null)
                     {
-                        UrlRewriter.ProcessRequestUrl(inboundRules, args.Context.Request.Url);
+                        var httpContext = new HttpContextWrapper(args.Context);
+                        var rewriter = new UrlRewriter();
+                        var requestResult = rewriter.ProcessRequestUrl(httpContext.Request, inboundRules);
+
+                        if (!requestResult.HasOneRedirect || requestResult.RewrittenUri == null || requestResult.RewrittenUri.ToString().Equals(requestResult.OriginalUri.ToString(), StringComparison.InvariantCultureIgnoreCase)) return;
+
+                        Log.Info(string.Format("UrlRewrite - Redirecting {0} to {1} [{2}]", requestResult.OriginalUri, requestResult.RewrittenUri, requestResult.StatusCode), thisType);
+
+                        rewriter.ExecuteRedirect(httpContext.Response, requestResult);
+
                     }
                 }
             }
@@ -61,9 +70,9 @@ namespace Hi.UrlRewrite
             }
         }
 
-        internal static List<InboundRule> RefreshInboundRulesCache(List<InboundRule> inboundRules = null)
+        internal static List<InboundRule> RefreshInboundRulesCache()
         {
-            inboundRules = RulesEngine.GetInboundRules();
+            var inboundRules = RulesEngine.GetInboundRules();
 
             if (inboundRules != null)
             {
@@ -118,9 +127,7 @@ namespace Hi.UrlRewrite
             Log.Debug(string.Format("UrlRewrite - Adding Simple Redirect - item: [{0}]", item.Paths.FullPath), thisType);
 
             var simpleRedirectItem = new SimpleRedirectItem(item);
-            var redirectFolderItem = new RedirectFolderItem(simpleRedirectItem.InnerItem.Parent);
-            var siteCondition = RulesEngine.GetSiteCondition(redirectFolderItem);
-            var newInboundRule = RulesEngine.CreateInboundRuleFromSimpleRedirectItem(simpleRedirectItem, siteCondition);
+            var newInboundRule = RulesEngine.CreateInboundRuleFromSimpleRedirectItem(simpleRedirectItem);
 
             AddOrRemoveRule(item, inboundRules, newInboundRule);
         }
@@ -131,9 +138,7 @@ namespace Hi.UrlRewrite
             Log.Debug(string.Format("UrlRewrite - Adding Inbound Rule - item: [{0}]", item.Paths.FullPath), thisType);
 
             var inboundRuleItem = new InboundRuleItem(item);
-            var redirectFolderItem = new RedirectFolderItem(inboundRuleItem.InnerItem.Parent);
-            var siteCondition = RulesEngine.GetSiteCondition(redirectFolderItem);
-            var newInboundRule = RulesEngine.CreateInboundRuleFromInboundRuleItem(inboundRuleItem, siteCondition);
+            var newInboundRule = RulesEngine.CreateInboundRuleFromInboundRuleItem(inboundRuleItem);
 
             AddOrRemoveRule(item, inboundRules, newInboundRule);
         }
