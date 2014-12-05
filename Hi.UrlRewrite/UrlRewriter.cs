@@ -209,7 +209,7 @@ namespace Hi.UrlRewrite
 
                     if (rewriteItemId.HasValue)
                     {
-                        var db = Database.GetDatabase(Configuration.Database);
+                        var db = Sitecore.Context.Database; // Database.GetDatabase(Configuration.Database);
                         if (db != null)
                         {
                             var rewriteItem = db.GetItem(new ID(rewriteItemId.Value));

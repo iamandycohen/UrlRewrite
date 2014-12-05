@@ -1,4 +1,5 @@
-﻿using Sitecore.Data;
+﻿using System.Runtime.InteropServices;
+using Sitecore.Data;
 using Sitecore.Data.Events;
 using Sitecore.Data.Items;
 using Sitecore.Diagnostics;
@@ -37,11 +38,12 @@ namespace Hi.UrlRewrite
             }
 
             var itemId = itemSavedRemoteEventArg.Item.ID;
+            var db = itemSavedRemoteEventArg.Item.Database;
             Item item;
 
             using (new SecurityDisabler())
             {
-                var db = Database.GetDatabase(Configuration.Database);
+                //var db = Database.GetDatabase(Configuration.Database);
                 item = db.GetItem(itemId);
             }
 
@@ -122,8 +124,8 @@ namespace Hi.UrlRewrite
 
         private void RunItemDeleted(Item item)
         {
-            if (item.Database.Name.Equals(Configuration.Database, StringComparison.InvariantCultureIgnoreCase))
-            {
+            //if (item.Database.Name.Equals(Configuration.Database, StringComparison.InvariantCultureIgnoreCase))
+            //{
                 try
                 {
 
@@ -145,7 +147,7 @@ namespace Hi.UrlRewrite
                 {
                     Log.Error(string.Format("UrlRewrite - Exception occured which deleting item after publish Item ID: {0} Item Path: {1}", item.ID, item.Paths.FullPath), ex, this);
                 }
-            }
+            //}
         }
 
         #endregion
