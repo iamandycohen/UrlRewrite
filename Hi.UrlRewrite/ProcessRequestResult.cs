@@ -13,27 +13,25 @@ namespace Hi.UrlRewrite
         public ProcessRequestResult(RuleResult ruleResult, bool matchedAtLeastOneRule, List<RuleResult> processedResults)
         {
             this.OriginalUri = ruleResult.OriginalUri;
-            this.HttpCacheability = ruleResult.HttpCacheability;
             this.RewrittenUri = ruleResult.RewrittenUri;
+
+            this.HttpCacheability = ruleResult.HttpCacheability;
             this.StatusCode = ruleResult.StatusCode;
+            this.Abort = ruleResult.Abort;
+
             this.MatchedAtLeastOneRule = matchedAtLeastOneRule;
             this.ProcessedResults = processedResults;
-            this.Abort = ruleResult.Abort;
         }
 
-
         public Uri OriginalUri { get; set; }
-
-        public HttpCacheability? HttpCacheability { get; set; }
-
         public Uri RewrittenUri { get; set; }
 
+        public HttpCacheability? HttpCacheability { get; set; }
         public int? StatusCode { get; set; }
+        public bool Abort { get; set; }
 
         public bool MatchedAtLeastOneRule { get; set; }
-
         public List<RuleResult> ProcessedResults { get; set; }
 
-        public bool Abort { get; set; }
     }
 }

@@ -3,6 +3,7 @@ using Hi.UrlRewrite.Entities;
 using Hi.UrlRewrite.Templates;
 using Hi.UrlRewrite.Templates.Conditions;
 using Sitecore;
+using Sitecore.ApplicationCenter;
 using Sitecore.Configuration;
 using Sitecore.Data;
 using Sitecore.Diagnostics;
@@ -190,7 +191,7 @@ namespace Hi.UrlRewrite
                 isInboundRuleMatch = conditionMatches;
             }
 
-            if (isInboundRuleMatch)
+            if (isInboundRuleMatch && inboundRule.Action != null)
             {
 
                 ruleResult.RuleMatched = true;
@@ -199,13 +200,7 @@ namespace Hi.UrlRewrite
 
                 // TODO: Need to implement Rewrite, None, Custom Response
 
-                if (inboundRule.Action == null)
-                {
-                    Log.Warn(string.Format("UrlRewrite - Inbound Rule has no Action set - inboundRule: {0} inboundRule ItemId: {1}", inboundRule.Name, inboundRule.ItemId), this);
-
-                    //throw new ItemNullException("Inbound Rule has no Action set.");
-                } 
-                else if (inboundRule.Action is RedirectAction) // process the action if it is a RedirectAction
+                if (inboundRule.Action is RedirectAction) // process the action if it is a RedirectAction  
                 {
                     ProcessRedirectAction(inboundRule, originalUri, inboundRuleMatch, ruleResult);
                 }
@@ -217,7 +212,15 @@ namespace Hi.UrlRewrite
                 {
                     throw new NotImplementedException("Redirect Action and Abort Reqeust Action are the only supported type of redirects");
                 }
-            }
+            } 
+            else if (inboundRule.Action == null)
+            {
+                Log.Warn(string.Format("UrlRewrite - Inbound Rule has no Action set - inboundRule: {0} inboundRule ItemId: {1}", inboundRule.Name, inboundRule.ItemId), this);
+
+                // we are going to skip this because we don't know what to do with it during processing
+                ruleResult.RuleMatched = false;
+            } 
+
 
             return ruleResult;
         }
