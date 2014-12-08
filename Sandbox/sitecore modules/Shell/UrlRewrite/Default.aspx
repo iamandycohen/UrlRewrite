@@ -16,10 +16,19 @@
             width: 100%;
         }
 
+        .wrapperForm table tr {
+            border-top: blue;    
+        }
+
+        .wrapperForm table tr:nth-child(even) {
+            background-color: lightyellow;
+        }
+
         .wrapperForm table tr.matched {
             color: green;
             font-weight: bolder;
         }
+
     </style>
 
     <form id="form1" runat="server" class="wrapperForm">
