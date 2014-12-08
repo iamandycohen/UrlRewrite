@@ -46,17 +46,36 @@ namespace Hi.UrlRewrite.Tests
                         HttpCacheability = HttpCacheability.NoCache,
                         Name = "RedirectAction 1",
                         RedirectType = RedirectType.Permanent,
-                        RewriteUrl = "http://fictitioussite.com/article.aspx?id={R:1}&amp;title={R:2}",
+                        RewriteUrl = "http://{HTTP_HOST}/article.aspx?id={R:1}&amp;title={R:2}",
                         StopProcessingOfSubsequentRules = false
                     },
                     Enabled = true,
                     IgnoreCase = true,
-                    Name = "Inbound Rule 1",
+                    Name = "Inbound Rule 2",
                     Pattern = "^article/([0-9]+)/([_0-9a-z-]+)",
                     Using = Using.RegularExpressions,
                     RequestedUrl = RequestedUrl.MatchesThePattern,
                     ConditionLogicalGrouping = LogicalGrouping.MatchAll
                 },
+                new InboundRule()
+                {
+                    Action = new RedirectAction()
+                    {
+                        AppendQueryString = true,
+                        HttpCacheability = HttpCacheability.NoCache,
+                        Name = "RedirectAction 1",
+                        RedirectType = RedirectType.Permanent,
+                        RewriteUrl = "http://{HTTP_HOST}/tested",
+                        StopProcessingOfSubsequentRules = false
+                    },
+                    Enabled = true,
+                    IgnoreCase = true,
+                    Name = "Inbound Rule 3",
+                    Pattern = "^test$",
+                    Using = Using.RegularExpressions,
+                    RequestedUrl = RequestedUrl.MatchesThePattern,
+                    ConditionLogicalGrouping = LogicalGrouping.MatchAll
+                }
             };
         }
 
@@ -74,8 +93,8 @@ namespace Hi.UrlRewrite.Tests
             Assert.AreEqual(actionRewriteUri, rewriteResult.RewrittenUri);
 
         }
-        [TestMethod]
 
+        [TestMethod]
         public void ProcessRequestUrlWithCaptureGroupsTest()
         {
             var rewriter = new UrlRewriter();
@@ -84,7 +103,17 @@ namespace Hi.UrlRewrite.Tests
             var expectedUri = new Uri("http://fictitioussite.com/article.aspx?id=1&amp;title=2");
 
             Assert.AreEqual(expectedUri, rewriteResult.RewrittenUri);
+        }
 
+        [TestMethod]
+        public void ProcessRequestUrlWithHttpHostReplacementTest()
+        {
+            var rewriter = new UrlRewriter();
+            var rewriteResult = rewriter.ProcessRequestUrl(new Uri("http://fictitioussite.com/test"), InboundRules);
+
+            var expectedUri = new Uri("http://fictitioussite.com/tested");
+
+            Assert.AreEqual(expectedUri, rewriteResult.RewrittenUri);
         }
     }
 }
