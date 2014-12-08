@@ -175,20 +175,16 @@ namespace Hi.UrlRewrite
 
             var conditionLogicalGrouping = inboundRule.ConditionLogicalGrouping.HasValue ? inboundRule.ConditionLogicalGrouping.Value : LogicalGrouping.MatchAll;
 
-            var host = originalUri.Host;
-            var query = originalUri.Query;
-            var https = originalUri.Scheme.Equals(Uri.UriSchemeHttps, StringComparison.InvariantCultureIgnoreCase) ? "on" : "off"; //
-
             if (isInboundRuleMatch && inboundRule.Conditions != null && inboundRule.Conditions.Count > 0)
             {
                 var conditionMatches = false;
                 if (conditionLogicalGrouping == LogicalGrouping.MatchAll)
                 {
-                    conditionMatches = inboundRule.Conditions.All(condition => ConditionMatch(host, query, https, condition));
+                    conditionMatches = inboundRule.Conditions.All(condition => ConditionMatch(originalUri, condition));
                 }
                 else
                 {
-                    conditionMatches = inboundRule.Conditions.Any(condition => ConditionMatch(host, query, https, condition));
+                    conditionMatches = inboundRule.Conditions.Any(condition => ConditionMatch(originalUri, condition));
                 }
 
                 isInboundRuleMatch = conditionMatches;
@@ -211,7 +207,7 @@ namespace Hi.UrlRewrite
                 } 
                 else if (inboundRule.Action is RedirectAction) // process the action if it is a RedirectAction
                 {
-                    ProcessRedirectAction(inboundRule, host, inboundRuleMatch, ruleResult, query);
+                    ProcessRedirectAction(inboundRule, originalUri, inboundRuleMatch, ruleResult);
                 }
                 else if (inboundRule.Action is AbortRequestAction)
                 {
@@ -219,7 +215,7 @@ namespace Hi.UrlRewrite
                 }
                 else
                 {
-                    throw new NotImplementedException("Redirect Action is currently the only supported type of redirect");
+                    throw new NotImplementedException("Redirect Action and Abort Reqeust Action are the only supported type of redirects");
                 }
             }
 
@@ -234,8 +230,8 @@ namespace Hi.UrlRewrite
             ruleResult.StopProcessing = true;
         }
 
-        private static void ProcessRedirectAction(InboundRule inboundRule, string host, Match inboundRuleMatch,
-            RuleResult ruleResult, string query)
+        private static void ProcessRedirectAction(InboundRule inboundRule, Uri uri, Match inboundRuleMatch,
+            RuleResult ruleResult)
         {
             var redirectAction = inboundRule.Action as RedirectAction;
 
@@ -271,11 +267,11 @@ namespace Hi.UrlRewrite
             // process token replacements
 
             // replace host
-            rewriteUrl = rewriteUrl.Replace("{HTTP_HOST}", host);
+            rewriteUrl = rewriteUrl.Replace("{HTTP_HOST}", uri.Host);
 
             if (redirectAction.AppendQueryString)
             {
-                rewriteUrl += query;
+                rewriteUrl += uri.Query;
             }
 
             // process capture groups
@@ -301,7 +297,7 @@ namespace Hi.UrlRewrite
             ruleResult.HttpCacheability = redirectAction.HttpCacheability;
         }
 
-        private bool ConditionMatch(string host, string query, string https, Condition condition)
+        private bool ConditionMatch(Uri uri, Condition condition)
         {
 
             // TODO : I have only implemented "MatchesThePattern" - need to implement the other types
@@ -319,12 +315,15 @@ namespace Hi.UrlRewrite
                         switch (condition.ConditionInput)
                         {
                             case Hi.UrlRewrite.Entities.ConditionInputType.HTTP_HOST:
-                                isMatch = conditionRegex.IsMatch(host);
+                                isMatch = conditionRegex.IsMatch(uri.Host);
                                 break;
                             case Hi.UrlRewrite.Entities.ConditionInputType.QUERY_STRING:
-                                isMatch = conditionRegex.IsMatch(query);
+                                isMatch = conditionRegex.IsMatch(uri.Query);
                                 break;
                             case Hi.UrlRewrite.Entities.ConditionInputType.HTTPS:
+
+                                var https = uri.Scheme.Equals(Uri.UriSchemeHttps,  StringComparison.InvariantCultureIgnoreCase) ? "on" : "off"; //
+
                                 isMatch = conditionRegex.IsMatch(https);
                                 break;
                             default:
