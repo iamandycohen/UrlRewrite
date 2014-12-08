@@ -177,7 +177,7 @@ namespace Hi.UrlRewrite
 
             var host = originalUri.Host;
             var query = originalUri.Query;
-            var https = originalUri.Scheme.Equals("https", StringComparison.InvariantCultureIgnoreCase) ? "on" : "off"; //
+            var https = originalUri.Scheme.Equals(Uri.UriSchemeHttps, StringComparison.InvariantCultureIgnoreCase) ? "on" : "off"; //
 
             if (isInboundRuleMatch && inboundRule.Conditions != null && inboundRule.Conditions.Count > 0)
             {
