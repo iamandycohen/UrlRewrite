@@ -230,6 +230,7 @@ namespace Hi.UrlRewrite
         {
             var abortRequestAction = inboundRule.Action as AbortRequestAction;
 
+            ruleResult.Abort = true;
             ruleResult.StopProcessing = true;
         }
 

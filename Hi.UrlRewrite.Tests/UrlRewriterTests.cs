@@ -115,5 +115,28 @@ namespace Hi.UrlRewrite.Tests
 
             Assert.AreEqual(expectedUri, rewriteResult.RewrittenUri);
         }
+
+        [TestMethod]
+        public void ProcessRequestUrlWithAbort()
+        {
+            var rewriter = new UrlRewriter();
+            var newInboundRule = new InboundRule()
+            {
+                Name = "Abort Rule",
+                Pattern = "^abort$",
+                Using = Using.RegularExpressions,
+                Action = new AbortRequestAction() { Name = "Abort Action"},
+                RequestedUrl = RequestedUrl.MatchesThePattern
+            };
+
+            InboundRules.Insert(1, newInboundRule);
+ 
+            var rewriteResult = rewriter.ProcessRequestUrl(new Uri("http://fictitioussite.com/abort"), InboundRules);
+
+            Assert.IsTrue(rewriteResult.Abort);
+            Assert.IsTrue(rewriteResult.ProcessedResults.Count == 2);
+        }
+
+
     }
 }
