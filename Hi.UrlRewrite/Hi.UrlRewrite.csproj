@@ -69,6 +69,7 @@
     <Compile Include="Extensions\ItemExtensions.cs" />
     <Compile Include="ProcessRequestResult.cs" />
     <Compile Include="RuleResult.cs" />
+    <Compile Include="RunExternalRelative.cs" />
     <Compile Include="Templates\Action\AbortRequestItem.cs" />
     <Compile Include="Templates\Action\Base\BaseCacheItem.cs" />
     <Compile Include="Templates\Action\HttpCacheabilityType\HttpCacheabilityTypeItem.cs" />
@@ -95,6 +96,7 @@
     <Compile Include="Templates\RedirectFolderItem.cs" />
     <Compile Include="UrlRewriteProcessor.cs" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

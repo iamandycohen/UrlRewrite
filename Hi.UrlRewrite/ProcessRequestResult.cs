@@ -10,14 +10,14 @@ namespace Hi.UrlRewrite
     public class ProcessRequestResult
     {
 
-        public ProcessRequestResult(RuleResult ruleResult, bool matchedAtLeastOneRule, List<RuleResult> processedResults)
+        public ProcessRequestResult(Uri originalUri, RuleResult finalRuleResult, bool matchedAtLeastOneRule, List<RuleResult> processedResults)
         {
-            this.OriginalUri = ruleResult.OriginalUri;
-            this.RewrittenUri = ruleResult.RewrittenUri;
+            this.OriginalUri = originalUri;
+            this.RewrittenUri = finalRuleResult.RewrittenUri;
 
-            this.HttpCacheability = ruleResult.HttpCacheability;
-            this.StatusCode = ruleResult.StatusCode;
-            this.Abort = ruleResult.Abort;
+            this.HttpCacheability = finalRuleResult.HttpCacheability;
+            this.StatusCode = finalRuleResult.StatusCode;
+            this.Abort = finalRuleResult.Abort;
 
             this.MatchedAtLeastOneRule = matchedAtLeastOneRule;
             this.ProcessedResults = processedResults;

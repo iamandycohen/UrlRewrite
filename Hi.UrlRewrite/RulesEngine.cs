@@ -21,7 +21,7 @@ namespace Hi.UrlRewrite
     {
         private static object thisType = typeof(RulesEngine);
 
-        internal static List<InboundRule> GetInboundRules(Database db)
+        public static List<InboundRule> GetInboundRules(Database db)
         {
             if (db == null)
             {
@@ -42,30 +42,34 @@ namespace Hi.UrlRewrite
             {
                 Log.Debug(string.Format("UrlRewrite - Processing RedirectFolder: {0}", redirectFolderItem.Name), thisType);
 
-                var folderDescendants = redirectFolderItem.Axes.GetDescendants();
+                var folderDescendants = redirectFolderItem.Axes.GetDescendants()
+                    .Where(x => x.TemplateID == new ID(new Guid(Constants.SimpleRedirectInternalTemplateId)) ||
+                                x.TemplateID == new ID(new Guid(Constants.InboundRuleTemplateId)));
 
-                foreach (var simpleRedirectInternalItem in folderDescendants
-                    .Where(x => x.TemplateID == new ID(new Guid(Constants.SimpleRedirectInternalTemplateId)))
-                    .Select(x => new SimpleRedirectItem(x)))
+                foreach (var descendantItem in folderDescendants)
                 {
-                    Log.Debug(string.Format("UrlRewrite - Processing Simple Redirect: {0}", simpleRedirectInternalItem.Name), thisType);
-
-                    var inboundRule = CreateInboundRuleFromSimpleRedirectItem(simpleRedirectInternalItem);
-
-                    inboundRules.Add(inboundRule);
-                }
-
-                foreach (var inboundRuleItem in folderDescendants
-                    .Where(x => x.TemplateID == new ID(new Guid(Constants.InboundRuleTemplateId)))
-                    .Select(x => new InboundRuleItem(x)))
-                {
-                    Log.Debug(string.Format("UrlRewrite - Processing InboundRule: {0}", inboundRuleItem.Name), thisType);
-
-                    var inboundRule = CreateInboundRuleFromInboundRuleItem(inboundRuleItem);
-
-                    if (inboundRule.Enabled)
+                    if (descendantItem.TemplateID == new ID(new Guid(Constants.SimpleRedirectInternalTemplateId)))
                     {
+                        var simpleRedirectItem = new SimpleRedirectItem(descendantItem);
+
+                        Log.Debug(string.Format("UrlRewrite - Processing Simple Redirect: {0}", simpleRedirectItem.Name), thisType);
+
+                        var inboundRule = CreateInboundRuleFromSimpleRedirectItem(simpleRedirectItem);
+
                         inboundRules.Add(inboundRule);
+                    }
+                    else if (descendantItem.TemplateID == new ID(new Guid(Constants.InboundRuleTemplateId)))
+                    {
+                        var inboundRuleItem = new InboundRuleItem(descendantItem);
+                      
+                        Log.Debug(string.Format("UrlRewrite - Processing InboundRule: {0}", inboundRuleItem.Name), thisType);
+
+                        var inboundRule = CreateInboundRuleFromInboundRuleItem(inboundRuleItem);
+
+                        if (inboundRule.Enabled)
+                        {
+                            inboundRules.Add(inboundRule);
+                        }
                     }
                 }
             }

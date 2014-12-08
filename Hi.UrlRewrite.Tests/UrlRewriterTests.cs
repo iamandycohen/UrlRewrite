@@ -137,6 +137,5 @@ namespace Hi.UrlRewrite.Tests
             Assert.IsTrue(rewriteResult.ProcessedResults.Count == 2);
         }
 
-
     }
 }

@@ -60,12 +60,9 @@ namespace Hi.UrlRewrite
                 }
             }
 
-            // we are done with the looping, reset the orignal uri to the real original uri
-            ruleResult.OriginalUri = originalUri;
+            Log.Debug(string.Format("UrlRewrite - Processed originalUrl: {0} redirectedUrl: {1}", originalUri, ruleResult.RewrittenUri), this);
 
-            Log.Debug(string.Format("UrlRewrite - Processed originalUrl: {0} redirectedUrl: {1}", ruleResult.OriginalUri, ruleResult.RewrittenUri), this);
-
-            var finalResult = new ProcessRequestResult(ruleResult, matchedAtLeastOneRule, processedResults);
+            var finalResult = new ProcessRequestResult(originalUri, ruleResult, matchedAtLeastOneRule, processedResults);
 
             return finalResult;
         }
