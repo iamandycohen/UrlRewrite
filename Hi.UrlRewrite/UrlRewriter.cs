@@ -205,7 +205,7 @@ namespace Hi.UrlRewrite
 
                     var rewriteUrl = redirectAction.RewriteUrl;
                     var rewriteItemId = redirectAction.RewriteItemId;
-                    var rewriteItmAnchor = redirectAction.RewriteItemAnchor;
+                    var rewriteItemAnchor = redirectAction.RewriteItemAnchor;
 
                     if (rewriteItemId.HasValue)
                     {
@@ -224,9 +224,9 @@ namespace Hi.UrlRewrite
 
                                 rewriteUrl = LinkManager.GetItemUrl(rewriteItem, urlOptions);
 
-                                if (!string.IsNullOrEmpty(rewriteItmAnchor))
+                                if (!string.IsNullOrEmpty(rewriteItemAnchor))
                                 {
-                                    rewriteUrl += string.Format("#{0}", rewriteItmAnchor);
+                                    rewriteUrl += string.Format("#{0}", rewriteItemAnchor);
                                 }
                             }
                         }
