@@ -15,5 +15,17 @@ namespace Hi.UrlRewrite
         public Uri OriginalUri { get; set; }
         public Uri RewrittenUri { get; set; }
         public Guid ItemId { get; set; }
+
+        public bool UrlIsRewritten
+        {
+            get
+            {
+
+                var originalUrl = OriginalUri.ToString();
+                var rewrittenUrl = RewrittenUri.ToString();
+
+                return !originalUrl.Equals(rewrittenUrl, StringComparison.InvariantCultureIgnoreCase);
+            }
+        }
     }
 }
