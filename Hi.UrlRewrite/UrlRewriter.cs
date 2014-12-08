@@ -6,6 +6,7 @@ using Sitecore;
 using Sitecore.Configuration;
 using Sitecore.Data;
 using Sitecore.Diagnostics;
+using Sitecore.Exceptions;
 using Sitecore.Links;
 using Sitecore.SecurityModel;
 using System;
@@ -263,6 +264,12 @@ namespace Hi.UrlRewrite
                     ruleResult.RewrittenUri = new Uri(rewriteUrl);
                     ruleResult.StopProcessing = redirectAction.StopProcessingOfSubsequentRules;
                     ruleResult.HttpCacheability = redirectAction.HttpCacheability;
+                }
+                else if (inboundRule.Action == null)
+                {
+                    Log.Error(string.Format("UrlRewrite - Inbound Rule has no Action set - inboundRule: {0} inboundRule ItemId: {1}", inboundRule.Name, inboundRule.ItemId), this);
+
+                    throw new ItemNullException("Inbound Rule has no Action set.");
                 }
                 else
                 {
