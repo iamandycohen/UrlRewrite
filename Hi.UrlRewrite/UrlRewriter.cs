@@ -267,9 +267,9 @@ namespace Hi.UrlRewrite
                 }
                 else if (inboundRule.Action == null)
                 {
-                    Log.Error(string.Format("UrlRewrite - Inbound Rule has no Action set - inboundRule: {0} inboundRule ItemId: {1}", inboundRule.Name, inboundRule.ItemId), this);
+                    Log.Warn(string.Format("UrlRewrite - Inbound Rule has no Action set - inboundRule: {0} inboundRule ItemId: {1}", inboundRule.Name, inboundRule.ItemId), this);
 
-                    throw new ItemNullException("Inbound Rule has no Action set.");
+                    //throw new ItemNullException("Inbound Rule has no Action set.");
                 }
                 else
                 {

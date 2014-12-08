@@ -43,6 +43,10 @@ namespace Hi.UrlRewrite
 
                 urlRewriter.ExecuteRedirect(httpContext.Response, requestResult);
             }
+            catch (ThreadAbortException)
+            {
+                // swallow this exception because we may have called Response.End
+            }
             catch (Exception ex)
             {
                 Log.Error("UrlRewrite - Exception occured", ex, this);
