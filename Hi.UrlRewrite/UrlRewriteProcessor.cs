@@ -37,11 +37,11 @@ namespace Hi.UrlRewrite
 
                 var requestResult = ProcessUri(httpContext.Request.Url, db, urlRewriter);
 
-                if (requestResult == null || !requestResult.HasOneRedirect || requestResult.RewrittenUri == null || requestResult.RewrittenUri.ToString().Equals(requestResult.OriginalUri.ToString(), StringComparison.InvariantCultureIgnoreCase)) return;
+                if (requestResult == null || !requestResult.MatchedAtLeastOneRule || requestResult.RewrittenUri == null || requestResult.RewrittenUri.ToString().Equals(requestResult.OriginalUri.ToString(), StringComparison.InvariantCultureIgnoreCase)) return;
 
                 Log.Info(string.Format("UrlRewrite - Redirecting {0} to {1} [{2}]", requestResult.OriginalUri, requestResult.RewrittenUri, requestResult.StatusCode), thisType);
 
-                urlRewriter.ExecuteRedirect(httpContext.Response, requestResult);
+                urlRewriter.ExecuteResult(httpContext.Response, requestResult);
             }
             catch (ThreadAbortException)
             {

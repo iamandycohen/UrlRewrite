@@ -36,8 +36,27 @@ namespace Hi.UrlRewrite.Tests
                     Pattern = "john",
                     Using = Using.ExactMatch,
                     RequestedUrl = RequestedUrl.MatchesThePattern,
-                    LogicalGrouping = LogicalGrouping.MatchAll
-                }
+                    ConditionLogicalGrouping = LogicalGrouping.MatchAll
+                },
+                new InboundRule()
+                {
+                    Action = new RedirectAction()
+                    {
+                        AppendQueryString = true,
+                        HttpCacheability = HttpCacheability.NoCache,
+                        Name = "RedirectAction 1",
+                        RedirectType = RedirectType.Permanent,
+                        RewriteUrl = "http://fictitioussite.com/article.aspx?id={R:1}&amp;title={R:2}",
+                        StopProcessingOfSubsequentRules = false
+                    },
+                    Enabled = true,
+                    IgnoreCase = true,
+                    Name = "Inbound Rule 1",
+                    Pattern = "^article/([0-9]+)/([_0-9a-z-]+)",
+                    Using = Using.RegularExpressions,
+                    RequestedUrl = RequestedUrl.MatchesThePattern,
+                    ConditionLogicalGrouping = LogicalGrouping.MatchAll
+                },
             };
         }
 
@@ -53,6 +72,18 @@ namespace Hi.UrlRewrite.Tests
             var actionRewriteUri = new Uri(actionRewriteUrl);
 
             Assert.AreEqual(actionRewriteUri, rewriteResult.RewrittenUri);
+
+        }
+        [TestMethod]
+
+        public void ProcessRequestUrlWithCaptureGroupsTest()
+        {
+            var rewriter = new UrlRewriter();
+            var rewriteResult = rewriter.ProcessRequestUrl(new Uri("http://fictitioussite.com/article/1/2"), InboundRules);
+
+            var expectedUri = new Uri("http://fictitioussite.com/article.aspx?id=1&amp;title=2");
+
+            Assert.AreEqual(expectedUri, rewriteResult.RewrittenUri);
 
         }
     }

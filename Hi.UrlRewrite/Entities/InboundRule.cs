@@ -14,7 +14,7 @@ namespace Hi.UrlRewrite.Entities
         public string Pattern { get; set; }
         public bool IgnoreCase { get; set; }
         public BaseAction Action { get; set; }
-        public LogicalGrouping? LogicalGrouping { get; set; }
+        public LogicalGrouping? ConditionLogicalGrouping { get; set; }
         public Using? Using { get; set; }
         public List<Condition> Conditions { get; set; }
         public bool Enabled { get; set; }

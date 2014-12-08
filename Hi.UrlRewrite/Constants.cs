@@ -26,6 +26,7 @@ namespace Hi.UrlRewrite
         public const string LogicalGroupingType_MatchAny_ItemId = "{8E8F11D0-5401-417B-B9E7-46264A2B1D7C}";
 
         public const string RedirectActionTemplateId = "{D199EF8B-9D4D-420F-A283-E16D7B575625}";
+        public const string AbortRequestActionTemplateId = "{BD8E6E5E-62F8-4397-99CA-B0502AFD14B9}";
 
         public const string RedirectType_Permanent_ItemId = "{C194D441-47EB-4C89-A336-4FDE6A2DC6B3}";
         public const string RedirectType_Found_ItemId = "{D80D36EB-F98A-419B-B4C4-497E31FBA8A0}";

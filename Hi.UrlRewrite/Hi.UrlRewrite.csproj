@@ -52,6 +52,7 @@
     <Compile Include="Caching\ICacheProvider.cs" />
     <Compile Include="Configuration.cs" />
     <Compile Include="Constants.cs" />
+    <Compile Include="Entities\AbortRequestAction.cs" />
     <Compile Include="Entities\BaseAction.cs" />
     <Compile Include="Entities\BaseRedirectAction.cs" />
     <Compile Include="Entities\BaseStopProcessingAction.cs" />
@@ -68,6 +69,7 @@
     <Compile Include="Extensions\ItemExtensions.cs" />
     <Compile Include="ProcessRequestResult.cs" />
     <Compile Include="RuleResult.cs" />
+    <Compile Include="Templates\Action\AbortRequestItem.cs" />
     <Compile Include="Templates\Action\Base\BaseCacheItem.cs" />
     <Compile Include="Templates\Action\HttpCacheabilityType\HttpCacheabilityTypeItem.cs" />
     <Compile Include="Templates\BaseUrlRewriteItem.cs" />

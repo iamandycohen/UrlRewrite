@@ -69,7 +69,7 @@ namespace Hi.UrlRewrite
                         break;
                 }
             }
-            inboundRule.LogicalGrouping = logicalGroupingType;
+            inboundRule.ConditionLogicalGrouping = logicalGroupingType;
 
             var usingItem = inboundRuleItem.Using.TargetItem;
             Using? usingType = null;
@@ -97,9 +97,15 @@ namespace Hi.UrlRewrite
             BaseAction baseAction = null;
             if (baseActionItem != null)
             {
-                if (baseActionItem.TemplateID.ToString().Equals(Constants.RedirectActionTemplateId, StringComparison.InvariantCultureIgnoreCase))
+                var baseActionItemTemplateId = baseActionItem.TemplateID.ToString();
+                if (baseActionItemTemplateId.Equals(Constants.RedirectActionTemplateId, StringComparison.InvariantCultureIgnoreCase))
                 {
                     baseAction = new RedirectItem(baseActionItem).ToRedirectAction();
+                }
+                else if (baseActionItemTemplateId.Equals(Constants.AbortRequestActionTemplateId,
+                    StringComparison.InvariantCultureIgnoreCase))
+                {
+                    baseAction = new AbortRequestItem(baseActionItem).ToAbortRequestAction();
                 }
             }
             inboundRule.Action = baseAction;
@@ -119,7 +125,7 @@ namespace Hi.UrlRewrite
             if (siteCondition != null)
             {
                 inboundRule.Conditions.Add(siteCondition);
-                inboundRule.LogicalGrouping = LogicalGrouping.MatchAll;
+                inboundRule.ConditionLogicalGrouping = LogicalGrouping.MatchAll;
             }
 
             return inboundRule;
@@ -207,6 +213,20 @@ namespace Hi.UrlRewrite
             return redirectAction;
         }
 
+        public static AbortRequestAction ToAbortRequestAction(this AbortRequestItem abortRequestItem)
+        {
+            if (abortRequestItem == null)
+            {
+                return null;
+            }
+
+            var abortRequestAction = new AbortRequestAction()
+            {
+                Name = abortRequestItem.Name
+            };
+
+            return abortRequestAction;
+        }
 
         public static Condition ToCondition(this ConditionItem conditionItem)
         {

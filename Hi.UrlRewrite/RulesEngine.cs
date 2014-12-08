@@ -106,7 +106,7 @@ namespace Hi.UrlRewrite
                 Enabled = true,
                 IgnoreCase = true,
                 ItemId = simpleRedirectInternalItem.ID.Guid,
-                LogicalGrouping = LogicalGrouping.MatchAll,
+                ConditionLogicalGrouping = LogicalGrouping.MatchAll,
                 Name = simpleRedirectInternalItem.Name,
                 Pattern = inboundRulePattern,
                 RequestedUrl = RequestedUrl.MatchesThePattern,

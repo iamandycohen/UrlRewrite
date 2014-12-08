@@ -34,7 +34,7 @@ namespace Hi.UrlRewrite
 
             Log.Debug(string.Format("UrlRewrite - Processing url: {0}", originalUri), this);
 
-            var hasAtLeastOneRewrite = false;
+            var matchedAtLeastOneRule = false;
 
             var ruleResult = new RuleResult
             {
@@ -48,12 +48,12 @@ namespace Hi.UrlRewrite
                 ruleResult = ProcessInboundRule(ruleResult.RewrittenUri, inboundRule);
                 processedResults.Add(ruleResult);
 
-                if (ruleResult.RewrittenUri == null) 
+                if (!ruleResult.RuleMatched) 
                     continue;
 
-                hasAtLeastOneRewrite = true;
+                matchedAtLeastOneRule = true;
 
-                if (ruleResult.UrlIsRewritten && ruleResult.StopProcessing)
+                if (ruleResult.RuleMatched && ruleResult.StopProcessing)
                 {
                     break;
                 }
@@ -64,22 +64,26 @@ namespace Hi.UrlRewrite
 
             Log.Debug(string.Format("UrlRewrite - Processed originalUrl: {0} redirectedUrl: {1}", ruleResult.OriginalUri, ruleResult.RewrittenUri), this);
 
-            var finalResult = new ProcessRequestResult(ruleResult, hasAtLeastOneRewrite, processedResults);
+            var finalResult = new ProcessRequestResult(ruleResult, matchedAtLeastOneRule, processedResults);
 
             return finalResult;
         }
 
-        public void ExecuteRedirect(HttpResponseBase httpResponse, ProcessRequestResult ruleResult)
+        public void ExecuteResult(HttpResponseBase httpResponse, ProcessRequestResult ruleResult)
         {
             try
             {
                 httpResponse.Clear();
-                httpResponse.RedirectLocation = ruleResult.RewrittenUri.ToString();
-                httpResponse.StatusCode = ruleResult.StatusCode ?? (int)HttpStatusCode.MovedPermanently;
 
-                if (ruleResult.HttpCacheability.HasValue)
+                if (!ruleResult.Abort)
                 {
-                    httpResponse.Cache.SetCacheability(ruleResult.HttpCacheability.Value);
+                    httpResponse.RedirectLocation = ruleResult.RewrittenUri.ToString();
+                    httpResponse.StatusCode = ruleResult.StatusCode ?? (int) HttpStatusCode.MovedPermanently;
+
+                    if (ruleResult.HttpCacheability.HasValue)
+                    {
+                        httpResponse.Cache.SetCacheability(ruleResult.HttpCacheability.Value);
+                    }
                 }
 
                 httpResponse.End();
@@ -133,10 +137,6 @@ namespace Hi.UrlRewrite
                 RewrittenUri = originalUri
             };
 
-            string rewrittenUrl = null;
-
-            var host = originalUri.Host;
-
             var absolutePath = originalUri.AbsolutePath;
             var uriPath = absolutePath.Substring(1); // remove starting "/"
 
@@ -173,9 +173,11 @@ namespace Hi.UrlRewrite
                 Log.Debug(string.Format("UrlRewrite - Regex - Pattern: '{0}' Input: '{1}' Success: {2}", pattern, escapedUriPath, isInboundRuleMatch), this);
             }
 
-            var conditionLogicalGrouping = inboundRule.LogicalGrouping.HasValue ? inboundRule.LogicalGrouping.Value : LogicalGrouping.MatchAll;
+            var conditionLogicalGrouping = inboundRule.ConditionLogicalGrouping.HasValue ? inboundRule.ConditionLogicalGrouping.Value : LogicalGrouping.MatchAll;
+
+            var host = originalUri.Host;
             var query = originalUri.Query;
-            var https = originalUri.Scheme.Equals("https", StringComparison.InvariantCultureIgnoreCase) ? "on" : "off"; //HttpContext.Current.Request.ServerVariables["HTTPS"];
+            var https = originalUri.Scheme.Equals("https", StringComparison.InvariantCultureIgnoreCase) ? "on" : "off"; //
 
             if (isInboundRuleMatch && inboundRule.Conditions != null && inboundRule.Conditions.Count > 0)
             {
@@ -195,81 +197,25 @@ namespace Hi.UrlRewrite
             if (isInboundRuleMatch)
             {
 
+                ruleResult.RuleMatched = true;
+
                 Log.Debug(string.Format("UrlRewrite - INBOUND RULE MATCH - requestUri: {0} inboundRule: {1}", originalUri, inboundRule.Name), this);
 
-                // TODO: Need to implement Rewrite, None, Custom Response and Abort Request
+                // TODO: Need to implement Rewrite, None, Custom Response
 
-                // process the action if it is a RedirectAction
-                if (inboundRule.Action is RedirectAction)
-                {
-                    var redirectAction = inboundRule.Action as RedirectAction;
-
-                    var rewriteUrl = redirectAction.RewriteUrl;
-                    var rewriteItemId = redirectAction.RewriteItemId;
-                    var rewriteItemAnchor = redirectAction.RewriteItemAnchor;
-
-                    if (rewriteItemId.HasValue)
-                    {
-                        var db = Sitecore.Context.Database; // Database.GetDatabase(Configuration.Database);
-                        if (db != null)
-                        {
-                            var rewriteItem = db.GetItem(new ID(rewriteItemId.Value));
-
-                            if (rewriteItem != null)
-                            {
-                                var urlOptions = new UrlOptions
-                                {
-                                    AlwaysIncludeServerUrl = true, 
-                                    SiteResolving = true
-                                };
-
-                                rewriteUrl = LinkManager.GetItemUrl(rewriteItem, urlOptions);
-
-                                if (!string.IsNullOrEmpty(rewriteItemAnchor))
-                                {
-                                    rewriteUrl += string.Format("#{0}", rewriteItemAnchor);
-                                }
-                            }
-                        }
-                    }
-
-                    // process token replacements
-
-                    // replace host
-                    rewriteUrl = rewriteUrl.Replace("{HTTP_HOST}", host);
-
-                    // process capture groups
-                    var ruleCaptureGroupRegex = new Regex(@"({R:(\d+)})", RegexOptions.None);
-
-                    foreach (Match ruleCaptureGroupMatch in ruleCaptureGroupRegex.Matches(rewriteUrl))
-                    {
-                        var num = ruleCaptureGroupMatch.Groups[2];
-                        var groupIndex = System.Convert.ToInt32(num.Value);
-                        var group = inboundRuleMatch.Groups[groupIndex];
-                        var matchText = ruleCaptureGroupMatch.ToString();
-
-                        rewriteUrl = rewriteUrl.Replace(matchText, group.Value);
-                    }
-
-                    var redirectType = redirectAction.RedirectType;
-
-                    // get the status code
-                    ruleResult.StatusCode = redirectType.HasValue ? (int) redirectType : (int) HttpStatusCode.MovedPermanently;
-
-                    if (redirectAction.AppendQueryString)
-                    {
-                        rewriteUrl += query;
-                    }
-
-                    ruleResult.RewrittenUri = new Uri(rewriteUrl);
-                    ruleResult.StopProcessing = redirectAction.StopProcessingOfSubsequentRules;
-                    ruleResult.HttpCacheability = redirectAction.HttpCacheability;
-                }
-                else if (inboundRule.Action == null)
+                if (inboundRule.Action == null)
                 {
                     Log.Warn(string.Format("UrlRewrite - Inbound Rule has no Action set - inboundRule: {0} inboundRule ItemId: {1}", inboundRule.Name, inboundRule.ItemId), this);
 
                     //throw new ItemNullException("Inbound Rule has no Action set.");
+                } 
+                else if (inboundRule.Action is RedirectAction) // process the action if it is a RedirectAction
+                {
+                    ProcessRedirectAction(inboundRule, host, inboundRuleMatch, ruleResult, query);
+                }
+                else if (inboundRule.Action is AbortRequestAction)
+                {
+                    ProcessAbortRequestAction(inboundRule, ruleResult);
                 }
                 else
                 {
@@ -278,6 +224,80 @@ namespace Hi.UrlRewrite
             }
 
             return ruleResult;
+        }
+
+        private static void ProcessAbortRequestAction(InboundRule inboundRule, RuleResult ruleResult)
+        {
+            var abortRequestAction = inboundRule.Action as AbortRequestAction;
+
+            ruleResult.StopProcessing = true;
+        }
+
+        private static void ProcessRedirectAction(InboundRule inboundRule, string host, Match inboundRuleMatch,
+            RuleResult ruleResult, string query)
+        {
+            var redirectAction = inboundRule.Action as RedirectAction;
+
+            var rewriteUrl = redirectAction.RewriteUrl;
+            var rewriteItemId = redirectAction.RewriteItemId;
+            var rewriteItemAnchor = redirectAction.RewriteItemAnchor;
+
+            if (rewriteItemId.HasValue)
+            {
+                var db = Sitecore.Context.Database; // Database.GetDatabase(Configuration.Database);
+                if (db != null)
+                {
+                    var rewriteItem = db.GetItem(new ID(rewriteItemId.Value));
+
+                    if (rewriteItem != null)
+                    {
+                        var urlOptions = new UrlOptions
+                        {
+                            AlwaysIncludeServerUrl = true,
+                            SiteResolving = true
+                        };
+
+                        rewriteUrl = LinkManager.GetItemUrl(rewriteItem, urlOptions);
+
+                        if (!string.IsNullOrEmpty(rewriteItemAnchor))
+                        {
+                            rewriteUrl += string.Format("#{0}", rewriteItemAnchor);
+                        }
+                    }
+                }
+            }
+
+            // process token replacements
+
+            // replace host
+            rewriteUrl = rewriteUrl.Replace("{HTTP_HOST}", host);
+
+            if (redirectAction.AppendQueryString)
+            {
+                rewriteUrl += query;
+            }
+
+            // process capture groups
+            var ruleCaptureGroupRegex = new Regex(@"({R:(\d+)})", RegexOptions.None);
+
+            foreach (Match ruleCaptureGroupMatch in ruleCaptureGroupRegex.Matches(rewriteUrl))
+            {
+                var num = ruleCaptureGroupMatch.Groups[2];
+                var groupIndex = System.Convert.ToInt32(num.Value);
+                var group = inboundRuleMatch.Groups[groupIndex];
+                var matchText = ruleCaptureGroupMatch.ToString();
+
+                rewriteUrl = rewriteUrl.Replace(matchText, @group.Value);
+            }
+
+            var redirectType = redirectAction.RedirectType;
+
+            // get the status code
+            ruleResult.StatusCode = redirectType.HasValue ? (int) redirectType : (int) HttpStatusCode.MovedPermanently;
+
+            ruleResult.RewrittenUri = new Uri(rewriteUrl);
+            ruleResult.StopProcessing = redirectAction.StopProcessingOfSubsequentRules;
+            ruleResult.HttpCacheability = redirectAction.HttpCacheability;
         }
 
         private bool ConditionMatch(string host, string query, string https, Condition condition)
