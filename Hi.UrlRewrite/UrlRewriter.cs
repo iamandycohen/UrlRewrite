@@ -56,6 +56,7 @@ namespace Hi.UrlRewrite
 
                 if (ruleResult.RuleMatched && ruleResult.StopProcessing)
                 {
+                    ruleResult.StoppedProcessing = true;
                     break;
                 }
             }

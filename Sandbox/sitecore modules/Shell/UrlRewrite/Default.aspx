@@ -18,6 +18,7 @@
 
         .wrapperForm table tr.matched {
             color: green;
+            font-weight: bolder;
         }
     </style>
 
