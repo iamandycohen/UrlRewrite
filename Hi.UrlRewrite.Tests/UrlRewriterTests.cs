@@ -150,13 +150,14 @@ namespace Hi.UrlRewrite.Tests
                 RequestedUrl = RequestedUrl.MatchesThePattern
             };
 
-            InboundRules.Insert(1, newInboundRule);
+            InboundRules.Insert(0, newInboundRule);
 
             var rewriteResult = rewriter.ProcessRequestUrl(new Uri("http://fictitioussite.com/customresponse"), InboundRules);
 
             Assert.IsTrue(rewriteResult.CustomResponse != null);
             Assert.AreEqual(rewriteResult.CustomResponse.StatusCode, 550);
             Assert.AreEqual(rewriteResult.CustomResponse.SubStatusCode, 100);
+            Assert.IsTrue(rewriteResult.ProcessedResults.Count == 1);
         }
 
     }
