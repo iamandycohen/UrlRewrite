@@ -1,5 +1,4 @@
-﻿using System.Threading;
-using Hi.UrlRewrite.Entities;
+﻿using Hi.UrlRewrite.Entities;
 using Sitecore.Data;
 using Sitecore.Diagnostics;
 using Sitecore.Links;
@@ -8,6 +7,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using System.Text.RegularExpressions;
+using System.Threading;
 using System.Web;
 
 namespace Hi.UrlRewrite
@@ -187,6 +187,7 @@ namespace Hi.UrlRewrite
             var escapedAbsolutePath = HttpUtility.UrlDecode(absolutePath);
             var escapedUriPath = (escapedAbsolutePath ?? string.Empty).Substring(1); // remove starting "/"
 
+            // TODO : I have only implemented "MatchesThePattern" - need to implement the other types
             var matchesThePattern = inboundRule.RequestedUrl.HasValue &&
                                     inboundRule.RequestedUrl.Value == RequestedUrl.MatchesThePattern;
 
@@ -299,27 +300,7 @@ namespace Hi.UrlRewrite
 
             if (rewriteItemId.HasValue)
             {
-                var db = Sitecore.Context.Database; // Database.GetDatabase(Configuration.Database);
-                if (db != null)
-                {
-                    var rewriteItem = db.GetItem(new ID(rewriteItemId.Value));
-
-                    if (rewriteItem != null)
-                    {
-                        var urlOptions = new UrlOptions
-                        {
-                            AlwaysIncludeServerUrl = true,
-                            SiteResolving = true
-                        };
-
-                        rewriteUrl = LinkManager.GetItemUrl(rewriteItem, urlOptions);
-
-                        if (!string.IsNullOrEmpty(rewriteItemAnchor))
-                        {
-                            rewriteUrl += string.Format("#{0}", rewriteItemAnchor);
-                        }
-                    }
-                }
+                rewriteUrl = GetRewriteUrlFromItemId(rewriteItemId.Value, rewriteItemAnchor);
             }
 
             // process token replacements
@@ -338,7 +319,7 @@ namespace Hi.UrlRewrite
             foreach (Match ruleCaptureGroupMatch in ruleCaptureGroupRegex.Matches(rewriteUrl))
             {
                 var num = ruleCaptureGroupMatch.Groups[2];
-                var groupIndex = System.Convert.ToInt32(num.Value);
+                var groupIndex = Convert.ToInt32(num.Value);
                 var group = inboundRuleMatch.Groups[groupIndex];
                 var matchText = ruleCaptureGroupMatch.ToString();
 
@@ -355,11 +336,37 @@ namespace Hi.UrlRewrite
             ruleResult.HttpCacheability = redirectAction.HttpCacheability;
         }
 
+        private static string GetRewriteUrlFromItemId(Guid rewriteItemId, string rewriteItemAnchor)
+        {
+            string rewriteUrl = null;
+
+            var db = Sitecore.Context.Database;
+            if (db != null)
+            {
+                var rewriteItem = db.GetItem(new ID(rewriteItemId));
+
+                if (rewriteItem != null)
+                {
+                    var urlOptions = new UrlOptions
+                    {
+                        AlwaysIncludeServerUrl = true,
+                        SiteResolving = true
+                    };
+
+                    rewriteUrl = LinkManager.GetItemUrl(rewriteItem, urlOptions);
+
+                    if (!string.IsNullOrEmpty(rewriteItemAnchor))
+                    {
+                        rewriteUrl += string.Format("#{0}", rewriteItemAnchor);
+                    }
+                }
+            }
+
+            return rewriteUrl;
+        }
+
         private bool ConditionMatch(Uri uri, Condition condition)
         {
-
-            // TODO : I have only implemented "MatchesThePattern" - need to implement the other types
-
             var conditionRegex = new Regex(condition.Pattern, condition.IgnoreCase ? RegexOptions.IgnoreCase : RegexOptions.None);
 
             bool isMatch = false;
