@@ -1,22 +1,13 @@
 ﻿using System.Threading;
 using Hi.UrlRewrite.Entities;
-using Hi.UrlRewrite.Templates;
-using Hi.UrlRewrite.Templates.Conditions;
-using Sitecore;
-using Sitecore.ApplicationCenter;
-using Sitecore.Configuration;
 using Sitecore.Data;
 using Sitecore.Diagnostics;
-using Sitecore.Exceptions;
 using Sitecore.Links;
-using Sitecore.SecurityModel;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net;
-using System.Text;
 using System.Text.RegularExpressions;
-using System.Threading.Tasks;
 using System.Web;
 
 namespace Hi.UrlRewrite
@@ -49,7 +40,7 @@ namespace Hi.UrlRewrite
                 ruleResult = ProcessInboundRule(ruleResult.RewrittenUri, inboundRule);
                 processedResults.Add(ruleResult);
 
-                if (!ruleResult.RuleMatched) 
+                if (!ruleResult.RuleMatched)
                     continue;
 
                 matchedAtLeastOneRule = true;
@@ -77,7 +68,7 @@ namespace Hi.UrlRewrite
                 if (!ruleResult.Abort)
                 {
                     httpResponse.RedirectLocation = ruleResult.RewrittenUri.ToString();
-                    httpResponse.StatusCode = ruleResult.StatusCode ?? (int) HttpStatusCode.MovedPermanently;
+                    httpResponse.StatusCode = ruleResult.StatusCode ?? (int)HttpStatusCode.MovedPermanently;
 
                     if (ruleResult.HttpCacheability.HasValue)
                     {
@@ -115,7 +106,7 @@ namespace Hi.UrlRewrite
                     //TODO: Implement Wildcards
                     throw new NotImplementedException("Using Wildcards has not been implemented");
                     break;
-                  
+
                 default:
                     break;
             }
@@ -136,57 +127,21 @@ namespace Hi.UrlRewrite
                 RewrittenUri = originalUri
             };
 
-            var absolutePath = originalUri.AbsolutePath;
-            var uriPath = absolutePath.Substring(1); // remove starting "/"
+            Match inboundRuleMatch;
 
-            var escapedAbsolutePath = HttpUtility.UrlDecode(absolutePath);
-            var escapedUriPath = (escapedAbsolutePath ?? string.Empty).Substring(1); // remove starting "/"
+            // test pattern matches
+            bool isInboundRuleMatch = TestPatternMatches(inboundRule, originalUri, out inboundRuleMatch);
 
-            var matchesThePattern = inboundRule.RequestedUrl.HasValue &&
-                                    inboundRule.RequestedUrl.Value == RequestedUrl.MatchesThePattern;
-
-            if (!matchesThePattern)
-            {
-                throw new NotImplementedException("Have not yet implemented 'Does Not Match the Pattern' because of possible redirect loops");
-            }
-
-            var pattern = inboundRule.Pattern;
-
-            if (inboundRule.Using.HasValue && inboundRule.Using.Value == Using.ExactMatch)
-            {
-                pattern = "^" + pattern + "$";
-            }
-
-            var inboundRuleRegex = new Regex(pattern, inboundRule.IgnoreCase ? RegexOptions.IgnoreCase : RegexOptions.None);
-
-            var inboundRuleMatch = inboundRuleRegex.Match(uriPath);
-            var isInboundRuleMatch = matchesThePattern ? inboundRuleMatch.Success : !inboundRuleMatch.Success;
-
-            Log.Debug(string.Format("UrlRewrite - Regex - Pattern: '{0}' Input: '{1}' Success: {2}", pattern, uriPath, isInboundRuleMatch), this);
-
-            if (!isInboundRuleMatch && !uriPath.Equals(escapedUriPath, StringComparison.InvariantCultureIgnoreCase))
-            {
-                inboundRuleMatch = inboundRuleRegex.Match(escapedUriPath);
-                isInboundRuleMatch = matchesThePattern ? inboundRuleMatch.Success : !inboundRuleMatch.Success;
-
-                Log.Debug(string.Format("UrlRewrite - Regex - Pattern: '{0}' Input: '{1}' Success: {2}", pattern, escapedUriPath, isInboundRuleMatch), this);
-            }
-
-            var conditionLogicalGrouping = inboundRule.ConditionLogicalGrouping.HasValue ? inboundRule.ConditionLogicalGrouping.Value : LogicalGrouping.MatchAll;
-
+            // test conditions
             if (isInboundRuleMatch && inboundRule.Conditions != null && inboundRule.Conditions.Count > 0)
             {
-                var conditionMatches = false;
-                if (conditionLogicalGrouping == LogicalGrouping.MatchAll)
-                {
-                    conditionMatches = inboundRule.Conditions.All(condition => ConditionMatch(originalUri, condition));
-                }
-                else
-                {
-                    conditionMatches = inboundRule.Conditions.Any(condition => ConditionMatch(originalUri, condition));
-                }
+                isInboundRuleMatch = TestConditions(inboundRule, originalUri);
+            }
 
-                isInboundRuleMatch = conditionMatches;
+            // test site name restrictions
+            if (isInboundRuleMatch && !string.IsNullOrEmpty(inboundRule.SiteNameRestriction))
+            {
+                isInboundRuleMatch = TestSiteNameRestriction(inboundRule);
             }
 
             if (isInboundRuleMatch && inboundRule.Action != null)
@@ -210,17 +165,119 @@ namespace Hi.UrlRewrite
                 {
                     throw new NotImplementedException("Redirect Action and Abort Reqeust Action are the only supported type of redirects");
                 }
-            } 
+            }
             else if (inboundRule.Action == null)
             {
                 Log.Warn(string.Format("UrlRewrite - Inbound Rule has no Action set - inboundRule: {0} inboundRule ItemId: {1}", inboundRule.Name, inboundRule.ItemId), this);
 
                 // we are going to skip this because we don't know what to do with it during processing
                 ruleResult.RuleMatched = false;
-            } 
+            }
 
 
             return ruleResult;
+        }
+
+        private bool TestPatternMatches(InboundRule inboundRule, Uri originalUri, out Match inboundRuleMatch)
+        {
+            var isInboundRuleMatch = false;
+            var absolutePath = originalUri.AbsolutePath;
+            var uriPath = absolutePath.Substring(1); // remove starting "/"
+
+            var escapedAbsolutePath = HttpUtility.UrlDecode(absolutePath);
+            var escapedUriPath = (escapedAbsolutePath ?? string.Empty).Substring(1); // remove starting "/"
+
+            var matchesThePattern = inboundRule.RequestedUrl.HasValue &&
+                                    inboundRule.RequestedUrl.Value == RequestedUrl.MatchesThePattern;
+
+            if (!matchesThePattern)
+            {
+                throw new NotImplementedException(
+                    "Have not yet implemented 'Does Not Match the Pattern' because of possible redirect loops");
+            }
+
+            var pattern = inboundRule.Pattern;
+
+            if (inboundRule.Using.HasValue && inboundRule.Using.Value == Using.ExactMatch)
+            {
+                pattern = "^" + pattern + "$";
+            }
+
+            var inboundRuleRegex = new Regex(pattern, inboundRule.IgnoreCase ? RegexOptions.IgnoreCase : RegexOptions.None);
+
+            inboundRuleMatch = inboundRuleRegex.Match(uriPath);
+            isInboundRuleMatch = matchesThePattern ? inboundRuleMatch.Success : !inboundRuleMatch.Success;
+
+            Log.Debug(
+                string.Format("UrlRewrite - Regex - Pattern: '{0}' Input: '{1}' Success: {2}", pattern, uriPath,
+                    isInboundRuleMatch), this);
+
+            if (!isInboundRuleMatch && !uriPath.Equals(escapedUriPath, StringComparison.InvariantCultureIgnoreCase))
+            {
+                inboundRuleMatch = inboundRuleRegex.Match(escapedUriPath);
+                isInboundRuleMatch = matchesThePattern ? inboundRuleMatch.Success : !inboundRuleMatch.Success;
+
+                Log.Debug(
+                    string.Format("UrlRewrite - Regex - Pattern: '{0}' Input: '{1}' Success: {2}", pattern, escapedUriPath,
+                        isInboundRuleMatch), this);
+            }
+            return isInboundRuleMatch;
+        }
+
+        private bool TestConditions(InboundRule inboundRule,  Uri originalUri)
+        {
+            var conditionMatches = false;
+
+            var conditionLogicalGrouping = inboundRule.ConditionLogicalGrouping.HasValue
+                ? inboundRule.ConditionLogicalGrouping.Value
+                : LogicalGrouping.MatchAll;
+
+            if (conditionLogicalGrouping == LogicalGrouping.MatchAll)
+            {
+                conditionMatches = inboundRule.Conditions.All(condition => ConditionMatch(originalUri, condition));
+            }
+            else
+            {
+                conditionMatches = inboundRule.Conditions.Any(condition => ConditionMatch(originalUri, condition));
+            }
+
+            return conditionMatches;
+        }
+
+        private bool TestSiteNameRestriction(InboundRule inboundRule)
+        {
+            var currentSiteName = Sitecore.Context.Site.Name;
+            bool isInboundRuleMatch = false;
+
+            if (currentSiteName != null)
+            {
+                isInboundRuleMatch = currentSiteName.Equals(inboundRule.SiteNameRestriction,
+                    StringComparison.InvariantCultureIgnoreCase);
+
+                if (!isInboundRuleMatch)
+                {
+                    Log.Debug(
+                        string.Format(
+                            "UrlRewrite - Regex - Rule '{0}' failed.  Site '{1}' does not equal rules site condition '{2}'",
+                            inboundRule.Name, currentSiteName, inboundRule.SiteNameRestriction), this);
+                }
+                else
+                {
+                    Log.Debug(
+                        string.Format(
+                            "UrlRewrite - Regex - Rule '{0}' matched site name restriction.  Site '{1}' equal rules site condition '{2}'",
+                            inboundRule.Name, currentSiteName, inboundRule.SiteNameRestriction), this);
+                }
+            }
+            else
+            {
+                Log.Warn(
+                    string.Format(
+                        "UrlRewrite - Regex - Rule '{0}' matching based on site name will not occur because site name is null.",
+                        inboundRule.Name), this);
+            }
+
+            return isInboundRuleMatch;
         }
 
         private static void ProcessAbortRequestAction(InboundRule inboundRule, RuleResult ruleResult)
@@ -291,7 +348,7 @@ namespace Hi.UrlRewrite
             var redirectType = redirectAction.RedirectType;
 
             // get the status code
-            ruleResult.StatusCode = redirectType.HasValue ? (int) redirectType : (int) HttpStatusCode.MovedPermanently;
+            ruleResult.StatusCode = redirectType.HasValue ? (int)redirectType : (int)HttpStatusCode.MovedPermanently;
 
             ruleResult.RewrittenUri = new Uri(rewriteUrl);
             ruleResult.StopProcessing = redirectAction.StopProcessingOfSubsequentRules;
@@ -323,7 +380,7 @@ namespace Hi.UrlRewrite
                                 break;
                             case Hi.UrlRewrite.Entities.ConditionInputType.HTTPS:
 
-                                var https = uri.Scheme.Equals(Uri.UriSchemeHttps,  StringComparison.InvariantCultureIgnoreCase) ? "on" : "off"; //
+                                var https = uri.Scheme.Equals(Uri.UriSchemeHttps, StringComparison.InvariantCultureIgnoreCase) ? "on" : "off"; //
 
                                 isMatch = conditionRegex.IsMatch(https);
                                 break;

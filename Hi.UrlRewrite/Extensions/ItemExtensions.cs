@@ -11,12 +11,13 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Web;
+using Sitecore.Sites;
 
 namespace Hi.UrlRewrite
 {
     public static class ItemExtensions
     {
-        public static InboundRule ToInboundRule(this InboundRuleItem inboundRuleItem, IEnumerable<ConditionItem> conditionItems = null, Condition siteCondition = null)
+        public static InboundRule ToInboundRule(this InboundRuleItem inboundRuleItem, IEnumerable<ConditionItem> conditionItems = null, string siteNameRestriction = null)
         {
 
             if (inboundRuleItem == null)
@@ -98,11 +99,11 @@ namespace Hi.UrlRewrite
             if (baseActionItem != null)
             {
                 var baseActionItemTemplateId = baseActionItem.TemplateID.ToString();
-                if (baseActionItemTemplateId.Equals(Constants.RedirectActionTemplateId, StringComparison.InvariantCultureIgnoreCase))
+                if (baseActionItemTemplateId.Equals(RedirectItem.TemplateId, StringComparison.InvariantCultureIgnoreCase))
                 {
                     baseAction = new RedirectItem(baseActionItem).ToRedirectAction();
                 }
-                else if (baseActionItemTemplateId.Equals(Constants.AbortRequestActionTemplateId,
+                else if (baseActionItemTemplateId.Equals(AbortRequestItem.TemplateId,
                     StringComparison.InvariantCultureIgnoreCase))
                 {
                     baseAction = new AbortRequestItem(baseActionItem).ToAbortRequestAction();
@@ -121,12 +122,7 @@ namespace Hi.UrlRewrite
             }
 
             inboundRule.Conditions = conditions;
-
-            if (siteCondition != null)
-            {
-                inboundRule.Conditions.Add(siteCondition);
-                inboundRule.ConditionLogicalGrouping = LogicalGrouping.MatchAll;
-            }
+            inboundRule.SiteNameRestriction = siteNameRestriction;
 
             return inboundRule;
         }

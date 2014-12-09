@@ -18,5 +18,6 @@ namespace Hi.UrlRewrite.Entities
         public Using? Using { get; set; }
         public List<Condition> Conditions { get; set; }
         public bool Enabled { get; set; }
+        public string SiteNameRestriction { get; set; }
     }
 }

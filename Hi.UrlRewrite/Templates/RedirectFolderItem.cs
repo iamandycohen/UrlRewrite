@@ -46,11 +46,11 @@ namespace Hi.UrlRewrite.Templates
 
         #region Field Instance Methods
 
-        public TextField SitePattern
+        public TextField SiteNameRestriction
         {
             get
             {
-                return new TextField(InnerItem.Fields["Site Pattern"]);
+                return new TextField(InnerItem.Fields["Site Name Restriction"]);
             }
         }
 

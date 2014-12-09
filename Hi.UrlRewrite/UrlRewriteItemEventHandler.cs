@@ -1,4 +1,5 @@
 ﻿using System.Runtime.InteropServices;
+using Hi.UrlRewrite.Templates;
 using Sitecore.Data;
 using Sitecore.Data.Events;
 using Sitecore.Data.Items;
@@ -156,24 +157,24 @@ namespace Hi.UrlRewrite
 
         private static bool IsRedirectFolderItem(Item item)
         {
-            return !IsTemplate(item) && item.TemplateID.ToString().Equals(Constants.RedirectFolderTemplateId, StringComparison.InvariantCultureIgnoreCase);
+            return !IsTemplate(item) && item.TemplateID.ToString().Equals(RedirectFolderItem.TemplateId, StringComparison.InvariantCultureIgnoreCase);
         }
 
         private static bool IsSimpleRedirectItem(Item item)
         {
-            return !IsTemplate(item) && item.TemplateID.ToString().Equals(Constants.SimpleRedirectInternalTemplateId, StringComparison.InvariantCultureIgnoreCase);
+            return !IsTemplate(item) && item.TemplateID.ToString().Equals(SimpleRedirectItem.TemplateId, StringComparison.InvariantCultureIgnoreCase);
         }
 
         private static bool IsInboundRuleItem(Item item)
         {
-            return !IsTemplate(item) && item.TemplateID.ToString().Equals(Constants.InboundRuleTemplateId, StringComparison.InvariantCultureIgnoreCase);
+            return !IsTemplate(item) && item.TemplateID.ToString().Equals(InboundRuleItem.TemplateId, StringComparison.InvariantCultureIgnoreCase);
         }
 
         private static bool IsInboundRuleItemChild(Item item)
         {
             if (item.Parent != null)
             {
-                return !IsTemplate(item) && item.Parent.TemplateID.ToString().Equals(Constants.InboundRuleTemplateId, StringComparison.InvariantCultureIgnoreCase);
+                return !IsTemplate(item) && item.Parent.TemplateID.ToString().Equals(InboundRuleItem.TemplateId, StringComparison.InvariantCultureIgnoreCase);
             }
             return false;
         }

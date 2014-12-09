@@ -1,18 +1,14 @@
 ﻿using System.Web.UI;
-using Sitecore.Data.Items;
-using Sitecore.Shell.Applications.ContentEditor;
 using Sitecore.Sites;
 using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Control = Sitecore.Web.UI.HtmlControls.Control;
 
 namespace Hi.UrlRewrite.Fields
 {
     public class SiteDropList : Control
     {
+
         public SiteDropList()
         {
             this.Class = "scContentControl";

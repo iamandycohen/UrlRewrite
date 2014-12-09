@@ -28,7 +28,7 @@ namespace Hi.UrlRewrite
                 return null;
             }
 
-            var query = string.Format(Constants.RedirectFolderItemsQuery, Configuration.RewriteFolderSearchRoot, Constants.RedirectFolderTemplateId);
+            var query = string.Format(Constants.RedirectFolderItemsQuery, Configuration.RewriteFolderSearchRoot, RedirectFolderItem.TemplateId);
             Item[] redirectFolderItems = db.SelectItems(query);
 
             if (redirectFolderItems == null)
@@ -43,12 +43,12 @@ namespace Hi.UrlRewrite
                 Log.Debug(string.Format("UrlRewrite - Processing RedirectFolder: {0}", redirectFolderItem.Name), thisType);
 
                 var folderDescendants = redirectFolderItem.Axes.GetDescendants()
-                    .Where(x => x.TemplateID == new ID(new Guid(Constants.SimpleRedirectInternalTemplateId)) ||
-                                x.TemplateID == new ID(new Guid(Constants.InboundRuleTemplateId)));
+                    .Where(x => x.TemplateID == new ID(new Guid(SimpleRedirectItem.TemplateId)) ||
+                                x.TemplateID == new ID(new Guid(InboundRuleItem.TemplateId)));
 
                 foreach (var descendantItem in folderDescendants)
                 {
-                    if (descendantItem.TemplateID == new ID(new Guid(Constants.SimpleRedirectInternalTemplateId)))
+                    if (descendantItem.TemplateID == new ID(new Guid(SimpleRedirectItem.TemplateId)))
                     {
                         var simpleRedirectItem = new SimpleRedirectItem(descendantItem);
 
@@ -58,7 +58,7 @@ namespace Hi.UrlRewrite
 
                         inboundRules.Add(inboundRule);
                     }
-                    else if (descendantItem.TemplateID == new ID(new Guid(Constants.InboundRuleTemplateId)))
+                    else if (descendantItem.TemplateID == new ID(new Guid(InboundRuleItem.TemplateId)))
                     {
                         var inboundRuleItem = new InboundRuleItem(descendantItem);
                       
@@ -82,7 +82,7 @@ namespace Hi.UrlRewrite
             string inboundRulePattern = string.Format("^{0}/?$", simpleRedirectInternalItem.Path.Value);
 
             var redirectFolderItem = new RedirectFolderItem(simpleRedirectInternalItem.InnerItem.Parent);
-            var siteCondition = GetSiteCondition(redirectFolderItem);
+            var siteNameRestriction = GetSiteNameRestriction(redirectFolderItem);
 
             var redirectTo = simpleRedirectInternalItem.Target;
             string actionRewriteUrl = null;
@@ -106,7 +106,8 @@ namespace Hi.UrlRewrite
                     StopProcessingOfSubsequentRules = false,
                     HttpCacheability = HttpCacheability.NoCache
                 },
-                Conditions = siteCondition != null ? new List<Condition> { siteCondition } : new List<Condition>(),
+                Conditions = new List<Condition>(),
+                SiteNameRestriction = siteNameRestriction,
                 Enabled = true,
                 IgnoreCase = true,
                 ItemId = simpleRedirectInternalItem.ID.Guid,
@@ -125,38 +126,25 @@ namespace Hi.UrlRewrite
             IEnumerable<ConditionItem> conditionItems = null;
 
             var redirectFolderItem = new RedirectFolderItem(inboundRuleItem.InnerItem.Parent);
-            var siteCondition = GetSiteCondition(redirectFolderItem);
+            var siteNameRestriction = GetSiteNameRestriction(redirectFolderItem);
 
-            Item[] items = inboundRuleItem.InnerItem.Axes.SelectItems(string.Format(Constants.RedirectFolderConditionItemsQuery, Constants.ConditionItemTemplateId));
+            Item[] items = inboundRuleItem.InnerItem.Axes.SelectItems(string.Format(Constants.RedirectFolderConditionItemsQuery, ConditionItem.TemplateId));
 
             if (items != null)
             {
                 conditionItems = items.Select(e => new ConditionItem(e));
             }
 
-            var inboundRule = inboundRuleItem.ToInboundRule(conditionItems, siteCondition);
+            var inboundRule = inboundRuleItem.ToInboundRule(conditionItems, siteNameRestriction);
 
             return inboundRule;
         }
 
-        internal static Condition GetSiteCondition(RedirectFolderItem redirectFolder)
+        internal static string GetSiteNameRestriction(RedirectFolderItem redirectFolder)
         {
-            var sitePattern = redirectFolder.SitePattern.Value;
-            Condition siteCondition = null;
+            var site = redirectFolder.SiteNameRestriction.Value;
 
-            if (!string.IsNullOrEmpty(sitePattern))
-            {
-                siteCondition = new Condition
-                {
-                    CheckIfInputString = CheckIfInputStringType.MatchesThePattern,
-                    ConditionInput = Hi.UrlRewrite.Entities.ConditionInputType.HTTP_HOST,
-                    IgnoreCase = true,
-                    Name = "Site",
-                    Pattern = sitePattern
-                };
-            }
-
-            return siteCondition;
+            return site;
         }
 
         internal static void GetRedirectUrlOrItemId(LinkField redirectTo, out string actionRewriteUrl, out Guid? redirectItemId, out string redirectItemAnchor)
