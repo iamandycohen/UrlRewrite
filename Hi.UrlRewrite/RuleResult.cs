@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Hi.UrlRewrite.Entities;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -21,5 +22,7 @@ namespace Hi.UrlRewrite
 
         public Guid ItemId { get; set; }
         public bool RuleMatched { get; set; }
+
+        public CustomResponseAction CustomResponse { get; set; }
     }
 }

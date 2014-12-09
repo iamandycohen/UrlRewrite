@@ -65,7 +65,7 @@ namespace Hi.UrlRewrite
             {
                 httpResponse.Clear();
 
-                if (!ruleResult.Abort)
+                if (!ruleResult.Abort && ruleResult.CustomResponse == null)
                 {
                     httpResponse.RedirectLocation = ruleResult.RewrittenUri.ToString();
                     httpResponse.StatusCode = ruleResult.StatusCode ?? (int)HttpStatusCode.MovedPermanently;
@@ -74,6 +74,19 @@ namespace Hi.UrlRewrite
                     {
                         httpResponse.Cache.SetCacheability(ruleResult.HttpCacheability.Value);
                     }
+                }
+                else if (ruleResult.Abort)
+                {
+                    // do nothing
+                }
+                else if (ruleResult.CustomResponse != null)
+                {
+                    var customResponse = ruleResult.CustomResponse;
+
+                    httpResponse.StatusCode = customResponse.StatusCode;
+                    httpResponse.SubStatusCode = customResponse.SubStatusCode;
+                    httpResponse.StatusDescription = customResponse.ErrorDescription;
+                    httpResponse.Status = customResponse.Reason;
                 }
 
                 httpResponse.End();
@@ -160,6 +173,10 @@ namespace Hi.UrlRewrite
                 else if (inboundRule.Action is AbortRequestAction)
                 {
                     ProcessAbortRequestAction(inboundRule, ruleResult);
+                }
+                else if (inboundRule.Action is CustomResponseAction)
+                {
+                    ProcessCustomResponseAction(inboundRule, ruleResult);
                 }
                 else
                 {
@@ -281,7 +298,15 @@ namespace Hi.UrlRewrite
             return isInboundRuleMatch;
         }
 
-        private static void ProcessAbortRequestAction(InboundRule inboundRule, RuleResult ruleResult)
+        private void ProcessCustomResponseAction(InboundRule inboundRule, RuleResult ruleResult)
+        {
+            var customResponseAction = inboundRule.Action as CustomResponseAction;
+
+            ruleResult.CustomResponse = customResponseAction;
+            ruleResult.StopProcessing = true;
+        }
+
+        private void ProcessAbortRequestAction(InboundRule inboundRule, RuleResult ruleResult)
         {
             var abortRequestAction = inboundRule.Action as AbortRequestAction;
 
@@ -289,7 +314,7 @@ namespace Hi.UrlRewrite
             ruleResult.StopProcessing = true;
         }
 
-        private static void ProcessRedirectAction(InboundRule inboundRule, Uri uri, Match inboundRuleMatch,
+        private void ProcessRedirectAction(InboundRule inboundRule, Uri uri, Match inboundRuleMatch,
             RuleResult ruleResult)
         {
             var redirectAction = inboundRule.Action as RedirectAction;
@@ -336,7 +361,7 @@ namespace Hi.UrlRewrite
             ruleResult.HttpCacheability = redirectAction.HttpCacheability;
         }
 
-        private static string GetRewriteUrlFromItemId(Guid rewriteItemId, string rewriteItemAnchor)
+        private string GetRewriteUrlFromItemId(Guid rewriteItemId, string rewriteItemAnchor)
         {
             string rewriteUrl = null;
 

@@ -59,6 +59,7 @@
     <Compile Include="Entities\CheckIfInputStringType.cs" />
     <Compile Include="Entities\Condition.cs" />
     <Compile Include="Entities\ConditionInputType.cs" />
+    <Compile Include="Entities\CustomResponseAction.cs" />
     <Compile Include="Entities\IBaseCache.cs" />
     <Compile Include="Entities\InboundRule.cs" />
     <Compile Include="Entities\LogicalGrouping.cs" />
@@ -73,6 +74,7 @@
     <Compile Include="RunExternalRelative.cs" />
     <Compile Include="Templates\Action\AbortRequestItem.cs" />
     <Compile Include="Templates\Action\Base\BaseCacheItem.cs" />
+    <Compile Include="Templates\Action\CustomResponseItem.cs" />
     <Compile Include="Templates\Action\HttpCacheabilityType\HttpCacheabilityTypeItem.cs" />
     <Compile Include="Templates\BaseUrlRewriteItem.cs" />
     <Compile Include="UrlRewriteHandler.cs" />
