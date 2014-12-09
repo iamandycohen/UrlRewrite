@@ -1,4 +1,4 @@
-﻿<%@ Page Language="C#" AutoEventWireup="true" CodeBehind="Default.aspx.cs" Inherits="AndysPlayground.sitecore_modules.Shell.UrlRewrite.Default" %>
+﻿<%@ Page Language="C#" AutoEventWireup="true" CodeBehind="Default.aspx.cs" Inherits="Hi.UrlRewrite.sitecore_modules.Shell.UrlRewrite.Default" %>
 
 <!DOCTYPE html>
 

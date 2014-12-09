@@ -62,23 +62,12 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="sitecore modules\Shell\UrlRewrite\Default.aspx.cs">
-      <DependentUpon>Default.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="sitecore modules\Shell\UrlRewrite\Default.aspx.designer.cs">
-      <DependentUpon>Default.aspx</DependentUpon>
-    </Compile>
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Hi.UrlRewrite\Hi.UrlRewrite.csproj">
       <Project>{6af4a433-0d10-4b1f-8517-7a1f05ef5ab5}</Project>
       <Name>Hi.UrlRewrite</Name>
     </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="App_Config\Include\Hi.UrlRewrite.config" />
-    <Content Include="sitecore modules\Shell\UrlRewrite\Default.aspx" />
   </ItemGroup>
   <ItemGroup />
   <ItemGroup>

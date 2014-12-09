@@ -7,7 +7,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace AndysPlayground.sitecore_modules.Shell.UrlRewrite {
+namespace Hi.UrlRewrite.sitecore_modules.Shell.UrlRewrite {
     
     
     public partial class Default {

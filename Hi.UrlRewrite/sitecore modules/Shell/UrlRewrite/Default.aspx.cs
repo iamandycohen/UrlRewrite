@@ -1,21 +1,17 @@
-﻿using System.Diagnostics;
-using System.Web.UI.HtmlControls;
-using Hi.UrlRewrite;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Web;
 using System.Web.UI;
+using System.Web.UI.HtmlControls;
 using System.Web.UI.WebControls;
 using Sitecore.Data;
 using Sitecore.Sites;
 
-namespace AndysPlayground.sitecore_modules.Shell.UrlRewrite
+namespace Hi.UrlRewrite.sitecore_modules.Shell.UrlRewrite
 {
     public partial class Default : System.Web.UI.Page
     {
-
         private Database _db;
         private List<RuleResult> _processedResults;
 
