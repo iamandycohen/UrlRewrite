@@ -67,6 +67,7 @@
     <Compile Include="Entities\RequestedUrl.cs" />
     <Compile Include="Entities\Using.cs" />
     <Compile Include="Extensions\ItemExtensions.cs" />
+    <Compile Include="Fields\SiteDropList.cs" />
     <Compile Include="ProcessRequestResult.cs" />
     <Compile Include="RuleResult.cs" />
     <Compile Include="RunExternalRelative.cs" />
