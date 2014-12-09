@@ -81,12 +81,20 @@ namespace Hi.UrlRewrite
                 }
                 else if (ruleResult.CustomResponse != null)
                 {
+                    httpResponse.TrySkipIisCustomErrors = true;
+
                     var customResponse = ruleResult.CustomResponse;
 
                     httpResponse.StatusCode = customResponse.StatusCode;
-                    httpResponse.SubStatusCode = customResponse.SubStatusCode;
                     httpResponse.StatusDescription = customResponse.ErrorDescription;
-                    httpResponse.Status = customResponse.Reason;
+                    // TODO: Implement Status Reason?
+                    //httpResponse.??? = customResponse.Reason;
+
+                    if (customResponse.SubStatusCode.HasValue)
+                    {
+                        httpResponse.SubStatusCode = customResponse.SubStatusCode.Value;
+                    }
+
                 }
 
                 httpResponse.End();

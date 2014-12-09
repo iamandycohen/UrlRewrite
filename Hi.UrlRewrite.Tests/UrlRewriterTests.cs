@@ -125,16 +125,38 @@ namespace Hi.UrlRewrite.Tests
                 Name = "Abort Rule",
                 Pattern = "^abort$",
                 Using = Using.RegularExpressions,
-                Action = new AbortRequestAction() { Name = "Abort Action"},
+                Action = new AbortRequestAction() { Name = "Abort Action" },
                 RequestedUrl = RequestedUrl.MatchesThePattern
             };
 
             InboundRules.Insert(1, newInboundRule);
- 
+
             var rewriteResult = rewriter.ProcessRequestUrl(new Uri("http://fictitioussite.com/abort"), InboundRules);
 
             Assert.IsTrue(rewriteResult.Abort);
             Assert.IsTrue(rewriteResult.ProcessedResults.Count == 2);
+        }
+
+        [TestMethod]
+        public void ProcessRequestUrlWithCustomResponse()
+        {
+            var rewriter = new UrlRewriter();
+            var newInboundRule = new InboundRule()
+            {
+                Name = "Custom Response Rule",
+                Pattern = "customresponse",
+                Using = Using.ExactMatch,
+                Action = new CustomResponseAction() { Name = "Custom Response Action", StatusCode = 550, SubStatusCode = 100, ErrorDescription = "Custom Response Because I Said So", Reason = "Custom Response 550"},
+                RequestedUrl = RequestedUrl.MatchesThePattern
+            };
+
+            InboundRules.Insert(1, newInboundRule);
+
+            var rewriteResult = rewriter.ProcessRequestUrl(new Uri("http://fictitioussite.com/customresponse"), InboundRules);
+
+            Assert.IsTrue(rewriteResult.CustomResponse != null);
+            Assert.AreEqual(rewriteResult.CustomResponse.StatusCode, 550);
+            Assert.AreEqual(rewriteResult.CustomResponse.SubStatusCode, 100);
         }
 
     }

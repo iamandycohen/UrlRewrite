@@ -10,7 +10,7 @@ namespace Hi.UrlRewrite.Templates
 {
     public class InboundRuleItem : CustomItem
     {
-        public static readonly string TemplateId = "{F91102D6-C17E-4966-9A1A-F551FDD18D40}";
+        public static readonly string TemplateId = "{69DCE9A6-D8C1-463D-AF95-B7FEB326013F}";
 
         #region Inherited Base Templates
 

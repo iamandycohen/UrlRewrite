@@ -37,7 +37,7 @@ namespace Hi.UrlRewrite
 
                 var requestResult = ProcessUri(httpContext.Request.Url, db, urlRewriter);
 
-                if (requestResult == null || !requestResult.MatchedAtLeastOneRule || requestResult.RewrittenUri == null || requestResult.RewrittenUri.ToString().Equals(requestResult.OriginalUri.ToString(), StringComparison.InvariantCultureIgnoreCase)) return;
+                if (requestResult == null || !requestResult.MatchedAtLeastOneRule) return;
 
                 Log.Info(string.Format("UrlRewrite - Redirecting {0} to {1} [{2}]", requestResult.OriginalUri, requestResult.RewrittenUri, requestResult.StatusCode), thisType);
 

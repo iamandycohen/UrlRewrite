@@ -99,6 +99,7 @@ namespace Hi.UrlRewrite
             if (baseActionItem != null)
             {
                 var baseActionItemTemplateId = baseActionItem.TemplateID.ToString();
+
                 if (baseActionItemTemplateId.Equals(RedirectItem.TemplateId, StringComparison.InvariantCultureIgnoreCase))
                 {
                     baseAction = new RedirectItem(baseActionItem).ToRedirectAction();
@@ -107,6 +108,11 @@ namespace Hi.UrlRewrite
                     StringComparison.InvariantCultureIgnoreCase))
                 {
                     baseAction = new AbortRequestItem(baseActionItem).ToAbortRequestAction();
+                }
+                else if (baseActionItemTemplateId.Equals(CustomResponseItem.TemplateId,
+                    StringComparison.InvariantCultureIgnoreCase))
+                {
+                    baseAction = new CustomResponseItem(baseActionItem).ToCustomResponseAction();
                 }
             }
             inboundRule.Action = baseAction;
@@ -222,6 +228,42 @@ namespace Hi.UrlRewrite
             };
 
             return abortRequestAction;
+        }
+
+        public static CustomResponseAction ToCustomResponseAction(this CustomResponseItem customResponseItem)
+        {
+            if (customResponseItem == null)
+            {
+                return null;
+            }
+
+            var customResponseAction = new CustomResponseAction()
+            {
+                Name = customResponseItem.Name,
+            };
+
+            var statusCode = 0;
+
+            if (!int.TryParse(customResponseItem.StatusCode.Value, out statusCode))
+            {
+                return null;
+            }
+
+            customResponseAction.StatusCode = statusCode;
+
+            if (customResponseItem.SubstatusCode.Value != null)
+            {
+                int outSubStatusCode = 0;
+                if (int.TryParse(customResponseItem.SubstatusCode.Value, out outSubStatusCode))
+                {
+                    customResponseAction.SubStatusCode = outSubStatusCode;
+                }
+            }
+
+            customResponseAction.ErrorDescription = customResponseItem.ErrorDescription.Value;
+            customResponseAction.Reason = customResponseItem.Reason.Value;
+
+            return customResponseAction;
         }
 
         public static Condition ToCondition(this ConditionItem conditionItem)
