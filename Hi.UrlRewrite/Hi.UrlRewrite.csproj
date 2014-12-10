@@ -78,8 +78,13 @@
     <Compile Include="Entities\Using.cs" />
     <Compile Include="Extensions\ItemExtensions.cs" />
     <Compile Include="Fields\SiteDropList.cs" />
-    <Compile Include="ProcessRequestResult.cs" />
-    <Compile Include="RuleResult.cs" />
+    <Compile Include="Processing\Results\ProcessRequestResult.cs" />
+    <Compile Include="Processing\Results\RuleResult.cs" />
+    <Compile Include="Processing\RulesEngine.cs" />
+    <Compile Include="Processing\UrlRewriteHandler.cs" />
+    <Compile Include="Processing\UrlRewriteItemEventHandler.cs" />
+    <Compile Include="Processing\UrlRewriteProcessor.cs" />
+    <Compile Include="Processing\UrlRewriter.cs" />
     <Compile Include="sitecore modules\Shell\UrlRewrite\Default.aspx.cs">
       <DependentUpon>Default.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
@@ -92,12 +97,8 @@
     <Compile Include="Templates\Action\CustomResponseItem.cs" />
     <Compile Include="Templates\Action\HttpCacheabilityType\HttpCacheabilityTypeItem.cs" />
     <Compile Include="Templates\BaseUrlRewriteItem.cs" />
-    <Compile Include="UrlRewriteHandler.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="RulesEngine.cs" />
     <Compile Include="Templates\SimpleRedirectItem.cs" />
-    <Compile Include="UrlRewriteItemEventHandler.cs" />
-    <Compile Include="UrlRewriter.cs" />
     <Compile Include="Templates\Action\Base\BaseActionItem.cs" />
     <Compile Include="Templates\Action\Base\BaseRedirectActionItem.cs" />
     <Compile Include="Templates\Action\Base\BaseStopProcessingActionItem.cs" />
@@ -112,7 +113,6 @@
     <Compile Include="Templates\MatchUrl\RequestedUrlTypeItem.cs" />
     <Compile Include="Templates\MatchUrl\UsingTypeItem.cs" />
     <Compile Include="Templates\RedirectFolderItem.cs" />
-    <Compile Include="UrlRewriteProcessor.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="App_Config\Include\Hi.UrlRewrite.config" />

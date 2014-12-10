@@ -1,4 +1,5 @@
 ﻿using Hi.UrlRewrite.Entities;
+using Hi.UrlRewrite.Processing;
 using Hi.UrlRewrite.Templates;
 using Hi.UrlRewrite.Templates.Action;
 using Hi.UrlRewrite.Templates.Action.Base;

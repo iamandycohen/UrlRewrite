@@ -1,21 +1,16 @@
-﻿using Hi.UrlRewrite.Entities;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Web;
+using Hi.UrlRewrite.Entities;
 using Hi.UrlRewrite.Templates;
 using Hi.UrlRewrite.Templates.Conditions;
 using Sitecore.Data;
 using Sitecore.Data.Fields;
 using Sitecore.Data.Items;
 using Sitecore.Diagnostics;
-using Sitecore.Links;
-using Sitecore.SecurityModel;
-using Sitecore.Sites;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Web;
 
-namespace Hi.UrlRewrite
+namespace Hi.UrlRewrite.Processing
 {
     public class RulesEngine
     {

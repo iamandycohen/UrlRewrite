@@ -1,16 +1,17 @@
-﻿using Hi.UrlRewrite.Entities;
-using Sitecore.Data;
-using Sitecore.Diagnostics;
-using Sitecore.Links;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using System.Text.RegularExpressions;
 using System.Threading;
 using System.Web;
+using Hi.UrlRewrite.Entities;
+using Hi.UrlRewrite.Processing.Results;
+using Sitecore.Data;
+using Sitecore.Diagnostics;
+using Sitecore.Links;
 
-namespace Hi.UrlRewrite
+namespace Hi.UrlRewrite.Processing
 {
     public class UrlRewriter
     {

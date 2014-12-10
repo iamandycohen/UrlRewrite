@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Runtime.InteropServices;
 using Hi.UrlRewrite.Entities;
+using Hi.UrlRewrite.Processing;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System.Web;
 

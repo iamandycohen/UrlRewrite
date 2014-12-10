@@ -1,16 +1,8 @@
-﻿using Sitecore;
-using Sitecore.IO;
+﻿using System.Web;
 using Sitecore.Pipelines.HttpRequest;
 using Sitecore.Sites;
-using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Web;
 
-namespace Hi.UrlRewrite
+namespace Hi.UrlRewrite.Processing
 {
     public class UrlRewriteHandler : IHttpHandler
     {

@@ -5,6 +5,8 @@ using System.Web;
 using System.Web.UI;
 using System.Web.UI.HtmlControls;
 using System.Web.UI.WebControls;
+using Hi.UrlRewrite.Processing;
+using Hi.UrlRewrite.Processing.Results;
 using Sitecore.Data;
 using Sitecore.Sites;
 

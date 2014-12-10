@@ -1,12 +1,9 @@
-﻿using Hi.UrlRewrite.Entities;
-using System;
+﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Web;
+using Hi.UrlRewrite.Entities;
 
-namespace Hi.UrlRewrite
+namespace Hi.UrlRewrite.Processing.Results
 {
     public class ProcessRequestResult
     {

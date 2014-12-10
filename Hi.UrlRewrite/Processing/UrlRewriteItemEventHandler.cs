@@ -1,18 +1,12 @@
-﻿using System.Runtime.InteropServices;
+﻿using System;
 using Hi.UrlRewrite.Templates;
-using Sitecore.Data;
 using Sitecore.Data.Events;
 using Sitecore.Data.Items;
 using Sitecore.Diagnostics;
 using Sitecore.Events;
 using Sitecore.SecurityModel;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
-namespace Hi.UrlRewrite
+namespace Hi.UrlRewrite.Processing
 {
     public class UrlRewriteItemEventHandler
     {
