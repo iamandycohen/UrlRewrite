@@ -18,7 +18,6 @@
   <Sources>
     <xitems>
       <Entries>
-        <x-item>/core/sitecore/content/Applications/Url Rewrite/{09F3C777-48F9-4E61-82FA-A65FF02C4A1A}/invariant/0</x-item>
         <x-item>/core/sitecore/layout/Layouts/Applications/UrlRewrite/{EDB0643E-C338-44E6-8029-B050043C4555}/invariant/0</x-item>
         <x-item>/core/sitecore/content/Documents and settings/All users/Start menu/Left/Url Rewrite/{0A3CB105-0D5B-437A-A087-DCB4E9E380BD}/invariant/0</x-item>
         <x-item>/core/sitecore/content/Documents and settings/All users/Start menu/Programs/Url Rewrite/{42A1C028-A80F-4E50-99E8-72695D0F5902}/invariant/0</x-item>
@@ -151,6 +150,8 @@
         <x-item>/master/sitecore/system/Workflows/Redirect Workflow/Draft/Submit/Validation Action/{E71E5D39-845C-49C4-AA5F-60960EF67F14}/invariant/0</x-item>
         <x-item>/master/sitecore/system/Workflows/Redirect Workflow/Awaiting Approval/Approve/{12E10F20-CB26-48BC-9D70-F1877A74D961}/invariant/0</x-item>
         <x-item>/master/sitecore/system/Workflows/Redirect Workflow/Awaiting Approval/Reject/{1A662076-EA82-44D9-8158-C0DF8F9F754B}/invariant/0</x-item>
+        <x-item>/core/sitecore/content/Applications/Url Rewrite/{F7F8487E-BEBE-454C-A9F0-52A34A6D342B}/invariant/0</x-item>
+        <x-item>/core/sitecore/content/Applications/Url Rewrite/Url Rewrite/{09F3C777-48F9-4E61-82FA-A65FF02C4A1A}/invariant/0</x-item>
       </Entries>
       <SkipVersions>False</SkipVersions>
       <Converter>
@@ -192,6 +193,7 @@
         <x-item>/sitecore modules/Shell/UrlRewrite/Scripts/jquery-1.9.0.min.js</x-item>
         <x-item>/sitecore modules/Shell/UrlRewrite/Scripts/jquery-1.9.0.min.map</x-item>
         <x-item>/sitecore modules/Shell/UrlRewrite/Scripts/npm.js</x-item>
+        <x-item>/sitecore modules/Shell/UrlRewrite/Default.aspx</x-item>
       </Entries>
       <Converter>
         <FileToEntryConverter>
