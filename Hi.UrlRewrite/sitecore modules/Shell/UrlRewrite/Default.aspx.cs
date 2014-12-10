@@ -25,43 +25,60 @@ namespace Hi.UrlRewrite.sitecore_modules.Shell.UrlRewrite
             }
             else
             {
-                var rewriter = new UrlRewriter();
-                _db = Sitecore.Context.ContentDatabase;
+                Page.Validate();
 
-                var inboundRules = RulesEngine.GetInboundRules(_db);
-                ProcessRequestResult results;
-
-                var requestUri = new Uri(txtUrl.Text);
-                var siteContext = SiteContextFactory.GetSiteContext(requestUri.Host, requestUri.AbsolutePath, requestUri.Port);
-
-                using (new SiteContextSwitcher(siteContext))
-                using (new DatabaseSwitcher(_db))
+                if (Page.IsValid)
                 {
-                    results = rewriter.ProcessRequestUrl(new Uri(txtUrl.Text), inboundRules);
+                    divFormGroup.Attributes["class"] = "form-group";
+                    divTable.Visible = true;
 
-                    _processedResults = results.ProcessedResults;
-                }
+                    var rewriter = new UrlRewriter();
+                    _db = Sitecore.Context.ContentDatabase;
+
+                    var inboundRules = RulesEngine.GetInboundRules(_db);
+                    ProcessRequestResult results;
+
+                    var requestUri = new Uri(txtUrl.Text);
+                    var siteContext = SiteContextFactory.GetSiteContext(requestUri.Host, requestUri.AbsolutePath,
+                        requestUri.Port);
+
+                    using (new SiteContextSwitcher(siteContext))
+                    using (new DatabaseSwitcher(_db))
+                    {
+                        results = rewriter.ProcessRequestUrl(new Uri(txtUrl.Text), inboundRules);
+
+                        _processedResults = results.ProcessedResults;
+                    }
 
 
-                resultsRepeater.DataSource = _processedResults;
-                resultsRepeater.DataBind();
+                    resultsRepeater.DataSource = _processedResults;
+                    resultsRepeater.DataBind();
 
-                var isAbort = results.Abort;
-                var isCustomResponse = results.CustomResponse != null;
+                    var isAbort = results.Abort;
+                    var isCustomResponse = results.CustomResponse != null;
 
-                if (isAbort)
-                {
-                    txtFinalUrl.InnerText = "Aborted";
-                }
-                else if (isCustomResponse)
-                {
-                    const string resultFormat = "Custom Response: {0} {1} {2}";
-                    txtFinalUrl.InnerText = string.Format(resultFormat, results.CustomResponse.StatusCode, results.CustomResponse.SubStatusCode, results.CustomResponse.ErrorDescription);
+                    if (isAbort)
+                    {
+                        txtFinalUrl.InnerText = "Aborted";
+                    }
+                    else if (isCustomResponse)
+                    {
+                        const string resultFormat = "Custom Response: {0} {1} {2}";
+                        txtFinalUrl.InnerText = string.Format(resultFormat, results.CustomResponse.StatusCode,
+                            results.CustomResponse.SubStatusCode, results.CustomResponse.ErrorDescription);
+                    }
+                    else
+                    {
+                        const string resultFormat = "Redirected to {0}.";
+                        txtFinalUrl.InnerText = string.Format(resultFormat, results.RewrittenUri.ToString());
+                    }
                 }
                 else
                 {
-                    const string resultFormat = "Redirected to {0}.";
-                    txtFinalUrl.InnerText = string.Format(resultFormat, results.RewrittenUri.ToString());
+                    if (!vldTxtUrl.IsValid)
+                    {
+                        divFormGroup.Attributes["class"] = "form-group has-error";
+                    }
                 }
             }
         }

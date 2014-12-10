@@ -22,6 +22,15 @@ namespace Hi.UrlRewrite.sitecore_modules.Shell.UrlRewrite {
         protected global::System.Web.UI.HtmlControls.HtmlForm form1;
         
         /// <summary>
+        /// divFormGroup control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.HtmlControls.HtmlGenericControl divFormGroup;
+        
+        /// <summary>
         /// txtUrl control.
         /// </summary>
         /// <remarks>
@@ -31,6 +40,15 @@ namespace Hi.UrlRewrite.sitecore_modules.Shell.UrlRewrite {
         protected global::System.Web.UI.WebControls.TextBox txtUrl;
         
         /// <summary>
+        /// vldTxtUrl control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.RequiredFieldValidator vldTxtUrl;
+        
+        /// <summary>
         /// btnSubmit control.
         /// </summary>
         /// <remarks>
@@ -38,6 +56,15 @@ namespace Hi.UrlRewrite.sitecore_modules.Shell.UrlRewrite {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.Button btnSubmit;
+        
+        /// <summary>
+        /// divTable control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.HtmlControls.HtmlGenericControl divTable;
         
         /// <summary>
         /// resultsRepeater control.
