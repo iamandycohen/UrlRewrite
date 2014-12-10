@@ -9,14 +9,6 @@ namespace Hi.UrlRewrite
 {
     public class Configuration
     {
-        //public static string Database
-        //{
-        //    get
-        //    {
-        //        return Settings.GetSetting("Hi.UrlRewrite.Database", "web");
-        //    }
-        //}
-
         public static string[] IgnoreUrlPrefixes
         {
             get
