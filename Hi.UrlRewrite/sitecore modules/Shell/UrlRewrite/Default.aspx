@@ -2,62 +2,91 @@
 
 <!DOCTYPE html>
 
-<html xmlns="http://www.w3.org/1999/xhtml">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
 <head runat="server">
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="description" content="" />
+    <meta name="author" content="" />
     <title></title>
+
+    <!-- Bootstrap core CSS -->
+    <link href="~/Content/bootstrap.min.css" rel="stylesheet" />
+
+    <!-- Custom styles for this template -->
+
+    <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
+    <!--[if lt IE 9]>
+      <script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
+      <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+    <![endif]-->
+
+
 </head>
-<body style="background-color: white;">
-    <style>
-        .wrapperForm div {
-            padding: 20px;
-        }
+<body>
 
-        .wrapperForm table {
-            width: 100%;
-        }
+    <div class="container">
 
-        .wrapperForm table tr {
-            border-top: blue;    
-        }
+        <div class="row">
 
-        .wrapperForm table tr:nth-child(even) {
-            background-color: lightyellow;
-        }
+            <form id="form1" runat="server" role="form" class="form-horizontal">
 
-        .wrapperForm table tr.matched {
-            color: green;
-            font-weight: bolder;
-        }
+                <div class="form-group">
+                    <label for="txtUrl" class="control-label">Url</label>
+                    <asp:TextBox ID="txtUrl" ClientIDMode="Static" runat="server" placeholder="Please enter a fully qualified URL to test..." CssClass="form-control"></asp:TextBox>
+                </div>
 
-    </style>
+                <div class="form-group">
+                    <asp:Button ID="btnSubmit" runat="server" Text="Run" UseSubmitBehavior="True" CssClass="btn btn-primary" />
+                </div>
 
-    <form id="form1" runat="server" class="wrapperForm">
-        <div>
-            <asp:TextBox ID="txtUrl" runat="server"></asp:TextBox>
-            <asp:Button ID="btnSubmit" runat="server" Text="Run" UseSubmitBehavior="True" />
+                <table class="table table-striped">
+                    <thead>
+                        <tr>
+                            <th>Name</th>
+                            <th>Path</th>
+                            <th>Original Url</th>
+                            <th>Rewritten Url</th>
+                            <th>Match?</th>
+                            <th>Action</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <asp:Repeater runat="server" ID="resultsRepeater" OnItemDataBound="resultsRepeater_OnItemDataBound">
+                            <ItemTemplate>
+                                <tr id="tableRow" runat="server">
+                                    <td id="cellName" runat="server"></td>
+                                    <td id="cellPath" runat="server"></td>
+                                    <td id="cellOriginalUrl" runat="server"></td>
+                                    <td id="cellRewrittenUrl" runat="server"></td>
+                                    <td id="cellMatch" runat="server"></td>
+                                    <td id="cellAction" runat="server"></td>
+                                </tr>
+                            </ItemTemplate>
+                        </asp:Repeater>
+                    </tbody>
+                </table>
+
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        <h3 class="panel-title">Final Result</h3>
+                    </div>
+                    <div class="panel-body">
+                        <div id="txtFinalUrl" runat="server"></div>
+                    </div>
+                </div>
+
+            </form>
+
         </div>
+    </div>
 
-        <div id="divResults" runat="server">
+    <!-- Bootstrap core JavaScript
+    ================================================== -->
+    <!-- Placed at the end of the document so the pages load faster -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+    <script src="~/Scripts/bootstrap.min.js"></script>
 
-            <table>
-                <thead>
-                    <tr>
-                        <th>Name</th><th>Path</th><th>Original Url</th><th>Rewritten Url</th><th>Match?</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <asp:Repeater runat="server" ID="resultsRepeater" OnItemDataBound="resultsRepeater_OnItemDataBound">
-                        <ItemTemplate>
-                            <tr id="tableRow" runat="server"><td id="cellName" runat="server"></td><td id="cellPath" runat="server"></td><td id="cellOriginalUrl" runat="server"></td><td id="cellRewrittenUrl" runat="server"></td><td id="cellMatch" runat="server"></td></tr>
-                        </ItemTemplate>
-                    </asp:Repeater>
-                </tbody>
-            </table>
-
-            <div id="txtFinalUrl" runat="server"></div>
-
-        </div>
-
-    </form>
 </body>
 </html>

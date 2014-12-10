@@ -46,8 +46,23 @@ namespace Hi.UrlRewrite.sitecore_modules.Shell.UrlRewrite
                 resultsRepeater.DataSource = _processedResults;
                 resultsRepeater.DataBind();
 
-                txtFinalUrl.InnerText = results.RewrittenUri.ToString();
+                var isAbort = results.Abort;
+                var isCustomResponse = results.CustomResponse != null;
 
+                if (isAbort)
+                {
+                    txtFinalUrl.InnerText = "Aborted";
+                }
+                else if (isCustomResponse)
+                {
+                    const string resultFormat = "Custom Response: {0} {1} {2}";
+                    txtFinalUrl.InnerText = string.Format(resultFormat, results.CustomResponse.StatusCode, results.CustomResponse.SubStatusCode, results.CustomResponse.ErrorDescription);
+                }
+                else
+                {
+                    const string resultFormat = "Redirected to {0}.";
+                    txtFinalUrl.InnerText = string.Format(resultFormat, results.RewrittenUri.ToString());
+                }
             }
         }
 
@@ -61,11 +76,31 @@ namespace Hi.UrlRewrite.sitecore_modules.Shell.UrlRewrite
                 var result = e.Item.DataItem as RuleResult;
                 if (result != null)
                 {
+                    var ruleMatched = result.RuleMatched;
+                    var isAbort = ruleMatched && result.Abort;
+                    var isCustomResponse = ruleMatched && result.CustomResponse != null;
 
-                    if (result.RuleMatched)
+                    if (ruleMatched)
                     {
                         var tableRow = e.Item.FindControl("tableRow") as HtmlTableRow;
-                        tableRow.Attributes["class"] = "matched";
+                        if (tableRow != null) tableRow.Attributes["class"] = "success";
+
+                        var cellAction = e.Item.FindControl("cellAction") as HtmlTableCell;
+                        if (cellAction != null)
+                        {
+                            if (isAbort)
+                            {
+                                cellAction.InnerText = "Abort";
+                            }
+                            else if (isCustomResponse)
+                            {
+                                cellAction.InnerText = "Custom Response";
+                            }
+                            else
+                            {
+                                cellAction.InnerText = "Redirect";
+                            }
+                        }
                     }
 
                     var item = _db.GetItem(new ID(result.ItemId));

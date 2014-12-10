@@ -40,15 +40,6 @@ namespace Hi.UrlRewrite.sitecore_modules.Shell.UrlRewrite {
         protected global::System.Web.UI.WebControls.Button btnSubmit;
         
         /// <summary>
-        /// divResults control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.HtmlControls.HtmlGenericControl divResults;
-        
-        /// <summary>
         /// resultsRepeater control.
         /// </summary>
         /// <remarks>
