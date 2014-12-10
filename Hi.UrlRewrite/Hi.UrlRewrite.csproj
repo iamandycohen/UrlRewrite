@@ -80,7 +80,6 @@
     <Compile Include="Fields\SiteDropList.cs" />
     <Compile Include="ProcessRequestResult.cs" />
     <Compile Include="RuleResult.cs" />
-    <Compile Include="RunExternalRelative.cs" />
     <Compile Include="sitecore modules\Shell\UrlRewrite\Default.aspx.cs">
       <DependentUpon>Default.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
