@@ -121,14 +121,14 @@ namespace Hi.UrlRewrite.Processing
             {
                 case Using.ExactMatch:
                 case Using.RegularExpressions:
-
+                case Using.Wildcards:
                     ruleResult = ProcessRegularExpressionInboundRule(ruleResult.OriginalUri, inboundRule);
 
                     break;
-                case Using.Wildcards:
-                    //TODO: Implement Wildcards
-                    throw new NotImplementedException("Using Wildcards has not been implemented");
-                    break;
+                //case Using.Wildcards:
+                //    //TODO: Implement Wildcards
+                //    throw new NotImplementedException("Using Wildcards has not been implemented");
+                //    break;
 
                 default:
                     break;

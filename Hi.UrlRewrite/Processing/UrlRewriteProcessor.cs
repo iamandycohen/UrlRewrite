@@ -143,7 +143,10 @@ namespace Hi.UrlRewrite.Processing
 
             var newInboundRule = RulesEngine.CreateInboundRuleFromInboundRuleItem(inboundRuleItem, redirectFolderItem);
 
-            AddOrRemoveRule(item, redirectFolderItem, inboundRules, newInboundRule);
+            if (newInboundRule != null)
+            {
+                AddOrRemoveRule(item, redirectFolderItem, inboundRules, newInboundRule);
+            }
         }
 
         private static void AddOrRemoveRule(Item item, Item redirectFolderItem, List<InboundRule> inboundRules, InboundRule newInboundRule)

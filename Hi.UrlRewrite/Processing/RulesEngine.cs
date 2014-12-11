@@ -61,7 +61,7 @@ namespace Hi.UrlRewrite.Processing
 
                         var inboundRule = CreateInboundRuleFromInboundRuleItem(inboundRuleItem, redirectFolderItem);
 
-                        if (inboundRule.Enabled)
+                        if (inboundRule != null && inboundRule.Enabled)
                         {
                             inboundRules.Add(inboundRule);
                         }

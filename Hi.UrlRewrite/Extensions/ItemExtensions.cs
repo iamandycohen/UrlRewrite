@@ -5,6 +5,7 @@ using Hi.UrlRewrite.Templates.Action;
 using Hi.UrlRewrite.Templates.Action.Base;
 using Hi.UrlRewrite.Templates.Conditions;
 using Hi.UrlRewrite.Templates.MatchUrl;
+using Sitecore.Diagnostics;
 using Sitecore.Links;
 using System;
 using System.Collections.Generic;
@@ -94,6 +95,13 @@ namespace Hi.UrlRewrite
                 }
             }
             inboundRule.Using = usingType;
+
+            if (inboundRuleItem.Action == null)
+            {
+                Log.Warn(string.Format("UrlRewrite - No action set on rule with ItemID: {0}", inboundRuleItem.ID), typeof(ItemExtensions));
+
+                return null;
+            }
 
             var baseActionItem = inboundRuleItem.Action.TargetItem;
             BaseAction baseAction = null;
