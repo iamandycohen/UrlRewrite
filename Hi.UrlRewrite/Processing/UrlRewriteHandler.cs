@@ -25,10 +25,20 @@ namespace Hi.UrlRewrite.Processing
                 urlRewriteProcessor.Process(requestArgs);
             }
 
-            // Serve static content:
-            var type = typeof(HttpApplication).Assembly.GetType("System.Web.StaticFileHandler", true);
-            var handler = (IHttpHandler)Activator.CreateInstance(type, true);
-            handler.ProcessRequest(context);
+            if (requestUri.AbsolutePath.StartsWith("/~/media"))
+            {
+                // Serve static content:
+                var type = typeof(SiteContextFactory).Assembly.GetType("Sitecore.Resources.Media.MediaRequestHandler", true);
+                var handler = (IHttpHandler)Activator.CreateInstance(type, true);
+                handler.ProcessRequest(context);
+            }
+            else
+            {
+                // Serve static content:
+                var type = typeof(HttpApplication).Assembly.GetType("System.Web.StaticFileHandler", true);
+                var handler = (IHttpHandler)Activator.CreateInstance(type, true);
+                handler.ProcessRequest(context);
+            }
             
         }
     }
