@@ -152,6 +152,7 @@
         <x-item>/master/sitecore/system/Workflows/Redirect Workflow/Awaiting Approval/Reject/{1A662076-EA82-44D9-8158-C0DF8F9F754B}/invariant/0</x-item>
         <x-item>/core/sitecore/content/Applications/Url Rewrite/{F7F8487E-BEBE-454C-A9F0-52A34A6D342B}/invariant/0</x-item>
         <x-item>/core/sitecore/content/Applications/Url Rewrite/Url Rewrite/{09F3C777-48F9-4E61-82FA-A65FF02C4A1A}/invariant/0</x-item>
+        <x-item>/core/sitecore/system/Field types/List Types/SiteDroplist/{78FB28FB-406A-4A54-846F-6E3FA718F68F}/invariant/0</x-item>
       </Entries>
       <SkipVersions>False</SkipVersions>
       <Converter>
