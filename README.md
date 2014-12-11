@@ -1,5 +1,5 @@
-UrlRewrite 1.5
-==============
+UrlRewrite
+==========
 
 While there are many Redirect / Rewrite modules available in the Sitecore Marketplace, I created this one to address the fact that most of them cannot create redirects that are Site specific.
 
