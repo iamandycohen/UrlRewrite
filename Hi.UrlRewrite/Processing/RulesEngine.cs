@@ -49,7 +49,7 @@ namespace Hi.UrlRewrite.Processing
 
                         Log.Debug(string.Format("UrlRewrite - Processing Simple Redirect: {0}", simpleRedirectItem.Name), thisType);
 
-                        var inboundRule = CreateInboundRuleFromSimpleRedirectItem(simpleRedirectItem);
+                        var inboundRule = CreateInboundRuleFromSimpleRedirectItem(simpleRedirectItem, redirectFolderItem);
 
                         inboundRules.Add(inboundRule);
                     }
@@ -59,7 +59,7 @@ namespace Hi.UrlRewrite.Processing
                       
                         Log.Debug(string.Format("UrlRewrite - Processing InboundRule: {0}", inboundRuleItem.Name), thisType);
 
-                        var inboundRule = CreateInboundRuleFromInboundRuleItem(inboundRuleItem);
+                        var inboundRule = CreateInboundRuleFromInboundRuleItem(inboundRuleItem, redirectFolderItem);
 
                         if (inboundRule.Enabled)
                         {
@@ -72,11 +72,10 @@ namespace Hi.UrlRewrite.Processing
             return inboundRules;
         }
 
-        internal static InboundRule CreateInboundRuleFromSimpleRedirectItem(SimpleRedirectItem simpleRedirectInternalItem)
+        internal static InboundRule CreateInboundRuleFromSimpleRedirectItem(SimpleRedirectItem simpleRedirectInternalItem, RedirectFolderItem redirectFolderItem)
         {
             string inboundRulePattern = string.Format("^{0}/?$", simpleRedirectInternalItem.Path.Value);
 
-            var redirectFolderItem = new RedirectFolderItem(simpleRedirectInternalItem.InnerItem.Parent);
             var siteNameRestriction = GetSiteNameRestriction(redirectFolderItem);
 
             var redirectTo = simpleRedirectInternalItem.Target;
@@ -116,11 +115,10 @@ namespace Hi.UrlRewrite.Processing
             return inboundRule;
         }
 
-        internal static InboundRule CreateInboundRuleFromInboundRuleItem(InboundRuleItem inboundRuleItem)
+        internal static InboundRule CreateInboundRuleFromInboundRuleItem(InboundRuleItem inboundRuleItem, RedirectFolderItem redirectFolderItem)
         {
             IEnumerable<ConditionItem> conditionItems = null;
 
-            var redirectFolderItem = new RedirectFolderItem(inboundRuleItem.InnerItem.Parent);
             var siteNameRestriction = GetSiteNameRestriction(redirectFolderItem);
 
             Item[] items = inboundRuleItem.InnerItem.Axes.SelectItems(string.Format(Constants.RedirectFolderConditionItemsQuery, ConditionItem.TemplateId));

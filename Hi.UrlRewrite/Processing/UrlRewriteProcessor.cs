@@ -89,22 +89,22 @@ namespace Hi.UrlRewrite.Processing
             return inboundRules;
         }
 
-        internal static void RefreshSimpleRedirect(Item item)
+        internal static void RefreshSimpleRedirect(Item item, Item redirectFolderItem)
         {
-            UpdateRulesCache(item, AddSimpleRedirect);
+            UpdateRulesCache(item, redirectFolderItem, AddSimpleRedirect);
         }
 
-        internal static void RefreshInboundRule(Item item)
+        internal static void RefreshInboundRule(Item item, Item redirectFolderItem)
         {
-            UpdateRulesCache(item, AddInboundRule);
+            UpdateRulesCache(item, redirectFolderItem, AddInboundRule);
         }
 
-        internal static void DeleteInboundRule(Item item)
+        internal static void DeleteInboundRule(Item item, Item redirectFolderItem)
         {
-            UpdateRulesCache(item, RemoveInboundRule);
+            UpdateRulesCache(item, redirectFolderItem, RemoveInboundRule);
         }
 
-        private static void UpdateRulesCache(Item item, Action<Item, List<InboundRule>> action)
+        private static void UpdateRulesCache(Item item, Item redirectFolderItem, Action<Item, Item, List<InboundRule>> action)
         {
             List<InboundRule> inboundRules = null;
             if (!cache.Get(rulesCacheKey + ":" + item.Database.Name, out inboundRules))
@@ -114,7 +114,7 @@ namespace Hi.UrlRewrite.Processing
 
             if (inboundRules != null)
             {
-                action(item, inboundRules);
+                action(item, redirectFolderItem, inboundRules);
 
                 Log.Debug(string.Format("UrlRewrite - Updating Rules Cache - count: {0}", inboundRules.Count), thisType);
 
@@ -123,29 +123,30 @@ namespace Hi.UrlRewrite.Processing
             }
         }
 
-        private static void AddSimpleRedirect(Item item, List<InboundRule> inboundRules)
+        private static void AddSimpleRedirect(Item item, Item redirectFolderItem, List<InboundRule> inboundRules)
         {
 
             Log.Debug(string.Format("UrlRewrite - Adding Simple Redirect - item: [{0}]", item.Paths.FullPath), thisType);
 
             var simpleRedirectItem = new SimpleRedirectItem(item);
-            var newInboundRule = RulesEngine.CreateInboundRuleFromSimpleRedirectItem(simpleRedirectItem);
+            var newInboundRule = RulesEngine.CreateInboundRuleFromSimpleRedirectItem(simpleRedirectItem, redirectFolderItem);
 
-            AddOrRemoveRule(item, inboundRules, newInboundRule);
+            AddOrRemoveRule(item, redirectFolderItem, inboundRules, newInboundRule);
         }
 
-        private static void AddInboundRule(Item item, List<InboundRule> inboundRules)
+        private static void AddInboundRule(Item item, Item redirectFolderItem, List<InboundRule> inboundRules)
         {
 
             Log.Debug(string.Format("UrlRewrite - Adding Inbound Rule - item: [{0}]", item.Paths.FullPath), thisType);
 
             var inboundRuleItem = new InboundRuleItem(item);
-            var newInboundRule = RulesEngine.CreateInboundRuleFromInboundRuleItem(inboundRuleItem);
 
-            AddOrRemoveRule(item, inboundRules, newInboundRule);
+            var newInboundRule = RulesEngine.CreateInboundRuleFromInboundRuleItem(inboundRuleItem, redirectFolderItem);
+
+            AddOrRemoveRule(item, redirectFolderItem, inboundRules, newInboundRule);
         }
 
-        private static void AddOrRemoveRule(Item item, List<InboundRule> inboundRules, InboundRule newInboundRule)
+        private static void AddOrRemoveRule(Item item, Item redirectFolderItem, List<InboundRule> inboundRules, InboundRule newInboundRule)
         {
             if (newInboundRule.Enabled)
             {
@@ -170,11 +171,11 @@ namespace Hi.UrlRewrite.Processing
             else
             {
 
-                RemoveInboundRule(item, inboundRules);
+                RemoveInboundRule(item, redirectFolderItem, inboundRules);
             }
         }
 
-        private static void RemoveInboundRule(Item item, List<InboundRule> inboundRules)
+        private static void RemoveInboundRule(Item item, Item redirectFolderItem, List<InboundRule> inboundRules)
         {
             Log.Debug(string.Format("UrlRewrite - Removing Inbound Rule - item: [{0}]", item.Paths.FullPath), thisType);
 

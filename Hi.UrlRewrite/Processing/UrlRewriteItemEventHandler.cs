@@ -1,5 +1,7 @@
 ﻿using System;
+using System.Linq;
 using Hi.UrlRewrite.Templates;
+using Sitecore.Data;
 using Sitecore.Data.Events;
 using Sitecore.Data.Items;
 using Sitecore.Diagnostics;
@@ -53,36 +55,43 @@ namespace Hi.UrlRewrite.Processing
             {
                 using (new SecurityDisabler())
                 {
-                    if (IsRedirectFolderItem(item))
+                    var redirectFolderItem = item.Axes.GetAncestors()
+                        .FirstOrDefault(a => a.TemplateID == new ID(RedirectFolderItem.TemplateId));
+
+                    if (redirectFolderItem != null)
                     {
-                        Log.Info(
-                            string.Format("UrlRewrite - Refreshing Redirect Folder [{0}] after save event",
-                                item.Paths.FullPath), this);
-                        UrlRewriteProcessor.RefreshInboundRulesCache(db);
-                    }
-                    else if (IsSimpleRedirectItem(item))
-                    {
-                        Log.Info(
-                            string.Format("UrlRewrite - Refreshing Simple Redirect [{0}] after save event",
-                                item.Paths.FullPath), this);
-                        UrlRewriteProcessor.RefreshSimpleRedirect(item);
-                    }
-                    else if (IsInboundRuleItem(item))
-                    {
-                        Log.Info(
-                            string.Format("UrlRewrite - Refreshing Inbound Rule [{0}] after save event",
-                                item.Paths.FullPath), this);
-                        UrlRewriteProcessor.RefreshInboundRule(item);
-                    }
-                    else if (IsInboundRuleItemChild(item))
-                    {
-                        Log.Info(
-                            string.Format("UrlRewrite - Refreshing Inbound Rule [{0}] after save event",
-                                item.Parent.Paths.FullPath), this);
-                        UrlRewriteProcessor.RefreshInboundRule(item.Parent);
+
+                        if (IsRedirectFolderItem(item))
+                        {
+                            Log.Info(
+                                string.Format("UrlRewrite - Refreshing Redirect Folder [{0}] after save event",
+                                    item.Paths.FullPath), this);
+                            UrlRewriteProcessor.RefreshInboundRulesCache(db);
+                        }
+                        else if (IsSimpleRedirectItem(item))
+                        {
+                            Log.Info(
+                                string.Format("UrlRewrite - Refreshing Simple Redirect [{0}] after save event",
+                                    item.Paths.FullPath), this);
+                            UrlRewriteProcessor.RefreshSimpleRedirect(item, redirectFolderItem);
+                        }
+                        else if (IsInboundRuleItem(item))
+                        {
+                            Log.Info(
+                                string.Format("UrlRewrite - Refreshing Inbound Rule [{0}] after save event",
+                                    item.Paths.FullPath), this);
+                            UrlRewriteProcessor.RefreshInboundRule(item, redirectFolderItem);
+                        }
+                        else if (IsInboundRuleItemChild(item))
+                        {
+                            Log.Info(
+                                string.Format("UrlRewrite - Refreshing Inbound Rule [{0}] after save event",
+                                    item.Parent.Paths.FullPath), this);
+
+                            UrlRewriteProcessor.RefreshInboundRule(item.Parent, redirectFolderItem);
+                        }
                     }
                 }
-
             }
             catch (Exception ex)
             {
@@ -121,28 +130,38 @@ namespace Hi.UrlRewrite.Processing
         {
             //if (item.Database.Name.Equals(Configuration.Database, StringComparison.InvariantCultureIgnoreCase))
             //{
-                try
+            try
+            {
+
+                using (new SecurityDisabler())
                 {
 
-                    using (new SecurityDisabler())
+                    var redirectFolderItem = item.Axes.GetAncestors()
+                        .FirstOrDefault(a => a.TemplateID == new ID(RedirectFolderItem.TemplateId));
+
+                    if (redirectFolderItem != null)
                     {
                         if (IsInboundRuleItem(item) || IsSimpleRedirectItem(item))
                         {
-                            Log.Info(string.Format("UrlRewrite - Removing Inbound Rule [{0}] after delete event", item.Paths.FullPath), this);
-                            UrlRewriteProcessor.DeleteInboundRule(item);
+                            Log.Info(
+                                string.Format("UrlRewrite - Removing Inbound Rule [{0}] after delete event",
+                                    item.Paths.FullPath), this);
+                            UrlRewriteProcessor.DeleteInboundRule(item, redirectFolderItem);
                         }
                         else if (IsInboundRuleItemChild(item))
                         {
-                            Log.Info(string.Format("UrlRewrite - Removing Inbound Rule [{0}] after delete event", item.Parent.Paths.FullPath), this);
-                            UrlRewriteProcessor.RefreshInboundRule(item.Parent);
+                            Log.Info(
+                                string.Format("UrlRewrite - Removing Inbound Rule [{0}] after delete event",
+                                    item.Parent.Paths.FullPath), this);
+                            UrlRewriteProcessor.RefreshInboundRule(item.Parent, redirectFolderItem);
                         }
                     }
                 }
-                catch (Exception ex)
-                {
-                    Log.Error(string.Format("UrlRewrite - Exception occured which deleting item after publish Item ID: {0} Item Path: {1}", item.ID, item.Paths.FullPath), ex, this);
-                }
-            //}
+            }
+            catch (Exception ex)
+            {
+                Log.Error(string.Format("UrlRewrite - Exception occured which deleting item after publish Item ID: {0} Item Path: {1}", item.ID, item.Paths.FullPath), ex, this);
+            }
         }
 
         #endregion
