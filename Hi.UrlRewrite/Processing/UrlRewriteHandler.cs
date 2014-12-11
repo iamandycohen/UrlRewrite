@@ -1,4 +1,5 @@
-﻿using System.Web;
+﻿using System;
+using System.Web;
 using Sitecore.Pipelines.HttpRequest;
 using Sitecore.Sites;
 
@@ -23,6 +24,12 @@ namespace Hi.UrlRewrite.Processing
             {
                 urlRewriteProcessor.Process(requestArgs);
             }
+
+            // Serve static content:
+            var type = typeof(HttpApplication).Assembly.GetType("System.Web.StaticFileHandler", true);
+            var handler = (IHttpHandler)Activator.CreateInstance(type, true);
+            handler.ProcessRequest(context);
+            
         }
     }
 }
