@@ -1,5 +1,8 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Web;
+using Sitecore.Configuration;
 using Sitecore.Pipelines.HttpRequest;
 using Sitecore.Sites;
 
@@ -25,21 +28,11 @@ namespace Hi.UrlRewrite.Processing
                 urlRewriteProcessor.Process(requestArgs);
             }
 
-            if (requestUri.AbsolutePath.StartsWith("/~/media"))
-            {
-                // Serve static content:
-                var type = typeof(SiteContextFactory).Assembly.GetType("Sitecore.Resources.Media.MediaRequestHandler", true);
-                var handler = (IHttpHandler)Activator.CreateInstance(type, true);
-                handler.ProcessRequest(context);
-            }
-            else
-            {
-                // Serve static content:
-                var type = typeof(HttpApplication).Assembly.GetType("System.Web.StaticFileHandler", true);
-                var handler = (IHttpHandler)Activator.CreateInstance(type, true);
-                handler.ProcessRequest(context);
-            }
-            
+            // Serve static content:
+            var type = typeof(HttpApplication).Assembly.GetType("System.Web.StaticFileHandler", true);
+            var handler = (IHttpHandler)Activator.CreateInstance(type, true);
+            handler.ProcessRequest(context);
+
         }
     }
 }
