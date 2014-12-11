@@ -333,6 +333,13 @@ namespace Hi.UrlRewrite.Processing
             var rewriteItemId = redirectAction.RewriteItemId;
             var rewriteItemAnchor = redirectAction.RewriteItemAnchor;
 
+            if (string.IsNullOrEmpty(rewriteUrl) && rewriteItemId == null)
+            {
+                ruleResult.RuleMatched = false;
+                return;
+            }
+
+
             if (rewriteItemId.HasValue)
             {
                 rewriteUrl = GetRewriteUrlFromItemId(rewriteItemId.Value, rewriteItemAnchor);

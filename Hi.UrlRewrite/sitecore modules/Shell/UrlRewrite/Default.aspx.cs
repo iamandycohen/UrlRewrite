@@ -69,8 +69,15 @@ namespace Hi.UrlRewrite.sitecore_modules.Shell.UrlRewrite
                     }
                     else
                     {
-                        const string resultFormat = "Redirected to {0}.";
-                        txtFinalUrl.InnerText = string.Format(resultFormat, results.RewrittenUri.ToString());
+                        if (!results.MatchedAtLeastOneRule)
+                        {
+                            txtFinalUrl.InnerText = "No matches.";
+                        }
+                        else
+                        {
+                            const string resultFormat = "Redirected to {0}.";
+                            txtFinalUrl.InnerText = string.Format(resultFormat, results.RewrittenUri.ToString());
+                        }
                     }
                 }
                 else
