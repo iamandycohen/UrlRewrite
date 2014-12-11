@@ -21,7 +21,6 @@
         <x-item>/core/sitecore/layout/Layouts/Applications/UrlRewrite/{EDB0643E-C338-44E6-8029-B050043C4555}/invariant/0</x-item>
         <x-item>/core/sitecore/content/Documents and settings/All users/Start menu/Left/Url Rewrite/{0A3CB105-0D5B-437A-A087-DCB4E9E380BD}/invariant/0</x-item>
         <x-item>/core/sitecore/content/Documents and settings/All users/Start menu/Programs/Url Rewrite/{42A1C028-A80F-4E50-99E8-72695D0F5902}/invariant/0</x-item>
-        <x-item>/master/sitecore/content/Redirects/{57FBF8F9-E408-4E91-AF64-C863FF2B79E4}/invariant/0</x-item>
         <x-item>/master/sitecore/templates/Modules/UrlRewrite/{5D183D73-5F71-48D5-B381-47D96E9687B9}/invariant/0</x-item>
         <x-item>/master/sitecore/templates/Modules/UrlRewrite/Content/{FBD48044-53B0-4DCA-9D3E-E73682E78F9F}/invariant/0</x-item>
         <x-item>/master/sitecore/templates/Modules/UrlRewrite/Templates/{63D9F0B6-70B2-49D7-AC4B-645B3F252AE8}/invariant/0</x-item>
@@ -153,6 +152,8 @@
         <x-item>/core/sitecore/content/Applications/Url Rewrite/{F7F8487E-BEBE-454C-A9F0-52A34A6D342B}/invariant/0</x-item>
         <x-item>/core/sitecore/content/Applications/Url Rewrite/Url Rewrite/{09F3C777-48F9-4E61-82FA-A65FF02C4A1A}/invariant/0</x-item>
         <x-item>/core/sitecore/system/Field types/List Types/SiteDroplist/{78FB28FB-406A-4A54-846F-6E3FA718F68F}/invariant/0</x-item>
+        <x-item>/master/sitecore/templates/Modules/UrlRewrite/Templates/Redirect Sub Folder/{9461E537-8E89-4B91-896A-1F2C3AF4A3D5}/invariant/0</x-item>
+        <x-item>/master/sitecore/templates/Modules/UrlRewrite/Templates/Redirect Sub Folder/__Standard Values/{A7BF9844-B8BB-49AC-A11D-DC0EEA8F110E}/invariant/0</x-item>
       </Entries>
       <SkipVersions>False</SkipVersions>
       <Converter>
