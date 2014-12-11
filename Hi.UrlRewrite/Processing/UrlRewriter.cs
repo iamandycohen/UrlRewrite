@@ -10,6 +10,7 @@ using Hi.UrlRewrite.Processing.Results;
 using Sitecore.Data;
 using Sitecore.Diagnostics;
 using Sitecore.Links;
+using Sitecore.Resources.Media;
 
 namespace Hi.UrlRewrite.Processing
 {
@@ -251,7 +252,7 @@ namespace Hi.UrlRewrite.Processing
             return isInboundRuleMatch;
         }
 
-        private bool TestConditions(InboundRule inboundRule,  Uri originalUri)
+        private bool TestConditions(InboundRule inboundRule, Uri originalUri)
         {
             var conditionMatches = false;
 
@@ -381,13 +382,23 @@ namespace Hi.UrlRewrite.Processing
 
                 if (rewriteItem != null)
                 {
-                    var urlOptions = new UrlOptions
+                    if (rewriteItem.Paths.IsMediaItem)
                     {
-                        AlwaysIncludeServerUrl = true,
-                        SiteResolving = true
-                    };
+                        var mediaUrlOptions = new MediaUrlOptions
+                        {
+                            AlwaysIncludeServerUrl = true
+                        };
 
-                    rewriteUrl = LinkManager.GetItemUrl(rewriteItem, urlOptions);
+                        rewriteUrl = MediaManager.GetMediaUrl(rewriteItem, mediaUrlOptions);
+                    }
+                    else
+                    {
+                        var urlOptions = LinkManager.GetDefaultUrlOptions();
+                        urlOptions.AlwaysIncludeServerUrl = true;
+                        urlOptions.SiteResolving = true;
+
+                        rewriteUrl = LinkManager.GetItemUrl(rewriteItem, urlOptions);
+                    }
 
                     if (!string.IsNullOrEmpty(rewriteItemAnchor))
                     {
