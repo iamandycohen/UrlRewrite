@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 using System.Web;
 using Sitecore.Configuration;
 using Sitecore.Diagnostics;
@@ -33,6 +34,18 @@ namespace Hi.UrlRewrite.Processing
                         urlRewriteProcessor.Process(requestArgs);
                     }
                 }
+            
+                // if we have come this far, the url rewrite processor didn't match on anything so the request is passed to the static request handler
+
+                // Serve static content:
+                var type = typeof(HttpApplication).Assembly.GetType("System.Web.StaticFileHandler", true);
+                var handler = Activator.CreateInstance(type, true) as IHttpHandler;
+
+                if (handler != null)
+                {
+                    handler.ProcessRequest(context);
+                }
+
             }
             catch (Exception ex)
             {
@@ -40,14 +53,6 @@ namespace Hi.UrlRewrite.Processing
                 
                 // don't throw the error, but instead let it fall through
             }
-            
-            // if we have come this far, the url rewrite processor didn't match on anything so the request is passed to the static request handler
-
-            // Serve static content:
-            var type = typeof(HttpApplication).Assembly.GetType("System.Web.StaticFileHandler", true);
-            var handler = (IHttpHandler)Activator.CreateInstance(type, true);
-
-            handler.ProcessRequest(context);
 
         }
     }
