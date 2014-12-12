@@ -162,5 +162,52 @@ namespace Hi.UrlRewrite.Tests
             Assert.AreEqual(expectedUrl, rewriteResult.RewrittenUri);
         }
 
+        [TestMethod]
+        public void ProcessRequestUrlWithHttpsToHttp()
+        {
+            var rewriter = new UrlRewriter();
+
+            InboundRules = new List<InboundRule>()
+            {
+                new InboundRule()
+                {
+                    Name = "Redirect HTTPS to HTTP",
+                    Action = new RedirectAction()
+                    {
+                        Name = "Redirect",
+                        AppendQueryString = true,
+                        StatusCode = RedirectActionStatusCode.Permanent,
+                        HttpCacheability = HttpCacheability.NoCache,
+                        StopProcessingOfSubsequentRules = true,
+                        RewriteUrl = "http://{HTTP_HOST}/{R:1}"
+                    },
+                    Conditions = new List<Condition>()
+                    {
+                        new Condition()
+                        {
+                            Name = "HTTPS",
+                            CheckIfInputString = CheckIfInputString.DoesNotMatchThePattern,
+                            IgnoreCase = true,
+                            InputString = "{HTTPS}",
+                            Pattern = "off"
+                        }
+                    },
+                    Enabled = true,
+                    IgnoreCase = true,
+                    Pattern = "(.*)",
+                    ConditionLogicalGrouping = LogicalGrouping.MatchAll,
+                    Using = Using.RegularExpressions,
+                    RequestedUrl = RequestedUrl.MatchesThePattern
+                }
+            };
+
+            var result = rewriter.ProcessRequestUrl(new Uri("https://www.secured.com/blah/asdfadsf.htm?test=test"),
+                InboundRules);
+
+            var rewrittenUri = result.RewrittenUri;
+
+            Assert.IsNotNull(rewrittenUri);
+        }
+
     }
 }

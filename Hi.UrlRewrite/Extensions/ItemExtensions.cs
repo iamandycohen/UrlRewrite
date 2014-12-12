@@ -189,7 +189,7 @@ namespace Hi.UrlRewrite
                         break;
                 }
             }
-            redirectAction.RedirectType = redirectType;
+            redirectAction.StatusCode = redirectType;
 
             var httpCacheabilityTypeItem = redirectItem.BaseRedirectAction.BaseCacheItem.HttpCacheability.TargetItem;
             HttpCacheability? httpCacheability = null;
