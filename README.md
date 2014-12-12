@@ -17,6 +17,8 @@ Version 1.5
 * Added drop down list so you can select your site instead of having to type a regular expression to match the site on.  NOTE *** All Redirect Folder's are currently reset so you have to reset the Site Name Restriction field.
 * Added the ability to have sub folders in a top level Redirect Folder
 * removed the top level Redirect Folder from the package so that rules don't get overwritten when you 
+* Updated how back references work for Rules and Conditions
+* Fixed security on Redirect Workflow
 
 Version 1.1
 * Major refactor to support instantiation of the UrlRewriter without needing HttpContext or a web site.  
