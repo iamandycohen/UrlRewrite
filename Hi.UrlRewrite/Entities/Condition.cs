@@ -9,7 +9,8 @@ namespace Hi.UrlRewrite.Entities
     public class Condition
     {
         public string Name { get; set; }
-        public ConditionInputType? ConditionInput { get; set; }
+        public string InputString { get; set; }
+        //public ConditionInputType? ConditionInput { get; set; }
         public CheckIfInputStringType? CheckIfInputString { get; set; }
         public string Pattern { get; set; }
         public bool IgnoreCase { get; set; }

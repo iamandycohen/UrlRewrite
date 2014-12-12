@@ -102,5 +102,57 @@ namespace Hi.UrlRewrite.Tests
             Assert.IsTrue(rewriteResult.ProcessedResults.Count == 1);
         }
 
+        [TestMethod]
+        public void ProcessRequestUrlWithMultipleConditionMatchBackReferences()
+        {
+            var rewriter = new UrlRewriter();
+
+            InboundRules = new List<InboundRule>()
+            {
+                new InboundRule()
+                {
+                    Name = "Multiple Variable Rules",
+                    Pattern = "^(.*)$",
+                    Using = Using.RegularExpressions,
+                    Action = new RedirectAction()
+                    {
+                        Name = "Redirect to C1 and C2",
+                        AppendQueryString = false,
+                        HttpCacheability = HttpCacheability.NoCache,
+                        RedirectType = RedirectType.Permanent,
+                        RewriteUrl = "http://{HTTP_HOST}/newpage/{C:1}/{C:2}"
+                    },
+                    RequestedUrl = RequestedUrl.MatchesThePattern,
+                    ConditionLogicalGrouping = LogicalGrouping.MatchAll,
+                    Conditions = new List<Condition>()
+                    {
+                        new Condition()
+                        {
+                            Name = "C1",
+                            CheckIfInputString = CheckIfInputStringType.MatchesThePattern,
+                            InputString = "{QUERY_STRING}",
+                            Pattern = @"(?:^|&)var1=(\d+)(?:&|$)",
+                            IgnoreCase = true
+                        },
+                        new Condition()
+                        {
+                            Name = "C2",
+                            CheckIfInputString = CheckIfInputStringType.MatchesThePattern,
+                            InputString = "%{C:1}%_{QUERY_STRING}",
+                            Pattern = @"%(.+)%_.*var2=(\d+)(?:&|$)",
+                            IgnoreCase = true
+                        }
+                    }
+                }
+
+            };
+
+            var rewriteResult = rewriter.ProcessRequestUrl(new Uri("http://fictitioussite.com/?var1=1&var2=2"), InboundRules);
+
+            var expectedUrl = new Uri("http://fictitioussite.com/newpage/1/2");
+
+            Assert.AreEqual(expectedUrl, rewriteResult.RewrittenUri);
+        }
+
     }
 }

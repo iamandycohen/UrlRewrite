@@ -150,7 +150,8 @@ namespace Hi.UrlRewrite.Processing
                 RewrittenUri = originalUri
             };
 
-            Match inboundRuleMatch;
+            Match inboundRuleMatch,
+                lastConditionMatch = null;
 
             // test pattern matches
             bool isInboundRuleMatch = TestPatternMatches(inboundRule, originalUri, out inboundRuleMatch);
@@ -158,7 +159,7 @@ namespace Hi.UrlRewrite.Processing
             // test conditions
             if (isInboundRuleMatch && inboundRule.Conditions != null && inboundRule.Conditions.Count > 0)
             {
-                isInboundRuleMatch = TestConditions(inboundRule, originalUri);
+                isInboundRuleMatch = TestConditionMatches(inboundRule, originalUri, out lastConditionMatch);
             }
 
             // test site name restrictions
@@ -178,7 +179,7 @@ namespace Hi.UrlRewrite.Processing
 
                 if (inboundRule.Action is RedirectAction) // process the action if it is a RedirectAction  
                 {
-                    ProcessRedirectAction(inboundRule, originalUri, inboundRuleMatch, ruleResult);
+                    ProcessRedirectAction(inboundRule, originalUri, inboundRuleMatch, lastConditionMatch, ruleResult);
                 }
                 else if (inboundRule.Action is AbortRequestAction)
                 {
@@ -252,9 +253,10 @@ namespace Hi.UrlRewrite.Processing
             return isInboundRuleMatch;
         }
 
-        private bool TestConditions(InboundRule inboundRule, Uri originalUri)
+        private bool TestConditionMatches(InboundRule inboundRule, Uri originalUri, out Match lastConditionMatch)
         {
             var conditionMatches = false;
+            lastConditionMatch = null;
 
             var conditionLogicalGrouping = inboundRule.ConditionLogicalGrouping.HasValue
                 ? inboundRule.ConditionLogicalGrouping.Value
@@ -262,11 +264,40 @@ namespace Hi.UrlRewrite.Processing
 
             if (conditionLogicalGrouping == LogicalGrouping.MatchAll)
             {
-                conditionMatches = inboundRule.Conditions.All(condition => ConditionMatch(originalUri, condition));
+                foreach (var condition in inboundRule.Conditions)
+                {
+                    var conditionMatch = ConditionMatch(originalUri, condition, lastConditionMatch);
+                    conditionMatches = conditionMatch.Success;
+
+                    if (condition.CheckIfInputString != null && condition.CheckIfInputString.Value == CheckIfInputStringType.DoesNotMatchThePattern)
+                    {
+                        conditionMatches = !conditionMatches;
+                    }
+
+                    if (conditionMatches)
+                    {
+                        lastConditionMatch = conditionMatch;
+                    }
+                }
             }
             else
             {
-                conditionMatches = inboundRule.Conditions.Any(condition => ConditionMatch(originalUri, condition));
+                foreach (var condition in inboundRule.Conditions)
+                {
+                    var conditionMatch = ConditionMatch(originalUri, condition);
+                    conditionMatches = conditionMatch.Success;
+
+                    if (condition.CheckIfInputString != null && condition.CheckIfInputString.Value == CheckIfInputStringType.DoesNotMatchThePattern)
+                    {
+                        conditionMatches = !conditionMatches;
+                    }
+
+                    if (!conditionMatches) continue;
+
+                    lastConditionMatch = conditionMatch;
+
+                    break;
+                }
             }
 
             return conditionMatches;
@@ -324,8 +355,7 @@ namespace Hi.UrlRewrite.Processing
             ruleResult.StopProcessing = true;
         }
 
-        private void ProcessRedirectAction(InboundRule inboundRule, Uri uri, Match inboundRuleMatch,
-            RuleResult ruleResult)
+        private void ProcessRedirectAction(InboundRule inboundRule, Uri uri, Match inboundRuleMatch, Match lastConditionMatch, RuleResult ruleResult)
         {
             var redirectAction = inboundRule.Action as RedirectAction;
 
@@ -346,36 +376,62 @@ namespace Hi.UrlRewrite.Processing
             }
 
             // process token replacements
-
-            // replace host
-            rewriteUrl = rewriteUrl.Replace("{HTTP_HOST}", uri.Host);
+            rewriteUrl = ReplaceTokens(uri, rewriteUrl);
 
             if (redirectAction.AppendQueryString)
             {
                 rewriteUrl += uri.Query;
             }
 
-            // process capture groups
-            var ruleCaptureGroupRegex = new Regex(@"({R:(\d+)})", RegexOptions.None);
-
-            foreach (Match ruleCaptureGroupMatch in ruleCaptureGroupRegex.Matches(rewriteUrl))
-            {
-                var num = ruleCaptureGroupMatch.Groups[2];
-                var groupIndex = Convert.ToInt32(num.Value);
-                var group = inboundRuleMatch.Groups[groupIndex];
-                var matchText = ruleCaptureGroupMatch.ToString();
-
-                rewriteUrl = rewriteUrl.Replace(matchText, @group.Value);
-            }
+            rewriteUrl = ReplaceRuleBackReferences(inboundRuleMatch, rewriteUrl);
+            rewriteUrl = ReplaceConditionBackReferences(lastConditionMatch, rewriteUrl);
 
             var redirectType = redirectAction.RedirectType;
 
             // get the status code
             ruleResult.StatusCode = redirectType.HasValue ? (int)redirectType : (int)HttpStatusCode.MovedPermanently;
-
             ruleResult.RewrittenUri = new Uri(rewriteUrl);
             ruleResult.StopProcessing = redirectAction.StopProcessingOfSubsequentRules;
             ruleResult.HttpCacheability = redirectAction.HttpCacheability;
+        }
+
+        private static string ReplaceRuleBackReferences(Match inboundRuleMatch, string input)
+        {
+            return ReplaceBackReferences(inboundRuleMatch, input, "R");
+        }
+
+        private static string ReplaceConditionBackReferences(Match conditionMatch, string input)
+        {
+            return ReplaceBackReferences(conditionMatch, input, "C");
+        }
+
+        private static string ReplaceBackReferences(Match match, string input, string backReferenceVariable)
+        {
+            var groupRegex = new Regex(@"({" + backReferenceVariable + @":(\d+)})", RegexOptions.None);
+
+            foreach (Match groupMatch in groupRegex.Matches(input))
+            {
+                var num = groupMatch.Groups[2];
+                var groupIndex = Convert.ToInt32(num.Value);
+                var group = match.Groups[groupIndex];
+                var matchText = groupMatch.ToString();
+                var groupValue = group.Value;
+
+                input = input.Replace(matchText, groupValue);
+            }
+            return input;
+        }
+
+        private static string ReplaceTokens(Uri uri, string input)
+        {
+
+            input = input.Replace("{HTTP_HOST}", uri.Host);
+            input = input.Replace("{QUERY_STRING}", uri.Query.Substring(1));
+
+            var https = uri.Scheme.Equals(Uri.UriSchemeHttps, StringComparison.InvariantCultureIgnoreCase) ? "on" : "off";
+            input = input.Replace("{HTTPS}", https);
+
+            return input;
         }
 
         private string GetRewriteUrlFromItemId(Guid rewriteItemId, string rewriteItemAnchor)
@@ -417,50 +473,21 @@ namespace Hi.UrlRewrite.Processing
             return rewriteUrl;
         }
 
-        private bool ConditionMatch(Uri uri, Condition condition)
+        private Match ConditionMatch(Uri uri, Condition condition, Match previousConditionMatch = null)
         {
             var conditionRegex = new Regex(condition.Pattern, condition.IgnoreCase ? RegexOptions.IgnoreCase : RegexOptions.None);
-
+            Match returnMatch = null;
             bool isMatch = false;
 
-            if (condition.CheckIfInputString.HasValue)
+            var conditionInput = ReplaceTokens(uri, condition.InputString);
+            if (previousConditionMatch != null)
             {
-                switch (condition.CheckIfInputString.Value)
-                {
-                    case CheckIfInputStringType.MatchesThePattern:
-                    case CheckIfInputStringType.DoesNotMatchThePattern:
-                        switch (condition.ConditionInput)
-                        {
-                            case Hi.UrlRewrite.Entities.ConditionInputType.HTTP_HOST:
-                                isMatch = conditionRegex.IsMatch(uri.Host);
-                                break;
-                            case Hi.UrlRewrite.Entities.ConditionInputType.QUERY_STRING:
-                                isMatch = conditionRegex.IsMatch(uri.Query);
-                                break;
-                            case Hi.UrlRewrite.Entities.ConditionInputType.HTTPS:
-
-                                var https = uri.Scheme.Equals(Uri.UriSchemeHttps, StringComparison.InvariantCultureIgnoreCase) ? "on" : "off"; //
-
-                                isMatch = conditionRegex.IsMatch(https);
-                                break;
-                            default:
-                                break;
-                        }
-
-                        if (condition.CheckIfInputString.Value == CheckIfInputStringType.DoesNotMatchThePattern)
-                        {
-                            isMatch = !isMatch;
-                        }
-
-                        break;
-                    default:
-                        throw new NotImplementedException("Only 'Matches the Pattern' and 'Does Not Match the Pattern' have been implemented.");
-                        break;
-                }
-
+                conditionInput = ReplaceConditionBackReferences(previousConditionMatch, conditionInput);
             }
 
-            return isMatch;
+            returnMatch = conditionRegex.Match(conditionInput);
+
+            return returnMatch;
         }
 
     }

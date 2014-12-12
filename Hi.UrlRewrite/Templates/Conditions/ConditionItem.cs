@@ -13,8 +13,8 @@ namespace Hi.UrlRewrite.Templates.Conditions
 
         #region Inherited Base Templates
 
-        private readonly BaseUrlRewriteItem _BaseUrlRewriteItem;
-        public BaseUrlRewriteItem BaseUrlRewrite { get { return _BaseUrlRewriteItem; } }
+        private readonly BaseConditionItem _BaseConditionItem;
+        public BaseConditionItem BaseConditionItem { get { return _BaseConditionItem; } }
 
         #endregion
 
@@ -23,7 +23,7 @@ namespace Hi.UrlRewrite.Templates.Conditions
         public ConditionItem(Item innerItem)
             : base(innerItem)
         {
-            _BaseUrlRewriteItem = new BaseUrlRewriteItem(innerItem);
+            _BaseConditionItem = new BaseConditionItem(innerItem);
         }
 
         public static implicit operator ConditionItem(Item innerItem)
@@ -36,6 +36,16 @@ namespace Hi.UrlRewrite.Templates.Conditions
             return customItem != null ? customItem.InnerItem : null;
         }
 
+        //public static implicit operator ConditionItem(BaseConditionItem baseConditionItem)
+        //{
+        //    return baseConditionItem != null ? new ConditionItem(baseConditionItem.InnerItem) : null;
+        //}
+
+        //public static implicit operator BaseConditionItem(ConditionItem customItem)
+        //{
+        //    return customItem != null ? customItem.BaseConditionItem : null;
+        //}
+
         #endregion //Boilerplate CustomItem Code
 
 
@@ -46,37 +56,9 @@ namespace Hi.UrlRewrite.Templates.Conditions
         {
             get
             {
-                return new LookupField(InnerItem.Fields["Condition Input"]);
+                return new LookupField(InnerItem.Fields["Condition Input Type"]);
             }
         }
-
-
-        public LookupField CheckIfInputString
-        {
-            get
-            {
-                return new LookupField(InnerItem.Fields["Check if input string"]);
-            }
-        }
-
-
-        public TextField Pattern
-        {
-            get
-            {
-                return new TextField(InnerItem.Fields["Pattern"]);
-            }
-        }
-
-
-        public CheckboxField IgnoreCase
-        {
-            get
-            {
-                return new CheckboxField(InnerItem.Fields["Ignore case"]);
-            }
-        }
-
 
         #endregion //Field Instance Methods
     }

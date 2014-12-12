@@ -14,12 +14,13 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Web;
 using Sitecore.Sites;
+using Sitecore.Data;
 
 namespace Hi.UrlRewrite
 {
     public static class ItemExtensions
     {
-        public static InboundRule ToInboundRule(this InboundRuleItem inboundRuleItem, IEnumerable<ConditionItem> conditionItems = null, string siteNameRestriction = null)
+        public static InboundRule ToInboundRule(this InboundRuleItem inboundRuleItem, IEnumerable<BaseConditionItem> conditionItems = null, string siteNameRestriction = null)
         {
 
             if (inboundRuleItem == null)
@@ -275,9 +276,45 @@ namespace Hi.UrlRewrite
             return customResponseAction;
         }
 
-        public static Condition ToCondition(this ConditionItem conditionItem)
+        public static Condition ToCondition(this BaseConditionItem conditionItem)
         {
+            var condition = GetBaseConditionInfo(conditionItem);
 
+            if (condition == null) return null;
+
+            if (conditionItem.InnerItem.TemplateID.Equals(new ID(ConditionItem.TemplateId)))
+            {
+                var conditionInputItem = new ConditionItem(conditionItem).ConditionInput.TargetItem;
+                Entities.ConditionInputType? conditionInputType = null;
+                if (conditionInputItem != null)
+                {
+                    switch (conditionInputItem.ID.ToString())
+                    {
+                        case Constants.ConditionInputType_QueryString_ItemId:
+                            conditionInputType = Hi.UrlRewrite.Entities.ConditionInputType.QUERY_STRING;
+                            break;
+                        case Constants.ConditionInputType_HttpHost_ItemId:
+                            conditionInputType = Hi.UrlRewrite.Entities.ConditionInputType.HTTP_HOST;
+                            break;
+                        case Constants.ConditionInputType_Https_ItemId:
+                            conditionInputType = Hi.UrlRewrite.Entities.ConditionInputType.HTTPS;
+                            break;
+                        default:
+                            break;
+                    }
+                }
+                condition.InputString = string.Format("{{{0}}}", conditionInputType);
+            }
+            else if (conditionItem.InnerItem.TemplateID.Equals(new ID(ConditionAdvancedItem.TemplateId)))
+            {
+                condition.InputString = new ConditionAdvancedItem(conditionItem).ConditionInputString.Value;
+            }
+
+            return condition;
+        }
+
+        private static Condition GetBaseConditionInfo(BaseConditionItem conditionItem)
+        {
             if (conditionItem == null)
             {
                 return null;
@@ -319,27 +356,6 @@ namespace Hi.UrlRewrite
                 }
             }
             condition.CheckIfInputString = checkIfInputStringType;
-
-            var conditionInputItem = conditionItem.ConditionInput.TargetItem;
-            Hi.UrlRewrite.Entities.ConditionInputType? conditionInputType = null;
-            if (conditionInputItem != null)
-            {
-                switch (conditionInputItem.ID.ToString())
-                {
-                    case Constants.ConditionInputType_QueryString_ItemId:
-                        conditionInputType = Hi.UrlRewrite.Entities.ConditionInputType.QUERY_STRING;
-                        break;
-                    case Constants.ConditionInputType_HttpHost_ItemId:
-                        conditionInputType = Hi.UrlRewrite.Entities.ConditionInputType.HTTP_HOST;
-                        break;
-                    case Constants.ConditionInputType_Https_ItemId:
-                        conditionInputType = Hi.UrlRewrite.Entities.ConditionInputType.HTTPS;
-                        break;
-                    default:
-                        break;
-                }
-            }
-            condition.ConditionInput = conditionInputType;
 
             return condition;
         }

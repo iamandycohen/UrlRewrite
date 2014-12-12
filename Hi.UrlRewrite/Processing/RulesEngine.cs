@@ -117,15 +117,15 @@ namespace Hi.UrlRewrite.Processing
 
         internal static InboundRule CreateInboundRuleFromInboundRuleItem(InboundRuleItem inboundRuleItem, RedirectFolderItem redirectFolderItem)
         {
-            IEnumerable<ConditionItem> conditionItems = null;
+            IEnumerable<BaseConditionItem> conditionItems = null;
 
             var siteNameRestriction = GetSiteNameRestriction(redirectFolderItem);
 
-            Item[] items = inboundRuleItem.InnerItem.Axes.SelectItems(string.Format(Constants.RedirectFolderConditionItemsQuery, ConditionItem.TemplateId));
+            Item[] items = inboundRuleItem.InnerItem.Axes.SelectItems(string.Format(Constants.RedirectFolderConditionItemsQuery, ConditionItem.TemplateId, ConditionAdvancedItem.TemplateId));
 
             if (items != null)
             {
-                conditionItems = items.Select(e => new ConditionItem(e));
+                conditionItems = items.Select(e => new BaseConditionItem(e));
             }
 
             var inboundRule = inboundRuleItem.ToInboundRule(conditionItems, siteNameRestriction);

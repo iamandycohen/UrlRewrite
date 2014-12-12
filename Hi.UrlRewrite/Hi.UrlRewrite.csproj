@@ -99,6 +99,8 @@
     <Compile Include="Templates\Action\HttpCacheabilityType\HttpCacheabilityTypeItem.cs" />
     <Compile Include="Templates\BaseUrlRewriteItem.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Templates\Conditions\BaseConditionItem.cs" />
+    <Compile Include="Templates\Conditions\ConditionAdvancedItem.cs" />
     <Compile Include="Templates\RedirectSubFolderItem.cs" />
     <Compile Include="Templates\SimpleRedirectItem.cs" />
     <Compile Include="Templates\Action\Base\BaseActionItem.cs" />
