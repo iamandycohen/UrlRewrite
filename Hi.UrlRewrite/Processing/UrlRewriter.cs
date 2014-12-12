@@ -426,7 +426,13 @@ namespace Hi.UrlRewrite.Processing
         {
 
             input = input.Replace("{HTTP_HOST}", uri.Host);
-            input = input.Replace("{QUERY_STRING}", uri.Query.Substring(1));
+
+            var query = uri.Query;
+            if (query.Length > 0)
+            {
+                query = query.Substring(1);
+            }
+            input = input.Replace("{QUERY_STRING}", query);
 
             var https = uri.Scheme.Equals(Uri.UriSchemeHttps, StringComparison.InvariantCultureIgnoreCase) ? "on" : "off";
             input = input.Replace("{HTTPS}", https);
