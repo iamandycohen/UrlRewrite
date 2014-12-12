@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using Hi.UrlRewrite.Entities;
 using Hi.UrlRewrite.Entities.Actions;
 using Hi.UrlRewrite.Entities.Conditions;
 using Hi.UrlRewrite.Entities.Rules;
@@ -90,7 +89,14 @@ namespace Hi.UrlRewrite.Tests
                 Name = "Custom Response Rule",
                 Pattern = "customresponse",
                 Using = Using.ExactMatch,
-                Action = new CustomResponseAction() { Name = "Custom Response Action", StatusCode = 550, SubStatusCode = 100, ErrorDescription = "Custom Response Because I Said So", Reason = "Custom Response 550"},
+                Action = new CustomResponseAction()
+                {
+                    Name = "Custom Response Action", 
+                    StatusCode = 550, 
+                    SubStatusCode = 100, 
+                    ErrorDescription = "Custom Response Because I Said So", 
+                    Reason = "Custom Response 550"
+                },
                 RequestedUrl = RequestedUrl.MatchesThePattern
             };
 
@@ -121,7 +127,7 @@ namespace Hi.UrlRewrite.Tests
                         Name = "Redirect to C1 and C2",
                         AppendQueryString = false,
                         HttpCacheability = HttpCacheability.NoCache,
-                        RedirectType = RedirectActionStatusCode.Permanent,
+                        StatusCode = RedirectActionStatusCode.Permanent,
                         RewriteUrl = "http://{HTTP_HOST}/newpage/{C:1}/{C:2}"
                     },
                     RequestedUrl = RequestedUrl.MatchesThePattern,

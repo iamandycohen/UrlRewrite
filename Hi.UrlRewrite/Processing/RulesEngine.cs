@@ -96,7 +96,7 @@ namespace Hi.UrlRewrite.Processing
                 {
                     AppendQueryString = true,
                     Name = "Redirect",
-                    RedirectType = RedirectActionStatusCode.Permanent,
+                    StatusCode = RedirectActionStatusCode.Permanent,
                     RewriteUrl = actionRewriteUrl,
                     RewriteItemId = redirectItem,
                     RewriteItemAnchor = redirectItemAnchor,

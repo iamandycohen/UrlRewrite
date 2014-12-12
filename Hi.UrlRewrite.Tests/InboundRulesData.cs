@@ -23,7 +23,7 @@ namespace Hi.UrlRewrite.Tests
                         AppendQueryString = true,
                         HttpCacheability = HttpCacheability.NoCache,
                         Name = "RedirectAction 1",
-                        RedirectType = RedirectActionStatusCode.Permanent,
+                        StatusCode = RedirectActionStatusCode.Permanent,
                         RewriteUrl = "http://www.google.com",
                         StopProcessingOfSubsequentRules = false
                     },
@@ -42,7 +42,7 @@ namespace Hi.UrlRewrite.Tests
                         AppendQueryString = true,
                         HttpCacheability = HttpCacheability.NoCache,
                         Name = "RedirectAction 1",
-                        RedirectType = RedirectActionStatusCode.Permanent,
+                        StatusCode = RedirectActionStatusCode.Permanent,
                         RewriteUrl = "http://{HTTP_HOST}/article.aspx?id={R:1}&amp;title={R:2}",
                         StopProcessingOfSubsequentRules = false
                     },
@@ -61,7 +61,7 @@ namespace Hi.UrlRewrite.Tests
                         AppendQueryString = true,
                         HttpCacheability = HttpCacheability.NoCache,
                         Name = "RedirectAction 1",
-                        RedirectType = RedirectActionStatusCode.Permanent,
+                        StatusCode = RedirectActionStatusCode.Permanent,
                         RewriteUrl = "http://{HTTP_HOST}/hostreplaced",
                         StopProcessingOfSubsequentRules = false
                     },

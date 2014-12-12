@@ -386,10 +386,11 @@ namespace Hi.UrlRewrite.Processing
             rewriteUrl = ReplaceRuleBackReferences(inboundRuleMatch, rewriteUrl);
             rewriteUrl = ReplaceConditionBackReferences(lastConditionMatch, rewriteUrl);
 
-            var redirectType = redirectAction.RedirectType;
+            var redirectType = redirectAction.StatusCode;
 
-            // get the status code
+            // get the status code, defaulting to moved permanently
             ruleResult.StatusCode = redirectType.HasValue ? (int)redirectType : (int)HttpStatusCode.MovedPermanently;
+
             ruleResult.RewrittenUri = new Uri(rewriteUrl);
             ruleResult.StopProcessing = redirectAction.StopProcessingOfSubsequentRules;
             ruleResult.HttpCacheability = redirectAction.HttpCacheability;
