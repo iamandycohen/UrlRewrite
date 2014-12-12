@@ -6,7 +6,7 @@ using Sitecore.Web.UI.WebControls;
 
 namespace Hi.UrlRewrite.Templates.Conditions
 {
-    public partial class ConditionInputType : CustomItem
+    public partial class ConditionInputTypeItem : CustomItem
     {
 
         public static readonly string TemplateId = "{01A28131-5CC9-4419-BD14-351922CE9416}";
@@ -14,18 +14,18 @@ namespace Hi.UrlRewrite.Templates.Conditions
 
         #region Boilerplate CustomItem Code
 
-        public ConditionInputType(Item innerItem)
+        public ConditionInputTypeItem(Item innerItem)
             : base(innerItem)
         {
 
         }
 
-        public static implicit operator ConditionInputType(Item innerItem)
+        public static implicit operator ConditionInputTypeItem(Item innerItem)
         {
-            return innerItem != null ? new ConditionInputType(innerItem) : null;
+            return innerItem != null ? new ConditionInputTypeItem(innerItem) : null;
         }
 
-        public static implicit operator Item(ConditionInputType customItem)
+        public static implicit operator Item(ConditionInputTypeItem customItem)
         {
             return customItem != null ? customItem.InnerItem : null;
         }

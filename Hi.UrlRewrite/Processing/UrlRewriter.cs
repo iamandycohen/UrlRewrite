@@ -6,6 +6,9 @@ using System.Text.RegularExpressions;
 using System.Threading;
 using System.Web;
 using Hi.UrlRewrite.Entities;
+using Hi.UrlRewrite.Entities.Actions;
+using Hi.UrlRewrite.Entities.Conditions;
+using Hi.UrlRewrite.Entities.Rules;
 using Hi.UrlRewrite.Processing.Results;
 using Sitecore.Data;
 using Sitecore.Diagnostics;
@@ -153,10 +156,10 @@ namespace Hi.UrlRewrite.Processing
             Match inboundRuleMatch,
                 lastConditionMatch = null;
 
-            // test pattern matches
-            bool isInboundRuleMatch = TestPatternMatches(inboundRule, originalUri, out inboundRuleMatch);
+            // test rule match
+            var isInboundRuleMatch = TestRuleMatches(inboundRule, originalUri, out inboundRuleMatch);
 
-            // test conditions
+            // test conditions matches
             if (isInboundRuleMatch && inboundRule.Conditions != null && inboundRule.Conditions.Count > 0)
             {
                 isInboundRuleMatch = TestConditionMatches(inboundRule, originalUri, out lastConditionMatch);
@@ -170,12 +173,11 @@ namespace Hi.UrlRewrite.Processing
 
             if (isInboundRuleMatch && inboundRule.Action != null)
             {
-
                 ruleResult.RuleMatched = true;
 
                 Log.Debug(string.Format("UrlRewrite - INBOUND RULE MATCH - requestUri: {0} inboundRule: {1}", originalUri, inboundRule.Name), this);
 
-                // TODO: Need to implement Rewrite, None, Custom Response
+                // TODO: Need to implement Rewrite, None
 
                 if (inboundRule.Action is RedirectAction) // process the action if it is a RedirectAction  
                 {
@@ -183,7 +185,7 @@ namespace Hi.UrlRewrite.Processing
                 }
                 else if (inboundRule.Action is AbortRequestAction)
                 {
-                    ProcessAbortRequestAction(inboundRule, ruleResult);
+                    ProcessAbortRequestAction(ruleResult);
                 }
                 else if (inboundRule.Action is CustomResponseAction)
                 {
@@ -191,7 +193,7 @@ namespace Hi.UrlRewrite.Processing
                 }
                 else
                 {
-                    throw new NotImplementedException("Redirect Action and Abort Reqeust Action are the only supported type of redirects");
+                    throw new NotImplementedException("Redirect Action, Custome Response and Abort Reqeust Action are the only supported type of redirects");
                 }
             }
             else if (inboundRule.Action == null)
@@ -206,7 +208,7 @@ namespace Hi.UrlRewrite.Processing
             return ruleResult;
         }
 
-        private bool TestPatternMatches(InboundRule inboundRule, Uri originalUri, out Match inboundRuleMatch)
+        private bool TestRuleMatches(InboundRule inboundRule, Uri originalUri, out Match inboundRuleMatch)
         {
             var isInboundRuleMatch = false;
             var absolutePath = originalUri.AbsolutePath;
@@ -269,7 +271,7 @@ namespace Hi.UrlRewrite.Processing
                     var conditionMatch = ConditionMatch(originalUri, condition, lastConditionMatch);
                     conditionMatches = conditionMatch.Success;
 
-                    if (condition.CheckIfInputString != null && condition.CheckIfInputString.Value == CheckIfInputStringType.DoesNotMatchThePattern)
+                    if (condition.CheckIfInputString != null && condition.CheckIfInputString.Value == CheckIfInputString.DoesNotMatchThePattern)
                     {
                         conditionMatches = !conditionMatches;
                     }
@@ -287,7 +289,7 @@ namespace Hi.UrlRewrite.Processing
                     var conditionMatch = ConditionMatch(originalUri, condition);
                     conditionMatches = conditionMatch.Success;
 
-                    if (condition.CheckIfInputString != null && condition.CheckIfInputString.Value == CheckIfInputStringType.DoesNotMatchThePattern)
+                    if (condition.CheckIfInputString != null && condition.CheckIfInputString.Value == CheckIfInputString.DoesNotMatchThePattern)
                     {
                         conditionMatches = !conditionMatches;
                     }
@@ -347,10 +349,8 @@ namespace Hi.UrlRewrite.Processing
             ruleResult.StopProcessing = true;
         }
 
-        private void ProcessAbortRequestAction(InboundRule inboundRule, RuleResult ruleResult)
+        private void ProcessAbortRequestAction(RuleResult ruleResult)
         {
-            var abortRequestAction = inboundRule.Action as AbortRequestAction;
-
             ruleResult.Abort = true;
             ruleResult.StopProcessing = true;
         }
@@ -427,6 +427,7 @@ namespace Hi.UrlRewrite.Processing
 
             input = input.Replace("{HTTP_HOST}", uri.Host);
 
+            // Querystring replacement
             var query = uri.Query;
             if (query.Length > 0)
             {
@@ -434,6 +435,7 @@ namespace Hi.UrlRewrite.Processing
             }
             input = input.Replace("{QUERY_STRING}", query);
 
+            // https replacement
             var https = uri.Scheme.Equals(Uri.UriSchemeHttps, StringComparison.InvariantCultureIgnoreCase) ? "on" : "off";
             input = input.Replace("{HTTPS}", https);
 

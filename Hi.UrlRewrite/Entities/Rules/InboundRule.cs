@@ -1,10 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using Hi.UrlRewrite.Entities.Actions;
+using Hi.UrlRewrite.Entities.Conditions;
 
-namespace Hi.UrlRewrite.Entities
+namespace Hi.UrlRewrite.Entities.Rules
 {
     public class InboundRule
     {

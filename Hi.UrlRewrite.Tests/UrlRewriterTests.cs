@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Runtime.InteropServices;
 using Hi.UrlRewrite.Entities;
+using Hi.UrlRewrite.Entities.Actions;
+using Hi.UrlRewrite.Entities.Conditions;
+using Hi.UrlRewrite.Entities.Rules;
 using Hi.UrlRewrite.Processing;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System.Web;
@@ -119,7 +121,7 @@ namespace Hi.UrlRewrite.Tests
                         Name = "Redirect to C1 and C2",
                         AppendQueryString = false,
                         HttpCacheability = HttpCacheability.NoCache,
-                        RedirectType = RedirectType.Permanent,
+                        RedirectType = RedirectActionStatusCode.Permanent,
                         RewriteUrl = "http://{HTTP_HOST}/newpage/{C:1}/{C:2}"
                     },
                     RequestedUrl = RequestedUrl.MatchesThePattern,
@@ -129,7 +131,7 @@ namespace Hi.UrlRewrite.Tests
                         new Condition()
                         {
                             Name = "C1",
-                            CheckIfInputString = CheckIfInputStringType.MatchesThePattern,
+                            CheckIfInputString = CheckIfInputString.MatchesThePattern,
                             InputString = "{QUERY_STRING}",
                             Pattern = @"(?:^|&)var1=(\d+)(?:&|$)",
                             IgnoreCase = true
@@ -137,7 +139,7 @@ namespace Hi.UrlRewrite.Tests
                         new Condition()
                         {
                             Name = "C2",
-                            CheckIfInputString = CheckIfInputStringType.MatchesThePattern,
+                            CheckIfInputString = CheckIfInputString.MatchesThePattern,
                             InputString = "%{C:1}%_{QUERY_STRING}",
                             Pattern = @"%(.+)%_.*var2=(\d+)(?:&|$)",
                             IgnoreCase = true

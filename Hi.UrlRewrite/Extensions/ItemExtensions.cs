@@ -1,26 +1,25 @@
 ﻿using Hi.UrlRewrite.Entities;
+using Hi.UrlRewrite.Entities.Actions;
+using Hi.UrlRewrite.Entities.Conditions;
+using Hi.UrlRewrite.Entities.Rules;
 using Hi.UrlRewrite.Processing;
 using Hi.UrlRewrite.Templates;
 using Hi.UrlRewrite.Templates.Action;
-using Hi.UrlRewrite.Templates.Action.Base;
 using Hi.UrlRewrite.Templates.Conditions;
-using Hi.UrlRewrite.Templates.MatchUrl;
 using Sitecore.Diagnostics;
-using Sitecore.Links;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Web;
-using Sitecore.Sites;
 using Sitecore.Data;
 
 namespace Hi.UrlRewrite
 {
     public static class ItemExtensions
     {
-        public static InboundRule ToInboundRule(this InboundRuleItem inboundRuleItem, IEnumerable<BaseConditionItem> conditionItems = null, string siteNameRestriction = null)
+        public static InboundRule ToInboundRule(this InboundRuleItem inboundRuleItem, IEnumerable<BaseConditionItem> conditionItems, string siteNameRestriction)
         {
 
             if (inboundRuleItem == null)
@@ -169,22 +168,22 @@ namespace Hi.UrlRewrite
             };
 
             var redirectTypeItem = redirectItem.RedirectType.TargetItem;
-            RedirectType? redirectType = null;
+            RedirectActionStatusCode? redirectType = null;
             if (redirectTypeItem != null)
             {
                 switch (redirectTypeItem.ID.ToString())
                 {
                     case Constants.RedirectType_Permanent_ItemId:
-                        redirectType = RedirectType.Permanent;
+                        redirectType = RedirectActionStatusCode.Permanent;
                         break;
                     case Constants.RedirectType_Found_ItemId:
-                        redirectType = RedirectType.Found;
+                        redirectType = RedirectActionStatusCode.Found;
                         break;
                     case Constants.RedirectType_SeeOther_ItemId:
-                        redirectType = RedirectType.SeeOther;
+                        redirectType = RedirectActionStatusCode.SeeOther;
                         break;
                     case Constants.RedirectType_Temporary_ItemId:
-                        redirectType = RedirectType.Temporary;
+                        redirectType = RedirectActionStatusCode.Temporary;
                         break;
                     default:
                         break;
@@ -276,38 +275,42 @@ namespace Hi.UrlRewrite
             return customResponseAction;
         }
 
-        public static Condition ToCondition(this BaseConditionItem conditionItem)
+        public static Condition ToCondition(this BaseConditionItem baseConditionItem)
         {
-            var condition = GetBaseConditionInfo(conditionItem);
+            var condition = GetBaseConditionInfo(baseConditionItem);
 
             if (condition == null) return null;
 
-            if (conditionItem.InnerItem.TemplateID.Equals(new ID(ConditionItem.TemplateId)))
+            var baseConditionItemTemplateId = baseConditionItem.InnerItem.TemplateID;
+
+            if (baseConditionItemTemplateId.Equals(new ID(ConditionItem.TemplateId)))
             {
-                var conditionInputItem = new ConditionItem(conditionItem).ConditionInput.TargetItem;
-                Entities.ConditionInputType? conditionInputType = null;
+                var conditionInputItem = new ConditionItem(baseConditionItem).ConditionInput.TargetItem;
+                Entities.ConditionInput? conditionInputType = null;
+
                 if (conditionInputItem != null)
                 {
                     switch (conditionInputItem.ID.ToString())
                     {
                         case Constants.ConditionInputType_QueryString_ItemId:
-                            conditionInputType = Hi.UrlRewrite.Entities.ConditionInputType.QUERY_STRING;
+                            conditionInputType = Entities.ConditionInput.QUERY_STRING;
                             break;
                         case Constants.ConditionInputType_HttpHost_ItemId:
-                            conditionInputType = Hi.UrlRewrite.Entities.ConditionInputType.HTTP_HOST;
+                            conditionInputType = Entities.ConditionInput.HTTP_HOST;
                             break;
                         case Constants.ConditionInputType_Https_ItemId:
-                            conditionInputType = Hi.UrlRewrite.Entities.ConditionInputType.HTTPS;
+                            conditionInputType = Entities.ConditionInput.HTTPS;
                             break;
                         default:
                             break;
                     }
                 }
+
                 condition.InputString = string.Format("{{{0}}}", conditionInputType);
             }
-            else if (conditionItem.InnerItem.TemplateID.Equals(new ID(ConditionAdvancedItem.TemplateId)))
+            else if (baseConditionItemTemplateId.Equals(new ID(ConditionAdvancedItem.TemplateId)))
             {
-                condition.InputString = new ConditionAdvancedItem(conditionItem).ConditionInputString.Value;
+                condition.InputString = new ConditionAdvancedItem(baseConditionItem).ConditionInputString.Value;
             }
 
             return condition;
@@ -328,28 +331,29 @@ namespace Hi.UrlRewrite
             };
 
             var checkIfInputStringItem = conditionItem.CheckIfInputString.TargetItem;
-            CheckIfInputStringType? checkIfInputStringType = null;
+            CheckIfInputString? checkIfInputStringType = null;
+
             if (checkIfInputStringItem != null)
             {
                 switch (checkIfInputStringItem.ID.ToString())
                 {
                     case Constants.CheckIfInputStringType_IsAFile_ItemId:
-                        checkIfInputStringType = CheckIfInputStringType.IsAFile;
+                        checkIfInputStringType = CheckIfInputString.IsAFile;
                         break;
                     case Constants.CheckIfInputStringType_IsNotAFile_ItemId:
-                        checkIfInputStringType = CheckIfInputStringType.IsNotAFile;
+                        checkIfInputStringType = CheckIfInputString.IsNotAFile;
                         break;
                     case Constants.CheckIfInputStringType_IsADirectory_ItemId:
-                        checkIfInputStringType = CheckIfInputStringType.IsADirectory;
+                        checkIfInputStringType = CheckIfInputString.IsADirectory;
                         break;
                     case Constants.CheckIfInputStringType_IsNotADirectory_ItemId:
-                        checkIfInputStringType = CheckIfInputStringType.IsNotADirctory;
+                        checkIfInputStringType = CheckIfInputString.IsNotADirctory;
                         break;
                     case Constants.CheckIfInputStringType_MatchesThePattern_ItemId:
-                        checkIfInputStringType = CheckIfInputStringType.MatchesThePattern;
+                        checkIfInputStringType = CheckIfInputString.MatchesThePattern;
                         break;
                     case Constants.CheckIfInputStringType_DoesNotMatchThePattern_ItemId:
-                        checkIfInputStringType = CheckIfInputStringType.DoesNotMatchThePattern;
+                        checkIfInputStringType = CheckIfInputString.DoesNotMatchThePattern;
                         break;
                     default:
                         break;

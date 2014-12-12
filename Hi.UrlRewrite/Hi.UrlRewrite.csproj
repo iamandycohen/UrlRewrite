@@ -62,21 +62,21 @@
     <Compile Include="Caching\ICacheProvider.cs" />
     <Compile Include="Configuration.cs" />
     <Compile Include="Constants.cs" />
-    <Compile Include="Entities\AbortRequestAction.cs" />
-    <Compile Include="Entities\BaseAction.cs" />
-    <Compile Include="Entities\BaseRedirectAction.cs" />
-    <Compile Include="Entities\BaseStopProcessingAction.cs" />
-    <Compile Include="Entities\CheckIfInputStringType.cs" />
-    <Compile Include="Entities\Condition.cs" />
-    <Compile Include="Entities\ConditionInputType.cs" />
-    <Compile Include="Entities\CustomResponseAction.cs" />
-    <Compile Include="Entities\IBaseCache.cs" />
-    <Compile Include="Entities\InboundRule.cs" />
-    <Compile Include="Entities\LogicalGrouping.cs" />
-    <Compile Include="Entities\RedirectAction.cs" />
-    <Compile Include="Entities\RedirectType.cs" />
-    <Compile Include="Entities\RequestedUrl.cs" />
-    <Compile Include="Entities\Using.cs" />
+    <Compile Include="Entities\Actions\AbortRequestAction.cs" />
+    <Compile Include="Entities\Actions\BaseAction.cs" />
+    <Compile Include="Entities\Actions\BaseRedirectAction.cs" />
+    <Compile Include="Entities\Actions\BaseStopProcessingAction.cs" />
+    <Compile Include="Entities\Actions\CustomResponseAction.cs" />
+    <Compile Include="Entities\Actions\IBaseCache.cs" />
+    <Compile Include="Entities\Actions\RedirectAction.cs" />
+    <Compile Include="Entities\Actions\RedirectActionStatusCode.cs" />
+    <Compile Include="Entities\ConditionInput.cs" />
+    <Compile Include="Entities\Conditions\CheckIfInputString.cs" />
+    <Compile Include="Entities\Conditions\Condition.cs" />
+    <Compile Include="Entities\Rules\InboundRule.cs" />
+    <Compile Include="Entities\Rules\LogicalGrouping.cs" />
+    <Compile Include="Entities\Rules\RequestedUrl.cs" />
+    <Compile Include="Entities\Rules\Using.cs" />
     <Compile Include="Extensions\ItemExtensions.cs" />
     <Compile Include="Fields\SiteDropList.cs" />
     <Compile Include="Processing\Results\ProcessRequestResult.cs" />
@@ -109,7 +109,7 @@
     <Compile Include="Templates\Action\RedirectItem.cs" />
     <Compile Include="Templates\Action\RedirectType\RedirectTypeItem.cs" />
     <Compile Include="Templates\Conditions\CheckIfInputStringTypeItem.cs" />
-    <Compile Include="Templates\Conditions\ConditionInputType.cs" />
+    <Compile Include="Templates\Conditions\ConditionInputTypeItem.cs" />
     <Compile Include="Templates\Conditions\ConditionItem.cs" />
     <Compile Include="Templates\Conditions\LogicalGroupingTypeItem.cs" />
     <Compile Include="Templates\FolderItem.cs" />
@@ -143,6 +143,7 @@
   <ItemGroup>
     <None Include="Properties\PublishProfiles\Deploy.pubxml" />
   </ItemGroup>
+  <ItemGroup />
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
     <VSToolsPath Condition="'$(VSToolsPath)' == ''">$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)</VSToolsPath>

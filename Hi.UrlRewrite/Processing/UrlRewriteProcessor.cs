@@ -5,6 +5,7 @@ using System.Threading;
 using System.Web;
 using Hi.UrlRewrite.Caching;
 using Hi.UrlRewrite.Entities;
+using Hi.UrlRewrite.Entities.Rules;
 using Hi.UrlRewrite.Processing.Results;
 using Hi.UrlRewrite.Templates;
 using Sitecore.Data;

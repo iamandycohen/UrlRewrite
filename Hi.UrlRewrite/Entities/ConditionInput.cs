@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Hi.UrlRewrite.Entities
 {
-    public enum ConditionInputType
+    public enum ConditionInput
     {
         QUERY_STRING,
         HTTP_HOST,

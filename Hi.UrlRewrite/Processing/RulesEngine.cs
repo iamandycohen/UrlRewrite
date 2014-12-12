@@ -3,6 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using Hi.UrlRewrite.Entities;
+using Hi.UrlRewrite.Entities.Actions;
+using Hi.UrlRewrite.Entities.Conditions;
+using Hi.UrlRewrite.Entities.Rules;
 using Hi.UrlRewrite.Templates;
 using Hi.UrlRewrite.Templates.Conditions;
 using Sitecore.Data;
@@ -93,7 +96,7 @@ namespace Hi.UrlRewrite.Processing
                 {
                     AppendQueryString = true,
                     Name = "Redirect",
-                    RedirectType = RedirectType.Permanent,
+                    RedirectType = RedirectActionStatusCode.Permanent,
                     RewriteUrl = actionRewriteUrl,
                     RewriteItemId = redirectItem,
                     RewriteItemAnchor = redirectItemAnchor,

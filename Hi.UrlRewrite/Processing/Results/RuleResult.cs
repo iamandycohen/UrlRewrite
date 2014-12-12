@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Web;
-using Hi.UrlRewrite.Entities;
+using Hi.UrlRewrite.Entities.Actions;
 
 namespace Hi.UrlRewrite.Processing.Results
 {

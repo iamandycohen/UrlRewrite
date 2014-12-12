@@ -5,6 +5,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Hi.UrlRewrite.Entities.Actions;
+using Hi.UrlRewrite.Entities.Rules;
 
 namespace Hi.UrlRewrite.Tests
 {
@@ -21,7 +23,7 @@ namespace Hi.UrlRewrite.Tests
                         AppendQueryString = true,
                         HttpCacheability = HttpCacheability.NoCache,
                         Name = "RedirectAction 1",
-                        RedirectType = RedirectType.Permanent,
+                        RedirectType = RedirectActionStatusCode.Permanent,
                         RewriteUrl = "http://www.google.com",
                         StopProcessingOfSubsequentRules = false
                     },
@@ -40,7 +42,7 @@ namespace Hi.UrlRewrite.Tests
                         AppendQueryString = true,
                         HttpCacheability = HttpCacheability.NoCache,
                         Name = "RedirectAction 1",
-                        RedirectType = RedirectType.Permanent,
+                        RedirectType = RedirectActionStatusCode.Permanent,
                         RewriteUrl = "http://{HTTP_HOST}/article.aspx?id={R:1}&amp;title={R:2}",
                         StopProcessingOfSubsequentRules = false
                     },
@@ -59,7 +61,7 @@ namespace Hi.UrlRewrite.Tests
                         AppendQueryString = true,
                         HttpCacheability = HttpCacheability.NoCache,
                         Name = "RedirectAction 1",
-                        RedirectType = RedirectType.Permanent,
+                        RedirectType = RedirectActionStatusCode.Permanent,
                         RewriteUrl = "http://{HTTP_HOST}/hostreplaced",
                         StopProcessingOfSubsequentRules = false
                     },
