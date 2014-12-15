@@ -70,7 +70,6 @@
     <Compile Include="Entities\Actions\IBaseCache.cs" />
     <Compile Include="Entities\Actions\RedirectAction.cs" />
     <Compile Include="Entities\Actions\RedirectActionStatusCode.cs" />
-    <Compile Include="Entities\ConditionInput.cs" />
     <Compile Include="Entities\Conditions\CheckIfInputString.cs" />
     <Compile Include="Entities\Conditions\Condition.cs" />
     <Compile Include="Entities\Rules\InboundRule.cs" />
@@ -117,6 +116,8 @@
     <Compile Include="Templates\MatchUrl\RequestedUrlTypeItem.cs" />
     <Compile Include="Templates\MatchUrl\UsingTypeItem.cs" />
     <Compile Include="Templates\RedirectFolderItem.cs" />
+    <Compile Include="TokenHelper.cs" />
+    <Compile Include="Tokens.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="App_Config\Include\Hi.UrlRewrite.config" />

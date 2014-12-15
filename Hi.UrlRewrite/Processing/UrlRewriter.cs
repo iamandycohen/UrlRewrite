@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.Specialized;
 using System.Linq;
 using System.Net;
 using System.Text.RegularExpressions;
@@ -19,6 +20,18 @@ namespace Hi.UrlRewrite.Processing
 {
     public class UrlRewriter
     {
+
+        public NameValueCollection ServerVariables { get; set; }
+
+        public UrlRewriter()
+        {
+            ServerVariables = new NameValueCollection();
+        }
+
+        public UrlRewriter(NameValueCollection serverVariables)
+        {
+            ServerVariables = serverVariables;
+        }
 
         public ProcessRequestResult ProcessRequestUrl(Uri requestUri, List<InboundRule> inboundRules)
         {
@@ -423,22 +436,30 @@ namespace Hi.UrlRewrite.Processing
             return input;
         }
 
-        private static string ReplaceTokens(Uri uri, string input)
+        private string ReplaceTokens(Uri uri, string input)
         {
 
-            input = input.Replace("{HTTP_HOST}", uri.Host);
+            // host replacement
+            input = input.Replace(Tokens.HTTP_HOST.Formatted(), uri.Host);
 
-            // Querystring replacement
+            // querystring replacement
             var query = uri.Query;
             if (query.Length > 0)
             {
                 query = query.Substring(1);
             }
-            input = input.Replace("{QUERY_STRING}", query);
+            input = input.Replace(Tokens.QUERY_STRING.Formatted(), query);
 
-            // https replacement
+            // scheme replacement
             var https = uri.Scheme.Equals(Uri.UriSchemeHttps, StringComparison.InvariantCultureIgnoreCase) ? "on" : "off";
-            input = input.Replace("{HTTPS}", https);
+            input = input.Replace(Tokens.HTTPS.Formatted(), https);
+
+            return input;
+        }
+
+        private string ReplaceTokenInput(string input, Tokens token)
+        {
+            input = input.Replace(token.Formatted(), ServerVariables[token.ToString()]);
 
             return input;
         }

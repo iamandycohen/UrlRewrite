@@ -138,7 +138,7 @@ namespace Hi.UrlRewrite.Tests
                         {
                             Name = "C1",
                             CheckIfInputString = CheckIfInputString.MatchesThePattern,
-                            InputString = "{QUERY_STRING}",
+                            InputString = Tokens.QUERY_STRING.Formatted(),
                             Pattern = @"(?:^|&)var1=(\d+)(?:&|$)",
                             IgnoreCase = true
                         },

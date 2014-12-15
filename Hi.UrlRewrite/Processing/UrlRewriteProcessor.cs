@@ -31,7 +31,7 @@ namespace Hi.UrlRewrite.Processing
                 if (args.Context == null || db == null) return;
 
                 var httpContext = new HttpContextWrapper(args.Context);
-                var urlRewriter = new UrlRewriter();
+                var urlRewriter = new UrlRewriter(httpContext.Request.ServerVariables);
 
                 var requestResult = ProcessUri(httpContext.Request.Url, db, urlRewriter);
 

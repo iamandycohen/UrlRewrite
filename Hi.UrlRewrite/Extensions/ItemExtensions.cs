@@ -286,20 +286,20 @@ namespace Hi.UrlRewrite
             if (baseConditionItemTemplateId.Equals(new ID(ConditionItem.TemplateId)))
             {
                 var conditionInputItem = new ConditionItem(baseConditionItem).ConditionInput.TargetItem;
-                Entities.ConditionInput? conditionInputType = null;
+                Tokens? conditionInputType = null;
 
                 if (conditionInputItem != null)
                 {
                     switch (conditionInputItem.ID.ToString())
                     {
                         case Constants.ConditionInputType_QueryString_ItemId:
-                            conditionInputType = Entities.ConditionInput.QUERY_STRING;
+                            conditionInputType = Tokens.QUERY_STRING;
                             break;
                         case Constants.ConditionInputType_HttpHost_ItemId:
-                            conditionInputType = Entities.ConditionInput.HTTP_HOST;
+                            conditionInputType = Tokens.HTTP_HOST;
                             break;
                         case Constants.ConditionInputType_Https_ItemId:
-                            conditionInputType = Entities.ConditionInput.HTTPS;
+                            conditionInputType = Tokens.HTTPS;
                             break;
                         default:
                             break;
