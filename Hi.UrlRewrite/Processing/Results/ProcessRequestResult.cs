@@ -12,27 +12,40 @@ namespace Hi.UrlRewrite.Processing.Results
         {
             this.OriginalUri = originalUri;
             this.RewrittenUri = finalRuleResult.RewrittenUri;
-
-            this.HttpCacheability = finalRuleResult.HttpCacheability;
-            this.StatusCode = finalRuleResult.StatusCode;
-            this.Abort = finalRuleResult.Abort;
-            this.CustomResponse = finalRuleResult.CustomResponse;
-
             this.MatchedAtLeastOneRule = matchedAtLeastOneRule;
             this.ProcessedResults = processedResults;
+            this.FinalAction = finalRuleResult.ResultAction;
         }
 
         public Uri OriginalUri { get; set; }
         public Uri RewrittenUri { get; set; }
 
-        public HttpCacheability? HttpCacheability { get; set; }
-        public int? StatusCode { get; set; }
-        public bool Abort { get; set; }
-        public CustomResponseAction CustomResponse { get; set; }
+        public int? StatusCode 
+        { 
+            get 
+            {
+                if (FinalAction is RedirectAction)
+                {
+                    var redirectAction = FinalAction as RedirectAction;
+                    if (redirectAction.StatusCode.HasValue)
+                    {
+                        return (int) (redirectAction.StatusCode.Value);
+                    }
+                }
+                else if (FinalAction is CustomResponseAction)
+                {
+                    var customResponse = FinalAction as CustomResponseAction;
+                    return customResponse.StatusCode;
+                }
+
+                return null;
+            }
+        }
+
+        public BaseAction FinalAction { get; set; }
 
         public bool MatchedAtLeastOneRule { get; set; }
         public List<RuleResult> ProcessedResults { get; set; }
-
 
     }
 }

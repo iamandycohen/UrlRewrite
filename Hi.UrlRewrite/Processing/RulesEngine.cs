@@ -103,7 +103,6 @@ namespace Hi.UrlRewrite.Processing
                     StopProcessingOfSubsequentRules = false,
                     HttpCacheability = HttpCacheability.NoCache
                 },
-                Conditions = new List<Condition>(),
                 SiteNameRestriction = siteNameRestriction,
                 Enabled = true,
                 IgnoreCase = true,

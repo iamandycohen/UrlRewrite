@@ -18,5 +18,10 @@ namespace Hi.UrlRewrite.Entities.Rules
         public List<Condition> Conditions { get; set; }
         public bool Enabled { get; set; }
         public string SiteNameRestriction { get; set; }
+
+        public InboundRule()
+        {
+            Conditions = new List<Condition>();
+        }
     }
 }

@@ -15,6 +15,7 @@ using Sitecore.Data;
 using Sitecore.Diagnostics;
 using Sitecore.Links;
 using Sitecore.Resources.Media;
+using Sitecore.Shell.Applications.ContentEditor;
 
 namespace Hi.UrlRewrite.Processing
 {
@@ -83,28 +84,41 @@ namespace Hi.UrlRewrite.Processing
             {
                 httpResponse.Clear();
 
-                if (!ruleResult.Abort && ruleResult.CustomResponse == null)
+                if (ruleResult.FinalAction is RedirectAction)
                 {
-                    httpResponse.RedirectLocation = ruleResult.RewrittenUri.ToString();
-                    httpResponse.StatusCode = ruleResult.StatusCode ?? (int)HttpStatusCode.MovedPermanently;
+                    var redirectAction = ruleResult.FinalAction as RedirectAction;
+                    int statusCode;
 
-                    if (ruleResult.HttpCacheability.HasValue)
+                    if (redirectAction.StatusCode.HasValue)
                     {
-                        httpResponse.Cache.SetCacheability(ruleResult.HttpCacheability.Value);
+                        statusCode = (int)(redirectAction.StatusCode.Value);
                     }
-                }
-                else if (ruleResult.Abort)
+                    else
+                    {
+                        statusCode = (int)HttpStatusCode.MovedPermanently;
+                    }
+
+                    httpResponse.RedirectLocation = ruleResult.RewrittenUri.ToString();
+                    httpResponse.StatusCode = statusCode;
+
+                    if (redirectAction.HttpCacheability.HasValue)
+                    {
+                        httpResponse.Cache.SetCacheability(redirectAction.HttpCacheability.Value);
+                    }
+                } 
+                else if (ruleResult.FinalAction is AbortRequestAction)
                 {
                     // do nothing
                 }
-                else if (ruleResult.CustomResponse != null)
+                else if (ruleResult.FinalAction is CustomResponseAction)
                 {
-                    httpResponse.TrySkipIisCustomErrors = true;
+                    var customResponse = ruleResult.FinalAction as CustomResponseAction;
 
-                    var customResponse = ruleResult.CustomResponse;
+                    httpResponse.TrySkipIisCustomErrors = true;
 
                     httpResponse.StatusCode = customResponse.StatusCode;
                     httpResponse.StatusDescription = customResponse.ErrorDescription;
+
                     // TODO: Implement Status Reason?
                     //httpResponse.??? = customResponse.Reason;
 
@@ -196,18 +210,16 @@ namespace Hi.UrlRewrite.Processing
                 {
                     ProcessRedirectAction(inboundRule, originalUri, inboundRuleMatch, lastConditionMatch, ruleResult);
                 }
-                else if (inboundRule.Action is AbortRequestAction)
+                else if (inboundRule.Action is AbortRequestAction || inboundRule.Action is CustomResponseAction)
                 {
-                    ProcessAbortRequestAction(ruleResult);
-                }
-                else if (inboundRule.Action is CustomResponseAction)
-                {
-                    ProcessCustomResponseAction(inboundRule, ruleResult);
+                    ProcessActionProcessing(ruleResult);
                 }
                 else
                 {
                     throw new NotImplementedException("Redirect Action, Custome Response and Abort Reqeust Action are the only supported type of redirects");
                 }
+
+                ruleResult.ResultAction = inboundRule.Action;
             }
             else if (inboundRule.Action == null)
             {
@@ -216,7 +228,6 @@ namespace Hi.UrlRewrite.Processing
                 // we are going to skip this because we don't know what to do with it during processing
                 ruleResult.RuleMatched = false;
             }
-
 
             return ruleResult;
         }
@@ -354,17 +365,8 @@ namespace Hi.UrlRewrite.Processing
             return isInboundRuleMatch;
         }
 
-        private void ProcessCustomResponseAction(InboundRule inboundRule, RuleResult ruleResult)
+        private void ProcessActionProcessing(RuleResult ruleResult)
         {
-            var customResponseAction = inboundRule.Action as CustomResponseAction;
-
-            ruleResult.CustomResponse = customResponseAction;
-            ruleResult.StopProcessing = true;
-        }
-
-        private void ProcessAbortRequestAction(RuleResult ruleResult)
-        {
-            ruleResult.Abort = true;
             ruleResult.StopProcessing = true;
         }
 
@@ -399,14 +401,8 @@ namespace Hi.UrlRewrite.Processing
             rewriteUrl = ReplaceRuleBackReferences(inboundRuleMatch, rewriteUrl);
             rewriteUrl = ReplaceConditionBackReferences(lastConditionMatch, rewriteUrl);
 
-            var redirectType = redirectAction.StatusCode;
-
-            // get the status code, defaulting to moved permanently
-            ruleResult.StatusCode = redirectType.HasValue ? (int)redirectType : (int)HttpStatusCode.MovedPermanently;
-
             ruleResult.RewrittenUri = new Uri(rewriteUrl);
             ruleResult.StopProcessing = redirectAction.StopProcessingOfSubsequentRules;
-            ruleResult.HttpCacheability = redirectAction.HttpCacheability;
         }
 
         private static string ReplaceRuleBackReferences(Match inboundRuleMatch, string input)
@@ -507,7 +503,6 @@ namespace Hi.UrlRewrite.Processing
         {
             var conditionRegex = new Regex(condition.Pattern, condition.IgnoreCase ? RegexOptions.IgnoreCase : RegexOptions.None);
             Match returnMatch = null;
-            bool isMatch = false;
 
             var conditionInput = ReplaceTokens(uri, condition.InputString);
             if (previousConditionMatch != null)

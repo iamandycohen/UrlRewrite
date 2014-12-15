@@ -126,17 +126,14 @@ namespace Hi.UrlRewrite
             }
             inboundRule.Action = baseAction;
 
-            var conditions = new List<Condition>();
-
             if (conditionItems != null)
             {
-                conditions = conditionItems
+                inboundRule.Conditions = conditionItems
                     .Select(e => e.ToCondition())
                     .Where(e => e != null)
                     .ToList();
             }
 
-            inboundRule.Conditions = conditions;
             inboundRule.SiteNameRestriction = siteNameRestriction;
 
             return inboundRule;

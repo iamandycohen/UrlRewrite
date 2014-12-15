@@ -76,7 +76,7 @@ namespace Hi.UrlRewrite.Tests
 
             var rewriteResult = rewriter.ProcessRequestUrl(new Uri("http://fictitioussite.com/abort"), InboundRules);
 
-            Assert.IsTrue(rewriteResult.Abort);
+            Assert.IsInstanceOfType(rewriteResult.FinalAction, typeof(AbortRequestAction));
             Assert.IsTrue(rewriteResult.ProcessedResults.Count == 2);
         }
 
@@ -103,10 +103,11 @@ namespace Hi.UrlRewrite.Tests
             InboundRules.Insert(0, newInboundRule);
 
             var rewriteResult = rewriter.ProcessRequestUrl(new Uri("http://fictitioussite.com/customresponse"), InboundRules);
+            var customResponse = rewriteResult.FinalAction as CustomResponseAction;
 
-            Assert.IsTrue(rewriteResult.CustomResponse != null);
-            Assert.AreEqual(rewriteResult.CustomResponse.StatusCode, 550);
-            Assert.AreEqual(rewriteResult.CustomResponse.SubStatusCode, 100);
+            Assert.IsNotNull(customResponse);
+            Assert.AreEqual(customResponse.StatusCode, 550);
+            Assert.AreEqual(customResponse.SubStatusCode, 100);
             Assert.IsTrue(rewriteResult.ProcessedResults.Count == 1);
         }
 
@@ -201,12 +202,15 @@ namespace Hi.UrlRewrite.Tests
                 }
             };
 
-            var result = rewriter.ProcessRequestUrl(new Uri("https://www.secured.com/blah/asdfadsf.htm?test=test"),
-                InboundRules);
+            var inputUrl = "www.secured.com/blah/asdfadsf.htm?test=test";
+            var inputUri = new Uri("https://" + inputUrl);
+            var result = rewriter.ProcessRequestUrl(inputUri, InboundRules);
+            var expectedUri = new Uri("http://" + inputUrl);
 
             var rewrittenUri = result.RewrittenUri;
 
             Assert.IsNotNull(rewrittenUri);
+            Assert.AreEqual(rewrittenUri, expectedUri);
         }
 
     }

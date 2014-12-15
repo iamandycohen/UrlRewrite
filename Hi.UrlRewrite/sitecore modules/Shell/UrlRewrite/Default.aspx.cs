@@ -5,9 +5,11 @@ using System.Web;
 using System.Web.UI;
 using System.Web.UI.HtmlControls;
 using System.Web.UI.WebControls;
+using Hi.UrlRewrite.Entities.Actions;
 using Hi.UrlRewrite.Processing;
 using Hi.UrlRewrite.Processing.Results;
 using Sitecore.Data;
+using Sitecore.Shell.Applications.ContentEditor;
 using Sitecore.Sites;
 
 namespace Hi.UrlRewrite.sitecore_modules.Shell.UrlRewrite
@@ -54,8 +56,8 @@ namespace Hi.UrlRewrite.sitecore_modules.Shell.UrlRewrite
                     resultsRepeater.DataSource = _processedResults;
                     resultsRepeater.DataBind();
 
-                    var isAbort = results.Abort;
-                    var isCustomResponse = results.CustomResponse != null;
+                    var isAbort = results.FinalAction is AbortRequestAction;
+                    var isCustomResponse = results.FinalAction is CustomResponseAction;
 
                     if (isAbort)
                     {
@@ -63,9 +65,10 @@ namespace Hi.UrlRewrite.sitecore_modules.Shell.UrlRewrite
                     }
                     else if (isCustomResponse)
                     {
+                        var customResponse = results.FinalAction as CustomResponseAction;
                         const string resultFormat = "Custom Response: {0} {1} {2}";
-                        txtFinalUrl.InnerText = string.Format(resultFormat, results.CustomResponse.StatusCode,
-                            results.CustomResponse.SubStatusCode, results.CustomResponse.ErrorDescription);
+                        txtFinalUrl.InnerText = string.Format(resultFormat, customResponse.StatusCode,
+                            customResponse.SubStatusCode, customResponse.ErrorDescription);
                     }
                     else
                     {
@@ -101,8 +104,8 @@ namespace Hi.UrlRewrite.sitecore_modules.Shell.UrlRewrite
                 if (result != null)
                 {
                     var ruleMatched = result.RuleMatched;
-                    var isAbort = ruleMatched && result.Abort;
-                    var isCustomResponse = ruleMatched && result.CustomResponse != null;
+                    var isAbort = ruleMatched && result.ResultAction is AbortRequestAction;
+                    var isCustomResponse = ruleMatched && result.ResultAction is CustomResponseAction;
 
                     if (ruleMatched)
                     {
