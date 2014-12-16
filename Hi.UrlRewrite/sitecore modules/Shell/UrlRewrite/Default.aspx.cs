@@ -206,6 +206,8 @@ namespace Hi.UrlRewrite.sitecore_modules.Shell.UrlRewrite
                     var pattern = conditionTupleCondition.Pattern;
                     var inputString = conditionTupleCondition.InputString;
                     var tokenizedInput = conditionTuple.Item2;
+                    var matchType = conditionTupleCondition.CheckIfInputString.ToString();
+
                     var itemId = conditionResult.Item3;
 
                     var conditionCellPattern = e.Item.FindControl("conditionPattern") as HtmlTableCell;
@@ -216,6 +218,9 @@ namespace Hi.UrlRewrite.sitecore_modules.Shell.UrlRewrite
 
                     var conditionCellInput = e.Item.FindControl("conditionInput") as HtmlTableCell;
                     if (conditionCellInput != null) conditionCellInput.InnerText = tokenizedInput;
+
+                    var conditionMatchType = e.Item.FindControl("conditionMatchType") as HtmlTableCell;
+                    if (conditionMatchType != null) conditionMatchType.InnerText = matchType;
 
                     var conditionRow = e.Item.FindControl("conditionRow") as HtmlTableRow;
                     if (conditionRow != null)

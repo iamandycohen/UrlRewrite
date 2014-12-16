@@ -72,7 +72,7 @@
                                         <th>Pattern</th>
                                         <th>Input (w/ tokens)</th>
                                         <th>Input</th>
-                                        <th></th>
+                                        <th>Match Type</th>
                                         <th></th>
                                     </tr>
 
@@ -83,7 +83,7 @@
                                                 <td id="conditionPattern" runat="server"></td>
                                                 <td id="conditionInputToken" runat="server"></td>
                                                 <td id="conditionInput" runat="server"></td>
-                                                <td></td>
+                                                <td id="conditionMatchType"></td>
                                                 <td></td>
                                             </tr>
                                         </ItemTemplate>

@@ -299,7 +299,10 @@ namespace Hi.UrlRewrite.Processing
             {
                 foreach (var condition in inboundRule.Conditions)
                 {
-                    var conditionMatch = ConditionMatch(originalUri, condition, lastConditionMatch);
+                    var conditionMatchTuple = ConditionMatch(originalUri, condition, lastConditionMatch);
+                    var conditionMatch = conditionMatchTuple.Item1;
+                    var conditionInput = conditionMatchTuple.Item2;
+
                     conditionMatches = conditionMatch.Success;
 
                     if (condition.CheckIfInputString != null && condition.CheckIfInputString.Value == CheckIfInputString.DoesNotMatchThePattern)
@@ -310,7 +313,7 @@ namespace Hi.UrlRewrite.Processing
                     if (conditionMatches)
                     {
                         lastConditionMatch = conditionMatch;
-                        conditionMatchResult.MatchedConditions.Add(new Tuple<Condition, string>(condition, conditionMatch.Value));
+                        conditionMatchResult.MatchedConditions.Add(new Tuple<Condition, string>(condition, conditionInput));
                         conditionMatchResult.Matched = true;
                     }
                 }
@@ -319,7 +322,10 @@ namespace Hi.UrlRewrite.Processing
             {
                 foreach (var condition in inboundRule.Conditions)
                 {
-                    var conditionMatch = ConditionMatch(originalUri, condition);
+                    var conditionMatchTuple = ConditionMatch(originalUri, condition);
+                    var conditionMatch = conditionMatchTuple.Item1;
+                    var conditionInput = conditionMatchTuple.Item2;
+
                     conditionMatches = conditionMatch.Success;
 
                     if (condition.CheckIfInputString != null && condition.CheckIfInputString.Value == CheckIfInputString.DoesNotMatchThePattern)
@@ -329,7 +335,7 @@ namespace Hi.UrlRewrite.Processing
 
                     if (!conditionMatches) continue;
 
-                    conditionMatchResult.MatchedConditions.Add(new Tuple<Condition, string>(condition, conditionMatch.Value));
+                    conditionMatchResult.MatchedConditions.Add(new Tuple<Condition, string>(condition, conditionInput));
                     lastConditionMatch = conditionMatch;
                     conditionMatchResult.Matched = true;
 
@@ -510,7 +516,7 @@ namespace Hi.UrlRewrite.Processing
             return rewriteUrl;
         }
 
-        private Match ConditionMatch(Uri uri, Condition condition, Match previousConditionMatch = null)
+        private Tuple<Match, string> ConditionMatch(Uri uri, Condition condition, Match previousConditionMatch = null)
         {
             var conditionRegex = new Regex(condition.Pattern, condition.IgnoreCase ? RegexOptions.IgnoreCase : RegexOptions.None);
             Match returnMatch = null;
@@ -523,7 +529,7 @@ namespace Hi.UrlRewrite.Processing
 
             returnMatch = conditionRegex.Match(conditionInput);
 
-            return returnMatch;
+            return new Tuple<Match, string>(returnMatch, conditionInput);
         }
 
     }
