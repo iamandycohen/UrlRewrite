@@ -13,6 +13,7 @@
 
     <!-- Bootstrap core CSS -->
     <link href="/sitecore modules/Shell/UrlRewrite/Content/bootstrap.min.css" rel="stylesheet" />
+    <link href="/sitecore modules/Shell/UrlRewrite/Content/app.css" rel="stylesheet" />
 
     <!-- Custom styles for this template -->
 
@@ -65,6 +66,30 @@
                                         <td id="cellMatch" runat="server"></td>
                                         <td id="cellAction" runat="server"></td>
                                     </tr>
+
+                                    <tr id="conditionHeader" runat="server" class="hide">
+                                        <th></th>
+                                        <th>Pattern</th>
+                                        <th>Input (w/ tokens)</th>
+                                        <th>Input</th>
+                                        <th></th>
+                                        <th></th>
+                                    </tr>
+
+                                    <asp:Repeater runat="server" ID="conditionRepeater" OnItemDataBound="conditionRepeater_OnItemDataBound">
+                                        <ItemTemplate>
+                                            <tr id="conditionRow" runat="server">
+                                                <td></td>
+                                                <td id="conditionPattern" runat="server"></td>
+                                                <td id="conditionInputToken" runat="server"></td>
+                                                <td id="conditionInput" runat="server"></td>
+                                                <td></td>
+                                                <td></td>
+                                            </tr>
+                                        </ItemTemplate>
+
+                                    </asp:Repeater>
+
                                 </ItemTemplate>
                             </asp:Repeater>
                         </tbody>
@@ -90,6 +115,6 @@
     <!-- Placed at the end of the document so the pages load faster -->
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
     <script src="/sitecore modules/Shell/UrlRewrite/Scripts/bootstrap.min.js"></script>
-
+    <script src="/sitecore modules/Shell/UrlRewrite/Scripts/app.js"></script>
 </body>
 </html>

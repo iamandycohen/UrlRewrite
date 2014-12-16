@@ -6,9 +6,12 @@ using System.Web.UI;
 using System.Web.UI.HtmlControls;
 using System.Web.UI.WebControls;
 using Hi.UrlRewrite.Entities.Actions;
+using Hi.UrlRewrite.Entities.Conditions;
+using Hi.UrlRewrite.Entities.Rules;
 using Hi.UrlRewrite.Processing;
 using Hi.UrlRewrite.Processing.Results;
 using Sitecore.Data;
+using Sitecore.Data.Query;
 using Sitecore.Shell.Applications.ContentEditor;
 using Sitecore.Sites;
 
@@ -106,11 +109,23 @@ namespace Hi.UrlRewrite.sitecore_modules.Shell.UrlRewrite
                     var ruleMatched = result.RuleMatched;
                     var isAbort = ruleMatched && result.ResultAction is AbortRequestAction;
                     var isCustomResponse = ruleMatched && result.ResultAction is CustomResponseAction;
+                    var conditionMatched = result.ConditionMatchResult != null && result.ConditionMatchResult.Matched;
+                    var itemId = new ID(result.ItemId).ToShortID().ToString();
 
                     if (ruleMatched)
                     {
                         var tableRow = e.Item.FindControl("tableRow") as HtmlTableRow;
-                        if (tableRow != null) tableRow.Attributes["class"] = "success";
+                        if (tableRow != null)
+                        {
+                            var tableRowClass = "success rule-row";
+                            if (conditionMatched)
+                            {
+                                tableRowClass += " table-hover condition-hidden";
+                            }
+
+                            tableRow.Attributes["class"] = tableRowClass;
+                            tableRow.Attributes["data-itemid"] = itemId;
+                        }
 
                         var cellAction = e.Item.FindControl("cellAction") as HtmlTableCell;
                         if (cellAction != null)
@@ -149,6 +164,65 @@ namespace Hi.UrlRewrite.sitecore_modules.Shell.UrlRewrite
 
                     var cellMatch = e.Item.FindControl("cellMatch") as HtmlTableCell;
                     if (cellMatch != null) cellMatch.InnerText = result.RuleMatched.ToString();
+
+                    if (conditionMatched)
+                    {
+                        var conditionHeader = e.Item.FindControl("conditionHeader") as HtmlTableRow;
+                        if (conditionHeader != null)
+                        {
+                            conditionHeader.Attributes["data-itemid"] = itemId;
+                            conditionHeader.Attributes["class"] = "warning hide condition condition-header";
+                        };
+
+                        var conditionRepeater = e.Item.FindControl("conditionRepeater") as Repeater;
+                        if (conditionRepeater != null)
+                        {
+                            conditionRepeater.DataSource = result.ConditionMatchResult.MatchedConditions
+                                .Select(
+                                    c =>
+                                        new Tuple<Tuple<Condition, string>, LogicalGrouping, string>(c,
+                                            result.ConditionMatchResult.LogincalGrouping, itemId))
+                                .ToList();
+                            conditionRepeater.DataBind();
+                        }
+                    }
+                }
+            }
+        }
+
+        protected void conditionRepeater_OnItemDataBound(object sender, RepeaterItemEventArgs e)
+        {
+            if (e.Item.ItemType == ListItemType.AlternatingItem || e.Item.ItemType == ListItemType.Item)
+            {
+                if (e.Item.DataItem == null)
+                    return;
+
+                var conditionResult = e.Item.DataItem as Tuple<Tuple<Condition, string>, LogicalGrouping, string>;
+                if (conditionResult != null)
+                {
+
+                    var conditionTuple = conditionResult.Item1;
+                    var conditionTupleCondition = conditionTuple.Item1;
+                    var pattern = conditionTupleCondition.Pattern;
+                    var inputString = conditionTupleCondition.InputString;
+                    var tokenizedInput = conditionTuple.Item2;
+                    var itemId = conditionResult.Item3;
+
+                    var conditionCellPattern = e.Item.FindControl("conditionPattern") as HtmlTableCell;
+                    if (conditionCellPattern != null) conditionCellPattern.InnerText = pattern;
+
+                    var conditionCellInputToken = e.Item.FindControl("conditionInputToken") as HtmlTableCell;
+                    if (conditionCellInputToken != null) conditionCellInputToken.InnerText = inputString;
+
+                    var conditionCellInput = e.Item.FindControl("conditionInput") as HtmlTableCell;
+                    if (conditionCellInput != null) conditionCellInput.InnerText = tokenizedInput;
+
+                    var conditionRow = e.Item.FindControl("conditionRow") as HtmlTableRow;
+                    if (conditionRow != null)
+                    {
+                        conditionRow.Attributes["class"] = "hide warning condition-item condition";
+                        conditionRow.Attributes["data-itemid"] = itemId;
+                    }
                 }
             }
         }

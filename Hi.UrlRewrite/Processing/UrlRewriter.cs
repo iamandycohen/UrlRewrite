@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.Specialized;
+using System.Data.SqlTypes;
 using System.Linq;
 using System.Net;
 using System.Text.RegularExpressions;
@@ -185,11 +186,13 @@ namespace Hi.UrlRewrite.Processing
 
             // test rule match
             var isInboundRuleMatch = TestRuleMatches(inboundRule, originalUri, out inboundRuleMatch);
+            ConditionMatchResult conditionMatchResult = null;
 
             // test conditions matches
             if (isInboundRuleMatch && inboundRule.Conditions != null && inboundRule.Conditions.Count > 0)
             {
-                isInboundRuleMatch = TestConditionMatches(inboundRule, originalUri, out lastConditionMatch);
+                conditionMatchResult = TestConditionMatches(inboundRule, originalUri, out lastConditionMatch);
+                isInboundRuleMatch = conditionMatchResult.Matched;
             }
 
             // test site name restrictions
@@ -220,6 +223,7 @@ namespace Hi.UrlRewrite.Processing
                 }
 
                 ruleResult.ResultAction = inboundRule.Action;
+                ruleResult.ConditionMatchResult = conditionMatchResult;
             }
             else if (inboundRule.Action == null)
             {
@@ -279,14 +283,17 @@ namespace Hi.UrlRewrite.Processing
             return isInboundRuleMatch;
         }
 
-        private bool TestConditionMatches(InboundRule inboundRule, Uri originalUri, out Match lastConditionMatch)
+        private ConditionMatchResult TestConditionMatches(InboundRule inboundRule, Uri originalUri, out Match lastConditionMatch)
         {
+            var conditionMatchResult = new ConditionMatchResult();
             var conditionMatches = false;
             lastConditionMatch = null;
 
             var conditionLogicalGrouping = inboundRule.ConditionLogicalGrouping.HasValue
                 ? inboundRule.ConditionLogicalGrouping.Value
                 : LogicalGrouping.MatchAll;
+
+            conditionMatchResult.LogincalGrouping = conditionLogicalGrouping;
 
             if (conditionLogicalGrouping == LogicalGrouping.MatchAll)
             {
@@ -303,6 +310,8 @@ namespace Hi.UrlRewrite.Processing
                     if (conditionMatches)
                     {
                         lastConditionMatch = conditionMatch;
+                        conditionMatchResult.MatchedConditions.Add(new Tuple<Condition, string>(condition, conditionMatch.Value));
+                        conditionMatchResult.Matched = true;
                     }
                 }
             }
@@ -320,13 +329,15 @@ namespace Hi.UrlRewrite.Processing
 
                     if (!conditionMatches) continue;
 
+                    conditionMatchResult.MatchedConditions.Add(new Tuple<Condition, string>(condition, conditionMatch.Value));
                     lastConditionMatch = conditionMatch;
+                    conditionMatchResult.Matched = true;
 
                     break;
                 }
             }
 
-            return conditionMatches;
+            return conditionMatchResult;
         }
 
         private bool TestSiteNameRestriction(InboundRule inboundRule)

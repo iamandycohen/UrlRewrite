@@ -1,0 +1,7 @@
+﻿body {
+}
+
+tbody tr.table-hover:hover > td {
+    cursor: pointer;
+    cursor: hand;
+}

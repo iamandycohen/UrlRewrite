@@ -78,6 +78,7 @@
     <Compile Include="Entities\Rules\Using.cs" />
     <Compile Include="Extensions\ItemExtensions.cs" />
     <Compile Include="Fields\SiteDropList.cs" />
+    <Compile Include="Processing\Results\ConditionMatchResult.cs" />
     <Compile Include="Processing\Results\ProcessRequestResult.cs" />
     <Compile Include="Processing\Results\RuleResult.cs" />
     <Compile Include="Processing\RulesEngine.cs" />
@@ -121,6 +122,7 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="App_Config\Include\Hi.UrlRewrite.config" />
+    <Content Include="sitecore modules\Shell\UrlRewrite\Content\app.css" />
     <Content Include="sitecore modules\Shell\UrlRewrite\Content\bootstrap-theme.css" />
     <Content Include="sitecore modules\Shell\UrlRewrite\Content\bootstrap-theme.min.css" />
     <Content Include="sitecore modules\Shell\UrlRewrite\Content\bootstrap.css" />
@@ -133,6 +135,7 @@
     <Content Include="sitecore modules\Shell\UrlRewrite\Content\bootstrap-theme.css.map" />
     <Content Include="sitecore modules\Shell\UrlRewrite\Content\bootstrap.css.map" />
     <None Include="sitecore modules\Shell\UrlRewrite\Scripts\jquery-1.9.0.intellisense.js" />
+    <Content Include="sitecore modules\Shell\UrlRewrite\Scripts\app.js" />
     <Content Include="sitecore modules\Shell\UrlRewrite\Scripts\bootstrap.js" />
     <Content Include="sitecore modules\Shell\UrlRewrite\Scripts\bootstrap.min.js" />
     <Content Include="sitecore modules\Shell\UrlRewrite\Scripts\jquery-1.9.0.js" />

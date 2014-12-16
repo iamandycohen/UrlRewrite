@@ -17,5 +17,6 @@ namespace Hi.UrlRewrite.Processing.Results
         public bool RuleMatched { get; set; }
 
         public BaseAction ResultAction { get; set; }
+        public ConditionMatchResult ConditionMatchResult { get; set; }
     }
 }
