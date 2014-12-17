@@ -4,7 +4,6 @@ using System.Linq;
 using System.Threading;
 using System.Web;
 using Hi.UrlRewrite.Caching;
-using Hi.UrlRewrite.Entities;
 using Hi.UrlRewrite.Entities.Rules;
 using Hi.UrlRewrite.Processing.Results;
 using Hi.UrlRewrite.Templates;
@@ -39,7 +38,7 @@ namespace Hi.UrlRewrite.Processing
 
                 Log.Info(string.Format("UrlRewrite - Redirecting {0} to {1} [{2}]", requestResult.OriginalUri, requestResult.RewrittenUri, requestResult.StatusCode), thisType);
 
-                urlRewriter.ExecuteResult(httpContext.Response, requestResult);
+                urlRewriter.ExecuteResult(httpContext, requestResult);
             }
             catch (ThreadAbortException)
             {
@@ -79,7 +78,7 @@ namespace Hi.UrlRewrite.Processing
 
             if (inboundRules != null)
             {
-                Log.Info(string.Format("UrlRewrite - Adding {0} rules to Cache [{0}]", db.Name, inboundRules.Count()), thisType);
+                Log.Info(string.Format("UrlRewrite - Adding {0} rules to Cache [{1}]", inboundRules.Count(), db.Name), thisType);
                 cache.Set(rulesCacheKey + ":" + db.Name, inboundRules, 86400);
             }
             else
@@ -107,7 +106,7 @@ namespace Hi.UrlRewrite.Processing
 
         private static void UpdateRulesCache(Item item, Item redirectFolderItem, Action<Item, Item, List<InboundRule>> action)
         {
-            List<InboundRule> inboundRules = null;
+            List<InboundRule> inboundRules;
             if (!cache.Get(rulesCacheKey + ":" + item.Database.Name, out inboundRules))
             {
                 inboundRules = RulesEngine.GetInboundRules(item.Database);

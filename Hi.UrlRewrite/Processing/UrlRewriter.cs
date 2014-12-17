@@ -1,24 +1,19 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.Specialized;
-using System.Data.SqlTypes;
 using System.Linq;
 using System.Net;
 using System.Text.RegularExpressions;
 using System.Threading;
 using System.Web;
-using Hi.UrlRewrite.Entities;
 using Hi.UrlRewrite.Entities.Actions;
 using Hi.UrlRewrite.Entities.Conditions;
 using Hi.UrlRewrite.Entities.Rules;
 using Hi.UrlRewrite.Processing.Results;
 using Sitecore.Data;
-using Sitecore.Data.Items;
 using Sitecore.Diagnostics;
 using Sitecore.Links;
 using Sitecore.Resources.Media;
-using Sitecore.Shell.Applications.ContentEditor;
-using Sitecore.Web;
 
 namespace Hi.UrlRewrite.Processing
 {
@@ -76,15 +71,23 @@ namespace Hi.UrlRewrite.Processing
 
             Log.Debug(string.Format("UrlRewrite - Processed originalUrl: {0} redirectedUrl: {1}", originalUri, ruleResult.RewrittenUri), this);
 
-            var finalResult = new ProcessRequestResult(originalUri, ruleResult, matchedAtLeastOneRule, processedResults);
+            var lastMatchedRuleResult = processedResults.FirstOrDefault(r => r.RuleMatched);
+
+            if (lastMatchedRuleResult == null)
+            {
+                return null;
+            }
+
+            var finalResult = new ProcessRequestResult(originalUri, lastMatchedRuleResult, matchedAtLeastOneRule, processedResults);
 
             return finalResult;
         }
 
-        public void ExecuteResult(HttpResponseBase httpResponse, ProcessRequestResult ruleResult)
+        public void ExecuteResult(HttpContextBase httpContext, ProcessRequestResult ruleResult)
         {
             try
             {
+                var httpResponse = httpContext.Response;
                 httpResponse.Clear();
 
                 if (ruleResult.FinalAction is IBaseRewrite)
@@ -132,6 +135,7 @@ namespace Hi.UrlRewrite.Processing
 
                 }
 
+                //httpContext.ApplicationInstance.CompleteRequest();
                 httpResponse.End();
             }
             catch (ThreadAbortException)
@@ -162,9 +166,6 @@ namespace Hi.UrlRewrite.Processing
                 //    //TODO: Implement Wildcards
                 //    throw new NotImplementedException("Using Wildcards has not been implemented");
                 //    break;
-
-                default:
-                    break;
             }
 
             Log.Debug(string.Format("UrlRewrite - Processing inbound rule - requestUri: {0} inboundRule: {1} rewrittenUrl: {2}", ruleResult.OriginalUri, inboundRule.Name, ruleResult.RewrittenUri), this);
@@ -244,7 +245,6 @@ namespace Hi.UrlRewrite.Processing
 
         private bool TestRuleMatches(InboundRule inboundRule, Uri originalUri, out Match inboundRuleMatch)
         {
-            var isInboundRuleMatch = false;
             var absolutePath = originalUri.AbsolutePath;
             var uriPath = absolutePath.Substring(1); // remove starting "/"
 
@@ -271,7 +271,7 @@ namespace Hi.UrlRewrite.Processing
             var inboundRuleRegex = new Regex(pattern, inboundRule.IgnoreCase ? RegexOptions.IgnoreCase : RegexOptions.None);
 
             inboundRuleMatch = inboundRuleRegex.Match(uriPath);
-            isInboundRuleMatch = matchesThePattern ? inboundRuleMatch.Success : !inboundRuleMatch.Success;
+            bool isInboundRuleMatch = matchesThePattern ? inboundRuleMatch.Success : !inboundRuleMatch.Success;
 
             Log.Debug(
                 string.Format("UrlRewrite - Regex - Pattern: '{0}' Input: '{1}' Success: {2}", pattern, uriPath,
@@ -292,7 +292,7 @@ namespace Hi.UrlRewrite.Processing
         private ConditionMatchResult TestConditionMatches(InboundRule inboundRule, Uri originalUri, out Match lastConditionMatch)
         {
             var conditionMatchResult = new ConditionMatchResult();
-            var conditionMatches = false;
+            bool conditionMatches;
             lastConditionMatch = null;
 
             var conditionLogicalGrouping = inboundRule.ConditionLogicalGrouping.HasValue
@@ -431,7 +431,6 @@ namespace Hi.UrlRewrite.Processing
         {
             var redirectAction = inboundRule.Action as ItemQueryRedirectAction;
 
-            var rewriteUrl = string.Empty;
             var itemQuery = redirectAction.ItemQuery;
 
             if (string.IsNullOrEmpty(itemQuery))
@@ -452,7 +451,7 @@ namespace Hi.UrlRewrite.Processing
                 return;
             }
 
-            rewriteUrl = GetRewriteUrlFromItemId(rewriteItemId.Value, null);
+            string rewriteUrl = GetRewriteUrlFromItemId(rewriteItemId.Value, null);
 
             // process token replacements
             rewriteUrl = ReplaceTokens(uri, rewriteUrl);
@@ -572,7 +571,6 @@ namespace Hi.UrlRewrite.Processing
         private Tuple<Match, string> ConditionMatch(Uri uri, Condition condition, Match previousConditionMatch = null)
         {
             var conditionRegex = new Regex(condition.Pattern, condition.IgnoreCase ? RegexOptions.IgnoreCase : RegexOptions.None);
-            Match returnMatch = null;
 
             var conditionInput = ReplaceTokens(uri, condition.InputString);
             if (previousConditionMatch != null)
@@ -580,7 +578,7 @@ namespace Hi.UrlRewrite.Processing
                 conditionInput = ReplaceConditionBackReferences(previousConditionMatch, conditionInput);
             }
 
-            returnMatch = conditionRegex.Match(conditionInput);
+            var returnMatch = conditionRegex.Match(conditionInput);
 
             return new Tuple<Match, string>(returnMatch, conditionInput);
         }
