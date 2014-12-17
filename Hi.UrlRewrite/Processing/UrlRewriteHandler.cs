@@ -1,10 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Reflection;
 using System.Threading;
 using System.Web;
-using Sitecore.Configuration;
 using Sitecore.Diagnostics;
 using Sitecore.Pipelines.HttpRequest;
 using Sitecore.Sites;

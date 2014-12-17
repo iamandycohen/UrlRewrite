@@ -2,9 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
-using Hi.UrlRewrite.Entities;
 using Hi.UrlRewrite.Entities.Actions;
-using Hi.UrlRewrite.Entities.Conditions;
 using Hi.UrlRewrite.Entities.Rules;
 using Hi.UrlRewrite.Templates;
 using Hi.UrlRewrite.Templates.Conditions;
@@ -82,8 +80,8 @@ namespace Hi.UrlRewrite.Processing
             var siteNameRestriction = GetSiteNameRestriction(redirectFolderItem);
 
             var redirectTo = simpleRedirectInternalItem.Target;
-            string actionRewriteUrl = null;
-            Guid? redirectItem = null;
+            string actionRewriteUrl;
+            Guid? redirectItem;
             string redirectItemAnchor;
 
             GetRedirectUrlOrItemId(redirectTo, out actionRewriteUrl, out redirectItem, out redirectItemAnchor);

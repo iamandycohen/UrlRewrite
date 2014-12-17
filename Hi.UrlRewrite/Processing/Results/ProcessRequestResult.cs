@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Web;
 using Hi.UrlRewrite.Entities.Actions;
 
 namespace Hi.UrlRewrite.Processing.Results
@@ -10,11 +9,11 @@ namespace Hi.UrlRewrite.Processing.Results
 
         public ProcessRequestResult(Uri originalUri, RuleResult finalRuleResult, bool matchedAtLeastOneRule, List<RuleResult> processedResults)
         {
-            this.OriginalUri = originalUri;
-            this.RewrittenUri = finalRuleResult.RewrittenUri;
-            this.MatchedAtLeastOneRule = matchedAtLeastOneRule;
-            this.ProcessedResults = processedResults;
-            this.FinalAction = finalRuleResult.ResultAction;
+            OriginalUri = originalUri;
+            RewrittenUri = finalRuleResult.RewrittenUri;
+            MatchedAtLeastOneRule = matchedAtLeastOneRule;
+            ProcessedResults = processedResults;
+            FinalAction = finalRuleResult.ResultAction;
         }
 
         public Uri OriginalUri { get; set; }

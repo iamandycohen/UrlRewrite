@@ -1,4 +1,6 @@
 ﻿using System.Web.UI;
+using Sitecore.Diagnostics;
+using Sitecore.Globalization;
 using Sitecore.Sites;
 using System;
 using System.Linq;
@@ -11,17 +13,22 @@ namespace Hi.UrlRewrite.Fields
 
         public SiteDropList()
         {
-            this.Class = "scContentControl";
-            this.Activation = true;
+            SetClass();
+            Activation = true;
+        }
+
+        protected void SetClass()
+        {
+            Class = "scContentControl";
         }
 
         protected override void DoRender(HtmlTextWriter output)
         {
             string err = null;
-            output.Write("<select" + this.GetControlAttributes() + ">");
+            output.Write("<select" + GetControlAttributes() + ">");
             output.Write("<option value=\"\"></option>");
 
-            bool valueFound = String.IsNullOrEmpty(this.Value);
+            bool valueFound = String.IsNullOrEmpty(Value);
 
             var sites = SiteManager.GetSites()
                 .Where(s =>
@@ -38,22 +45,22 @@ namespace Hi.UrlRewrite.Fields
                 string title = site.Name;
                 string value = site.Name;
 
-                valueFound = valueFound || value == this.Value;
+                valueFound = valueFound || value == Value;
 
-                string selected = this.Value == value ? " selected=\"selected\"" : string.Empty;
+                string selected = Value == value ? " selected=\"selected\"" : string.Empty;
 
-                output.Write(string.Format(@"<option value=""{0}"" {1}>{2}</option>", value, selected, title));
+                output.Write(@"<option value=""{0}"" {1}>{2}</option>", value, selected, title);
             }
 
             if (!valueFound)
             {
-                err = Sitecore.Globalization.Translate.Text("Value not in the selection list.");
+                err = Translate.Text("Value not in the selection list.");
             }
 
             if (err != null)
             {
-                output.Write("<optgroup label=\"" + err + "\">");
-                output.Write("<option value=\"" + this.Value + "\" selected=\"selected\">" + this.Value + "</option>");
+                output.Write("<optgroup label=\"{0}\">", err);
+                output.Write("<option value=\"{0}\" selected=\"selected\">{1}</option>", Value, Value);
                 output.Write("</optgroup>");
             }
 
@@ -68,41 +75,41 @@ namespace Hi.UrlRewrite.Fields
 
         protected override bool LoadPostData(string value)
         {
-            this.HasPostData = true;
+            HasPostData = true;
 
             if (value == null)
             {
                 return false;
             }
 
-            Sitecore.Diagnostics.Log.Info(this + " : Field : " + this.GetViewStateString("Field"), this);
-            Sitecore.Diagnostics.Log.Info(this + " : FieldName : " + this.GetViewStateString("FieldName"), this);
+            Log.Info(this + " : Field : " + GetViewStateString("Field"), this);
+            Log.Info(this + " : FieldName : " + GetViewStateString("FieldName"), this);
 
-            if (this.GetViewStateString("Value") != value)
+            if (GetViewStateString("Value") != value)
             {
                 SetModified();
             }
 
-            this.SetViewStateString("Value", value);
+            SetViewStateString("Value", value);
             return true;
         }
 
         protected override void OnLoad(EventArgs e)
         {
-            Sitecore.Diagnostics.Assert.ArgumentNotNull(e, "e");
+            Assert.ArgumentNotNull(e, "e");
             base.OnLoad(e);
 
-            if (!this.HasPostData)
+            if (!HasPostData)
             {
-                this.LoadPostData(string.Empty);
+                LoadPostData(string.Empty);
             }
         }
 
         protected override void OnPreRender(EventArgs e)
         {
-            Sitecore.Diagnostics.Assert.ArgumentNotNull(e, "e");
+            Assert.ArgumentNotNull(e, "e");
             base.OnPreRender(e);
-            this.ServerProperties["Value"] = this.ServerProperties["Value"];
+            ServerProperties["Value"] = ServerProperties["Value"];
         }
 
         private static void SetModified()
