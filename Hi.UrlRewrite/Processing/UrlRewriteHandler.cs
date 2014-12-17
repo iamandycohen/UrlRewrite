@@ -1,9 +1,12 @@
 ﻿using System;
+using System.Linq;
+using System.Net;
 using System.Threading;
 using System.Web;
 using Sitecore.Diagnostics;
 using Sitecore.Pipelines.HttpRequest;
 using Sitecore.Sites;
+using System.Reflection;
 
 namespace Hi.UrlRewrite.Processing
 {
@@ -22,7 +25,8 @@ namespace Hi.UrlRewrite.Processing
                 var requestArgs = new HttpRequestArgs(context, HttpRequestType.Begin);
                 var requestUri = context.Request.Url;
 
-                var siteContext = SiteContextFactory.GetSiteContext(requestUri.Host, requestUri.AbsolutePath, requestUri.Port);
+                var siteContext = SiteContextFactory.GetSiteContext(requestUri.Host, requestUri.AbsolutePath,
+                    requestUri.Port);
 
                 if (siteContext != null)
                 {
@@ -31,27 +35,40 @@ namespace Hi.UrlRewrite.Processing
                         urlRewriteProcessor.Process(requestArgs);
                     }
                 }
-            
+
                 // if we have come this far, the url rewrite processor didn't match on anything so the request is passed to the static request handler
 
                 // Serve static content:
-                var type = typeof(HttpApplication).Assembly.GetType("System.Web.StaticFileHandler", true);
-                var handler = Activator.CreateInstance(type, true) as IHttpHandler;
+                var systemWebAssemblyName =
+                    GetType()
+                        .Assembly.GetReferencedAssemblies()
+                        .First(assembly => assembly.FullName.StartsWith("System.Web, "));
+                var systemWeb = AppDomain.CurrentDomain.Load(systemWebAssemblyName);
 
-                if (handler != null)
+                var staticFileHandlerType = systemWeb.GetType("System.Web.StaticFileHandler", true);
+                var staticFileHanlder = Activator.CreateInstance(staticFileHandlerType, true) as IHttpHandler;
+
+                if (staticFileHanlder != null)
                 {
-                    handler.ProcessRequest(context);
+                    staticFileHanlder.ProcessRequest(context);
                 }
             }
             catch (ThreadAbortException)
             {
                 // swallow this exception because we may have called Response.End
             }
+            catch (HttpException)
+            {
+                // we want to throw http exceptions, but we don't care about logging them in Sitecore
+                throw;
+            }
             catch (Exception ex)
             {
+                // log it in sitecore
                 Log.Error(string.Format("{0}::Error in UrlRewriteHandler", this), ex, this);
-                
-                // don't throw the error, but instead let it fall through
+
+                throw;
+                // throw the error, but instead let it fall through
             }
 
         }
