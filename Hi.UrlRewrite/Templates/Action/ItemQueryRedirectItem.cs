@@ -6,10 +6,10 @@ using Sitecore.Web.UI.WebControls;
 
 namespace Hi.UrlRewrite.Templates.Action.Base
 {
-    public partial class BaseRedirectActionItem : CustomItem
+    public partial class ItemQueryRedirectItem : CustomItem
     {
 
-        public static readonly string TemplateId = "{D28318B2-5793-4ABA-BFB3-3C3FBC00AA92}";
+        public static readonly string TemplateId = "{5B7FB661-CB6C-449C-9C84-2672538AC77C}";
 
         #region Inherited Base Templates
 
@@ -20,18 +20,18 @@ namespace Hi.UrlRewrite.Templates.Action.Base
 
         #region Boilerplate CustomItem Code
 
-        public BaseRedirectActionItem(Item innerItem)
+        public ItemQueryRedirectItem(Item innerItem)
             : base(innerItem)
         {
             _BaseRewriteItem = new BaseRewriteItem(innerItem);
         }
 
-        public static implicit operator BaseRedirectActionItem(Item innerItem)
+        public static implicit operator ItemQueryRedirectItem(Item innerItem)
         {
-            return innerItem != null ? new BaseRedirectActionItem(innerItem) : null;
+            return innerItem != null ? new ItemQueryRedirectItem(innerItem) : null;
         }
 
-        public static implicit operator Item(BaseRedirectActionItem customItem)
+        public static implicit operator Item(ItemQueryRedirectItem customItem)
         {
             return customItem != null ? customItem.InnerItem : null;
         }
@@ -42,23 +42,13 @@ namespace Hi.UrlRewrite.Templates.Action.Base
         #region Field Instance Methods
 
 
-        public LinkField RewriteUrl
+        public TextField ItemQuery
         {
             get
             {
-                return new LinkField(InnerItem.Fields["Rewrite URL"]);
+                return new TextField(InnerItem.Fields["Item Query"]);
             }
         }
-
-
-        public CheckboxField AppendQueryString
-        {
-            get
-            {
-                return new CheckboxField(InnerItem.Fields["Append query string"]);
-            }
-        }
-
 
         #endregion //Field Instance Methods
     }

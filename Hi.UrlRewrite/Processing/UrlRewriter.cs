@@ -13,10 +13,12 @@ using Hi.UrlRewrite.Entities.Conditions;
 using Hi.UrlRewrite.Entities.Rules;
 using Hi.UrlRewrite.Processing.Results;
 using Sitecore.Data;
+using Sitecore.Data.Items;
 using Sitecore.Diagnostics;
 using Sitecore.Links;
 using Sitecore.Resources.Media;
 using Sitecore.Shell.Applications.ContentEditor;
+using Sitecore.Web;
 
 namespace Hi.UrlRewrite.Processing
 {
@@ -85,9 +87,9 @@ namespace Hi.UrlRewrite.Processing
             {
                 httpResponse.Clear();
 
-                if (ruleResult.FinalAction is RedirectAction)
+                if (ruleResult.FinalAction is IBaseRewrite)
                 {
-                    var redirectAction = ruleResult.FinalAction as RedirectAction;
+                    var redirectAction = ruleResult.FinalAction as IBaseRewrite;
                     int statusCode;
 
                     if (redirectAction.StatusCode.HasValue)
@@ -106,7 +108,7 @@ namespace Hi.UrlRewrite.Processing
                     {
                         httpResponse.Cache.SetCacheability(redirectAction.HttpCacheability.Value);
                     }
-                } 
+                }
                 else if (ruleResult.FinalAction is AbortRequestAction)
                 {
                     // do nothing
@@ -212,6 +214,10 @@ namespace Hi.UrlRewrite.Processing
                 if (inboundRule.Action is RedirectAction) // process the action if it is a RedirectAction  
                 {
                     ProcessRedirectAction(inboundRule, originalUri, inboundRuleMatch, lastConditionMatch, ruleResult);
+                }
+                else if (inboundRule.Action is ItemQueryRedirectAction)
+                {
+                    ProcessItemQueryRedirectAction(inboundRule, originalUri, inboundRuleMatch, lastConditionMatch, ruleResult);
                 }
                 else if (inboundRule.Action is AbortRequestAction || inboundRule.Action is CustomResponseAction)
                 {
@@ -401,7 +407,6 @@ namespace Hi.UrlRewrite.Processing
                 return;
             }
 
-
             if (rewriteItemId.HasValue)
             {
                 rewriteUrl = GetRewriteUrlFromItemId(rewriteItemId.Value, rewriteItemAnchor);
@@ -420,6 +425,54 @@ namespace Hi.UrlRewrite.Processing
 
             ruleResult.RewrittenUri = new Uri(rewriteUrl);
             ruleResult.StopProcessing = redirectAction.StopProcessingOfSubsequentRules;
+        }
+
+        private void ProcessItemQueryRedirectAction(InboundRule inboundRule, Uri uri, Match inboundRuleMatch, Match lastConditionMatch, RuleResult ruleResult)
+        {
+            var redirectAction = inboundRule.Action as ItemQueryRedirectAction;
+
+            var rewriteUrl = string.Empty;
+            var itemQuery = redirectAction.ItemQuery;
+
+            if (string.IsNullOrEmpty(itemQuery))
+            {
+                ruleResult.RuleMatched = false;
+                return;
+            }
+
+            // process token replacements in the item query
+            itemQuery = ReplaceRuleBackReferences(inboundRuleMatch, itemQuery);
+            itemQuery = ReplaceConditionBackReferences(lastConditionMatch, itemQuery);
+
+            var rewriteItemId = ProcessItemQuery(itemQuery);
+
+            if (!rewriteItemId.HasValue)
+            {
+                ruleResult.RuleMatched = false;
+                return;
+            }
+
+            rewriteUrl = GetRewriteUrlFromItemId(rewriteItemId.Value, null);
+
+            // process token replacements
+            rewriteUrl = ReplaceTokens(uri, rewriteUrl);
+            rewriteUrl = ReplaceRuleBackReferences(inboundRuleMatch, rewriteUrl);
+            rewriteUrl = ReplaceConditionBackReferences(lastConditionMatch, rewriteUrl);
+
+            ruleResult.RewrittenUri = new Uri(rewriteUrl);
+            ruleResult.StopProcessing = redirectAction.StopProcessingOfSubsequentRules;
+        }
+
+        private Guid? ProcessItemQuery(string itemQuery)
+        {
+            var db = Sitecore.Context.Database;
+            var items = db.SelectItems(itemQuery);
+            if (items != null && items.Any())
+            {
+                return items.First().ID.Guid;
+            }
+
+            return null;
         }
 
         private static string ReplaceRuleBackReferences(Match inboundRuleMatch, string input)
@@ -461,7 +514,7 @@ namespace Hi.UrlRewrite.Processing
             {
                 query = query.Substring(1);
             }
-            input = input.Replace(Tokens.QUERY_STRING.Formatted(), query);
+            input = input.Replace(Tokens.QUERY_STRING.Formatted(), HttpUtility.UrlDecode(query));
 
             // scheme replacement
             var https = uri.Scheme.Equals(Uri.UriSchemeHttps, StringComparison.InvariantCultureIgnoreCase) ? "on" : "off";

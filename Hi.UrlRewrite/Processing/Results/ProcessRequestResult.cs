@@ -42,7 +42,7 @@ namespace Hi.UrlRewrite.Processing.Results
             }
         }
 
-        public BaseAction FinalAction { get; set; }
+        public IBaseAction FinalAction { get; set; }
 
         public bool MatchedAtLeastOneRule { get; set; }
         public List<RuleResult> ProcessedResults { get; set; }

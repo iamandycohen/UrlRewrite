@@ -40,18 +40,7 @@ namespace Hi.UrlRewrite.Templates.Action
 
         #endregion //Boilerplate CustomItem Code
 
-
         #region Field Instance Methods
-
-
-        public LookupField RedirectType
-        {
-            get
-            {
-                return new LookupField(InnerItem.Fields["Redirect type"]);
-            }
-        }
-
 
         #endregion //Field Instance Methods
     }

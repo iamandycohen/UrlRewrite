@@ -2,6 +2,5 @@
 {
     public class RedirectAction : BaseRedirectAction
     {
-        public RedirectActionStatusCode? StatusCode { get; set; }
     }
 }

@@ -16,7 +16,7 @@ namespace Hi.UrlRewrite.Processing.Results
         public Guid ItemId { get; set; }
         public bool RuleMatched { get; set; }
 
-        public BaseAction ResultAction { get; set; }
+        public IBaseAction ResultAction { get; set; }
         public ConditionMatchResult ConditionMatchResult { get; set; }
     }
 }

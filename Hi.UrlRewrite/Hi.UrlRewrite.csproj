@@ -63,11 +63,14 @@
     <Compile Include="Configuration.cs" />
     <Compile Include="Constants.cs" />
     <Compile Include="Entities\Actions\AbortRequestAction.cs" />
-    <Compile Include="Entities\Actions\BaseAction.cs" />
+    <Compile Include="Entities\Actions\IBaseAction.cs" />
     <Compile Include="Entities\Actions\BaseRedirectAction.cs" />
-    <Compile Include="Entities\Actions\BaseStopProcessingAction.cs" />
+    <Compile Include="Entities\Actions\IBaseStopProcessingAction.cs" />
     <Compile Include="Entities\Actions\CustomResponseAction.cs" />
     <Compile Include="Entities\Actions\IBaseCache.cs" />
+    <Compile Include="Entities\Actions\IBaseRewrite.cs" />
+    <Compile Include="Entities\Actions\IBaseStatusCode.cs" />
+    <Compile Include="Entities\Actions\ItemQueryRedirectAction.cs" />
     <Compile Include="Entities\Actions\RedirectAction.cs" />
     <Compile Include="Entities\Actions\RedirectActionStatusCode.cs" />
     <Compile Include="Entities\Conditions\CheckIfInputString.cs" />
@@ -94,6 +97,9 @@
       <DependentUpon>Default.aspx</DependentUpon>
     </Compile>
     <Compile Include="Templates\Action\AbortRequestItem.cs" />
+    <Compile Include="Templates\Action\Base\BaseRewriteItem.cs" />
+    <Compile Include="Templates\Action\Base\BaseRedirectTypeItem.cs" />
+    <Compile Include="Templates\Action\ItemQueryRedirectItem.cs" />
     <Compile Include="Templates\Action\Base\BaseCacheItem.cs" />
     <Compile Include="Templates\Action\CustomResponseItem.cs" />
     <Compile Include="Templates\Action\HttpCacheabilityType\HttpCacheabilityTypeItem.cs" />

@@ -5,6 +5,7 @@ using Hi.UrlRewrite.Entities.Rules;
 using Hi.UrlRewrite.Processing;
 using Hi.UrlRewrite.Templates;
 using Hi.UrlRewrite.Templates.Action;
+using Hi.UrlRewrite.Templates.Action.Base;
 using Hi.UrlRewrite.Templates.Conditions;
 using Sitecore.Diagnostics;
 using System;
@@ -104,7 +105,7 @@ namespace Hi.UrlRewrite
             }
 
             var baseActionItem = inboundRuleItem.Action.TargetItem;
-            BaseAction baseAction = null;
+            IBaseAction baseAction = null;
             if (baseActionItem != null)
             {
                 var baseActionItemTemplateId = baseActionItem.TemplateID.ToString();
@@ -122,6 +123,10 @@ namespace Hi.UrlRewrite
                     StringComparison.InvariantCultureIgnoreCase))
                 {
                     baseAction = new CustomResponseItem(baseActionItem).ToCustomResponseAction();
+                }
+                else if (baseActionItemTemplateId.Equals(ItemQueryRedirectItem.TemplateId))
+                {
+                    baseAction = new ItemQueryRedirectItem(baseActionItem).ToItemQueryRedirectAction();
                 }
             }
             inboundRule.Action = baseAction;
@@ -160,39 +165,28 @@ namespace Hi.UrlRewrite
                 AppendQueryString = redirectItem.BaseRedirectAction.AppendQueryString.Checked,
                 RewriteUrl = actionRewriteUrl,
                 RewriteItemId = redirectItemId,
-                RewriteItemAnchor = redirectItemAnchor,
-                StopProcessingOfSubsequentRules = redirectItem.BaseRedirectAction.BaseStopProcessingAction.StopProcessingOfSubsequentRules.Checked
+                RewriteItemAnchor = redirectItemAnchor
             };
 
-            var redirectTypeItem = redirectItem.RedirectType.TargetItem;
-            RedirectActionStatusCode? redirectType = null;
-            if (redirectTypeItem != null)
-            {
-                switch (redirectTypeItem.ID.ToString())
-                {
-                    case Constants.RedirectType_Permanent_ItemId:
-                        redirectType = RedirectActionStatusCode.Permanent;
-                        break;
-                    case Constants.RedirectType_Found_ItemId:
-                        redirectType = RedirectActionStatusCode.Found;
-                        break;
-                    case Constants.RedirectType_SeeOther_ItemId:
-                        redirectType = RedirectActionStatusCode.SeeOther;
-                        break;
-                    case Constants.RedirectType_Temporary_ItemId:
-                        redirectType = RedirectActionStatusCode.Temporary;
-                        break;
-                    default:
-                        break;
-                }
-            }
-            redirectAction.StatusCode = redirectType;
+            var baseRewriteItem = redirectItem.BaseRedirectAction.BaseRewriteItem;
+            GetBaseRewriteItem(baseRewriteItem, redirectAction);
 
-            var httpCacheabilityTypeItem = redirectItem.BaseRedirectAction.BaseCacheItem.HttpCacheability.TargetItem;
+            return redirectAction;
+        }
+
+        private static void GetStopProcessing(BaseStopProcessingActionItem redirectItem, IBaseStopProcessingAction redirectAction)
+        {
+            redirectAction.StopProcessingOfSubsequentRules =
+                redirectItem.StopProcessingOfSubsequentRules.Checked;
+        }
+
+        private static void GetCacheability(BaseCacheItem httpCacheabilityTypeItem, IBaseCache redirectAction)
+        {
+            var httpCacheabilityTypeTargetItem = httpCacheabilityTypeItem.HttpCacheability.TargetItem;
             HttpCacheability? httpCacheability = null;
-            if (httpCacheabilityTypeItem != null)
+            if (httpCacheabilityTypeTargetItem != null)
             {
-                switch (httpCacheabilityTypeItem.ID.ToString())
+                switch (httpCacheabilityTypeTargetItem.ID.ToString())
                 {
                     case Constants.HttpCacheabilityType_NoCache_ItemId:
                         httpCacheability = HttpCacheability.NoCache;
@@ -217,8 +211,33 @@ namespace Hi.UrlRewrite
                 }
             }
             redirectAction.HttpCacheability = httpCacheability;
+        }
 
-            return redirectAction;
+        private static void GetStatusCode(BaseRedirectTypeItem redirectTypeItem, IBaseStatusCode redirectAction)
+        {
+            var redirectTypeTargetItem = redirectTypeItem.RedirectType.TargetItem;
+            RedirectActionStatusCode? redirectType = null;
+            if (redirectTypeTargetItem != null)
+            {
+                switch (redirectTypeTargetItem.ID.ToString())
+                {
+                    case Constants.RedirectType_Permanent_ItemId:
+                        redirectType = RedirectActionStatusCode.Permanent;
+                        break;
+                    case Constants.RedirectType_Found_ItemId:
+                        redirectType = RedirectActionStatusCode.Found;
+                        break;
+                    case Constants.RedirectType_SeeOther_ItemId:
+                        redirectType = RedirectActionStatusCode.SeeOther;
+                        break;
+                    case Constants.RedirectType_Temporary_ItemId:
+                        redirectType = RedirectActionStatusCode.Temporary;
+                        break;
+                    default:
+                        break;
+                }
+            }
+            redirectAction.StatusCode = redirectType;
         }
 
         public static AbortRequestAction ToAbortRequestAction(this AbortRequestItem abortRequestItem)
@@ -270,6 +289,37 @@ namespace Hi.UrlRewrite
             customResponseAction.Reason = customResponseItem.Reason.Value;
 
             return customResponseAction;
+        }
+
+        public static ItemQueryRedirectAction ToItemQueryRedirectAction(this ItemQueryRedirectItem itemQueryRedirectItem)
+        {
+            if (itemQueryRedirectItem == null)
+            {
+                return null;
+            }
+
+            var itemQueryRedirectAction = new ItemQueryRedirectAction()
+            {
+                Name = itemQueryRedirectItem.Name,
+                ItemQuery =  itemQueryRedirectItem.ItemQuery.Value
+            };
+
+            var baseRewriteItem = itemQueryRedirectItem.BaseRewriteItem;
+            GetBaseRewriteItem(baseRewriteItem, itemQueryRedirectAction);
+
+            return itemQueryRedirectAction;
+        }
+
+        private static void GetBaseRewriteItem(BaseRewriteItem baseRewriteItem, IBaseRewrite redirect)
+        {
+            var stopProcessingItem = baseRewriteItem.BaseStopProcessingAction;
+            GetStopProcessing(stopProcessingItem, redirect);
+
+            var redirectTypeItem = baseRewriteItem.BaseRedirectTypeItem;
+            GetStatusCode(redirectTypeItem, redirect);
+
+            var httpCacheabilityTypeItem = baseRewriteItem.BaseCacheItem;
+            GetCacheability(httpCacheabilityTypeItem, redirect);
         }
 
         public static Condition ToCondition(this BaseConditionItem baseConditionItem)
