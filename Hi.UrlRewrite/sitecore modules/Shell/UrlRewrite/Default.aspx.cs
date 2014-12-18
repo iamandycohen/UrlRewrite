@@ -20,7 +20,6 @@ namespace Hi.UrlRewrite.sitecore_modules.Shell.UrlRewrite
     public partial class Default : System.Web.UI.Page
     {
         private Database _db;
-        private List<RuleResult> _processedResults;
 
         protected void Page_Load(object sender, EventArgs e)
         {
@@ -54,11 +53,14 @@ namespace Hi.UrlRewrite.sitecore_modules.Shell.UrlRewrite
                     {
                         results = rewriter.ProcessRequestUrl(new Uri(txtUrl.Text), inboundRules);
 
-                        _processedResults = results.ProcessedResults;
                     }
 
+                    if (results == null)
+                    {
+                        return;
+                    }
 
-                    resultsRepeater.DataSource = _processedResults;
+                    resultsRepeater.DataSource = results.ProcessedResults;
                     resultsRepeater.DataBind();
 
                     var isAbort = results.FinalAction is AbortRequestAction;
