@@ -11,7 +11,6 @@ Changelog
 
 Version 1.6
 * Added information about conditions to the Url Rewrite application in the Sitecore Admin UI
-* Added 
 * Fixed UrlRewriteHandler displaying blank page if the StaticMapHandler didn't find the file. Allowed exceptions to be bubbled up.
 * Added a new type of rediret action - Item Query Redirect which allows you to use a Sitecore Query to find an item.  Ability to utilize back references from conditions.
 
