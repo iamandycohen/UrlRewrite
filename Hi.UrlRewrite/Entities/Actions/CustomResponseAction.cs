@@ -1,5 +1,8 @@
-﻿namespace Hi.UrlRewrite.Entities.Actions
+﻿using System;
+
+namespace Hi.UrlRewrite.Entities.Actions
 {
+    [Serializable]
     public class CustomResponseAction : IBaseAction
     {
         public int StatusCode { get; set; }

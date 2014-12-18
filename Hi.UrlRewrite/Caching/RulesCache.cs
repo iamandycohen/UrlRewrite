@@ -1,4 +1,6 @@
-﻿using Hi.UrlRewrite.Entities.Rules;
+﻿using System.IO;
+using System.Runtime.Serialization.Formatters.Binary;
+using Hi.UrlRewrite.Entities.Rules;
 using Sitecore;
 using Sitecore.Caching;
 using Sitecore.Data;
@@ -28,7 +30,16 @@ namespace Hi.UrlRewrite.Caching
 
         public void SetInboundRules(List<InboundRule> inboundRules)
         {
-            SetObject(key, inboundRules, TypeUtil.SizeOfObject());
+            long size;
+
+            using (var memoryStream = new MemoryStream())
+            {
+                var binaryFormatter = new BinaryFormatter();
+                binaryFormatter.Serialize(memoryStream, inboundRules);
+                size = memoryStream.Length;
+            }
+
+            SetObject(key, inboundRules, size);
         }
 
     }

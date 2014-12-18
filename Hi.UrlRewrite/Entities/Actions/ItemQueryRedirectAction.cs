@@ -5,6 +5,7 @@ using System.Web;
 
 namespace Hi.UrlRewrite.Entities.Actions
 {
+    [Serializable]
     public class ItemQueryRedirectAction : IBaseRewrite
     {
         public string ItemQuery { get; set; }

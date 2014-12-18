@@ -3,6 +3,7 @@ using System.Web;
 
 namespace Hi.UrlRewrite.Entities.Actions
 {
+    [Serializable]
     public class BaseRedirectAction : IBaseRewrite
     {
         public string RewriteUrl { get; set; }

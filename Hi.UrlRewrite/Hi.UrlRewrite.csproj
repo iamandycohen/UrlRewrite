@@ -57,9 +57,6 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Caching\CacheProvider`.cs" />
-    <Compile Include="Caching\HttpCache.cs" />
-    <Compile Include="Caching\ICacheProvider.cs" />
     <Compile Include="Caching\RulesCache.cs" />
     <Compile Include="Caching\RulesCacheManager.cs" />
     <Compile Include="Configuration.cs" />

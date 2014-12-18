@@ -5,6 +5,7 @@ using Hi.UrlRewrite.Entities.Conditions;
 
 namespace Hi.UrlRewrite.Entities.Rules
 {
+    [Serializable]
     public class InboundRule
     {
         public Guid ItemId { get; set; }

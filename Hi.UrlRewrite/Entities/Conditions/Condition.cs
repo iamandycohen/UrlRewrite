@@ -1,5 +1,8 @@
-﻿namespace Hi.UrlRewrite.Entities.Conditions
+﻿using System;
+
+namespace Hi.UrlRewrite.Entities.Conditions
 {
+    [Serializable]
     public class Condition
     {
         public string Name { get; set; }
