@@ -104,6 +104,16 @@
                         </div>
                     </div>
                 </div>
+                
+                <div id="divInfo" runat="server" Visible="False">
+                    
+                </div>
+                
+                <div id="divError" runat="server" Visible="False">
+                    <pre id="txtError" runat="server">
+
+                    </pre>
+                </div>
 
             </form>
 

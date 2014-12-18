@@ -29,74 +29,91 @@ namespace Hi.UrlRewrite.sitecore_modules.Shell.UrlRewrite
             }
             else
             {
-                Page.Validate();
 
-                if (Page.IsValid)
+                try
                 {
-                    divFormGroup.Attributes["class"] = "form-group";
-                    divTable.Visible = true;
+                    Page.Validate();
 
-                    var rewriter = new UrlRewriter();
-                    _db = Sitecore.Context.ContentDatabase;
-
-                    var rulesEngine = new RulesEngine();
-                    var inboundRules = rulesEngine.GetInboundRules(_db);
-
-                    ProcessRequestResult results;
-
-                    var requestUri = new Uri(txtUrl.Text);
-                    var siteContext = SiteContextFactory.GetSiteContext(requestUri.Host, requestUri.AbsolutePath,
-                        requestUri.Port);
-
-                    using (new SiteContextSwitcher(siteContext))
-                    using (new DatabaseSwitcher(_db))
+                    if (Page.IsValid)
                     {
-                        results = rewriter.ProcessRequestUrl(new Uri(txtUrl.Text), inboundRules);
+                        divFormGroup.Attributes["class"] = "form-group";
+                        divTable.Visible = true;
 
-                    }
+                        var rewriter = new UrlRewriter();
+                        _db = Sitecore.Context.ContentDatabase;
 
-                    if (results == null)
-                    {
-                        return;
-                    }
+                        var rulesEngine = new RulesEngine();
+                        var inboundRules = rulesEngine.GetInboundRules(_db);
 
-                    resultsRepeater.DataSource = results.ProcessedResults;
-                    resultsRepeater.DataBind();
+                        ProcessRequestResult results;
 
-                    var isAbort = results.FinalAction is AbortRequestAction;
-                    var isCustomResponse = results.FinalAction is CustomResponseAction;
+                        var requestUri = new Uri(txtUrl.Text);
+                        var siteContext = SiteContextFactory.GetSiteContext(requestUri.Host, requestUri.AbsolutePath,
+                            requestUri.Port);
 
-                    if (isAbort)
-                    {
-                        txtFinalUrl.InnerText = "Aborted";
-                    }
-                    else if (isCustomResponse)
-                    {
-                        var customResponse = results.FinalAction as CustomResponseAction;
-                        const string resultFormat = "Custom Response: {0} {1} {2}";
-                        txtFinalUrl.InnerText = string.Format(resultFormat, customResponse.StatusCode,
-                            customResponse.SubStatusCode, customResponse.ErrorDescription);
-                    }
-                    else
-                    {
-                        if (!results.MatchedAtLeastOneRule)
+                        using (new SiteContextSwitcher(siteContext))
+                        using (new DatabaseSwitcher(_db))
                         {
-                            txtFinalUrl.InnerText = "No matches.";
+                            results = rewriter.ProcessRequestUrl(new Uri(txtUrl.Text), inboundRules);
+
+                        }
+
+                        if (results == null)
+                        {
+                            divTable.Visible = false;
+                            divInfo.Visible = true;
+                            divInfo.InnerText = "Sorry, I couldn't find any rules to process. :(";
+                            return;
+                        }
+
+                        resultsRepeater.DataSource = results.ProcessedResults;
+                        resultsRepeater.DataBind();
+
+                        var isAbort = results.FinalAction is AbortRequestAction;
+                        var isCustomResponse = results.FinalAction is CustomResponseAction;
+
+                        if (isAbort)
+                        {
+                            txtFinalUrl.InnerText = "Aborted";
+                        }
+                        else if (isCustomResponse)
+                        {
+                            var customResponse = results.FinalAction as CustomResponseAction;
+                            const string resultFormat = "Custom Response: {0} {1} {2}";
+                            txtFinalUrl.InnerText = string.Format(resultFormat, customResponse.StatusCode,
+                                customResponse.SubStatusCode, customResponse.ErrorDescription);
                         }
                         else
                         {
-                            const string resultFormat = "Redirected to {0}.";
-                            txtFinalUrl.InnerText = string.Format(resultFormat, results.RewrittenUri.ToString());
+                            if (!results.MatchedAtLeastOneRule)
+                            {
+                                txtFinalUrl.InnerText = "No matches.";
+                            }
+                            else
+                            {
+                                const string resultFormat = "Redirected to {0}.";
+                                txtFinalUrl.InnerText = string.Format(resultFormat, results.RewrittenUri.ToString());
+                            }
+                        }
+                    }
+                    else
+                    {
+                        if (!vldTxtUrl.IsValid)
+                        {
+                            divFormGroup.Attributes["class"] = "form-group has-error";
                         }
                     }
                 }
-                else
+                catch (Exception ex)
                 {
-                    if (!vldTxtUrl.IsValid)
-                    {
-                        divFormGroup.Attributes["class"] = "form-group has-error";
-                    }
+                    divTable.Visible = false;
+                    divInfo.Visible = false;
+                    divError.Visible = true;
+                    txtError.InnerText = @"Exception: 
+
+    " + ex.Message;
                 }
+
             }
         }
 
