@@ -10,6 +10,7 @@ using Sitecore.Data;
 using Sitecore.Data.Fields;
 using Sitecore.Data.Items;
 using Sitecore.Diagnostics;
+using Hi.UrlRewrite.Caching;
 
 namespace Hi.UrlRewrite.Processing
 {
@@ -17,7 +18,7 @@ namespace Hi.UrlRewrite.Processing
     {
         private static object thisType = typeof(RulesEngine);
 
-        public static List<InboundRule> GetInboundRules(Database db)
+        public List<InboundRule> GetInboundRules(Database db)
         {
             if (db == null)
             {
@@ -156,6 +157,136 @@ namespace Hi.UrlRewrite.Processing
                 actionRewriteUrl = redirectTo.Url;
             }
         }
+
+        #region Caching
+
+        private RulesCache GetRulesCache(Database db)
+        {
+            return RulesCacheManager.GetCache(db);
+        }
+
+        internal List<InboundRule> RefreshInboundRulesCache(Database db)
+        {
+            var inboundRules = GetInboundRules(db);
+
+            if (inboundRules != null)
+            {
+                Log.Info(string.Format("UrlRewrite - Adding {0} rules to Cache [{1}]", inboundRules.Count(), db.Name), thisType);
+
+                var cache = GetRulesCache(db);
+                cache.SetInboundRules(inboundRules);
+            }
+            else
+            {
+                Log.Info(string.Format("UrlRewrite - Found no rules [{0}]", db.Name), thisType);
+            }
+
+            return inboundRules;
+        }
+
+        internal void RefreshSimpleRedirect(Item item, Item redirectFolderItem)
+        {
+            UpdateRulesCache(item, redirectFolderItem, AddSimpleRedirect);
+        }
+
+        internal void RefreshInboundRule(Item item, Item redirectFolderItem)
+        {
+            UpdateRulesCache(item, redirectFolderItem, AddInboundRule);
+        }
+
+        internal void DeleteInboundRule(Item item, Item redirectFolderItem)
+        {
+            UpdateRulesCache(item, redirectFolderItem, RemoveInboundRule);
+        }
+
+        private void UpdateRulesCache(Item item, Item redirectFolderItem, Action<Item, Item, List<InboundRule>> action)
+        {
+            var cache = GetRulesCache(item.Database);
+            var inboundRules = cache.GetInboundRules();
+
+            if (inboundRules == null)
+            {
+                inboundRules = GetInboundRules(item.Database);
+            }
+
+            if (inboundRules != null)
+            {
+                action(item, redirectFolderItem, inboundRules);
+
+                Log.Debug(string.Format("UrlRewrite - Updating Rules Cache - count: {0}", inboundRules.Count), thisType);
+
+                // update the cache
+                cache.SetInboundRules(inboundRules);
+            }
+        }
+
+        private static void AddSimpleRedirect(Item item, Item redirectFolderItem, List<InboundRule> inboundRules)
+        {
+
+            Log.Debug(string.Format("UrlRewrite - Adding Simple Redirect - item: [{0}]", item.Paths.FullPath), thisType);
+
+            var simpleRedirectItem = new SimpleRedirectItem(item);
+            var newInboundRule = RulesEngine.CreateInboundRuleFromSimpleRedirectItem(simpleRedirectItem, redirectFolderItem);
+
+            AddOrRemoveRule(item, redirectFolderItem, inboundRules, newInboundRule);
+        }
+
+        private static void AddInboundRule(Item item, Item redirectFolderItem, List<InboundRule> inboundRules)
+        {
+
+            Log.Debug(string.Format("UrlRewrite - Adding Inbound Rule - item: [{0}]", item.Paths.FullPath), thisType);
+
+            var inboundRuleItem = new InboundRuleItem(item);
+
+            var newInboundRule = RulesEngine.CreateInboundRuleFromInboundRuleItem(inboundRuleItem, redirectFolderItem);
+
+            if (newInboundRule != null)
+            {
+                AddOrRemoveRule(item, redirectFolderItem, inboundRules, newInboundRule);
+            }
+        }
+
+        private static void AddOrRemoveRule(Item item, Item redirectFolderItem, List<InboundRule> inboundRules, InboundRule newInboundRule)
+        {
+            if (newInboundRule.Enabled)
+            {
+                var existingInboundRule = inboundRules.FirstOrDefault(e => e.ItemId == item.ID.Guid);
+                if (existingInboundRule != null)
+                {
+
+                    Log.Debug(string.Format("UrlRewrite - Replacing Inbound Rule - item: [{0}]", item.Paths.FullPath), thisType);
+
+                    var index = inboundRules.FindIndex(e => e.ItemId == existingInboundRule.ItemId);
+                    inboundRules.RemoveAt(index);
+                    inboundRules.Insert(index, newInboundRule);
+                }
+                else
+                {
+
+                    Log.Debug(string.Format("UrlRewrite - Adding Inbound Rule - item: [{0}]", item.Paths.FullPath), thisType);
+
+                    inboundRules.Add(newInboundRule);
+                }
+            }
+            else
+            {
+
+                RemoveInboundRule(item, redirectFolderItem, inboundRules);
+            }
+        }
+
+        private static void RemoveInboundRule(Item item, Item redirectFolderItem, List<InboundRule> inboundRules)
+        {
+            Log.Debug(string.Format("UrlRewrite - Removing Inbound Rule - item: [{0}]", item.Paths.FullPath), thisType);
+
+            var existingInboundRule = inboundRules.FirstOrDefault(e => e.ItemId == item.ID.Guid);
+            if (existingInboundRule != null)
+            {
+                inboundRules.Remove(existingInboundRule);
+            }
+        }
+
+        #endregion
 
     }
 }

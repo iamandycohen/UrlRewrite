@@ -40,7 +40,9 @@ namespace Hi.UrlRewrite.sitecore_modules.Shell.UrlRewrite
                     var rewriter = new UrlRewriter();
                     _db = Sitecore.Context.ContentDatabase;
 
-                    var inboundRules = RulesEngine.GetInboundRules(_db);
+                    var rulesEngine = new RulesEngine();
+                    var inboundRules = rulesEngine.GetInboundRules(_db);
+
                     ProcessRequestResult results;
 
                     var requestUri = new Uri(txtUrl.Text);

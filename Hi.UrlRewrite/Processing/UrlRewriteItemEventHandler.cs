@@ -50,6 +50,7 @@ namespace Hi.UrlRewrite.Processing
         private void RunItemSaved(Item item)
         {
             var db = item.Database;
+            var rulesEngine = new RulesEngine();
 
             try
             {
@@ -66,21 +67,24 @@ namespace Hi.UrlRewrite.Processing
                             Log.Info(
                                 string.Format("UrlRewrite - Refreshing Redirect Folder [{0}] after save event",
                                     item.Paths.FullPath), this);
-                            UrlRewriteProcessor.RefreshInboundRulesCache(db);
+
+                            rulesEngine.RefreshInboundRulesCache(db);
                         }
                         else if (IsSimpleRedirectItem(item))
                         {
                             Log.Info(
                                 string.Format("UrlRewrite - Refreshing Simple Redirect [{0}] after save event",
                                     item.Paths.FullPath), this);
-                            UrlRewriteProcessor.RefreshSimpleRedirect(item, redirectFolderItem);
+
+                            rulesEngine.RefreshSimpleRedirect(item, redirectFolderItem);
                         }
                         else if (IsInboundRuleItem(item))
                         {
                             Log.Info(
                                 string.Format("UrlRewrite - Refreshing Inbound Rule [{0}] after save event",
                                     item.Paths.FullPath), this);
-                            UrlRewriteProcessor.RefreshInboundRule(item, redirectFolderItem);
+
+                            rulesEngine.RefreshInboundRule(item, redirectFolderItem);
                         }
                         else if (IsInboundRuleItemChild(item))
                         {
@@ -88,7 +92,7 @@ namespace Hi.UrlRewrite.Processing
                                 string.Format("UrlRewrite - Refreshing Inbound Rule [{0}] after save event",
                                     item.Parent.Paths.FullPath), this);
 
-                            UrlRewriteProcessor.RefreshInboundRule(item.Parent, redirectFolderItem);
+                            rulesEngine.RefreshInboundRule(item.Parent, redirectFolderItem);
                         }
                     }
                 }
@@ -130,6 +134,9 @@ namespace Hi.UrlRewrite.Processing
         {
             //if (item.Database.Name.Equals(Configuration.Database, StringComparison.InvariantCultureIgnoreCase))
             //{
+
+            var rulesEngine = new RulesEngine();
+
             try
             {
 
@@ -146,14 +153,16 @@ namespace Hi.UrlRewrite.Processing
                             Log.Info(
                                 string.Format("UrlRewrite - Removing Inbound Rule [{0}] after delete event",
                                     item.Paths.FullPath), this);
-                            UrlRewriteProcessor.DeleteInboundRule(item, redirectFolderItem);
+
+                            rulesEngine.DeleteInboundRule(item, redirectFolderItem);
                         }
                         else if (IsInboundRuleItemChild(item))
                         {
                             Log.Info(
                                 string.Format("UrlRewrite - Removing Inbound Rule [{0}] after delete event",
                                     item.Parent.Paths.FullPath), this);
-                            UrlRewriteProcessor.RefreshInboundRule(item.Parent, redirectFolderItem);
+
+                            rulesEngine.RefreshInboundRule(item.Parent, redirectFolderItem);
                         }
                     }
                 }
