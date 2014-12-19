@@ -10,10 +10,14 @@ namespace Hi.UrlRewrite.Processing.Results
         public ProcessRequestResult(Uri originalUri, RuleResult finalRuleResult, bool matchedAtLeastOneRule, List<RuleResult> processedResults)
         {
             OriginalUri = originalUri;
-            RewrittenUri = finalRuleResult.RewrittenUri;
             MatchedAtLeastOneRule = matchedAtLeastOneRule;
             ProcessedResults = processedResults;
-            FinalAction = finalRuleResult.ResultAction;
+
+            if (finalRuleResult != null)
+            {
+                RewrittenUri = finalRuleResult.RewrittenUri;
+                FinalAction = finalRuleResult.ResultAction;
+            }
         }
 
         public Uri OriginalUri { get; set; }

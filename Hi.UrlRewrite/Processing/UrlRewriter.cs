@@ -73,11 +73,6 @@ namespace Hi.UrlRewrite.Processing
 
             var lastMatchedRuleResult = processedResults.FirstOrDefault(r => r.RuleMatched);
 
-            if (lastMatchedRuleResult == null)
-            {
-                return null;
-            }
-
             var finalResult = new ProcessRequestResult(originalUri, lastMatchedRuleResult, matchedAtLeastOneRule, processedResults);
 
             return finalResult;
