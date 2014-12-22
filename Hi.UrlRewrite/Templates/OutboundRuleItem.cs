@@ -16,24 +16,15 @@ namespace Hi.UrlRewrite.Templates
 
         #region Inherited Base Templates
 
-        private readonly BaseUrlRewriteItem _BaseUrlRewriteItem;
-        public BaseUrlRewriteItem BaseUrlRewrite { get { return _BaseUrlRewriteItem; } }
-
-        private readonly RuleConditionPropertiesItem _RuleConditionPropertiesItem;
-        public RuleConditionPropertiesItem RuleConditionPropertiesItem { get { return _RuleConditionPropertiesItem; } }
-
-        private readonly BaseMatchItem _BaseMatchItem;
-        public BaseMatchItem BaseMatchItem { get { return _BaseMatchItem; } }
-
+        private readonly BaseRuleItem _BaseRuleItem;
+        public BaseRuleItem BaseRuleItem { get { return _BaseRuleItem; } }
 
         #endregion
 
         public OutboundRuleItem(Item innerItem)
             : base(innerItem)
         {
-            _BaseUrlRewriteItem = new BaseUrlRewriteItem(innerItem);
-            _RuleConditionPropertiesItem = new RuleConditionPropertiesItem(innerItem);
-            _BaseMatchItem = new BaseMatchItem(innerItem);
+            _BaseRuleItem = new BaseRuleItem(innerItem);
         }
 
         public static implicit operator OutboundRuleItem(Item innerItem)
@@ -51,14 +42,6 @@ namespace Hi.UrlRewrite.Templates
         //    get
         //    {
         //        return new LookupField(InnerItem.Fields["Action"]);
-        //    }
-        //}
-
-        //public CheckboxField Enabled
-        //{
-        //    get
-        //    {
-        //        return new CheckboxField(InnerItem.Fields["Enabled"]);
         //    }
         //}
             
