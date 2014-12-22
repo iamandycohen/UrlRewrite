@@ -1,20 +1,18 @@
-﻿using Hi.UrlRewrite.Entities;
-using Hi.UrlRewrite.Entities.Actions;
+﻿using Hi.UrlRewrite.Entities.Actions;
 using Hi.UrlRewrite.Entities.Conditions;
+using Hi.UrlRewrite.Entities.Match;
 using Hi.UrlRewrite.Entities.Rules;
 using Hi.UrlRewrite.Processing;
 using Hi.UrlRewrite.Templates;
 using Hi.UrlRewrite.Templates.Action;
 using Hi.UrlRewrite.Templates.Action.Base;
 using Hi.UrlRewrite.Templates.Conditions;
+using Sitecore.Data;
 using Sitecore.Diagnostics;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Web;
-using Sitecore.Data;
 
 namespace Hi.UrlRewrite
 {
@@ -31,71 +29,10 @@ namespace Hi.UrlRewrite
             var inboundRule = new InboundRule
             {
                 ItemId = inboundRuleItem.ID.Guid,
-                Name = inboundRuleItem.Name,
-                IgnoreCase = inboundRuleItem.IgnoreCase.Checked,
-                Pattern = inboundRuleItem.Pattern.Value,
-                Enabled = inboundRuleItem.Enabled.Checked
+                Name = inboundRuleItem.Name
             };
 
-            var requestedUrlItem = inboundRuleItem.RequestedUrl.TargetItem;
-            RequestedUrl? requestedUrlType = null;
-            if (requestedUrlItem != null)
-            {
-                var requestUrlItemId = requestedUrlItem.ID.ToString();
-                switch (requestUrlItemId)
-                {
-                    case Constants.RequestedUrlType_MatchesThePattern_ItemId:
-                        requestedUrlType = RequestedUrl.MatchesThePattern;
-                        break;
-                    case Constants.RequestedUrlType_DoesNotMatchThePattern_ItemId:
-                        requestedUrlType = RequestedUrl.DoesNotMatchThePattern;
-                        break;
-                    default:
-                        break;
-                }
-            }
-            inboundRule.RequestedUrl = requestedUrlType;
-
-            var logicalGroupingItem = inboundRuleItem.LogicalGrouping.TargetItem;
-            LogicalGrouping? logicalGroupingType = null;
-            if (logicalGroupingItem != null)
-            {
-                var logicalGroupingItemId = logicalGroupingItem.ID.ToString();
-                switch (logicalGroupingItemId)
-                {
-                    case Constants.LogicalGroupingType_MatchAll_ItemId:
-                        logicalGroupingType = LogicalGrouping.MatchAll;
-                        break;
-                    case Constants.LogicalGroupingType_MatchAny_ItemId:
-                        logicalGroupingType = LogicalGrouping.MatchAny;
-                        break;
-                    default:
-                        break;
-                }
-            }
-            inboundRule.ConditionLogicalGrouping = logicalGroupingType;
-
-            var usingItem = inboundRuleItem.Using.TargetItem;
-            Using? usingType = null;
-            if (usingItem != null)
-            {
-                var usingItemId = usingItem.ID.ToString();
-                switch (usingItemId)
-                {
-                    case Constants.UsingType_RegularExpressions_ItemId:
-                        usingType = Using.RegularExpressions;
-                        break;
-                    case Constants.UsingType_Wildcards_ItemId:
-                        usingType = Using.Wildcards;
-                        break;
-                    case Constants.UsingType_ExactMatch_ItemId:
-                        usingType = Using.ExactMatch;
-                        break;
-                    default:
-                        break;
-                }
-            }
-            inboundRule.Using = usingType;
+            GetBaseRuleItem(inboundRuleItem.BaseRuleItem, inboundRule);
 
             if (inboundRuleItem.Action == null)
             {
@@ -142,6 +79,79 @@ namespace Hi.UrlRewrite
             inboundRule.SiteNameRestriction = siteNameRestriction;
 
             return inboundRule;
+        }
+
+        private static void GetBaseRuleItem(BaseRuleItem baseRuleItem, IBaseRule baseRule)
+        {
+            baseRule.Enabled = baseRuleItem.Enabled.Checked;
+
+            GetBaseMatchItem(baseRuleItem.BaseMatchItem, baseRule);
+
+            var logicalGroupingItem = baseRuleItem.RuleConditionPropertiesItem.LogicalGrouping.TargetItem;
+            LogicalGrouping? logicalGroupingType = null;
+            if (logicalGroupingItem != null)
+            {
+                var logicalGroupingItemId = logicalGroupingItem.ID.ToString();
+                switch (logicalGroupingItemId)
+                {
+                    case Constants.LogicalGroupingType_MatchAll_ItemId:
+                        logicalGroupingType = LogicalGrouping.MatchAll;
+                        break;
+                    case Constants.LogicalGroupingType_MatchAny_ItemId:
+                        logicalGroupingType = LogicalGrouping.MatchAny;
+                        break;
+                    default:
+                        break;
+                }
+            }
+            baseRule.ConditionLogicalGrouping = logicalGroupingType;
+        }
+
+        private static void GetBaseMatchItem(BaseMatchItem baseMatchItem, IBaseMatch baseMatch)
+        {
+            baseMatch.IgnoreCase = baseMatchItem.MatchIgnoreCaseItem.IgnoreCase.Checked;
+            baseMatch.Pattern = baseMatchItem.MatchPatternItem.Pattern.Value;
+
+            var matchTypeItem = baseMatchItem.MatchMatchTypeItem.MatchType.TargetItem;
+            MatchType? matchType = null;
+            if (matchTypeItem != null)
+            {
+                var requestUrlItemId = matchTypeItem.ID.ToString();
+                switch (requestUrlItemId)
+                {
+                    case Constants.MatchType_MatchesThePattern_ItemId:
+                        matchType = MatchType.MatchesThePattern;
+                        break;
+                    case Constants.MatchType_DoesNotMatchThePattern_ItemId:
+                        matchType = MatchType.DoesNotMatchThePattern;
+                        break;
+                    default:
+                        break;
+                }
+            }
+            baseMatch.MatchType = matchType;
+
+            var usingItem = baseMatchItem.MatchUsingItem.Using.TargetItem;
+            Using? usingType = null;
+            if (usingItem != null)
+            {
+                var usingItemId = usingItem.ID.ToString();
+                switch (usingItemId)
+                {
+                    case Constants.UsingType_RegularExpressions_ItemId:
+                        usingType = Using.RegularExpressions;
+                        break;
+                    case Constants.UsingType_Wildcards_ItemId:
+                        usingType = Using.Wildcards;
+                        break;
+                    case Constants.UsingType_ExactMatch_ItemId:
+                        usingType = Using.ExactMatch;
+                        break;
+                    default:
+                        break;
+                }
+            }
+            baseMatch.Using = usingType;
         }
 
         public static RedirectAction ToRedirectAction(this RedirectItem redirectItem)

@@ -1,10 +1,6 @@
-using System;
 using Sitecore.Data.Items;
-using System.Collections.Generic;
-using Sitecore.Data.Fields;
-using Sitecore.Web.UI.WebControls;
 
-namespace Hi.UrlRewrite.Templates.MatchUrl
+namespace Hi.UrlRewrite.Templates.Match.Types
 {
     public partial class UsingTypeItem : CustomItem
     {

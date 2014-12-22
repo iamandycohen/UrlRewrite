@@ -1,8 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
+﻿using Hi.UrlRewrite.Caching;
 using Hi.UrlRewrite.Entities.Actions;
+using Hi.UrlRewrite.Entities.Match;
 using Hi.UrlRewrite.Entities.Rules;
 using Hi.UrlRewrite.Templates;
 using Hi.UrlRewrite.Templates.Conditions;
@@ -10,7 +8,10 @@ using Sitecore.Data;
 using Sitecore.Data.Fields;
 using Sitecore.Data.Items;
 using Sitecore.Diagnostics;
-using Hi.UrlRewrite.Caching;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Web;
 
 namespace Hi.UrlRewrite.Processing
 {
@@ -109,7 +110,7 @@ namespace Hi.UrlRewrite.Processing
                 ConditionLogicalGrouping = LogicalGrouping.MatchAll,
                 Name = simpleRedirectInternalItem.Name,
                 Pattern = inboundRulePattern,
-                RequestedUrl = RequestedUrl.MatchesThePattern,
+                MatchType = MatchType.MatchesThePattern,
                 Using = Using.RegularExpressions
             };
 

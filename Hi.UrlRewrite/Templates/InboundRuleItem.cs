@@ -1,4 +1,6 @@
-﻿using Sitecore.Data.Fields;
+﻿using Hi.UrlRewrite.Templates.Conditions;
+using Hi.UrlRewrite.Templates.Match;
+using Sitecore.Data.Fields;
 using Sitecore.Data.Items;
 using System;
 using System.Collections.Generic;
@@ -14,16 +16,16 @@ namespace Hi.UrlRewrite.Templates
 
         #region Inherited Base Templates
 
-        private readonly BaseUrlRewriteItem _BaseUrlRewriteItem;
-        public BaseUrlRewriteItem BaseUrlRewrite { get { return _BaseUrlRewriteItem; } }
+        private readonly BaseRuleItem _BaseRuleItem;
+        public BaseRuleItem BaseRuleItem { get { return _BaseRuleItem; } }
+
 
         #endregion
 
         public InboundRuleItem(Item innerItem)
             : base(innerItem)
         {
-            _BaseUrlRewriteItem = new BaseUrlRewriteItem(innerItem);
-        
+            _BaseRuleItem = new BaseRuleItem(innerItem);
         }
 
         public static implicit operator InboundRuleItem(Item innerItem)
@@ -36,38 +38,6 @@ namespace Hi.UrlRewrite.Templates
 	        return customItem != null ? customItem.InnerItem : null;
         }
 
-        public LookupField RequestedUrl
-        {
-            get
-            {
-                return new LookupField(InnerItem.Fields["Requested Url"]);
-            }
-        }
-
-        public LookupField Using
-        {
-            get
-            {
-                return new LookupField(InnerItem.Fields["Using"]);
-            }
-        }
-
-        public TextField Pattern
-        {
-            get
-            {
-                return new TextField(InnerItem.Fields["Pattern"]);
-            }
-        }
-
-        public CheckboxField IgnoreCase
-        {
-            get
-            {
-                return new CheckboxField(InnerItem.Fields["Ignore case"]);
-            }
-        }
-
         public LookupField Action
         {
             get
@@ -75,24 +45,6 @@ namespace Hi.UrlRewrite.Templates
                 return new LookupField(InnerItem.Fields["Action"]);
             }
         }
-
-        public LookupField LogicalGrouping
-        {
-            get
-            {
-                return new LookupField(InnerItem.Fields["Logical grouping"]);
-            }
-        }
-
-        public CheckboxField Enabled
-        {
-            get
-            {
-                return new CheckboxField(InnerItem.Fields["Enabled"]);
-            }
-        }
-
-
             
     }
 }

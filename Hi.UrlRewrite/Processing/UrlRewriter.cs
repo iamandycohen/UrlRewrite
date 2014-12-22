@@ -1,4 +1,13 @@
-﻿using System;
+﻿using Hi.UrlRewrite.Entities.Actions;
+using Hi.UrlRewrite.Entities.Conditions;
+using Hi.UrlRewrite.Entities.Match;
+using Hi.UrlRewrite.Entities.Rules;
+using Hi.UrlRewrite.Processing.Results;
+using Sitecore.Data;
+using Sitecore.Diagnostics;
+using Sitecore.Links;
+using Sitecore.Resources.Media;
+using System;
 using System.Collections.Generic;
 using System.Collections.Specialized;
 using System.Linq;
@@ -6,14 +15,6 @@ using System.Net;
 using System.Text.RegularExpressions;
 using System.Threading;
 using System.Web;
-using Hi.UrlRewrite.Entities.Actions;
-using Hi.UrlRewrite.Entities.Conditions;
-using Hi.UrlRewrite.Entities.Rules;
-using Hi.UrlRewrite.Processing.Results;
-using Sitecore.Data;
-using Sitecore.Diagnostics;
-using Sitecore.Links;
-using Sitecore.Resources.Media;
 
 namespace Hi.UrlRewrite.Processing
 {
@@ -247,8 +248,8 @@ namespace Hi.UrlRewrite.Processing
             var escapedUriPath = (escapedAbsolutePath ?? string.Empty).Substring(1); // remove starting "/"
 
             // TODO : I have only implemented "MatchesThePattern" - need to implement the other types
-            var matchesThePattern = inboundRule.RequestedUrl.HasValue &&
-                                    inboundRule.RequestedUrl.Value == RequestedUrl.MatchesThePattern;
+            var matchesThePattern = inboundRule.MatchType.HasValue &&
+                                    inboundRule.MatchType.Value == MatchType.MatchesThePattern;
 
             if (!matchesThePattern)
             {

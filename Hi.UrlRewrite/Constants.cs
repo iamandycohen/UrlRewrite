@@ -6,8 +6,8 @@ namespace Hi.UrlRewrite
         public const string RedirectFolderItemsQuery = "fast:{0}//*[@@templateid = '{1}']";
         public const string RedirectFolderConditionItemsQuery = "*[@@templateid = '{0}' or @@templateid = '{1}']";
 
-        public const string RequestedUrlType_MatchesThePattern_ItemId = "{2C94D94E-6FDA-465B-BCA1-4C18EF249EAB}";
-        public const string RequestedUrlType_DoesNotMatchThePattern_ItemId = "{35479F72-B51C-4878-8BE1-53373D66633A}";
+        public const string MatchType_MatchesThePattern_ItemId = "{2C94D94E-6FDA-465B-BCA1-4C18EF249EAB}";
+        public const string MatchType_DoesNotMatchThePattern_ItemId = "{35479F72-B51C-4878-8BE1-53373D66633A}";
 
         public const string UsingType_RegularExpressions_ItemId = "{75BFA469-AE7D-47FD-9A2F-DD8B3AF0865C}";
         public const string UsingType_Wildcards_ItemId = "{E936A17D-0014-4848-9779-1D9BE9095A7D}";

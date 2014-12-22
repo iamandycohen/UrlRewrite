@@ -1,11 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using Hi.UrlRewrite.Entities.Actions;
+﻿using Hi.UrlRewrite.Entities.Actions;
 using Hi.UrlRewrite.Entities.Conditions;
+using Hi.UrlRewrite.Entities.Match;
 using Hi.UrlRewrite.Entities.Rules;
 using Hi.UrlRewrite.Processing;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Web;
 
 namespace Hi.UrlRewrite.Tests
@@ -69,7 +70,7 @@ namespace Hi.UrlRewrite.Tests
                 Pattern = "^abort$",
                 Using = Using.RegularExpressions,
                 Action = new AbortRequestAction() { Name = "Abort Action" },
-                RequestedUrl = RequestedUrl.MatchesThePattern
+                MatchType = MatchType.MatchesThePattern
             };
 
             InboundRules.Insert(1, newInboundRule);
@@ -97,7 +98,7 @@ namespace Hi.UrlRewrite.Tests
                     ErrorDescription = "Custom Response Because I Said So", 
                     Reason = "Custom Response 550"
                 },
-                RequestedUrl = RequestedUrl.MatchesThePattern
+                MatchType = MatchType.MatchesThePattern
             };
 
             InboundRules.Insert(0, newInboundRule);
@@ -131,7 +132,7 @@ namespace Hi.UrlRewrite.Tests
                         StatusCode = RedirectActionStatusCode.Permanent,
                         RewriteUrl = "http://{HTTP_HOST}/newpage/{C:1}/{C:2}"
                     },
-                    RequestedUrl = RequestedUrl.MatchesThePattern,
+                    MatchType = MatchType.MatchesThePattern,
                     ConditionLogicalGrouping = LogicalGrouping.MatchAll,
                     Conditions = new List<Condition>()
                     {
@@ -198,7 +199,7 @@ namespace Hi.UrlRewrite.Tests
                     Pattern = "(.*)",
                     ConditionLogicalGrouping = LogicalGrouping.MatchAll,
                     Using = Using.RegularExpressions,
-                    RequestedUrl = RequestedUrl.MatchesThePattern
+                    MatchType = MatchType.MatchesThePattern
                 }
             };
 

@@ -1,12 +1,12 @@
-﻿using System.Web;
-using Hi.UrlRewrite.Entities;
+﻿using Hi.UrlRewrite.Entities.Actions;
+using Hi.UrlRewrite.Entities.Match;
+using Hi.UrlRewrite.Entities.Rules;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using Hi.UrlRewrite.Entities.Actions;
-using Hi.UrlRewrite.Entities.Rules;
+using System.Web;
 
 namespace Hi.UrlRewrite.Tests
 {
@@ -32,7 +32,7 @@ namespace Hi.UrlRewrite.Tests
                     Name = "Inbound Rule 1",
                     Pattern = "john",
                     Using = Using.ExactMatch,
-                    RequestedUrl = RequestedUrl.MatchesThePattern,
+                    MatchType = MatchType.MatchesThePattern,
                     ConditionLogicalGrouping = LogicalGrouping.MatchAll
                 },
                 new InboundRule()
@@ -51,7 +51,7 @@ namespace Hi.UrlRewrite.Tests
                     Name = "Inbound Rule 2",
                     Pattern = "^article/([0-9]+)/([_0-9a-z-]+)",
                     Using = Using.RegularExpressions,
-                    RequestedUrl = RequestedUrl.MatchesThePattern,
+                    MatchType = MatchType.MatchesThePattern,
                     ConditionLogicalGrouping = LogicalGrouping.MatchAll
                 },
                 new InboundRule()
@@ -70,7 +70,7 @@ namespace Hi.UrlRewrite.Tests
                     Name = "Inbound Rule 3",
                     Pattern = "^hostreplacement$",
                     Using = Using.RegularExpressions,
-                    RequestedUrl = RequestedUrl.MatchesThePattern,
+                    MatchType = MatchType.MatchesThePattern,
                     ConditionLogicalGrouping = LogicalGrouping.MatchAll
                 }
             };
