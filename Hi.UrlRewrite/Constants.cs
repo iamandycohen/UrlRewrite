@@ -40,5 +40,8 @@ namespace Hi.UrlRewrite
         public const string ConditionInputType_HttpHost_ItemId = "{CE714D26-9BC2-44AB-91CB-5D98F7BF7DE4}";
         public const string ConditionInputType_Https_ItemId = "{F9D6EA61-3C0B-41FA-8DA1-8405BED83BAD}";
 
+        public const string UrlRewriteModuleFolder_ItemId = "{5D183D73-5F71-48D5-B381-47D96E9687B9}";
+        public const string UrlRewriteSettings_ItemId = "{CD887CD4-9837-4929-B68E-366E3A7D1FEA}";
+
     }
 }

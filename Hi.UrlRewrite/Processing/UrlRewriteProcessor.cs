@@ -7,10 +7,12 @@ using Hi.UrlRewrite.Caching;
 using Hi.UrlRewrite.Entities.Rules;
 using Hi.UrlRewrite.Processing.Results;
 using Hi.UrlRewrite.Templates;
+using Sitecore.Configuration;
 using Sitecore.Data;
 using Sitecore.Data.Items;
 using Sitecore.Diagnostics;
 using Sitecore.Pipelines.HttpRequest;
+using Sitecore.Publishing;
 using Sitecore.SecurityModel;
 
 namespace Hi.UrlRewrite.Processing
@@ -43,6 +45,8 @@ namespace Hi.UrlRewrite.Processing
             }
             catch (Exception ex)
             {
+                if (ex is ThreadAbortException) return;
+
                 Log.Error("UrlRewrite - Exception occured", ex, this);
             }
         }
@@ -59,6 +63,7 @@ namespace Hi.UrlRewrite.Processing
                 using (new SecurityDisabler())
                 {
                     var rulesEngine = new RulesEngine();
+                    rulesEngine.InstallTemplates();
                     inboundRules = rulesEngine.RefreshInboundRulesCache(db);
                 }
             }

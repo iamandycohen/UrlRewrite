@@ -83,6 +83,8 @@
     <Compile Include="Entities\Rules\LogicalGrouping.cs" />
     <Compile Include="Extensions\ItemExtensions.cs" />
     <Compile Include="Fields\SiteDropList.cs" />
+    <Compile Include="Module\OutboundModule.cs" />
+    <Compile Include="Module\ResponseFilterStream.cs" />
     <Compile Include="Processing\Results\ConditionMatchResult.cs" />
     <Compile Include="Processing\Results\ProcessRequestResult.cs" />
     <Compile Include="Processing\Results\RuleResult.cs" />
@@ -111,6 +113,7 @@
     <Compile Include="Templates\Conditions\RuleConditionPropertiesItem.cs" />
     <Compile Include="Templates\Conditions\ConditionAdvancedItem.cs" />
     <Compile Include="Templates\BaseRuleItem.cs" />
+    <Compile Include="Templates\SettingsItem.cs" />
     <Compile Include="Templates\OutboundRuleItem.cs" />
     <Compile Include="Templates\Match\BaseMatchItem.cs" />
     <Compile Include="Templates\Match\MatchMatchTypeItem.cs" />

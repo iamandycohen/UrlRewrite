@@ -6,26 +6,26 @@ using Sitecore.Web.UI.WebControls;
 
 namespace Hi.UrlRewrite.Templates
 {
-    public partial class FolderItem : CustomItem
+    public partial class SettingsItem : CustomItem
     {
 
-        public static readonly string TemplateId = "{A87A00B1-E6DB-45AB-8B54-636FEC3B5523}";
+        public static readonly string TemplateId = "{B3A4B170-59DE-4438-B4E8-FE74A3C24C00}";
 
 
         #region Boilerplate CustomItem Code
 
-        public FolderItem(Item innerItem)
+        public SettingsItem(Item innerItem)
             : base(innerItem)
         {
 
         }
 
-        public static implicit operator FolderItem(Item innerItem)
+        public static implicit operator SettingsItem(Item innerItem)
         {
-            return innerItem != null ? new FolderItem(innerItem) : null;
+            return innerItem != null ? new SettingsItem(innerItem) : null;
         }
 
-        public static implicit operator Item(FolderItem customItem)
+        public static implicit operator Item(SettingsItem customItem)
         {
             return customItem != null ? customItem.InnerItem : null;
         }
@@ -35,6 +35,13 @@ namespace Hi.UrlRewrite.Templates
 
         #region Field Instance Methods
 
+        public MultilistField InstallationPublishingTargets
+        {
+	        get
+	        {
+		        return new MultilistField(InnerItem.Fields["Installation Publishing Targets"]);
+	        }
+        }
 
         #endregion //Field Instance Methods
     }

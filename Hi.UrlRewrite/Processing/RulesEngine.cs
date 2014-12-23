@@ -4,6 +4,7 @@ using Hi.UrlRewrite.Entities.Match;
 using Hi.UrlRewrite.Entities.Rules;
 using Hi.UrlRewrite.Templates;
 using Hi.UrlRewrite.Templates.Conditions;
+using Sitecore.Configuration;
 using Sitecore.Data;
 using Sitecore.Data.Fields;
 using Sitecore.Data.Items;
@@ -12,6 +13,8 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
+using Sitecore.Publishing;
+using Sitecore.SecurityModel;
 
 namespace Hi.UrlRewrite.Processing
 {
@@ -74,6 +77,28 @@ namespace Hi.UrlRewrite.Processing
 
             return inboundRules;
         }
+
+        public void InstallTemplates()
+        {
+            var settingsDb = Database.GetDatabase("master");
+            if (settingsDb == null) return;
+
+            using (new SecurityDisabler())
+            {
+                var settingsItem = settingsDb.GetItem(new ID(Constants.UrlRewriteSettings_ItemId));
+                if (settingsItem == null) return;
+
+                var settings = new SettingsItem(settingsItem);
+                var publishingTargets = settings.InstallationPublishingTargets.GetItems();
+                var dbArray = publishingTargets.Select(x => Factory.GetDatabase(x.Fields["Target database"].Value)).ToArray();
+                var urlRewriteModuleItem = settingsDb.GetItem(new ID(Constants.UrlRewriteModuleFolder_ItemId));
+
+                PublishManager.PublishItem(urlRewriteModuleItem, dbArray, urlRewriteModuleItem.Languages, true,
+                    true);
+            }
+        }
+
+
 
         internal static InboundRule CreateInboundRuleFromSimpleRedirectItem(SimpleRedirectItem simpleRedirectInternalItem, RedirectFolderItem redirectFolderItem)
         {

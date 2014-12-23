@@ -3,6 +3,7 @@ using System.Linq;
 using System.Net;
 using System.Threading;
 using System.Web;
+using System.Web.UI;
 using Sitecore.Diagnostics;
 using Sitecore.Pipelines.HttpRequest;
 using Sitecore.Sites;
@@ -64,6 +65,9 @@ namespace Hi.UrlRewrite.Processing
             }
             catch (Exception ex)
             {
+
+                if (ex is HttpException || ex is ThreadAbortException) return;
+
                 // log it in sitecore
                 Log.Error(string.Format("{0}::Error in UrlRewriteHandler", this), ex, this);
 
