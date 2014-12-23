@@ -20,7 +20,6 @@ namespace Hi.UrlRewrite.Processing
 {
     public class RulesEngine
     {
-        private static object thisType = typeof(RulesEngine);
 
         public List<InboundRule> GetInboundRules(Database db)
         {
@@ -30,7 +29,7 @@ namespace Hi.UrlRewrite.Processing
             }
 
             var query = string.Format(Constants.RedirectFolderItemsQuery, Configuration.RewriteFolderSearchRoot, RedirectFolderItem.TemplateId);
-            Item[] redirectFolderItems = db.SelectItems(query);
+            var redirectFolderItems = db.SelectItems(query);
 
             if (redirectFolderItems == null)
             {
@@ -41,7 +40,7 @@ namespace Hi.UrlRewrite.Processing
 
             foreach (var redirectFolderItem in redirectFolderItems)
             {
-                Log.Debug(string.Format("UrlRewrite - Processing RedirectFolder: {0}", redirectFolderItem.Name), thisType);
+                Log.Debug(string.Format("UrlRewrite - Processing RedirectFolder: {0}", redirectFolderItem.Name), this);
 
                 var folderDescendants = redirectFolderItem.Axes.GetDescendants()
                     .Where(x => x.TemplateID == new ID(new Guid(SimpleRedirectItem.TemplateId)) ||
@@ -53,7 +52,7 @@ namespace Hi.UrlRewrite.Processing
                     {
                         var simpleRedirectItem = new SimpleRedirectItem(descendantItem);
 
-                        Log.Debug(string.Format("UrlRewrite - Processing Simple Redirect: {0}", simpleRedirectItem.Name), thisType);
+                        Log.Debug(string.Format("UrlRewrite - Processing Simple Redirect: {0}", simpleRedirectItem.Name), this);
 
                         var inboundRule = CreateInboundRuleFromSimpleRedirectItem(simpleRedirectItem, redirectFolderItem);
 
@@ -63,7 +62,7 @@ namespace Hi.UrlRewrite.Processing
                     {
                         var inboundRuleItem = new InboundRuleItem(descendantItem);
                       
-                        Log.Debug(string.Format("UrlRewrite - Processing InboundRule: {0}", inboundRuleItem.Name), thisType);
+                        Log.Debug(string.Format("UrlRewrite - Processing InboundRule: {0}", inboundRuleItem.Name), this);
 
                         var inboundRule = CreateInboundRuleFromInboundRuleItem(inboundRuleItem, redirectFolderItem);
 
@@ -98,9 +97,7 @@ namespace Hi.UrlRewrite.Processing
             }
         }
 
-
-
-        internal static InboundRule CreateInboundRuleFromSimpleRedirectItem(SimpleRedirectItem simpleRedirectInternalItem, RedirectFolderItem redirectFolderItem)
+        internal InboundRule CreateInboundRuleFromSimpleRedirectItem(SimpleRedirectItem simpleRedirectInternalItem, RedirectFolderItem redirectFolderItem)
         {
             string inboundRulePattern = string.Format("^{0}/?$", simpleRedirectInternalItem.Path.Value);
 
@@ -113,7 +110,7 @@ namespace Hi.UrlRewrite.Processing
 
             GetRedirectUrlOrItemId(redirectTo, out actionRewriteUrl, out redirectItem, out redirectItemAnchor);
 
-            Log.Debug(string.Format("UrlRewrite - Creating Inbound Rule From Simple Redirect Item - {0} - id: {1} actionRewriteUrl: {2} redirectItem: {3}", simpleRedirectInternalItem.Name, simpleRedirectInternalItem.ID.Guid, actionRewriteUrl, redirectItem), thisType);
+            Log.Debug(string.Format("UrlRewrite - Creating Inbound Rule From Simple Redirect Item - {0} - id: {1} actionRewriteUrl: {2} redirectItem: {3}", simpleRedirectInternalItem.Name, simpleRedirectInternalItem.ID.Guid, actionRewriteUrl, redirectItem), this);
 
             var inboundRule = new InboundRule
             {
@@ -197,14 +194,14 @@ namespace Hi.UrlRewrite.Processing
 
             if (inboundRules != null)
             {
-                Log.Info(string.Format("UrlRewrite - Adding {0} rules to Cache [{1}]", inboundRules.Count(), db.Name), thisType);
+                Log.Info(string.Format("UrlRewrite - Adding {0} rules to Cache [{1}]", inboundRules.Count(), db.Name), this);
 
                 var cache = GetRulesCache(db);
                 cache.SetInboundRules(inboundRules);
             }
             else
             {
-                Log.Info(string.Format("UrlRewrite - Found no rules [{0}]", db.Name), thisType);
+                Log.Info(string.Format("UrlRewrite - Found no rules [{0}]", db.Name), this);
             }
 
             return inboundRules;
@@ -239,28 +236,28 @@ namespace Hi.UrlRewrite.Processing
             {
                 action(item, redirectFolderItem, inboundRules);
 
-                Log.Debug(string.Format("UrlRewrite - Updating Rules Cache - count: {0}", inboundRules.Count), thisType);
+                Log.Debug(string.Format("UrlRewrite - Updating Rules Cache - count: {0}", inboundRules.Count), this);
 
                 // update the cache
                 cache.SetInboundRules(inboundRules);
             }
         }
 
-        private static void AddSimpleRedirect(Item item, Item redirectFolderItem, List<InboundRule> inboundRules)
+        private void AddSimpleRedirect(Item item, Item redirectFolderItem, List<InboundRule> inboundRules)
         {
 
-            Log.Debug(string.Format("UrlRewrite - Adding Simple Redirect - item: [{0}]", item.Paths.FullPath), thisType);
+            Log.Debug(string.Format("UrlRewrite - Adding Simple Redirect - item: [{0}]", item.Paths.FullPath), this);
 
             var simpleRedirectItem = new SimpleRedirectItem(item);
-            var newInboundRule = RulesEngine.CreateInboundRuleFromSimpleRedirectItem(simpleRedirectItem, redirectFolderItem);
+            var newInboundRule = CreateInboundRuleFromSimpleRedirectItem(simpleRedirectItem, redirectFolderItem);
 
             AddOrRemoveRule(item, redirectFolderItem, inboundRules, newInboundRule);
         }
 
-        private static void AddInboundRule(Item item, Item redirectFolderItem, List<InboundRule> inboundRules)
+        private void AddInboundRule(Item item, Item redirectFolderItem, List<InboundRule> inboundRules)
         {
 
-            Log.Debug(string.Format("UrlRewrite - Adding Inbound Rule - item: [{0}]", item.Paths.FullPath), thisType);
+            Log.Debug(string.Format("UrlRewrite - Adding Inbound Rule - item: [{0}]", item.Paths.FullPath), this);
 
             var inboundRuleItem = new InboundRuleItem(item);
 
@@ -272,7 +269,7 @@ namespace Hi.UrlRewrite.Processing
             }
         }
 
-        private static void AddOrRemoveRule(Item item, Item redirectFolderItem, List<InboundRule> inboundRules, InboundRule newInboundRule)
+        private void AddOrRemoveRule(Item item, Item redirectFolderItem, List<InboundRule> inboundRules, InboundRule newInboundRule)
         {
             if (newInboundRule.Enabled)
             {
@@ -280,7 +277,7 @@ namespace Hi.UrlRewrite.Processing
                 if (existingInboundRule != null)
                 {
 
-                    Log.Debug(string.Format("UrlRewrite - Replacing Inbound Rule - item: [{0}]", item.Paths.FullPath), thisType);
+                    Log.Debug(string.Format("UrlRewrite - Replacing Inbound Rule - item: [{0}]", item.Paths.FullPath), this);
 
                     var index = inboundRules.FindIndex(e => e.ItemId == existingInboundRule.ItemId);
                     inboundRules.RemoveAt(index);
@@ -289,7 +286,7 @@ namespace Hi.UrlRewrite.Processing
                 else
                 {
 
-                    Log.Debug(string.Format("UrlRewrite - Adding Inbound Rule - item: [{0}]", item.Paths.FullPath), thisType);
+                    Log.Debug(string.Format("UrlRewrite - Adding Inbound Rule - item: [{0}]", item.Paths.FullPath), this);
 
                     inboundRules.Add(newInboundRule);
                 }
@@ -301,9 +298,9 @@ namespace Hi.UrlRewrite.Processing
             }
         }
 
-        private static void RemoveInboundRule(Item item, Item redirectFolderItem, List<InboundRule> inboundRules)
+        private void RemoveInboundRule(Item item, Item redirectFolderItem, List<InboundRule> inboundRules)
         {
-            Log.Debug(string.Format("UrlRewrite - Removing Inbound Rule - item: [{0}]", item.Paths.FullPath), thisType);
+            Log.Debug(string.Format("UrlRewrite - Removing Inbound Rule - item: [{0}]", item.Paths.FullPath), this);
 
             var existingInboundRule = inboundRules.FirstOrDefault(e => e.ItemId == item.ID.Guid);
             if (existingInboundRule != null)

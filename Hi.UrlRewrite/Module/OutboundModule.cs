@@ -25,6 +25,7 @@ namespace Hi.UrlRewrite.Module
             {
                 var context = app.Context;
 
+                // process outbound rules here... only set up event if it passes rules
                 var responseFilterStream = new ResponseFilterStream(context.Response.Filter);
                 responseFilterStream.TransformString += responseFilterStream_TransformString;
 

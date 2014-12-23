@@ -19,5 +19,13 @@ namespace Hi.UrlRewrite
                 return Settings.GetSetting("Hi.UrlRewrite.RewriteFolderSearchRoot", "/sitecore");
             }
         }
+
+        public static string CacheSize
+        {
+            get
+            {
+                return Settings.GetSetting("Hi.UrlRewrite.CacheSize", "10MB");
+            }
+        }
     }
 }
