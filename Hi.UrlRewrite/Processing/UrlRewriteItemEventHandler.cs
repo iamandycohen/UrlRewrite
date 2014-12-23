@@ -62,7 +62,7 @@ namespace Hi.UrlRewrite.Processing
                     if (redirectFolderItem != null)
                     {
 
-                        if (IsRedirectFolderItem(item))
+                        if (item.IsRedirectFolderItem())
                         {
                             Log.Info(
                                 string.Format("UrlRewrite - Refreshing Redirect Folder [{0}] after save event",
@@ -70,7 +70,7 @@ namespace Hi.UrlRewrite.Processing
 
                             rulesEngine.RefreshInboundRulesCache(db);
                         }
-                        else if (IsSimpleRedirectItem(item))
+                        else if (item.IsSimpleRedirectItem())
                         {
                             Log.Info(
                                 string.Format("UrlRewrite - Refreshing Simple Redirect [{0}] after save event",
@@ -78,7 +78,7 @@ namespace Hi.UrlRewrite.Processing
 
                             rulesEngine.RefreshSimpleRedirect(item, redirectFolderItem);
                         }
-                        else if (IsInboundRuleItem(item))
+                        else if (item.IsInboundRuleItem())
                         {
                             Log.Info(
                                 string.Format("UrlRewrite - Refreshing Inbound Rule [{0}] after save event",
@@ -86,7 +86,7 @@ namespace Hi.UrlRewrite.Processing
 
                             rulesEngine.RefreshInboundRule(item, redirectFolderItem);
                         }
-                        else if (IsInboundRuleItemChild(item))
+                        else if (item.IsInboundRuleItemChild())
                         {
                             Log.Info(
                                 string.Format("UrlRewrite - Refreshing Inbound Rule [{0}] after save event",
@@ -148,7 +148,7 @@ namespace Hi.UrlRewrite.Processing
 
                     if (redirectFolderItem != null)
                     {
-                        if (IsInboundRuleItem(item) || IsSimpleRedirectItem(item))
+                        if (item.IsInboundRuleItem() || item.IsSimpleRedirectItem())
                         {
                             Log.Info(
                                 string.Format("UrlRewrite - Removing Inbound Rule [{0}] after delete event",
@@ -156,7 +156,7 @@ namespace Hi.UrlRewrite.Processing
 
                             rulesEngine.DeleteInboundRule(item, redirectFolderItem);
                         }
-                        else if (IsInboundRuleItemChild(item))
+                        else if (item.IsInboundRuleItemChild())
                         {
                             Log.Info(
                                 string.Format("UrlRewrite - Removing Inbound Rule [{0}] after delete event",
@@ -171,39 +171,6 @@ namespace Hi.UrlRewrite.Processing
             {
                 Log.Error(string.Format("UrlRewrite - Exception occured which deleting item after publish Item ID: {0} Item Path: {1}", item.ID, item.Paths.FullPath), ex, this);
             }
-        }
-
-        #endregion
-
-        #region Checks
-
-        private static bool IsRedirectFolderItem(Item item)
-        {
-            return !IsTemplate(item) && item.TemplateID.ToString().Equals(RedirectFolderItem.TemplateId, StringComparison.InvariantCultureIgnoreCase);
-        }
-
-        private static bool IsSimpleRedirectItem(Item item)
-        {
-            return !IsTemplate(item) && item.TemplateID.ToString().Equals(SimpleRedirectItem.TemplateId, StringComparison.InvariantCultureIgnoreCase);
-        }
-
-        private static bool IsInboundRuleItem(Item item)
-        {
-            return !IsTemplate(item) && item.TemplateID.ToString().Equals(InboundRuleItem.TemplateId, StringComparison.InvariantCultureIgnoreCase);
-        }
-
-        private static bool IsInboundRuleItemChild(Item item)
-        {
-            if (item.Parent != null)
-            {
-                return !IsTemplate(item) && item.Parent.TemplateID.ToString().Equals(InboundRuleItem.TemplateId, StringComparison.InvariantCultureIgnoreCase);
-            }
-            return false;
-        }
-
-        private static bool IsTemplate(Item item)
-        {
-            return item.Paths.FullPath.StartsWith("/sitecore/templates", StringComparison.InvariantCultureIgnoreCase);
         }
 
         #endregion

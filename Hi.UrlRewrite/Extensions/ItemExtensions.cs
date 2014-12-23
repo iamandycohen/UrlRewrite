@@ -8,6 +8,7 @@ using Hi.UrlRewrite.Templates.Action;
 using Hi.UrlRewrite.Templates.Action.Base;
 using Hi.UrlRewrite.Templates.Conditions;
 using Sitecore.Data;
+using Sitecore.Data.Items;
 using Sitecore.Diagnostics;
 using System;
 using System.Collections.Generic;
@@ -420,5 +421,35 @@ namespace Hi.UrlRewrite
 
             return condition;
         }
+
+        public static bool IsRedirectFolderItem(this Item item)
+        {
+            return !IsTemplate(item) && item.TemplateID.ToString().Equals(RedirectFolderItem.TemplateId, StringComparison.InvariantCultureIgnoreCase);
+        }
+
+        public static bool IsSimpleRedirectItem(this Item item)
+        {
+            return !IsTemplate(item) && item.TemplateID.ToString().Equals(SimpleRedirectItem.TemplateId, StringComparison.InvariantCultureIgnoreCase);
+        }
+
+        public static bool IsInboundRuleItem(this Item item)
+        {
+            return !IsTemplate(item) && item.TemplateID.ToString().Equals(InboundRuleItem.TemplateId, StringComparison.InvariantCultureIgnoreCase);
+        }
+
+        public static bool IsInboundRuleItemChild(this Item item)
+        {
+            if (item.Parent != null)
+            {
+                return !IsTemplate(item) && item.Parent.TemplateID.ToString().Equals(InboundRuleItem.TemplateId, StringComparison.InvariantCultureIgnoreCase);
+            }
+            return false;
+        }
+
+        public static bool IsTemplate(this Item item)
+        {
+            return item.Paths.FullPath.StartsWith("/sitecore/templates", StringComparison.InvariantCultureIgnoreCase);
+        }
+
     }
 }
