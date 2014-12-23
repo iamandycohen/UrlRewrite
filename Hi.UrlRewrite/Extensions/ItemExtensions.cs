@@ -170,8 +170,8 @@ namespace Hi.UrlRewrite
 
             RulesEngine.GetRedirectUrlOrItemId(redirectTo, out actionRewriteUrl, out redirectItemId, out redirectItemAnchor);
 
-            var redirectAction = new RedirectAction 
-            { 
+            var redirectAction = new RedirectAction
+            {
                 Name = redirectItem.Name,
                 AppendQueryString = redirectItem.BaseRedirectAction.AppendQueryString.Checked,
                 RewriteUrl = actionRewriteUrl,
@@ -312,7 +312,7 @@ namespace Hi.UrlRewrite
             var itemQueryRedirectAction = new ItemQueryRedirectAction()
             {
                 Name = itemQueryRedirectItem.Name,
-                ItemQuery =  itemQueryRedirectItem.ItemQuery.Value
+                ItemQuery = itemQueryRedirectItem.ItemQuery.Value
             };
 
             var baseRewriteItem = itemQueryRedirectItem.BaseRewriteItem;
@@ -444,6 +444,17 @@ namespace Hi.UrlRewrite
                 return !IsTemplate(item) && item.Parent.TemplateID.ToString().Equals(InboundRuleItem.TemplateId, StringComparison.InvariantCultureIgnoreCase);
             }
             return false;
+        }
+
+        public static bool IsRedirectType(this Item item)
+        {
+            return !IsTemplate(item) && (new ID[]
+                   {
+                       new ID(RedirectItem.TemplateId),
+                       new ID(ItemQueryRedirectItem.TemplateId),
+                       new ID(CustomResponseItem.TemplateId),
+                       new ID(AbortRequestItem.TemplateId),
+                   }).Any(e => e.Equals(item.TemplateID));
         }
 
         public static bool IsTemplate(this Item item)

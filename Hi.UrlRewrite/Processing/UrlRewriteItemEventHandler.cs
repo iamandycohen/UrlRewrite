@@ -1,12 +1,12 @@
-﻿using System;
-using System.Linq;
-using Hi.UrlRewrite.Templates;
+﻿using Hi.UrlRewrite.Templates;
 using Sitecore.Data;
 using Sitecore.Data.Events;
 using Sitecore.Data.Items;
 using Sitecore.Diagnostics;
 using Sitecore.Events;
 using Sitecore.SecurityModel;
+using System;
+using System.Linq;
 
 namespace Hi.UrlRewrite.Processing
 {
@@ -59,41 +59,48 @@ namespace Hi.UrlRewrite.Processing
                     var redirectFolderItem = item.Axes.GetAncestors()
                         .FirstOrDefault(a => a.TemplateID == new ID(RedirectFolderItem.TemplateId));
 
-                    if (redirectFolderItem != null)
+                    if (redirectFolderItem == null) return;
+
+                    if (item.IsRedirectFolderItem())
                     {
+                        Log.Info(
+                            string.Format("UrlRewrite - Refreshing Redirect Folder [{0}] after save event",
+                                item.Paths.FullPath), this);
 
-                        if (item.IsRedirectFolderItem())
-                        {
-                            Log.Info(
-                                string.Format("UrlRewrite - Refreshing Redirect Folder [{0}] after save event",
-                                    item.Paths.FullPath), this);
+                        rulesEngine.RefreshInboundRulesCache(db);
+                    }
+                    else if (item.IsSimpleRedirectItem())
+                    {
+                        Log.Info(
+                            string.Format("UrlRewrite - Refreshing Simple Redirect [{0}] after save event",
+                                item.Paths.FullPath), this);
 
-                            rulesEngine.RefreshInboundRulesCache(db);
-                        }
-                        else if (item.IsSimpleRedirectItem())
-                        {
-                            Log.Info(
-                                string.Format("UrlRewrite - Refreshing Simple Redirect [{0}] after save event",
-                                    item.Paths.FullPath), this);
+                        rulesEngine.RefreshSimpleRedirect(item, redirectFolderItem);
+                    }
+                    else if (item.IsInboundRuleItem())
+                    {
+                        Log.Info(
+                            string.Format("UrlRewrite - Refreshing Inbound Rule [{0}] after save event",
+                                item.Paths.FullPath), this);
 
-                            rulesEngine.RefreshSimpleRedirect(item, redirectFolderItem);
-                        }
-                        else if (item.IsInboundRuleItem())
-                        {
-                            Log.Info(
-                                string.Format("UrlRewrite - Refreshing Inbound Rule [{0}] after save event",
-                                    item.Paths.FullPath), this);
+                        rulesEngine.RefreshInboundRule(item, redirectFolderItem);
+                    }
+                    else if (item.IsRedirectType() && item.IsInboundRuleItemChild())
+                    {
+                        var inboundRuleItem = item.Parent;
+                        var inboundRule = new InboundRuleItem(inboundRuleItem);
 
-                            rulesEngine.RefreshInboundRule(item, redirectFolderItem);
-                        }
-                        else if (item.IsInboundRuleItemChild())
-                        {
-                            Log.Info(
-                                string.Format("UrlRewrite - Refreshing Inbound Rule [{0}] after save event",
-                                    item.Parent.Paths.FullPath), this);
+                        inboundRule.BeginEdit();
+                        inboundRule.Action.InnerField.SetValue(item.ID.ToString(), false);
+                        inboundRule.EndEdit();
+                    }
+                    else if (item.IsInboundRuleItemChild())
+                    {
+                        Log.Info(
+                            string.Format("UrlRewrite - Refreshing Inbound Rule [{0}] after save event",
+                                item.Parent.Paths.FullPath), this);
 
-                            rulesEngine.RefreshInboundRule(item.Parent, redirectFolderItem);
-                        }
+                        rulesEngine.RefreshInboundRule(item.Parent, redirectFolderItem);
                     }
                 }
             }
@@ -132,8 +139,6 @@ namespace Hi.UrlRewrite.Processing
 
         private void RunItemDeleted(Item item)
         {
-            //if (item.Database.Name.Equals(Configuration.Database, StringComparison.InvariantCultureIgnoreCase))
-            //{
 
             var rulesEngine = new RulesEngine();
 
