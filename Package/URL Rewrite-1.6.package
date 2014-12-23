@@ -79,6 +79,98 @@ Version 1.0
     </xitems>
     <xitems>
       <Entries>
+        <x-item>/master/sitecore/system/Workflows/Redirect Workflow/{30D1BA49-44F5-4A99-8B3A-9815F41A31AA}/invariant/0</x-item>
+        <x-item>/master/sitecore/system/Workflows/Redirect Workflow/Approved/{7C920CDE-F8EC-44BA-9DCB-47B80329A50F}/invariant/0</x-item>
+        <x-item>/master/sitecore/system/Workflows/Redirect Workflow/Awaiting Approval/{DF6A09DC-7245-4903-831F-416273069473}/invariant/0</x-item>
+        <x-item>/master/sitecore/system/Workflows/Redirect Workflow/Awaiting Approval/Approve/{12E10F20-CB26-48BC-9D70-F1877A74D961}/invariant/0</x-item>
+        <x-item>/master/sitecore/system/Workflows/Redirect Workflow/Awaiting Approval/Reject/{1A662076-EA82-44D9-8158-C0DF8F9F754B}/invariant/0</x-item>
+        <x-item>/master/sitecore/system/Workflows/Redirect Workflow/Draft/{1123B394-7D58-48AF-A635-B5E8F36D76B3}/invariant/0</x-item>
+        <x-item>/master/sitecore/system/Workflows/Redirect Workflow/Draft/Fast Track/{B274FBE1-93E3-4E19-A8CE-E141A8680AA6}/invariant/0</x-item>
+        <x-item>/master/sitecore/system/Workflows/Redirect Workflow/Draft/Submit/{EF46356A-5DEC-4948-AC32-AFE74FD7F96F}/invariant/0</x-item>
+        <x-item>/master/sitecore/system/Workflows/Redirect Workflow/Draft/Submit/Validation Action/{E71E5D39-845C-49C4-AA5F-60960EF67F14}/invariant/0</x-item>
+      </Entries>
+      <SkipVersions>False</SkipVersions>
+      <Converter>
+        <ItemToEntryConverter>
+          <Transforms>
+            <InstallerConfigurationTransform>
+              <Options>
+                <BehaviourOptions>
+                  <ItemMode>Overwrite</ItemMode>
+                  <ItemMergeMode>Undefined</ItemMergeMode>
+                </BehaviourOptions>
+              </Options>
+            </InstallerConfigurationTransform>
+          </Transforms>
+        </ItemToEntryConverter>
+      </Converter>
+      <Include />
+      <Exclude />
+      <Name>workflow</Name>
+    </xitems>
+    <xitems>
+      <Entries>
+        <x-item>/master/sitecore/templates/Modules/UrlRewrite/Templates/Base UrlRewrite Item/__Standard Values/{A6C7AD1A-99CE-47AC-9D7F-EF66287E7F09}/invariant/0</x-item>
+        <x-item>/master/sitecore/templates/Modules/UrlRewrite/Templates/Base UrlRewrite Item/{83AFF04D-C0DA-44D4-8A7E-4BC0A89903E8}/invariant/0</x-item>
+      </Entries>
+      <SkipVersions>False</SkipVersions>
+      <Converter>
+        <ItemToEntryConverter>
+          <Transforms>
+            <InstallerConfigurationTransform>
+              <Options>
+                <BehaviourOptions>
+                  <ItemMode>Skip</ItemMode>
+                  <ItemMergeMode>Undefined</ItemMergeMode>
+                </BehaviourOptions>
+              </Options>
+            </InstallerConfigurationTransform>
+          </Transforms>
+        </ItemToEntryConverter>
+      </Converter>
+      <Include />
+      <Exclude />
+      <Name>templates (skip)</Name>
+    </xitems>
+    <xfiles>
+      <Entries>
+        <x-item>/App_Config/Include/Hi.UrlRewrite.config</x-item>
+        <x-item>/bin/Hi.UrlRewrite.dll</x-item>
+        <x-item>/bin/Hi.UrlRewrite.pdb</x-item>
+        <x-item>/sitecore modules/Shell/UrlRewrite/Content/app.css</x-item>
+        <x-item>/sitecore modules/Shell/UrlRewrite/Content/bootstrap.css</x-item>
+        <x-item>/sitecore modules/Shell/UrlRewrite/Content/bootstrap.css.map</x-item>
+        <x-item>/sitecore modules/Shell/UrlRewrite/Content/bootstrap.min.css</x-item>
+        <x-item>/sitecore modules/Shell/UrlRewrite/Content/bootstrap-theme.css</x-item>
+        <x-item>/sitecore modules/Shell/UrlRewrite/Content/bootstrap-theme.css.map</x-item>
+        <x-item>/sitecore modules/Shell/UrlRewrite/Content/bootstrap-theme.min.css</x-item>
+        <x-item>/sitecore modules/Shell/UrlRewrite/Default.aspx</x-item>
+        <x-item>/sitecore modules/Shell/UrlRewrite/Default.aspx.cs</x-item>
+        <x-item>/sitecore modules/Shell/UrlRewrite/Default.aspx.designer.cs</x-item>
+        <x-item>/sitecore modules/Shell/UrlRewrite/fonts/glyphicons-halflings-regular.eot</x-item>
+        <x-item>/sitecore modules/Shell/UrlRewrite/fonts/glyphicons-halflings-regular.svg</x-item>
+        <x-item>/sitecore modules/Shell/UrlRewrite/fonts/glyphicons-halflings-regular.ttf</x-item>
+        <x-item>/sitecore modules/Shell/UrlRewrite/fonts/glyphicons-halflings-regular.woff</x-item>
+        <x-item>/sitecore modules/Shell/UrlRewrite/Scripts/app.js</x-item>
+        <x-item>/sitecore modules/Shell/UrlRewrite/Scripts/bootstrap.js</x-item>
+        <x-item>/sitecore modules/Shell/UrlRewrite/Scripts/bootstrap.min.js</x-item>
+        <x-item>/sitecore modules/Shell/UrlRewrite/Scripts/jquery-1.9.0.js</x-item>
+        <x-item>/sitecore modules/Shell/UrlRewrite/Scripts/jquery-1.9.0.min.js</x-item>
+        <x-item>/sitecore modules/Shell/UrlRewrite/Scripts/jquery-1.9.0.min.map</x-item>
+        <x-item>/sitecore modules/Shell/UrlRewrite/Scripts/npm.js</x-item>
+      </Entries>
+      <Converter>
+        <FileToEntryConverter>
+          <Root>/</Root>
+          <Transforms />
+        </FileToEntryConverter>
+      </Converter>
+      <Include />
+      <Exclude />
+      <Name>files</Name>
+    </xfiles>
+    <xitems>
+      <Entries>
         <x-item>/master/sitecore/templates/Modules/UrlRewrite/{5D183D73-5F71-48D5-B381-47D96E9687B9}/invariant/0</x-item>
         <x-item>/master/sitecore/templates/Modules/UrlRewrite/Content/{FBD48044-53B0-4DCA-9D3E-E73682E78F9F}/invariant/0</x-item>
         <x-item>/master/sitecore/templates/Modules/UrlRewrite/Content/Types/{8997D0DE-51EC-4A98-9862-A915AE6FA2C2}/invariant/0</x-item>
@@ -171,6 +263,7 @@ Version 1.0
         <x-item>/master/sitecore/templates/Modules/UrlRewrite/Content/Types/Match/Using Type/{211909BC-B121-43CC-9446-38717CC04498}/invariant/0</x-item>
         <x-item>/master/sitecore/templates/Modules/UrlRewrite/Content/Types/Match/Using Type/Exact Match/{3323E74E-2BC8-4055-8A2B-B95656B2E786}/invariant/0</x-item>
         <x-item>/master/sitecore/templates/Modules/UrlRewrite/Content/Types/Match/Using Type/Regular Expressions/{75BFA469-AE7D-47FD-9A2F-DD8B3AF0865C}/invariant/0</x-item>
+        <x-item>/master/sitecore/templates/Modules/UrlRewrite/Settings/{CD887CD4-9837-4929-B68E-366E3A7D1FEA}/invariant/0</x-item>
         <x-item>/master/sitecore/templates/Modules/UrlRewrite/Templates/{63D9F0B6-70B2-49D7-AC4B-645B3F252AE8}/invariant/0</x-item>
         <x-item>/master/sitecore/templates/Modules/UrlRewrite/Templates/Action/{E802933F-9ABE-4746-9C41-CDE90117FB62}/invariant/0</x-item>
         <x-item>/master/sitecore/templates/Modules/UrlRewrite/Templates/Action/Abort Request/{BD8E6E5E-62F8-4397-99CA-B0502AFD14B9}/invariant/0</x-item>
@@ -289,6 +382,10 @@ Version 1.0
         <x-item>/master/sitecore/templates/Modules/UrlRewrite/Templates/Server Variables/Request Header/{698FFCC4-0D22-4B97-ACFE-3D04994B4B65}/invariant/0</x-item>
         <x-item>/master/sitecore/templates/Modules/UrlRewrite/Templates/Server Variables/Server Variable/__Standard Values/{05F33225-473A-4861-BE67-C4B9E3891E9F}/invariant/0</x-item>
         <x-item>/master/sitecore/templates/Modules/UrlRewrite/Templates/Server Variables/Server Variable/{E073CD4C-2747-433D-B6C0-3C52BA953C97}/invariant/0</x-item>
+        <x-item>/master/sitecore/templates/Modules/UrlRewrite/Templates/Settings/__Standard Values/{CC418620-871C-47F6-91F8-73E6360F1B3D}/invariant/0</x-item>
+        <x-item>/master/sitecore/templates/Modules/UrlRewrite/Templates/Settings/{B3A4B170-59DE-4438-B4E8-FE74A3C24C00}/invariant/0</x-item>
+        <x-item>/master/sitecore/templates/Modules/UrlRewrite/Templates/Settings/Url Rewrite Settings/{1A4C6755-F370-4D7D-8654-BF03759F3881}/invariant/0</x-item>
+        <x-item>/master/sitecore/templates/Modules/UrlRewrite/Templates/Settings/Url Rewrite Settings/Installation Publishing Targets/{64727107-1326-48B7-A428-6E469CB99B47}/invariant/0</x-item>
         <x-item>/master/sitecore/templates/Modules/UrlRewrite/Templates/Simple Redirect/__Standard Values/{FF769B54-28D0-4FF9-81DD-512340026B87}/invariant/0</x-item>
         <x-item>/master/sitecore/templates/Modules/UrlRewrite/Templates/Simple Redirect/{E30B15B9-34CD-419C-8671-60FEAAAD5A46}/invariant/0</x-item>
         <x-item>/master/sitecore/templates/Modules/UrlRewrite/Templates/Simple Redirect/General/{DC292C6C-EBB0-484B-ACBA-8C93ACB4595E}/invariant/0</x-item>
@@ -314,98 +411,6 @@ Version 1.0
       <Exclude />
       <Name>templates</Name>
     </xitems>
-    <xitems>
-      <Entries>
-        <x-item>/master/sitecore/system/Workflows/Redirect Workflow/{30D1BA49-44F5-4A99-8B3A-9815F41A31AA}/invariant/0</x-item>
-        <x-item>/master/sitecore/system/Workflows/Redirect Workflow/Approved/{7C920CDE-F8EC-44BA-9DCB-47B80329A50F}/invariant/0</x-item>
-        <x-item>/master/sitecore/system/Workflows/Redirect Workflow/Awaiting Approval/{DF6A09DC-7245-4903-831F-416273069473}/invariant/0</x-item>
-        <x-item>/master/sitecore/system/Workflows/Redirect Workflow/Awaiting Approval/Approve/{12E10F20-CB26-48BC-9D70-F1877A74D961}/invariant/0</x-item>
-        <x-item>/master/sitecore/system/Workflows/Redirect Workflow/Awaiting Approval/Reject/{1A662076-EA82-44D9-8158-C0DF8F9F754B}/invariant/0</x-item>
-        <x-item>/master/sitecore/system/Workflows/Redirect Workflow/Draft/{1123B394-7D58-48AF-A635-B5E8F36D76B3}/invariant/0</x-item>
-        <x-item>/master/sitecore/system/Workflows/Redirect Workflow/Draft/Fast Track/{B274FBE1-93E3-4E19-A8CE-E141A8680AA6}/invariant/0</x-item>
-        <x-item>/master/sitecore/system/Workflows/Redirect Workflow/Draft/Submit/{EF46356A-5DEC-4948-AC32-AFE74FD7F96F}/invariant/0</x-item>
-        <x-item>/master/sitecore/system/Workflows/Redirect Workflow/Draft/Submit/Validation Action/{E71E5D39-845C-49C4-AA5F-60960EF67F14}/invariant/0</x-item>
-      </Entries>
-      <SkipVersions>False</SkipVersions>
-      <Converter>
-        <ItemToEntryConverter>
-          <Transforms>
-            <InstallerConfigurationTransform>
-              <Options>
-                <BehaviourOptions>
-                  <ItemMode>Overwrite</ItemMode>
-                  <ItemMergeMode>Undefined</ItemMergeMode>
-                </BehaviourOptions>
-              </Options>
-            </InstallerConfigurationTransform>
-          </Transforms>
-        </ItemToEntryConverter>
-      </Converter>
-      <Include />
-      <Exclude />
-      <Name>workflow</Name>
-    </xitems>
-    <xitems>
-      <Entries>
-        <x-item>/master/sitecore/templates/Modules/UrlRewrite/Templates/Base UrlRewrite Item/__Standard Values/{A6C7AD1A-99CE-47AC-9D7F-EF66287E7F09}/invariant/0</x-item>
-        <x-item>/master/sitecore/templates/Modules/UrlRewrite/Templates/Base UrlRewrite Item/{83AFF04D-C0DA-44D4-8A7E-4BC0A89903E8}/invariant/0</x-item>
-      </Entries>
-      <SkipVersions>False</SkipVersions>
-      <Converter>
-        <ItemToEntryConverter>
-          <Transforms>
-            <InstallerConfigurationTransform>
-              <Options>
-                <BehaviourOptions>
-                  <ItemMode>Skip</ItemMode>
-                  <ItemMergeMode>Undefined</ItemMergeMode>
-                </BehaviourOptions>
-              </Options>
-            </InstallerConfigurationTransform>
-          </Transforms>
-        </ItemToEntryConverter>
-      </Converter>
-      <Include />
-      <Exclude />
-      <Name>templates (skip)</Name>
-    </xitems>
-    <xfiles>
-      <Entries>
-        <x-item>/App_Config/Include/Hi.UrlRewrite.config</x-item>
-        <x-item>/bin/Hi.UrlRewrite.dll</x-item>
-        <x-item>/bin/Hi.UrlRewrite.pdb</x-item>
-        <x-item>/sitecore modules/Shell/UrlRewrite/Content/app.css</x-item>
-        <x-item>/sitecore modules/Shell/UrlRewrite/Content/bootstrap.css</x-item>
-        <x-item>/sitecore modules/Shell/UrlRewrite/Content/bootstrap.css.map</x-item>
-        <x-item>/sitecore modules/Shell/UrlRewrite/Content/bootstrap.min.css</x-item>
-        <x-item>/sitecore modules/Shell/UrlRewrite/Content/bootstrap-theme.css</x-item>
-        <x-item>/sitecore modules/Shell/UrlRewrite/Content/bootstrap-theme.css.map</x-item>
-        <x-item>/sitecore modules/Shell/UrlRewrite/Content/bootstrap-theme.min.css</x-item>
-        <x-item>/sitecore modules/Shell/UrlRewrite/Default.aspx</x-item>
-        <x-item>/sitecore modules/Shell/UrlRewrite/Default.aspx.cs</x-item>
-        <x-item>/sitecore modules/Shell/UrlRewrite/Default.aspx.designer.cs</x-item>
-        <x-item>/sitecore modules/Shell/UrlRewrite/fonts/glyphicons-halflings-regular.eot</x-item>
-        <x-item>/sitecore modules/Shell/UrlRewrite/fonts/glyphicons-halflings-regular.svg</x-item>
-        <x-item>/sitecore modules/Shell/UrlRewrite/fonts/glyphicons-halflings-regular.ttf</x-item>
-        <x-item>/sitecore modules/Shell/UrlRewrite/fonts/glyphicons-halflings-regular.woff</x-item>
-        <x-item>/sitecore modules/Shell/UrlRewrite/Scripts/app.js</x-item>
-        <x-item>/sitecore modules/Shell/UrlRewrite/Scripts/bootstrap.js</x-item>
-        <x-item>/sitecore modules/Shell/UrlRewrite/Scripts/bootstrap.min.js</x-item>
-        <x-item>/sitecore modules/Shell/UrlRewrite/Scripts/jquery-1.9.0.js</x-item>
-        <x-item>/sitecore modules/Shell/UrlRewrite/Scripts/jquery-1.9.0.min.js</x-item>
-        <x-item>/sitecore modules/Shell/UrlRewrite/Scripts/jquery-1.9.0.min.map</x-item>
-        <x-item>/sitecore modules/Shell/UrlRewrite/Scripts/npm.js</x-item>
-      </Entries>
-      <Converter>
-        <FileToEntryConverter>
-          <Root>/</Root>
-          <Transforms />
-        </FileToEntryConverter>
-      </Converter>
-      <Include />
-      <Exclude />
-      <Name>files</Name>
-    </xfiles>
   </Sources>
   <Converter>
     <TrivialConverter>
