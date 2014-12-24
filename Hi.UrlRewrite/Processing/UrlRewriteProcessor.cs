@@ -60,7 +60,7 @@ namespace Hi.UrlRewrite.Processing
 
             if (inboundRules == null)
             {
-                Log.Info(this, db, "Initializing.");
+                Log.Info(this, db, "Initializing Inbound Rules.");
 
                 using (new SecurityDisabler())
                 {

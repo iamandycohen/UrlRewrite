@@ -9,6 +9,7 @@ using Hi.UrlRewrite.Templates.Action.Base;
 using Hi.UrlRewrite.Templates.Conditions;
 using Hi.UrlRewrite.Templates.Folders;
 using Hi.UrlRewrite.Templates.Inbound;
+using Hi.UrlRewrite.Templates.Outbound;
 using Sitecore.Data;
 using Sitecore.Data.Items;
 using Sitecore.Diagnostics;
@@ -24,13 +25,54 @@ namespace Hi.UrlRewrite
 
         #region Conversions
 
+        public static OutboundRule ToOutboundRule(this OutboundRuleItem outboundRuleItem, IEnumerable<BaseConditionItem> conditionItems)
+        {
+            if (outboundRuleItem == null) return null;
+
+            var outboundRule = new OutboundRule
+            {
+                ItemId = outboundRuleItem.ID.Guid,
+                Name = outboundRuleItem.Name
+            };
+
+            GetBaseRuleItem(outboundRuleItem.BaseRuleItem, outboundRule);
+
+            if (outboundRuleItem.Action == null)
+            {
+                Log.Warn(typeof(ItemExtensions), outboundRuleItem.Database.Name, "No action set on rule with ItemID: {0}", outboundRuleItem.ID);
+
+                return null;
+            }
+
+            var baseActionItem = outboundRuleItem.Action.TargetItem;
+            IBaseAction baseAction = null;
+
+            if (baseActionItem != null)
+            {
+                var baseActionItemTemplateId = baseActionItem.TemplateID.ToString();
+
+                if (baseActionItemTemplateId.Equals(OutboundRewriteItem.TemplateId, StringComparison.InvariantCultureIgnoreCase))
+                {
+                    baseAction = new OutboundRewriteItem(baseActionItem).ToOutboundRewriteAction();
+                }
+            }
+            outboundRule.Action = baseAction;
+
+            if (conditionItems != null)
+            {
+                outboundRule.Conditions = conditionItems
+                    .Select(e => e.ToCondition())
+                    .Where(e => e != null)
+                    .ToList();
+            }
+
+            return outboundRule;
+        }
+
         public static InboundRule ToInboundRule(this InboundRuleItem inboundRuleItem, IEnumerable<BaseConditionItem> conditionItems, string siteNameRestriction)
         {
 
-            if (inboundRuleItem == null)
-            {
-                return null;
-            }
+            if (inboundRuleItem == null) return null;
 
             var inboundRule = new InboundRule
             {
@@ -168,7 +210,7 @@ namespace Hi.UrlRewrite
                 return null;
             }
 
-            var redirectTo = redirectItem.BaseRedirectAction.RewriteUrl;
+            var redirectTo = redirectItem.BaseRedirectActionItem.RewriteUrl;
             string actionRewriteUrl;
             Guid? redirectItemId;
             string redirectItemAnchor;
@@ -178,13 +220,13 @@ namespace Hi.UrlRewrite
             var redirectAction = new RedirectAction
             {
                 Name = redirectItem.Name,
-                AppendQueryString = redirectItem.BaseRedirectAction.AppendQueryString.Checked,
+                AppendQueryString = redirectItem.BaseRedirectActionItem.AppendQueryString.Checked,
                 RewriteUrl = actionRewriteUrl,
                 RewriteItemId = redirectItemId,
                 RewriteItemAnchor = redirectItemAnchor
             };
 
-            var baseRewriteItem = redirectItem.BaseRedirectAction.BaseRewriteItem;
+            var baseRewriteItem = redirectItem.BaseRedirectActionItem.BaseRewriteItem;
             GetBaseRewriteItem(baseRewriteItem, redirectAction);
 
             return redirectAction;
@@ -271,6 +313,25 @@ namespace Hi.UrlRewrite
             return abortRequestAction;
         }
 
+        public static OutboundRewriteAction ToOutboundRewriteAction(this OutboundRewriteItem outboundRewriteItem)
+        {
+            if (outboundRewriteItem == null)
+            {
+                return null;
+            }
+
+            var outboundRewriteAction = new OutboundRewriteAction()
+            {
+                Name = outboundRewriteItem.Name,
+                Value = outboundRewriteItem.Value.Value
+            };
+
+            var stopProcessingItem = outboundRewriteItem.BaseStopProcessingActionItem;
+            GetStopProcessing(stopProcessingItem, outboundRewriteAction);
+
+            return outboundRewriteAction;
+        }
+
         public static CustomResponseAction ToCustomResponseAction(this CustomResponseItem customResponseItem)
         {
             if (customResponseItem == null)
@@ -328,7 +389,7 @@ namespace Hi.UrlRewrite
 
         private static void GetBaseRewriteItem(BaseRewriteItem baseRewriteItem, IBaseRewrite redirect)
         {
-            var stopProcessingItem = baseRewriteItem.BaseStopProcessingAction;
+            var stopProcessingItem = baseRewriteItem.BaseStopProcessingActionItem;
             GetStopProcessing(stopProcessingItem, redirect);
 
             var redirectTypeItem = baseRewriteItem.BaseRedirectTypeItem;

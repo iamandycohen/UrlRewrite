@@ -1,4 +1,5 @@
 ﻿using Hi.UrlRewrite.Templates.Conditions;
+using Sitecore.Data.Fields;
 using Sitecore.Data.Items;
 
 namespace Hi.UrlRewrite.Templates.Outbound
@@ -37,6 +38,15 @@ namespace Hi.UrlRewrite.Templates.Outbound
         {
 	        return customItem != null ? customItem.InnerItem : null;
         }
+
+        public LookupField Action
+        {
+            get
+            {
+                return new LookupField(InnerItem.Fields["Action"]);
+            }
+        }
+
             
     }
 }

@@ -16,8 +16,8 @@ namespace Hi.UrlRewrite.Templates.Action.Base
 
         #region Inherited Base Templates
 
-        private readonly BaseStopProcessingActionItem _BaseStopProcessingAction;
-        public BaseStopProcessingActionItem BaseStopProcessingAction { get { return _BaseStopProcessingAction; } }
+        private readonly BaseStopProcessingActionItem _BaseStopProcessingActionItem;
+        public BaseStopProcessingActionItem BaseStopProcessingActionItem { get { return _BaseStopProcessingActionItem; } }
 
         private readonly BaseCacheItem _BaseCacheItem;
         public BaseCacheItem BaseCacheItem { get { return _BaseCacheItem; } }
@@ -32,7 +32,7 @@ namespace Hi.UrlRewrite.Templates.Action.Base
         public BaseRewriteItem(Item innerItem)
             : base(innerItem)
         {
-            _BaseStopProcessingAction = new BaseStopProcessingActionItem(innerItem);
+            _BaseStopProcessingActionItem = new BaseStopProcessingActionItem(innerItem);
             _BaseCacheItem = new BaseCacheItem(innerItem);
             _BaseRedirectTypeItem = new BaseRedirectTypeItem(innerItem);
         }

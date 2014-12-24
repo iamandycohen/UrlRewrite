@@ -12,6 +12,7 @@ namespace Hi.UrlRewrite.Caching
     {
         private Database _db;
         private const string inboundRulesKey = "InboundRules";
+        private const string outboundRulesKey = "OutboundRules";
 
         public RulesCache(Database db) : 
             base(string.Format("Hi.UrlRewrite[{0}]", db.Name), StringUtil.ParseSizeString(Configuration.CacheSize))
@@ -36,6 +37,25 @@ namespace Hi.UrlRewrite.Caching
             }
 
             SetObject(inboundRulesKey, inboundRules, size);
+        }
+
+        public List<OutboundRule> GetOutboundRules()
+        {
+            return GetObject(outboundRulesKey) as List<OutboundRule>;
+        }
+
+        public void SetOutboundRules(List<OutboundRule> outboundRules)
+        {
+            long size;
+
+            using (var memoryStream = new MemoryStream())
+            {
+                var binaryFormatter = new BinaryFormatter();
+                binaryFormatter.Serialize(memoryStream, outboundRules);
+                size = memoryStream.Length;
+            }
+
+            SetObject(outboundRulesKey, outboundRules, size);
         }
 
     }

@@ -14,8 +14,8 @@ namespace Hi.UrlRewrite.Templates.Action
 
         #region Inherited Base Templates
 
-        private readonly BaseRedirectActionItem _BaseRedirectAction;
-        public BaseRedirectActionItem BaseRedirectAction { get { return _BaseRedirectAction; } }
+        private readonly BaseRedirectActionItem _BaseRedirectActionItem;
+        public BaseRedirectActionItem BaseRedirectActionItem { get { return _BaseRedirectActionItem; } }
 
         #endregion
 
@@ -24,7 +24,7 @@ namespace Hi.UrlRewrite.Templates.Action
         public RedirectItem(Item innerItem)
             : base(innerItem)
         {
-            _BaseRedirectAction = new BaseRedirectActionItem(innerItem);
+            _BaseRedirectActionItem = new BaseRedirectActionItem(innerItem);
 
         }
 

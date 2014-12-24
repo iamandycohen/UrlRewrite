@@ -6,12 +6,12 @@ using Hi.UrlRewrite.Entities.Rules;
 using Hi.UrlRewrite.Templates.Conditions;
 using Hi.UrlRewrite.Templates.Folders;
 using Hi.UrlRewrite.Templates.Inbound;
+using Hi.UrlRewrite.Templates.Outbound;
 using Hi.UrlRewrite.Templates.Settings;
 using Sitecore.Configuration;
 using Sitecore.Data;
 using Sitecore.Data.Fields;
 using Sitecore.Data.Items;
-using Sitecore.Diagnostics;
 using Sitecore.Publishing;
 using Sitecore.SecurityModel;
 using System;
@@ -23,62 +23,6 @@ namespace Hi.UrlRewrite.Processing
 {
     public class RulesEngine
     {
-
-        public List<InboundRule> GetInboundRules(Database db)
-        {
-            if (db == null)
-            {
-                return null;
-            }
-
-            var query = string.Format(Constants.RedirectFolderItemsQuery, Configuration.RewriteFolderSearchRoot, RedirectFolderItem.TemplateId);
-            var redirectFolderItems = db.SelectItems(query);
-
-            if (redirectFolderItems == null)
-            {
-                return null;
-            }
-
-            var inboundRules = new List<InboundRule>();
-
-            foreach (var redirectFolderItem in redirectFolderItems)
-            {
-                Log.Debug(this, db, "Processing RedirectFolder: {0}", redirectFolderItem.Name);
-
-                var folderDescendants = redirectFolderItem.Axes.GetDescendants()
-                    .Where(x => x.TemplateID == new ID(new Guid(SimpleRedirectItem.TemplateId)) ||
-                                x.TemplateID == new ID(new Guid(InboundRuleItem.TemplateId)));
-
-                foreach (var descendantItem in folderDescendants)
-                {
-                    if (descendantItem.TemplateID == new ID(new Guid(SimpleRedirectItem.TemplateId)))
-                    {
-                        var simpleRedirectItem = new SimpleRedirectItem(descendantItem);
-
-                        Log.Debug(this, db, "Processing Simple Redirect: {0}", simpleRedirectItem.Name);
-
-                        var inboundRule = CreateInboundRuleFromSimpleRedirectItem(simpleRedirectItem, redirectFolderItem);
-
-                        inboundRules.Add(inboundRule);
-                    }
-                    else if (descendantItem.TemplateID == new ID(new Guid(InboundRuleItem.TemplateId)))
-                    {
-                        var inboundRuleItem = new InboundRuleItem(descendantItem);
-                      
-                        Log.Debug(this, db, "Processing InboundRule: {0}", inboundRuleItem.Name);
-
-                        var inboundRule = CreateInboundRuleFromInboundRuleItem(inboundRuleItem, redirectFolderItem);
-
-                        if (inboundRule != null && inboundRule.Enabled)
-                        {
-                            inboundRules.Add(inboundRule);
-                        }
-                    }
-                }
-            }
-
-            return inboundRules;
-        }
 
         public void InstallTemplates()
         {
@@ -98,6 +42,114 @@ namespace Hi.UrlRewrite.Processing
                 PublishManager.PublishItem(urlRewriteModuleItem, dbArray, urlRewriteModuleItem.Languages, true,
                     true);
             }
+        }
+
+        public List<InboundRule> GetInboundRules(Database db)
+        {
+            if (db == null)
+            {
+                return null;
+            }
+
+            var redirectFolderItems = GetRedirectFolderItems(db);
+
+            if (redirectFolderItems == null)
+            {
+                return null;
+            }
+
+            var inboundRules = new List<InboundRule>();
+
+            foreach (var redirectFolderItem in redirectFolderItems)
+            {
+                Log.Debug(this, db, "Loading Inbound Rules from RedirectFolder: {0}", redirectFolderItem.Name);
+
+                var folderDescendants = redirectFolderItem.Axes.GetDescendants()
+                    .Where(x => x.TemplateID == new ID(new Guid(SimpleRedirectItem.TemplateId)) ||
+                                x.TemplateID == new ID(new Guid(InboundRuleItem.TemplateId)));
+
+                foreach (var descendantItem in folderDescendants)
+                {
+                    if (descendantItem.TemplateID == new ID(new Guid(SimpleRedirectItem.TemplateId)))
+                    {
+                        var simpleRedirectItem = new SimpleRedirectItem(descendantItem);
+
+                        Log.Debug(this, db, "Loading SimpleRedirect: {0}", simpleRedirectItem.Name);
+
+                        var inboundRule = CreateInboundRuleFromSimpleRedirectItem(simpleRedirectItem, redirectFolderItem);
+
+                        inboundRules.Add(inboundRule);
+                    }
+                    else if (descendantItem.TemplateID == new ID(new Guid(InboundRuleItem.TemplateId)))
+                    {
+                        var inboundRuleItem = new InboundRuleItem(descendantItem);
+
+                        Log.Debug(this, db, "Loading InboundRule: {0}", inboundRuleItem.Name);
+
+                        var inboundRule = CreateInboundRuleFromInboundRuleItem(inboundRuleItem, redirectFolderItem);
+
+                        if (inboundRule != null && inboundRule.Enabled)
+                        {
+                            inboundRules.Add(inboundRule);
+                        }
+                    }
+                }
+            }
+
+            return inboundRules;
+        }
+
+        public List<OutboundRule> GetOutboundRules(Database db)
+        {
+            if (db == null)
+            {
+                return null;
+            }
+
+            var redirectFolderItems = GetRedirectFolderItems(db);
+
+            if (redirectFolderItems == null)
+            {
+                return null;
+            }
+
+            var outboundRules = new List<OutboundRule>();
+
+            foreach (var redirectFolderItem in redirectFolderItems)
+            {
+                Log.Debug(this, db, "Loading Outbound Rules from RedirectFolder: {0}", redirectFolderItem.Name);
+
+                var folderDescendants = redirectFolderItem.Axes.GetDescendants()
+                    .Where(x => x.TemplateID == new ID(new Guid(OutboundRuleItem.TemplateId)));
+
+                foreach (var descendantItem in folderDescendants)
+                {
+                    if (descendantItem.TemplateID == new ID(new Guid(OutboundRuleItem.TemplateId)))
+                    {
+                        var outboundRuleItem = new OutboundRuleItem(descendantItem);
+
+                        Log.Debug(this, db, "Loading OutboundRule: {0}", outboundRuleItem.Name);
+
+                        var outboundRule = CreateOutboundRuleFromOutboundRuleItem(outboundRuleItem, redirectFolderItem);
+
+                        if (outboundRule != null && outboundRule.Enabled)
+                        {
+                            outboundRules.Add(outboundRule);
+                        }
+                    }
+                }
+            }
+
+            return outboundRules;
+        }
+
+        private static IEnumerable<Item> GetRedirectFolderItems(Database db)
+        {
+            var query = string.Format(Constants.RedirectFolderItemsQuery, Configuration.RewriteFolderSearchRoot,
+                RedirectFolderItem.TemplateId);
+            var redirectFolderItems = db.SelectItems(query);
+
+            return redirectFolderItems;
         }
 
         internal InboundRule CreateInboundRuleFromSimpleRedirectItem(SimpleRedirectItem simpleRedirectInternalItem, RedirectFolderItem redirectFolderItem)
@@ -144,20 +196,36 @@ namespace Hi.UrlRewrite.Processing
 
         internal static InboundRule CreateInboundRuleFromInboundRuleItem(InboundRuleItem inboundRuleItem, RedirectFolderItem redirectFolderItem)
         {
-            IEnumerable<BaseConditionItem> conditionItems = null;
-
             var siteNameRestriction = GetSiteNameRestriction(redirectFolderItem);
-
-            Item[] items = inboundRuleItem.InnerItem.Axes.SelectItems(string.Format(Constants.RedirectFolderConditionItemsQuery, ConditionItem.TemplateId, ConditionAdvancedItem.TemplateId));
-
-            if (items != null)
-            {
-                conditionItems = items.Select(e => new BaseConditionItem(e));
-            }
-
+            var conditionItems = GetBaseConditionItems(inboundRuleItem);
             var inboundRule = inboundRuleItem.ToInboundRule(conditionItems, siteNameRestriction);
 
             return inboundRule;
+        }
+
+        internal static OutboundRule CreateOutboundRuleFromOutboundRuleItem(OutboundRuleItem outboundRuleItem,
+            RedirectFolderItem redirectFolderItem)
+        {
+            var conditionItems = GetBaseConditionItems(outboundRuleItem);
+            var outboundRule = outboundRuleItem.ToOutboundRule(conditionItems);
+
+            return outboundRule;
+        }
+
+        private static IEnumerable<BaseConditionItem> GetBaseConditionItems(Item item)
+        {
+            IEnumerable<BaseConditionItem> conditionItems = null;
+
+            var conditions =
+                item.Axes.SelectItems(string.Format(Constants.RedirectFolderConditionItemsQuery,
+                    ConditionItem.TemplateId, ConditionAdvancedItem.TemplateId));
+
+            if (conditions != null)
+            {
+                conditionItems = conditions.Select(e => new BaseConditionItem(e));
+            }
+
+            return conditionItems;
         }
 
         internal static string GetSiteNameRestriction(RedirectFolderItem redirectFolder)
@@ -208,6 +276,25 @@ namespace Hi.UrlRewrite.Processing
             }
 
             return inboundRules;
+        }
+
+        internal List<OutboundRule> GetCachedOutboundRules(Database db)
+        {
+            var outboundRules = GetOutboundRules(db);
+
+            if (outboundRules != null)
+            {
+                Log.Info(this, db, "Adding {0} rules to Cache [{1}]", outboundRules.Count(), db.Name);
+
+                var cache = GetRulesCache(db);
+                cache.SetOutboundRules(outboundRules);
+            }
+            else
+            {
+                Log.Info(this, db, "Found no rules");
+            }
+
+            return outboundRules;
         }
 
         internal void RefreshSimpleRedirect(Item item, Item redirectFolderItem)

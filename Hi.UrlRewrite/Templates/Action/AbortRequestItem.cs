@@ -15,8 +15,8 @@ namespace Hi.UrlRewrite.Templates.Action
 
         #region Inherited Base Templates
 
-        private readonly BaseActionItem _BaseAction;
-        public BaseActionItem BaseAction { get { return _BaseAction; } }
+        private readonly BaseActionItem _BaseActionItem;
+        public BaseActionItem BaseActionItem { get { return _BaseActionItem; } }
 
         #endregion
 
@@ -25,7 +25,7 @@ namespace Hi.UrlRewrite.Templates.Action
         public AbortRequestItem(Item innerItem)
             : base(innerItem)
         {
-            _BaseAction = new BaseActionItem(innerItem);
+            _BaseActionItem = new BaseActionItem(innerItem);
         }
 
         public static implicit operator AbortRequestItem(Item innerItem)
