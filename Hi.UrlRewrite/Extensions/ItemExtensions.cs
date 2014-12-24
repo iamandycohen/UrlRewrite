@@ -23,6 +23,12 @@ namespace Hi.UrlRewrite
     public static class ItemExtensions
     {
 
+        private static LogObject logObject = new LogObject();
+
+        private class LogObject
+        {
+        }
+
         #region Conversions
 
         public static OutboundRule ToOutboundRule(this OutboundRuleItem outboundRuleItem, IEnumerable<BaseConditionItem> conditionItems)
@@ -37,9 +43,16 @@ namespace Hi.UrlRewrite
 
             GetBaseRuleItem(outboundRuleItem.BaseRuleItem, outboundRule);
 
+            if (string.IsNullOrEmpty(outboundRuleItem.BaseRuleItem.BaseMatchItem.MatchPatternItem.Pattern.Value))
+            {
+                Log.Warn(logObject, outboundRuleItem.Database, "No pattern set on rule with ItemID: {0}", outboundRuleItem.ID);
+
+                return null;
+            }
+
             if (outboundRuleItem.Action == null)
             {
-                Log.Warn(typeof(ItemExtensions), outboundRuleItem.Database.Name, "No action set on rule with ItemID: {0}", outboundRuleItem.ID);
+                Log.Warn(logObject, outboundRuleItem.Database, "No action set on rule with ItemID: {0}", outboundRuleItem.ID);
 
                 return null;
             }
@@ -82,9 +95,16 @@ namespace Hi.UrlRewrite
 
             GetBaseRuleItem(inboundRuleItem.BaseRuleItem, inboundRule);
 
+            if (string.IsNullOrEmpty(inboundRuleItem.BaseRuleItem.BaseMatchItem.MatchPatternItem.Pattern.Value))
+            {
+                Log.Warn(logObject, inboundRuleItem.Database, "No pattern set on rule with ItemID: {0}", inboundRuleItem.ID);
+
+                return null;
+            }
+
             if (inboundRuleItem.Action == null)
             {
-                Log.Warn(typeof(ItemExtensions), inboundRuleItem.Database.Name, "No action set on rule with ItemID: {0}", inboundRuleItem.ID);
+                Log.Warn(logObject, inboundRuleItem.Database, "No action set on rule with ItemID: {0}", inboundRuleItem.ID);
 
                 return null;
             }
