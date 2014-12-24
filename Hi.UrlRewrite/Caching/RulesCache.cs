@@ -4,11 +4,7 @@ using Hi.UrlRewrite.Entities.Rules;
 using Sitecore;
 using Sitecore.Caching;
 using Sitecore.Data;
-using Sitecore.Reflection;
-using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Web;
 
 namespace Hi.UrlRewrite.Caching
 {
