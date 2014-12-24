@@ -21,6 +21,9 @@ namespace Hi.UrlRewrite
 {
     public static class ItemExtensions
     {
+
+        #region Conversions
+
         public static InboundRule ToInboundRule(this InboundRuleItem inboundRuleItem, IEnumerable<BaseConditionItem> conditionItems, string siteNameRestriction)
         {
 
@@ -424,6 +427,10 @@ namespace Hi.UrlRewrite
             return condition;
         }
 
+        #endregion
+
+        #region Helpers
+
         public static bool IsRedirectFolderItem(this Item item)
         {
             return !IsTemplate(item) && item.TemplateID.ToString().Equals(RedirectFolderItem.TemplateId, StringComparison.InvariantCultureIgnoreCase);
@@ -456,6 +463,7 @@ namespace Hi.UrlRewrite
                        new ID(ItemQueryRedirectItem.TemplateId),
                        new ID(CustomResponseItem.TemplateId),
                        new ID(AbortRequestItem.TemplateId),
+                       new ID(NoneItem.TemplateId)
                    }).Any(e => e.Equals(item.TemplateID));
         }
 
@@ -463,6 +471,8 @@ namespace Hi.UrlRewrite
         {
             return item.Paths.FullPath.StartsWith("/sitecore/templates", StringComparison.InvariantCultureIgnoreCase);
         }
+
+        #endregion
 
     }
 }

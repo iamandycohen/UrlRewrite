@@ -10,6 +10,7 @@ namespace Hi.UrlRewrite.Entities.Conditions
     [Serializable]
     public class Precondition : IUsing, IConditionLogicalGrouping, IConditionList
     {
+        public string Name { get; set; }
         public Using? Using { get; set; }
         public LogicalGrouping? ConditionLogicalGrouping { get; set; }
         public List<Condition> Conditions { get; set; }

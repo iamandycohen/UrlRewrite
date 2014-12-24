@@ -70,6 +70,7 @@
     <Compile Include="Entities\Actions\IBaseRewrite.cs" />
     <Compile Include="Entities\Actions\IBaseStatusCode.cs" />
     <Compile Include="Entities\Actions\ItemQueryRedirectAction.cs" />
+    <Compile Include="Entities\Actions\OutboundRewriteAction.cs" />
     <Compile Include="Entities\Actions\RedirectAction.cs" />
     <Compile Include="Entities\Actions\RedirectActionStatusCode.cs" />
     <Compile Include="Entities\Conditions\CheckIfInputString.cs" />
@@ -109,6 +110,7 @@
     <Compile Include="sitecore modules\Shell\UrlRewrite\Default.aspx.designer.cs">
       <DependentUpon>Default.aspx</DependentUpon>
     </Compile>
+    <Compile Include="Templates\Action\NoneItem.cs" />
     <Compile Include="Templates\Action\AbortRequestItem.cs" />
     <Compile Include="Templates\Action\Base\BaseRewriteItem.cs" />
     <Compile Include="Templates\Action\Base\BaseRedirectTypeItem.cs" />
