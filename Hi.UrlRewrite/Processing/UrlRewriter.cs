@@ -45,8 +45,6 @@ namespace Hi.UrlRewrite.Processing
 
             Log.Debug(this, "Processing url: {0}", originalUri);
 
-            var matchedAtLeastOneRule = false;
-
             var ruleResult = new RuleResult
             {
                 RewrittenUri = originalUri
@@ -62,8 +60,6 @@ namespace Hi.UrlRewrite.Processing
                 if (!ruleResult.RuleMatched)
                     continue;
 
-                matchedAtLeastOneRule = true;
-
                 if (ruleResult.RuleMatched && ruleResult.StopProcessing)
                 {
                     ruleResult.StoppedProcessing = true;
@@ -75,7 +71,7 @@ namespace Hi.UrlRewrite.Processing
 
             var lastMatchedRuleResult = processedResults.FirstOrDefault(r => r.RuleMatched);
 
-            var finalResult = new ProcessRequestResult(originalUri, lastMatchedRuleResult, matchedAtLeastOneRule, processedResults);
+            var finalResult = new ProcessRequestResult(originalUri, lastMatchedRuleResult, processedResults);
 
             return finalResult;
         }

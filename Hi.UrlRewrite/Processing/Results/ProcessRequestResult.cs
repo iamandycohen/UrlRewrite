@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
+using System.Linq;
 using Hi.UrlRewrite.Entities.Actions;
 
 namespace Hi.UrlRewrite.Processing.Results
@@ -7,10 +9,9 @@ namespace Hi.UrlRewrite.Processing.Results
     public class ProcessRequestResult
     {
 
-        public ProcessRequestResult(Uri originalUri, RuleResult finalRuleResult, bool matchedAtLeastOneRule, List<RuleResult> processedResults)
+        public ProcessRequestResult(Uri originalUri, RuleResult finalRuleResult, List<RuleResult> processedResults)
         {
             OriginalUri = originalUri;
-            MatchedAtLeastOneRule = matchedAtLeastOneRule;
             ProcessedResults = processedResults;
 
             if (finalRuleResult != null)
@@ -47,7 +48,14 @@ namespace Hi.UrlRewrite.Processing.Results
 
         public IBaseAction FinalAction { get; set; }
 
-        public bool MatchedAtLeastOneRule { get; set; }
+        public bool MatchedAtLeastOneRule
+        {
+            get
+            {
+                return ProcessedResults != null && ProcessedResults.Any(e => e.RuleMatched);
+            }
+        }
+
         public List<RuleResult> ProcessedResults { get; set; }
 
     }
