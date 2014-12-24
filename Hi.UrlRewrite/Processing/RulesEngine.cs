@@ -190,7 +190,7 @@ namespace Hi.UrlRewrite.Processing
             return RulesCacheManager.GetCache(db);
         }
 
-        internal List<InboundRule> RefreshInboundRulesCache(Database db)
+        internal List<InboundRule> GetCachedInboundRules(Database db)
         {
             var inboundRules = GetInboundRules(db);
 

@@ -64,7 +64,7 @@ namespace Hi.UrlRewrite.Processing
                 {
                     var rulesEngine = new RulesEngine();
                     rulesEngine.InstallTemplates();
-                    inboundRules = rulesEngine.RefreshInboundRulesCache(db);
+                    inboundRules = rulesEngine.GetCachedInboundRules(db);
                 }
             }
 

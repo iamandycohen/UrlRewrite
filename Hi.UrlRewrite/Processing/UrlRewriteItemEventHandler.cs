@@ -69,7 +69,7 @@ namespace Hi.UrlRewrite.Processing
                             string.Format("UrlRewrite - Refreshing Redirect Folder [{0}] after save event",
                                 item.Paths.FullPath), this);
 
-                        rulesEngine.RefreshInboundRulesCache(db);
+                        rulesEngine.GetCachedInboundRules(db);
                     }
                     else if (item.IsSimpleRedirectItem())
                     {
