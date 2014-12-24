@@ -22,8 +22,6 @@ namespace Hi.UrlRewrite.Processing
 
         public override void Process(HttpRequestArgs args)
         {
-            LogHelper.Inititalize();
-
             var db = Sitecore.Context.Database;
 
             try

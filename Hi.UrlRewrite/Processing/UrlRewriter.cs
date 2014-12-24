@@ -36,8 +36,6 @@ namespace Hi.UrlRewrite.Processing
 
         public ProcessRequestResult ProcessRequestUrl(Uri requestUri, List<InboundRule> inboundRules)
         {
-            LogHelper.Inititalize();
-
             if (inboundRules == null)
             {
                 throw new ArgumentNullException("inboundRules");

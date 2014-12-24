@@ -10,6 +10,10 @@ namespace Hi.UrlRewrite
 {
     public class Log
     {
+        static Log()
+        {
+            LogHelper.Inititalize();
+        }
 
         private const string LogName = "UrlRewrite";
         private const string LogNameDbFormat = LogName + "[{0}]";
