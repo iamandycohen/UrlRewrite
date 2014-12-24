@@ -7,7 +7,7 @@ using System.Collections.Generic;
 namespace Hi.UrlRewrite.Entities.Rules
 {
     [Serializable]
-    public class InboundRule : IBaseRule
+    public class InboundRule : IBaseRule, IConditionList
     {
         public Guid ItemId { get; set; }
         public string Name { get; set; }

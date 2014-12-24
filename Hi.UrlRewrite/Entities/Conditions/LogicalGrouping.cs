@@ -1,4 +1,4 @@
-﻿namespace Hi.UrlRewrite.Entities.Rules
+﻿namespace Hi.UrlRewrite.Entities.Conditions
 {
     public enum LogicalGrouping
     {

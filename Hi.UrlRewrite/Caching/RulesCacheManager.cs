@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
+using Sitecore.Diagnostics;
 
 namespace Hi.UrlRewrite.Caching
 {
@@ -12,6 +13,8 @@ namespace Hi.UrlRewrite.Caching
 
         public static RulesCache GetCache(Database db)
         {
+            Assert.IsNotNull(db, "Database (db) cannot be null.");
+
             if (Caches.ContainsKey(db.Name))
             {
                 return Caches[db.Name];

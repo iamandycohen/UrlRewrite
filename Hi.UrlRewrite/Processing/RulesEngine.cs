@@ -1,5 +1,6 @@
 ﻿using Hi.UrlRewrite.Caching;
 using Hi.UrlRewrite.Entities.Actions;
+using Hi.UrlRewrite.Entities.Conditions;
 using Hi.UrlRewrite.Entities.Match;
 using Hi.UrlRewrite.Entities.Rules;
 using Hi.UrlRewrite.Templates.Conditions;

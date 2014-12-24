@@ -1,11 +1,9 @@
-﻿using Hi.UrlRewrite.Entities.Rules;
-
+﻿
 namespace Hi.UrlRewrite.Entities.Match
 {
-    public interface IBaseMatch
+    public interface IBaseMatch : IUsing
     {
         MatchType? MatchType { get; set; }
-        Using? Using { get; set; }
         string Pattern { get; set; }
         bool IgnoreCase { get; set; }
     }

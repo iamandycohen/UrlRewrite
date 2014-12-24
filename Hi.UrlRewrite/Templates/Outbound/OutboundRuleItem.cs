@@ -12,8 +12,8 @@ namespace Hi.UrlRewrite.Templates.Outbound
         private readonly BaseRuleItem _BaseRuleItem;
         public BaseRuleItem BaseRuleItem { get { return _BaseRuleItem; } }
 
-        private readonly OutboundPreconditionsItem _OutboundPreconditionsItem;
-        public OutboundPreconditionsItem OutboundPreconditionsItem { get { return _OutboundPreconditionsItem; } }
+        private readonly OutboundPreconditionItem _OutboundPreconditionItem;
+        public OutboundPreconditionItem OutboundPreconditionItem { get { return _OutboundPreconditionItem; } }
 
         private readonly OutboundMatchItem _OutboundMatchItem;
         public OutboundMatchItem OutboundMatchItem { get { return _OutboundMatchItem; } }
@@ -24,7 +24,7 @@ namespace Hi.UrlRewrite.Templates.Outbound
             : base(innerItem)
         {
             _BaseRuleItem = new BaseRuleItem(innerItem);
-            _OutboundPreconditionsItem = new OutboundPreconditionsItem(innerItem);
+            _OutboundPreconditionItem = new OutboundPreconditionItem(innerItem);
             _OutboundMatchItem = new OutboundMatchItem(innerItem);
         }
 
