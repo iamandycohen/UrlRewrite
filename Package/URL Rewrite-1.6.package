@@ -311,21 +311,20 @@ Version 1.0
         <x-item>/master/sitecore/templates/Modules/UrlRewrite/Templates/Action/Custom Response/Action Properties/Reason/{B054829D-577F-4ECA-9A4F-E76010F4B7EA}/invariant/0</x-item>
         <x-item>/master/sitecore/templates/Modules/UrlRewrite/Templates/Action/Custom Response/Action Properties/Status code/{6A605986-0706-472A-B0E7-7CCA019D11A3}/invariant/0</x-item>
         <x-item>/master/sitecore/templates/Modules/UrlRewrite/Templates/Action/Custom Response/Action Properties/Substatus code/{503ECB1C-C7A9-4DFF-A756-3786E24A730C}/invariant/0</x-item>
-        <x-item>/master/sitecore/templates/Modules/UrlRewrite/Templates/Action/HttpCacheability Type/{F48B78A5-0BC6-441F-83DD-506840A805B4}/invariant/0</x-item>
-        <x-item>/master/sitecore/templates/Modules/UrlRewrite/Templates/Action/HttpCacheability Type/HttpCacheability Type/{482F740A-FEF3-4C88-AE89-3D5859FD0D6D}/invariant/0</x-item>
         <x-item>/master/sitecore/templates/Modules/UrlRewrite/Templates/Action/ItemQueryRedirect/__Standard Values/{C764C188-58B6-4AFC-8EF5-1E1154EF5C21}/invariant/0</x-item>
         <x-item>/master/sitecore/templates/Modules/UrlRewrite/Templates/Action/ItemQueryRedirect/{5B7FB661-CB6C-449C-9C84-2672538AC77C}/invariant/0</x-item>
         <x-item>/master/sitecore/templates/Modules/UrlRewrite/Templates/Action/ItemQueryRedirect/Action Properties/{F9007FD0-E092-41E4-96EC-D8E4F6B7170F}/invariant/0</x-item>
         <x-item>/master/sitecore/templates/Modules/UrlRewrite/Templates/Action/ItemQueryRedirect/Action Properties/Item Query/{6CDC6831-9172-4927-90F7-1592B68D6B25}/invariant/0</x-item>
         <x-item>/master/sitecore/templates/Modules/UrlRewrite/Templates/Action/None/{12FA1A86-77CC-4097-86DB-A66849AF157A}/invariant/0</x-item>
-        <x-item>/master/sitecore/templates/Modules/UrlRewrite/Templates/Action/Redirect Type/{7EDB9DC0-22DD-401E-A5D8-7FEB78249796}/invariant/0</x-item>
-        <x-item>/master/sitecore/templates/Modules/UrlRewrite/Templates/Action/Redirect Type/Redirect Type/{5E020836-C778-4283-B199-82147C4C122F}/invariant/0</x-item>
         <x-item>/master/sitecore/templates/Modules/UrlRewrite/Templates/Action/Redirect/__Standard Values/{3CEE875E-BD62-44C4-9C38-796EC9AB2DC9}/invariant/0</x-item>
         <x-item>/master/sitecore/templates/Modules/UrlRewrite/Templates/Action/Redirect/{D199EF8B-9D4D-420F-A283-E16D7B575625}/invariant/0</x-item>
         <x-item>/master/sitecore/templates/Modules/UrlRewrite/Templates/Action/Rewrite/__Standard Values/{FA1EB05B-D604-47E5-B2B8-553093CDA434}/invariant/0</x-item>
         <x-item>/master/sitecore/templates/Modules/UrlRewrite/Templates/Action/Rewrite/{7ACB0905-11D7-47BD-94B3-A903D264135F}/invariant/0</x-item>
         <x-item>/master/sitecore/templates/Modules/UrlRewrite/Templates/Action/Rewrite/Action Properties/{037C8C20-5572-4271-81B9-CEA6263B24CA}/invariant/0</x-item>
         <x-item>/master/sitecore/templates/Modules/UrlRewrite/Templates/Action/Rewrite/Action Properties/Log rewritten url/{871F441E-B870-402B-8B88-1C2171C5F6D6}/invariant/0</x-item>
+        <x-item>/master/sitecore/templates/Modules/UrlRewrite/Templates/Action/Types/{B95A1866-B1C5-4A04-922E-02E669BD23FA}/invariant/0</x-item>
+        <x-item>/master/sitecore/templates/Modules/UrlRewrite/Templates/Action/Types/HttpCacheability Type/{482F740A-FEF3-4C88-AE89-3D5859FD0D6D}/invariant/0</x-item>
+        <x-item>/master/sitecore/templates/Modules/UrlRewrite/Templates/Action/Types/Redirect Type/{5E020836-C778-4283-B199-82147C4C122F}/invariant/0</x-item>
         <x-item>/master/sitecore/templates/Modules/UrlRewrite/Templates/Base Rule/__Standard Values/{F60ABD97-95BE-4882-805F-1B7CC3F122A9}/invariant/0</x-item>
         <x-item>/master/sitecore/templates/Modules/UrlRewrite/Templates/Base Rule/{995478B6-29FB-4CF8-B5FB-5C1C5B21BF5A}/invariant/0</x-item>
         <x-item>/master/sitecore/templates/Modules/UrlRewrite/Templates/Base Rule/General/{46D1F2F1-F364-4310-BCB0-200034C85C22}/invariant/0</x-item>
@@ -341,14 +340,14 @@ Version 1.0
         <x-item>/master/sitecore/templates/Modules/UrlRewrite/Templates/Conditions/Condition - Advanced/{0035B824-507B-4F69-9A1E-FFC2DD738D2D}/invariant/0</x-item>
         <x-item>/master/sitecore/templates/Modules/UrlRewrite/Templates/Conditions/Condition - Advanced/General/{8F94D448-5105-4D7D-A6C5-CC066CB5F5C3}/invariant/0</x-item>
         <x-item>/master/sitecore/templates/Modules/UrlRewrite/Templates/Conditions/Condition - Advanced/General/Condition Input String/{1DD20C5F-51D0-42A5-80D2-A2DB50BFC7C8}/invariant/0</x-item>
+        <x-item>/master/sitecore/templates/Modules/UrlRewrite/Templates/Conditions/Condition Logical Grouping/__Standard Values/{64509D7B-57EA-4AA4-99D5-A4CAD7D0AFF0}/invariant/0</x-item>
+        <x-item>/master/sitecore/templates/Modules/UrlRewrite/Templates/Conditions/Condition Logical Grouping/{1652DCC0-6319-43D4-853F-B5A441866F86}/invariant/0</x-item>
+        <x-item>/master/sitecore/templates/Modules/UrlRewrite/Templates/Conditions/Condition Logical Grouping/Condition Properties/{DF0C1FBE-1A6B-43C0-B676-BBBD305BBD07}/invariant/0</x-item>
+        <x-item>/master/sitecore/templates/Modules/UrlRewrite/Templates/Conditions/Condition Logical Grouping/Condition Properties/Logical grouping/{9BCC4CA4-3B9C-4284-B32F-280433F09C01}/invariant/0</x-item>
         <x-item>/master/sitecore/templates/Modules/UrlRewrite/Templates/Conditions/Condition/__Standard Values/{16475C01-C5FB-4065-AFB8-B5B36C7B0766}/invariant/0</x-item>
         <x-item>/master/sitecore/templates/Modules/UrlRewrite/Templates/Conditions/Condition/{2083F66B-0A94-4F9C-9833-EF53FAD05D70}/invariant/0</x-item>
         <x-item>/master/sitecore/templates/Modules/UrlRewrite/Templates/Conditions/Condition/General/{2D10CAEB-0A18-4AF3-9C96-CD5E78EB9216}/invariant/0</x-item>
         <x-item>/master/sitecore/templates/Modules/UrlRewrite/Templates/Conditions/Condition/General/Condition Input Type/{2F99346D-E5BB-421D-AFDB-DADB3163E440}/invariant/0</x-item>
-        <x-item>/master/sitecore/templates/Modules/UrlRewrite/Templates/Conditions/Logical Grouping/__Standard Values/{64509D7B-57EA-4AA4-99D5-A4CAD7D0AFF0}/invariant/0</x-item>
-        <x-item>/master/sitecore/templates/Modules/UrlRewrite/Templates/Conditions/Logical Grouping/{1652DCC0-6319-43D4-853F-B5A441866F86}/invariant/0</x-item>
-        <x-item>/master/sitecore/templates/Modules/UrlRewrite/Templates/Conditions/Logical Grouping/Condition Properties/{DF0C1FBE-1A6B-43C0-B676-BBBD305BBD07}/invariant/0</x-item>
-        <x-item>/master/sitecore/templates/Modules/UrlRewrite/Templates/Conditions/Logical Grouping/Condition Properties/Logical grouping/{9BCC4CA4-3B9C-4284-B32F-280433F09C01}/invariant/0</x-item>
         <x-item>/master/sitecore/templates/Modules/UrlRewrite/Templates/Conditions/Precondition Using/__Standard Values/{7DDA0088-AC4A-4194-911E-279DE9E9B49C}/invariant/0</x-item>
         <x-item>/master/sitecore/templates/Modules/UrlRewrite/Templates/Conditions/Precondition Using/{20C923EF-DAD7-433E-B51C-A5B634C3A27B}/invariant/0</x-item>
         <x-item>/master/sitecore/templates/Modules/UrlRewrite/Templates/Conditions/Precondition Using/Condition Properties/{67BD9694-0AAE-4972-ACA0-56A37DAEB390}/invariant/0</x-item>
@@ -395,7 +394,7 @@ Version 1.0
         <x-item>/master/sitecore/templates/Modules/UrlRewrite/Templates/Match/Match Pattern/Match/Pattern/{D938CD93-3517-4509-9A68-9DA430D8EC68}/invariant/0</x-item>
         <x-item>/master/sitecore/templates/Modules/UrlRewrite/Templates/Match/Match Scope Value/{7600DAF1-86EB-4E46-813A-A2971B7B5722}/invariant/0</x-item>
         <x-item>/master/sitecore/templates/Modules/UrlRewrite/Templates/Match/Match Scope Value/Match/{3B3151BC-3E52-4A06-AA37-EAECDB291A17}/invariant/0</x-item>
-        <x-item>/master/sitecore/templates/Modules/UrlRewrite/Templates/Match/Match Scope Value/Match/Scope Value/{3FB503D4-2BC9-41B3-B6D9-4D762BE2458F}/invariant/0</x-item>
+        <x-item>/master/sitecore/templates/Modules/UrlRewrite/Templates/Match/Match Scope Value/Match/Scope value/{3FB503D4-2BC9-41B3-B6D9-4D762BE2458F}/invariant/0</x-item>
         <x-item>/master/sitecore/templates/Modules/UrlRewrite/Templates/Match/Match Scope/__Standard Values/{D9AA4E26-EBEB-488F-99BF-F634314BF8EE}/invariant/0</x-item>
         <x-item>/master/sitecore/templates/Modules/UrlRewrite/Templates/Match/Match Scope/{7B5B7C00-4708-485B-809E-1064B689B2DE}/invariant/0</x-item>
         <x-item>/master/sitecore/templates/Modules/UrlRewrite/Templates/Match/Match Scope/Match/{FACCCD1C-476F-43F3-A835-106F09B9388D}/invariant/0</x-item>
@@ -441,7 +440,7 @@ Version 1.0
               <Options>
                 <BehaviourOptions>
                   <ItemMode>Overwrite</ItemMode>
-                  <ItemMergeMode>Clear</ItemMergeMode>
+                  <ItemMergeMode>Undefined</ItemMergeMode>
                 </BehaviourOptions>
               </Options>
             </InstallerConfigurationTransform>
