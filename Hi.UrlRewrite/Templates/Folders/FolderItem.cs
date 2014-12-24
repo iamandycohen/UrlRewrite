@@ -1,10 +1,6 @@
-using System;
 using Sitecore.Data.Items;
-using System.Collections.Generic;
-using Sitecore.Data.Fields;
-using Sitecore.Web.UI.WebControls;
 
-namespace Hi.UrlRewrite.Templates
+namespace Hi.UrlRewrite.Templates.Folders
 {
     public partial class FolderItem : CustomItem
     {

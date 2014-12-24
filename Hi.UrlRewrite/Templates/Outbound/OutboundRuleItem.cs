@@ -1,14 +1,7 @@
 ﻿using Hi.UrlRewrite.Templates.Conditions;
-using Hi.UrlRewrite.Templates.Match;
-using Sitecore.Data.Fields;
 using Sitecore.Data.Items;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
-namespace Hi.UrlRewrite.Templates
+namespace Hi.UrlRewrite.Templates.Outbound
 {
     public class OutboundRuleItem : CustomItem
     {
@@ -19,12 +12,20 @@ namespace Hi.UrlRewrite.Templates
         private readonly BaseRuleItem _BaseRuleItem;
         public BaseRuleItem BaseRuleItem { get { return _BaseRuleItem; } }
 
+        private readonly OutboundPreconditionsItem _OutboundPreconditionsItem;
+        public OutboundPreconditionsItem OutboundPreconditionsItem { get { return _OutboundPreconditionsItem; } }
+
+        private readonly OutboundMatchItem _OutboundMatchItem;
+        public OutboundMatchItem OutboundMatchItem { get { return _OutboundMatchItem; } }
+
         #endregion
 
         public OutboundRuleItem(Item innerItem)
             : base(innerItem)
         {
             _BaseRuleItem = new BaseRuleItem(innerItem);
+            _OutboundPreconditionsItem = new OutboundPreconditionsItem(innerItem);
+            _OutboundMatchItem = new OutboundMatchItem(innerItem);
         }
 
         public static implicit operator OutboundRuleItem(Item innerItem)
@@ -36,14 +37,6 @@ namespace Hi.UrlRewrite.Templates
         {
 	        return customItem != null ? customItem.InnerItem : null;
         }
-
-        //public LookupField Action
-        //{
-        //    get
-        //    {
-        //        return new LookupField(InnerItem.Fields["Action"]);
-        //    }
-        //}
             
     }
 }

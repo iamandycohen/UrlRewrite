@@ -1,11 +1,6 @@
 ﻿using Sitecore.Data.Items;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
-namespace Hi.UrlRewrite.Templates.Action.HttpCacheabilityType
+namespace Hi.UrlRewrite.Templates.Action.Types
 {
 
     public partial class HttpCacheabilityTypeItem : CustomItem

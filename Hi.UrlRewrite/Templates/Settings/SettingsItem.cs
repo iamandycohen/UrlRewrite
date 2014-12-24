@@ -1,10 +1,7 @@
-using System;
-using Sitecore.Data.Items;
-using System.Collections.Generic;
 using Sitecore.Data.Fields;
-using Sitecore.Web.UI.WebControls;
+using Sitecore.Data.Items;
 
-namespace Hi.UrlRewrite.Templates
+namespace Hi.UrlRewrite.Templates.Settings
 {
     public partial class SettingsItem : CustomItem
     {

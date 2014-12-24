@@ -36,23 +36,12 @@ namespace Hi.UrlRewrite.Templates.Conditions
             return customItem != null ? customItem.InnerItem : null;
         }
 
-        //public static implicit operator ConditionItem(BaseConditionItem baseConditionItem)
-        //{
-        //    return baseConditionItem != null ? new ConditionItem(baseConditionItem.InnerItem) : null;
-        //}
-
-        //public static implicit operator BaseConditionItem(ConditionItem customItem)
-        //{
-        //    return customItem != null ? customItem.BaseConditionItem : null;
-        //}
-
         #endregion //Boilerplate CustomItem Code
 
 
         #region Field Instance Methods
 
-
-        public LookupField ConditionInput
+        public LookupField ConditionInputType
         {
             get
             {

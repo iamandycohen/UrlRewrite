@@ -7,6 +7,8 @@ using Hi.UrlRewrite.Templates;
 using Hi.UrlRewrite.Templates.Action;
 using Hi.UrlRewrite.Templates.Action.Base;
 using Hi.UrlRewrite.Templates.Conditions;
+using Hi.UrlRewrite.Templates.Folders;
+using Hi.UrlRewrite.Templates.Inbound;
 using Sitecore.Data;
 using Sitecore.Data.Items;
 using Sitecore.Diagnostics;
@@ -88,7 +90,7 @@ namespace Hi.UrlRewrite
 
             GetBaseMatchItem(baseRuleItem.BaseMatchItem, baseRule);
 
-            var logicalGroupingItem = baseRuleItem.RuleConditionPropertiesItem.LogicalGrouping.TargetItem;
+            var logicalGroupingItem = baseRuleItem.ConditionLogicalGroupingItem.LogicalGrouping.TargetItem;
             LogicalGrouping? logicalGroupingType = null;
             if (logicalGroupingItem != null)
             {
@@ -343,7 +345,7 @@ namespace Hi.UrlRewrite
 
             if (baseConditionItemTemplateId.Equals(new ID(ConditionItem.TemplateId)))
             {
-                var conditionInputItem = new ConditionItem(baseConditionItem).ConditionInput.TargetItem;
+                var conditionInputItem = new ConditionItem(baseConditionItem).ConditionInputType.TargetItem;
                 Tokens? conditionInputType = null;
 
                 if (conditionInputItem != null)

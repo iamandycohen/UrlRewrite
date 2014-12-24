@@ -1,14 +1,7 @@
-﻿using Hi.UrlRewrite.Templates.Conditions;
-using Hi.UrlRewrite.Templates.Match;
-using Sitecore.Data.Fields;
+﻿using Sitecore.Data.Fields;
 using Sitecore.Data.Items;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
-namespace Hi.UrlRewrite.Templates
+namespace Hi.UrlRewrite.Templates.Inbound
 {
     public class InboundRuleItem : CustomItem
     {

@@ -1,10 +1,6 @@
-using System;
 using Sitecore.Data.Items;
-using System.Collections.Generic;
-using Sitecore.Data.Fields;
-using Sitecore.Web.UI.WebControls;
 
-namespace Hi.UrlRewrite.Templates.Conditions
+namespace Hi.UrlRewrite.Templates.Conditions.Types
 {
     public partial class ConditionInputTypeItem : CustomItem
     {

@@ -1,4 +1,6 @@
 ﻿using Hi.UrlRewrite.Templates;
+using Hi.UrlRewrite.Templates.Folders;
+using Hi.UrlRewrite.Templates.Inbound;
 using Sitecore.Data;
 using Sitecore.Data.Events;
 using Sitecore.Data.Items;

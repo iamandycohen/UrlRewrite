@@ -13,8 +13,8 @@ namespace Hi.UrlRewrite.Templates
         private readonly BaseUrlRewriteItem _BaseUrlRewriteItem;
         public BaseUrlRewriteItem BaseUrlRewrite { get { return _BaseUrlRewriteItem; } }
 
-        private readonly RuleConditionPropertiesItem _RuleConditionPropertiesItem;
-        public RuleConditionPropertiesItem RuleConditionPropertiesItem { get { return _RuleConditionPropertiesItem; } }
+        private readonly ConditionLogicalGroupingItem _ConditionLogicalGroupingItem;
+        public ConditionLogicalGroupingItem ConditionLogicalGroupingItem { get { return _ConditionLogicalGroupingItem; } }
 
         private readonly BaseMatchItem _BaseMatchItem;
         public BaseMatchItem BaseMatchItem { get { return _BaseMatchItem; } }
@@ -26,7 +26,7 @@ namespace Hi.UrlRewrite.Templates
             : base(innerItem)
         {
             _BaseUrlRewriteItem = new BaseUrlRewriteItem(innerItem);
-            _RuleConditionPropertiesItem = new RuleConditionPropertiesItem(innerItem);
+            _ConditionLogicalGroupingItem = new ConditionLogicalGroupingItem(innerItem);
             _BaseMatchItem = new BaseMatchItem(innerItem);
         }
 

@@ -1,10 +1,8 @@
-using System;
-using Sitecore.Data.Items;
-using System.Collections.Generic;
+using Hi.UrlRewrite.Templates.Settings;
 using Sitecore.Data.Fields;
-using Sitecore.Web.UI.WebControls;
+using Sitecore.Data.Items;
 
-namespace Hi.UrlRewrite.Templates
+namespace Hi.UrlRewrite.Templates.Folders
 {
     public partial class RedirectFolderItem : CustomItem
     {
