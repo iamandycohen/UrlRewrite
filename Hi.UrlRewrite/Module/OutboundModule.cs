@@ -11,7 +11,7 @@ namespace Hi.UrlRewrite.Module
         public void Dispose()
         {
         }
-
+         
         public void Init(HttpApplication context)
         {
             context.ReleaseRequestState += context_ReleaseRequestState;
@@ -25,7 +25,7 @@ namespace Hi.UrlRewrite.Module
             {
                 var context = app.Context;
 
-                // process outbound rules here... only set up event if it passes rules
+                // process outbound rules here... only set up event if it matches rules and preconditions
                 var responseFilterStream = new ResponseFilterStream(context.Response.Filter);
                 responseFilterStream.TransformString += responseFilterStream_TransformString;
 
