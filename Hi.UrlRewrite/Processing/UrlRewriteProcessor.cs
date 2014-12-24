@@ -30,9 +30,15 @@ namespace Hi.UrlRewrite.Processing
                 if (args.Context == null || db == null) return;
 
                 var httpContext = new HttpContextWrapper(args.Context);
-                var urlRewriter = new UrlRewriter(httpContext.Request.ServerVariables);
+                var requestUri = httpContext.Request.Url;
 
-                var requestResult = ProcessUri(httpContext.Request.Url, db, urlRewriter);
+                if (requestUri == null || Configuration.IgnoreUrlPrefixes.Length > 0 && Configuration.IgnoreUrlPrefixes.Any(prefix => requestUri.PathAndQuery.StartsWith(prefix, StringComparison.InvariantCultureIgnoreCase)))
+                {
+                    return;
+                }
+
+                var urlRewriter = new UrlRewriter(httpContext.Request.ServerVariables);
+                var requestResult = ProcessUri(requestUri, db, urlRewriter);
 
                 if (requestResult == null || !requestResult.MatchedAtLeastOneRule) return;
 
@@ -70,7 +76,7 @@ namespace Hi.UrlRewrite.Processing
                 }
             }
 
-            if (inboundRules == null || Configuration.IgnoreUrlPrefixes.Length > 0 && Configuration.IgnoreUrlPrefixes.Any(prefix => requestUri.PathAndQuery.StartsWith(prefix, StringComparison.InvariantCultureIgnoreCase)))
+            if (inboundRules == null)
             {
                 return null;
             }
