@@ -1,14 +1,10 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
 using log4net;
 using log4net.Appender;
 using log4net.Layout;
 using log4net.Repository;
 using log4net.spi;
 using log4net.Repository.Hierarchy;
-using Sitecore.Diagnostics;
 
 namespace Hi.UrlRewrite
 {
@@ -21,7 +17,10 @@ namespace Hi.UrlRewrite
         {
             if (!initialized)
             {
-                CreateLogger();
+                if (Configuration.LogFileEnabled)
+                {
+                    CreateLogger();
+                }
                 initialized = true;
             }
         }

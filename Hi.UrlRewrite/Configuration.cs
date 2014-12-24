@@ -29,6 +29,14 @@ namespace Hi.UrlRewrite
             }
         }
 
+        public static bool LogFileEnabled
+        {
+            get
+            {
+                return Settings.GetBoolSetting("Hi.UrlRewrite.LogFileEnabled", false);
+            }
+        }
+
         public static string LogFileName
         {
             get
