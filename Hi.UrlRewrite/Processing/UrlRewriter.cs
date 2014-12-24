@@ -4,7 +4,6 @@ using Hi.UrlRewrite.Entities.Match;
 using Hi.UrlRewrite.Entities.Rules;
 using Hi.UrlRewrite.Processing.Results;
 using Sitecore.Data;
-using Sitecore.Diagnostics;
 using Sitecore.Links;
 using Sitecore.Resources.Media;
 using System;
