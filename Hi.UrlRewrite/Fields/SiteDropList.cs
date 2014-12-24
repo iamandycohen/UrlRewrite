@@ -82,8 +82,8 @@ namespace Hi.UrlRewrite.Fields
                 return false;
             }
 
-            Log.Info(this + " : Field : " + GetViewStateString("Field"), this);
-            Log.Info(this + " : FieldName : " + GetViewStateString("FieldName"), this);
+            Sitecore.Diagnostics.Log.Info(this + " : Field : " + GetViewStateString("Field"), this);
+            Sitecore.Diagnostics.Log.Info(this + " : FieldName : " + GetViewStateString("FieldName"), this);
 
             if (GetViewStateString("Value") != value)
             {

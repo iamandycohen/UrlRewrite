@@ -42,7 +42,7 @@ namespace Hi.UrlRewrite.Processing
 
             var originalUri = requestUri;
 
-            Log.Debug(string.Format("UrlRewrite - Processing url: {0}", originalUri), this);
+            Log.Debug(this, "Processing url: {0}", originalUri);
 
             var matchedAtLeastOneRule = false;
 
@@ -70,7 +70,7 @@ namespace Hi.UrlRewrite.Processing
                 }
             }
 
-            Log.Debug(string.Format("UrlRewrite - Processed originalUrl: {0} redirectedUrl: {1}", originalUri, ruleResult.RewrittenUri), this);
+            Log.Debug(this, "Processed originalUrl: {0} redirectedUrl: {1}", originalUri, ruleResult.RewrittenUri);
 
             var lastMatchedRuleResult = processedResults.FirstOrDefault(r => r.RuleMatched);
 
@@ -142,7 +142,7 @@ namespace Hi.UrlRewrite.Processing
 
         private RuleResult ProcessInboundRule(Uri originalUri, InboundRule inboundRule)
         {
-            Log.Debug(string.Format("UrlRewrite - Processing inbound rule - requestUri: {0} inboundRule: {1}", originalUri, inboundRule.Name), this);
+            Log.Debug(this, "Processing inbound rule - requestUri: {0} inboundRule: {1}", originalUri, inboundRule.Name);
 
             var ruleResult = new RuleResult
             {
@@ -164,7 +164,7 @@ namespace Hi.UrlRewrite.Processing
                 //    break;
             }
 
-            Log.Debug(string.Format("UrlRewrite - Processing inbound rule - requestUri: {0} inboundRule: {1} rewrittenUrl: {2}", ruleResult.OriginalUri, inboundRule.Name, ruleResult.RewrittenUri), this);
+            Log.Debug(this, "Processing inbound rule - requestUri: {0} inboundRule: {1} rewrittenUrl: {2}", ruleResult.OriginalUri, inboundRule.Name, ruleResult.RewrittenUri);
 
             ruleResult.ItemId = inboundRule.ItemId;
 
@@ -204,7 +204,7 @@ namespace Hi.UrlRewrite.Processing
             {
                 ruleResult.RuleMatched = true;
 
-                Log.Debug(string.Format("UrlRewrite - INBOUND RULE MATCH - requestUri: {0} inboundRule: {1}", originalUri, inboundRule.Name), this);
+                Log.Debug(this, "INBOUND RULE MATCH - requestUri: {0} inboundRule: {1}", originalUri, inboundRule.Name);
 
                 // TODO: Need to implement Rewrite, None
 
@@ -230,7 +230,7 @@ namespace Hi.UrlRewrite.Processing
             }
             else if (inboundRule.Action == null)
             {
-                Log.Warn(string.Format("UrlRewrite - Inbound Rule has no Action set - inboundRule: {0} inboundRule ItemId: {1}", inboundRule.Name, inboundRule.ItemId), this);
+                Log.Warn(this, "Inbound Rule has no Action set - inboundRule: {0} inboundRule ItemId: {1}", inboundRule.Name, inboundRule.ItemId);
 
                 // we are going to skip this because we don't know what to do with it during processing
                 ruleResult.RuleMatched = false;
@@ -269,18 +269,16 @@ namespace Hi.UrlRewrite.Processing
             inboundRuleMatch = inboundRuleRegex.Match(uriPath);
             bool isInboundRuleMatch = matchesThePattern ? inboundRuleMatch.Success : !inboundRuleMatch.Success;
 
-            Log.Debug(
-                string.Format("UrlRewrite - Regex - Pattern: '{0}' Input: '{1}' Success: {2}", pattern, uriPath,
-                    isInboundRuleMatch), this);
+            Log.Debug(this, "Regex - Pattern: '{0}' Input: '{1}' Success: {2}", pattern, uriPath,
+                    isInboundRuleMatch);
 
             if (!isInboundRuleMatch && !uriPath.Equals(escapedUriPath, StringComparison.InvariantCultureIgnoreCase))
             {
                 inboundRuleMatch = inboundRuleRegex.Match(escapedUriPath);
                 isInboundRuleMatch = matchesThePattern ? inboundRuleMatch.Success : !inboundRuleMatch.Success;
 
-                Log.Debug(
-                    string.Format("UrlRewrite - Regex - Pattern: '{0}' Input: '{1}' Success: {2}", pattern, escapedUriPath,
-                        isInboundRuleMatch), this);
+                Log.Debug(this, "Regex - Pattern: '{0}' Input: '{1}' Success: {2}", pattern, escapedUriPath,
+                        isInboundRuleMatch);
             }
             return isInboundRuleMatch;
         }
@@ -360,25 +358,19 @@ namespace Hi.UrlRewrite.Processing
 
                 if (!isInboundRuleMatch)
                 {
-                    Log.Debug(
-                        string.Format(
-                            "UrlRewrite - Regex - Rule '{0}' failed.  Site '{1}' does not equal rules site condition '{2}'",
-                            inboundRule.Name, currentSiteName, inboundRule.SiteNameRestriction), this);
+                    Log.Debug(this, "Regex - Rule '{0}' failed.  Site '{1}' does not equal rules site condition '{2}'",
+                            inboundRule.Name, currentSiteName, inboundRule.SiteNameRestriction);
                 }
                 else
                 {
-                    Log.Debug(
-                        string.Format(
-                            "UrlRewrite - Regex - Rule '{0}' matched site name restriction.  Site '{1}' equal rules site condition '{2}'",
-                            inboundRule.Name, currentSiteName, inboundRule.SiteNameRestriction), this);
+                    Log.Debug(this, "Regex - Rule '{0}' matched site name restriction.  Site '{1}' equal rules site condition '{2}'",
+                            inboundRule.Name, currentSiteName, inboundRule.SiteNameRestriction);
                 }
             }
             else
             {
-                Log.Warn(
-                    string.Format(
-                        "UrlRewrite - Regex - Rule '{0}' matching based on site name will not occur because site name is null.",
-                        inboundRule.Name), this);
+                Log.Warn(this, "Regex - Rule '{0}' matching based on site name will not occur because site name is null.",
+                        inboundRule.Name);
             }
 
             return isInboundRuleMatch;

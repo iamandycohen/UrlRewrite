@@ -65,25 +65,19 @@ namespace Hi.UrlRewrite.Processing
 
                     if (item.IsRedirectFolderItem())
                     {
-                        Log.Info(
-                            string.Format("UrlRewrite - Refreshing Redirect Folder [{0}] after save event",
-                                item.Paths.FullPath), this);
+                        Log.Info(this, db, "Refreshing Redirect Folder [{0}] after save event", item.Paths.FullPath);
 
                         rulesEngine.GetCachedInboundRules(db);
                     }
                     else if (item.IsSimpleRedirectItem())
                     {
-                        Log.Info(
-                            string.Format("UrlRewrite - Refreshing Simple Redirect [{0}] after save event",
-                                item.Paths.FullPath), this);
+                        Log.Info(this, db, "Refreshing Simple Redirect [{0}] after save event", item.Paths.FullPath);
 
                         rulesEngine.RefreshSimpleRedirect(item, redirectFolderItem);
                     }
                     else if (item.IsInboundRuleItem())
                     {
-                        Log.Info(
-                            string.Format("UrlRewrite - Refreshing Inbound Rule [{0}] after save event",
-                                item.Paths.FullPath), this);
+                        Log.Info(this, db, "Refreshing Inbound Rule [{0}] after save event", item.Paths.FullPath);
 
                         rulesEngine.RefreshInboundRule(item, redirectFolderItem);
                     }
@@ -98,9 +92,7 @@ namespace Hi.UrlRewrite.Processing
                     }
                     else if (item.IsInboundRuleItemChild())
                     {
-                        Log.Info(
-                            string.Format("UrlRewrite - Refreshing Inbound Rule [{0}] after save event",
-                                item.Parent.Paths.FullPath), this);
+                        Log.Info(this, db, "Refreshing Inbound Rule [{0}] after save event", item.Parent.Paths.FullPath);
 
                         rulesEngine.RefreshInboundRule(item.Parent, redirectFolderItem);
                     }
@@ -108,7 +100,7 @@ namespace Hi.UrlRewrite.Processing
             }
             catch (Exception ex)
             {
-                Log.Error(string.Format("UrlRewrite - Exception occured when saving item after save - Item ID: {0} Item Path: {1}", item.ID, item.Paths.FullPath), ex, this);
+                Log.Error(this, ex, db, "Exception occured when saving item after save - Item ID: {0} Item Path: {1}", item.ID, item.Paths.FullPath);
             }
 
         }
@@ -157,17 +149,15 @@ namespace Hi.UrlRewrite.Processing
                     {
                         if (item.IsInboundRuleItem() || item.IsSimpleRedirectItem())
                         {
-                            Log.Info(
-                                string.Format("UrlRewrite - Removing Inbound Rule [{0}] after delete event",
-                                    item.Paths.FullPath), this);
+                            Log.Info(this, item.Database, "Removing Inbound Rule [{0}] after delete event",
+                                item.Paths.FullPath);
 
                             rulesEngine.DeleteInboundRule(item, redirectFolderItem);
                         }
                         else if (item.IsInboundRuleItemChild())
                         {
-                            Log.Info(
-                                string.Format("UrlRewrite - Removing Inbound Rule [{0}] after delete event",
-                                    item.Parent.Paths.FullPath), this);
+                            Log.Info(this, item.Database, "Removing Inbound Rule [{0}] after delete event",
+                                item.Parent.Paths.FullPath);
 
                             rulesEngine.RefreshInboundRule(item.Parent, redirectFolderItem);
                         }
@@ -176,7 +166,7 @@ namespace Hi.UrlRewrite.Processing
             }
             catch (Exception ex)
             {
-                Log.Error(string.Format("UrlRewrite - Exception occured which deleting item after publish Item ID: {0} Item Path: {1}", item.ID, item.Paths.FullPath), ex, this);
+                Log.Error(this, ex, item.Database, "Exception occured which deleting item after publish Item ID: {0} Item Path: {1}", item.ID, item.Paths.FullPath);
             }
         }
 

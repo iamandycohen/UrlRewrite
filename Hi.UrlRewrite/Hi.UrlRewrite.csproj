@@ -45,6 +45,10 @@
     <Reference Include="Sitecore.Kernel">
       <HintPath>..\Assemblies\Sitecore.Kernel.dll</HintPath>
     </Reference>
+    <Reference Include="Sitecore.Logging, Version=1.2.0.30715, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\Assemblies\Sitecore.Logging.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Configuration" />
     <Reference Include="System.Core" />
@@ -93,6 +97,7 @@
     <Compile Include="Entities\Rules\OutboundRule.cs" />
     <Compile Include="Extensions\ItemExtensions.cs" />
     <Compile Include="Fields\SiteDropList.cs" />
+    <Compile Include="Log.cs" />
     <Compile Include="Module\OutboundModule.cs" />
     <Compile Include="Module\ResponseFilterStream.cs" />
     <Compile Include="Processing\Results\ConditionMatchResult.cs" />

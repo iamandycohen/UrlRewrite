@@ -42,7 +42,7 @@ namespace Hi.UrlRewrite
 
             if (inboundRuleItem.Action == null)
             {
-                Log.Warn(string.Format("UrlRewrite - No action set on rule with ItemID: {0}", inboundRuleItem.ID), typeof(ItemExtensions));
+                Log.Warn(typeof(ItemExtensions), inboundRuleItem.Database.Name, "No action set on rule with ItemID: {0}", inboundRuleItem.ID);
 
                 return null;
             }

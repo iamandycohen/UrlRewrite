@@ -22,9 +22,10 @@ namespace Hi.UrlRewrite.Processing
 
         public override void Process(HttpRequestArgs args)
         {
+            var db = Sitecore.Context.Database;
+
             try
             {
-                var db = Sitecore.Context.Database;
 
                 if (args.Context == null || db == null) return;
 
@@ -35,7 +36,8 @@ namespace Hi.UrlRewrite.Processing
 
                 if (requestResult == null || !requestResult.MatchedAtLeastOneRule) return;
 
-                Log.Info(string.Format("UrlRewrite - Redirecting {0} to {1} [{2}]", requestResult.OriginalUri, requestResult.RewrittenUri, requestResult.StatusCode), this);
+                Log.Info(this, db, "Redirecting {0} to {1} [{2}]", requestResult.OriginalUri, requestResult.RewrittenUri,
+                    requestResult.StatusCode);
 
                 urlRewriter.ExecuteResult(httpContext, requestResult);
             }
@@ -47,7 +49,7 @@ namespace Hi.UrlRewrite.Processing
             {
                 if (ex is ThreadAbortException) return;
 
-                Log.Error("UrlRewrite - Exception occured", ex, this);
+                Log.Error(this, ex, db, "Exception occured");
             }
         }
 
@@ -58,7 +60,7 @@ namespace Hi.UrlRewrite.Processing
 
             if (inboundRules == null)
             {
-                Log.Info(string.Format("UrlRewrite - Initializing [{0}]", db.Name), this);
+                Log.Info(this, db, "Initializing.");
 
                 using (new SecurityDisabler())
                 {

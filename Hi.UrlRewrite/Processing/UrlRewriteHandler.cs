@@ -69,7 +69,7 @@ namespace Hi.UrlRewrite.Processing
                 if (ex is HttpException || ex is ThreadAbortException) return;
 
                 // log it in sitecore
-                Log.Error(string.Format("{0}::Error in UrlRewriteHandler", this), ex, this);
+                Log.Error(this, ex, "Error in UrlRewriteHandler.");
 
                 throw;
                 // throw the error, but instead let it fall through
