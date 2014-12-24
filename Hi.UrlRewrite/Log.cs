@@ -4,6 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
+using SLog = Sitecore.Diagnostics.Log;
 
 namespace Hi.UrlRewrite
 {
@@ -16,52 +17,52 @@ namespace Hi.UrlRewrite
 
         public static void Info(object owner, string format, params object[] args)
         {
-            Sitecore.Diagnostics.Log.Info(string.Format(format, args), owner);
+            SLog.Info(string.Format(format, args), owner);
         }
 
         public static void Info(object owner, Database database, string format, params object[] args)
         {
-            Sitecore.Diagnostics.Log.Info(Format(database, format, args), owner);
+            SLog.Info(Format(database, format, args), owner);
         }
 
         public static void Debug(object owner, string format, params object[] args)
         {
-            Sitecore.Diagnostics.Log.Debug(Format(format, args), owner);
+            SLog.Debug(Format(format, args), owner);
         }
 
         public static void Debug(object owner, Database database, string format, params object[] args)
         {
-            Sitecore.Diagnostics.Log.Debug(Format(database, format, args), owner);
+            SLog.Debug(Format(database, format, args), owner);
         }
 
         public static void Warn(object owner, string format, params object[] args)
         {
-            Sitecore.Diagnostics.Log.Warn(Format(format, args), owner);
+            SLog.Warn(Format(format, args), owner);
         }
 
         public static void Warn(object owner, Database database, string format, params object[] args)
         {
-            Sitecore.Diagnostics.Log.Warn(Format(database, format, args), owner);
+            SLog.Warn(Format(database, format, args), owner);
         }
 
         public static void Error(object owner, Exception exception, string format, params object[] args)
         {
-            Sitecore.Diagnostics.Log.Error(Format(format, args), exception, owner);
+            SLog.Error(Format(format, args), exception, owner);
         }
 
         public static void Error(object owner, Exception exception, Database database, string format, params object[] args)
         {
-            Sitecore.Diagnostics.Log.Error(Format(database, format, args), exception, owner);
+            SLog.Error(Format(database, format, args), exception, owner);
         }
 
         public static void Error(object owner, string format, params object[] args)
         {
-            Sitecore.Diagnostics.Log.Error(Format(format, args), owner);
+            SLog.Error(Format(format, args), owner);
         }
 
         public static void Error(object owner, Database database, string format, params object[] args)
         {
-            Sitecore.Diagnostics.Log.Error(Format(database, format, args), owner);
+            SLog.Error(Format(database, format, args), owner);
         }
 
         private static string Format(string format, object[] args)

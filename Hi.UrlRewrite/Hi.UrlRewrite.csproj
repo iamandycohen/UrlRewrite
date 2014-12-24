@@ -98,6 +98,7 @@
     <Compile Include="Extensions\ItemExtensions.cs" />
     <Compile Include="Fields\SiteDropList.cs" />
     <Compile Include="Log.cs" />
+    <Compile Include="LogHelper.cs" />
     <Compile Include="Module\OutboundModule.cs" />
     <Compile Include="Module\ResponseFilterStream.cs" />
     <Compile Include="Processing\Results\ConditionMatchResult.cs" />

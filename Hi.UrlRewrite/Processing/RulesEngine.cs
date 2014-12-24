@@ -23,6 +23,10 @@ namespace Hi.UrlRewrite.Processing
 {
     public class RulesEngine
     {
+        public RulesEngine()
+        {
+            LogHelper.Inititalize();
+        }
 
         public List<InboundRule> GetInboundRules(Database db)
         {
