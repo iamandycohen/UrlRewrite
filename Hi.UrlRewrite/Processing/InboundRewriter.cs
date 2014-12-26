@@ -17,23 +17,22 @@ using System.Web;
 
 namespace Hi.UrlRewrite.Processing
 {
-    public class UrlRewriter
+    public class InboundRewriter
     {
 
         public NameValueCollection ServerVariables { get; set; }
 
-        public UrlRewriter()
+        public InboundRewriter()
         {
-
             ServerVariables = new NameValueCollection();
         }
 
-        public UrlRewriter(NameValueCollection serverVariables)
+        public InboundRewriter(NameValueCollection serverVariables)
         {
             ServerVariables = serverVariables;
         }
 
-        public ProcessRequestResult ProcessRequestUrl(Uri requestUri, List<InboundRule> inboundRules)
+        public ProcessInboundRulesResult ProcessRequestUrl(Uri requestUri, List<InboundRule> inboundRules)
         {
             if (inboundRules == null)
             {
@@ -68,14 +67,12 @@ namespace Hi.UrlRewrite.Processing
 
             Log.Debug(this, "Processed originalUrl: {0} redirectedUrl: {1}", originalUri, ruleResult.RewrittenUri);
 
-            var lastMatchedRuleResult = processedResults.FirstOrDefault(r => r.RuleMatched);
-
-            var finalResult = new ProcessRequestResult(originalUri, lastMatchedRuleResult, processedResults);
+            var finalResult = new ProcessInboundRulesResult(originalUri, processedResults);
 
             return finalResult;
         }
 
-        public void ExecuteResult(HttpContextBase httpContext, ProcessRequestResult ruleResult)
+        public void ExecuteResult(HttpContextBase httpContext, ProcessInboundRulesResult ruleResult)
         {
             try
             {
@@ -427,7 +424,7 @@ namespace Hi.UrlRewrite.Processing
             itemQuery = ReplaceRuleBackReferences(inboundRuleMatch, itemQuery);
             itemQuery = ReplaceConditionBackReferences(lastConditionMatch, itemQuery);
 
-            var rewriteItemId = ProcessItemQuery(itemQuery);
+            var rewriteItemId = ExecuteItemQuery(itemQuery);
 
             if (!rewriteItemId.HasValue)
             {
@@ -446,7 +443,7 @@ namespace Hi.UrlRewrite.Processing
             ruleResult.StopProcessing = redirectAction.StopProcessingOfSubsequentRules;
         }
 
-        private Guid? ProcessItemQuery(string itemQuery)
+        private Guid? ExecuteItemQuery(string itemQuery)
         {
             var db = Sitecore.Context.Database;
             var items = db.SelectItems(itemQuery);

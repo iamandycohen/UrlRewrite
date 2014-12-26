@@ -39,13 +39,13 @@ namespace Hi.UrlRewrite.sitecore_modules.Shell.UrlRewrite
                         divFormGroup.Attributes["class"] = "form-group";
                         divTable.Visible = true;
 
-                        var rewriter = new UrlRewriter();
+                        var rewriter = new InboundRewriter();
                         _db = Sitecore.Context.ContentDatabase;
 
                         var rulesEngine = new RulesEngine();
                         var inboundRules = rulesEngine.GetInboundRules(_db);
 
-                        ProcessRequestResult results;
+                        ProcessInboundRulesResult results;
 
                         var requestUri = new Uri(txtUrl.Text);
                         var siteContext = SiteContextFactory.GetSiteContext(requestUri.Host, requestUri.AbsolutePath,

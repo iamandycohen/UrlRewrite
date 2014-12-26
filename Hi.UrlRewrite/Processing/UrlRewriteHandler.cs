@@ -22,7 +22,7 @@ namespace Hi.UrlRewrite.Processing
         {
             try
             {
-                var urlRewriteProcessor = new UrlRewriteProcessor();
+                var urlRewriteProcessor = new InboundRewriteProcessor();
                 var requestArgs = new HttpRequestArgs(context, HttpRequestType.Begin);
                 var requestUri = context.Request.Url;
 

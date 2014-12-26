@@ -17,7 +17,7 @@ using Sitecore.SecurityModel;
 
 namespace Hi.UrlRewrite.Processing
 {
-    public class UrlRewriteProcessor : HttpRequestProcessor
+    public class InboundRewriteProcessor : HttpRequestProcessor
     {
 
         public override void Process(HttpRequestArgs args)
@@ -37,11 +37,12 @@ namespace Hi.UrlRewrite.Processing
                     return;
                 }
 
-                var urlRewriter = new UrlRewriter(httpContext.Request.ServerVariables);
+                var urlRewriter = new InboundRewriter(httpContext.Request.ServerVariables);
                 var requestResult = ProcessUri(requestUri, db, urlRewriter);
 
                 if (requestResult == null || !requestResult.MatchedAtLeastOneRule) return;
 
+                //TODO: Curently this only reflects the result of Redirect Actions - make this call to logging reflect all action types
                 Log.Info(this, db, "Redirecting {0} to {1} [{2}]", requestResult.OriginalUri, requestResult.RewrittenUri,
                     requestResult.StatusCode);
 
@@ -59,22 +60,9 @@ namespace Hi.UrlRewrite.Processing
             }
         }
 
-        internal ProcessRequestResult ProcessUri(Uri requestUri, Database db, UrlRewriter urlRewriter)
+        internal ProcessInboundRulesResult ProcessUri(Uri requestUri, Database db, InboundRewriter urlRewriter)
         {
-            var cache = RulesCacheManager.GetCache(db);
-            var inboundRules = cache.GetInboundRules();
-
-            if (inboundRules == null)
-            {
-                Log.Info(this, db, "Initializing Inbound Rules.");
-
-                using (new SecurityDisabler())
-                {
-                    var rulesEngine = new RulesEngine();
-                    rulesEngine.InstallTemplates();
-                    inboundRules = rulesEngine.GetCachedInboundRules(db);
-                }
-            }
+            var inboundRules = GetInboundRules(db);
 
             if (inboundRules == null)
             {
@@ -84,5 +72,23 @@ namespace Hi.UrlRewrite.Processing
             return urlRewriter.ProcessRequestUrl(requestUri, inboundRules);
         }
 
+        private List<InboundRule> GetInboundRules(Database db)
+        {
+            var cache = RulesCacheManager.GetCache(db);
+            var inboundRules = cache.GetInboundRules();
+
+            if (inboundRules != null) return inboundRules;
+
+            Log.Info(this, db, "Initializing Inbound Rules.");
+
+            using (new SecurityDisabler())
+            {
+                var rulesEngine = new RulesEngine();
+                rulesEngine.InstallTemplates();
+                inboundRules = rulesEngine.GetCachedInboundRules(db);
+            }
+
+            return inboundRules;
+        }
     }
 }

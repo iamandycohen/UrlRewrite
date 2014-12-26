@@ -26,7 +26,7 @@ namespace Hi.UrlRewrite.Tests
         [TestMethod]
         public void ProcessRequestUrlTest()
         {
-            var rewriter = new UrlRewriter();
+            var rewriter = new InboundRewriter();
             var rewriteResult = rewriter.ProcessRequestUrl(new Uri("http://fictitioussite.com/john"), InboundRules);
 
             var firstInboundRule = InboundRules.First();
@@ -41,7 +41,7 @@ namespace Hi.UrlRewrite.Tests
         [TestMethod]
         public void ProcessRequestUrlWithCaptureGroups()
         {
-            var rewriter = new UrlRewriter();
+            var rewriter = new InboundRewriter();
             var rewriteResult = rewriter.ProcessRequestUrl(new Uri("http://fictitioussite.com/article/1/2"), InboundRules);
 
             var expectedUri = new Uri("http://fictitioussite.com/article.aspx?id=1&amp;title=2");
@@ -52,7 +52,7 @@ namespace Hi.UrlRewrite.Tests
         [TestMethod]
         public void ProcessRequestUrlWithHttpHostReplacement()
         {
-            var rewriter = new UrlRewriter();
+            var rewriter = new InboundRewriter();
             var rewriteResult = rewriter.ProcessRequestUrl(new Uri("http://fictitioussite.com/hostreplacement"), InboundRules);
 
             var expectedUri = new Uri("http://fictitioussite.com/hostreplaced");
@@ -63,7 +63,7 @@ namespace Hi.UrlRewrite.Tests
         [TestMethod]
         public void ProcessRequestUrlWithAbort()
         {
-            var rewriter = new UrlRewriter();
+            var rewriter = new InboundRewriter();
             var newInboundRule = new InboundRule()
             {
                 Name = "Abort Rule",
@@ -84,7 +84,7 @@ namespace Hi.UrlRewrite.Tests
         [TestMethod]
         public void ProcessRequestUrlWithCustomResponse()
         {
-            var rewriter = new UrlRewriter();
+            var rewriter = new InboundRewriter();
             var newInboundRule = new InboundRule()
             {
                 Name = "Custom Response Rule",
@@ -115,7 +115,7 @@ namespace Hi.UrlRewrite.Tests
         [TestMethod]
         public void ProcessRequestUrlWithMultipleConditionMatchBackReferences()
         {
-            var rewriter = new UrlRewriter();
+            var rewriter = new InboundRewriter();
 
             InboundRules = new List<InboundRule>()
             {
@@ -167,7 +167,7 @@ namespace Hi.UrlRewrite.Tests
         [TestMethod]
         public void ProcessRequestUrlWithHttpsToHttp()
         {
-            var rewriter = new UrlRewriter();
+            var rewriter = new InboundRewriter();
 
             InboundRules = new List<InboundRule>()
             {
