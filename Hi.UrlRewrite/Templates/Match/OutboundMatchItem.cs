@@ -15,13 +15,13 @@ namespace Hi.UrlRewrite.Templates.Conditions
         #region Inherited Base Templates
 
         private readonly BaseMatchItem _BaseMatchItem;
-        public BaseMatchItem MatchIgnoreCaseItem { get { return _BaseMatchItem; } }
+        public BaseMatchItem BaseMatchItem { get { return _BaseMatchItem; } }
 
         private readonly MatchScopeItem _MatchScopeItem;
         public MatchScopeItem MatchScopeItem { get { return _MatchScopeItem; } }
 
-        private readonly MatchScopeValueItem _MatchScopeValueItem;
-        public MatchScopeValueItem MatchScopeValueItem { get { return _MatchScopeValueItem; } }
+        private readonly MatchTagsItem _MatchTagsItem;
+        public MatchTagsItem MatchTagsItem { get { return _MatchTagsItem; } }
 
 
         #endregion
@@ -33,7 +33,7 @@ namespace Hi.UrlRewrite.Templates.Conditions
         {
             _BaseMatchItem = new BaseMatchItem(innerItem);
             _MatchScopeItem = new MatchScopeItem(innerItem);
-            _MatchScopeValueItem = new MatchScopeValueItem(innerItem);
+            _MatchTagsItem = new MatchTagsItem(innerItem);
         }
 
         public static implicit operator OutboundMatchItem(Item innerItem)

@@ -10,11 +10,11 @@ namespace Hi.UrlRewrite.Templates.Folders
 
         #region Inherited Base Templates
 
-        private readonly FolderItem _Folder;
-        public FolderItem Folder { get { return _Folder; } }
+        private readonly FolderItem _FolderItem;
+        public FolderItem FolderItem { get { return _FolderItem; } }
 
         private readonly BaseUrlRewriteItem _BaseUrlRewriteItem;
-        public BaseUrlRewriteItem BaseUrlRewrite { get { return _BaseUrlRewriteItem; } }
+        public BaseUrlRewriteItem BaseUrlRewriteItem { get { return _BaseUrlRewriteItem; } }
 
         #endregion
 
@@ -23,7 +23,7 @@ namespace Hi.UrlRewrite.Templates.Folders
         public RedirectSubFolderItem(Item innerItem)
             : base(innerItem)
         {
-            _Folder = new FolderItem(innerItem);
+            _FolderItem = new FolderItem(innerItem);
             _BaseUrlRewriteItem = new BaseUrlRewriteItem(innerItem);
         
         }

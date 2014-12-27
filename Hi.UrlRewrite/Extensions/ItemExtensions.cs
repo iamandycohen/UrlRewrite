@@ -9,6 +9,7 @@ using Hi.UrlRewrite.Templates.Action.Base;
 using Hi.UrlRewrite.Templates.Conditions;
 using Hi.UrlRewrite.Templates.Folders;
 using Hi.UrlRewrite.Templates.Inbound;
+using Hi.UrlRewrite.Templates.Match;
 using Hi.UrlRewrite.Templates.Outbound;
 using Sitecore.Data;
 using Sitecore.Data.Items;
@@ -37,6 +38,8 @@ namespace Hi.UrlRewrite
             };
 
             GetBaseRuleItem(outboundRuleItem.BaseRuleItem, outboundRule);
+
+            GetOutboundMatchItem(outboundRuleItem.OutboundMatchItem, outboundRule);
 
             if (string.IsNullOrEmpty(outboundRuleItem.BaseRuleItem.BaseMatchItem.MatchPatternItem.Pattern.Value))
             {
@@ -73,6 +76,8 @@ namespace Hi.UrlRewrite
                     .Where(e => e != null)
                     .ToList();
             }
+
+
 
             return outboundRule;
         }
@@ -216,6 +221,38 @@ namespace Hi.UrlRewrite
             }
             baseMatch.Using = usingType;
         }
+
+        private static void GetOutboundMatchItem(OutboundMatchItem outboundMatchItem, IOutboundMatch outboundMatch)
+        {
+            GetBaseMatchItem(outboundMatchItem.BaseMatchItem, outboundMatch);
+
+            var scopeTypeItem = outboundMatchItem.MatchScopeItem.MatchingScope.TargetItem;
+            if (scopeTypeItem != null)
+            {
+                var scopeTypeItemId = scopeTypeItem.ID;
+                if (scopeTypeItemId.Equals(new ID(Constants.MatchScope_Response_ItemId)))
+                {
+                    outboundMatch.MatchingScope = ScopeType.Response;
+                } 
+                else if (scopeTypeItemId.Equals(new ID(Constants.MatchScope_ServerVariables_ItemId))) 
+                {
+                    outboundMatch.MatchingScope = ScopeType.ServerVariables;
+                }
+
+            }
+
+            var matchTags = outboundMatchItem.MatchTagsItem.MatchTheContentWithin.TargetIDs
+                .Select(i => outboundMatchItem.InnerItem.Database.GetItem(i))
+                .Select(i => new MatchTagItem(i))
+                .Where(i => i != null)
+                .Select(i => new MatchTag { Tag = i.Tag.Value, Attribute = i.Attribute.Value})
+                .ToList();
+
+            outboundMatch.MatchTheContentWithin = matchTags;
+
+
+        }
+
 
         #endregion
 

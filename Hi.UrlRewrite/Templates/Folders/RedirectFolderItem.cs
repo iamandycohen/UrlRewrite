@@ -15,7 +15,7 @@ namespace Hi.UrlRewrite.Templates.Folders
         public FolderItem Folder { get { return _Folder; } }
 
         private readonly BaseUrlRewriteItem _BaseUrlRewriteItem;
-        public BaseUrlRewriteItem BaseUrlRewrite { get { return _BaseUrlRewriteItem; } }
+        public BaseUrlRewriteItem BaseUrlRewriteItem { get { return _BaseUrlRewriteItem; } }
 
         #endregion
 

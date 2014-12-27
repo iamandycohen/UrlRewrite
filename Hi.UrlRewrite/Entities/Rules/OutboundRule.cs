@@ -20,7 +20,13 @@ namespace Hi.UrlRewrite.Entities.Rules
         public bool IgnoreCase { get; set; }
         public Precondition Precondition { get; set; }
         public ScopeType? MatchingScope { get; set; }
-        public string ScopeValue { get; set; }
+        public List<MatchTag> MatchTheContentWithin { get; set; }
         public IBaseAction Action { get; set; }
+
+        public OutboundRule()
+        {
+            Conditions = new List<Condition>();
+            MatchTheContentWithin = new List<MatchTag>();
+        }
     }
 }

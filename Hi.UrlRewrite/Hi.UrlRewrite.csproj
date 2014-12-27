@@ -87,6 +87,7 @@
     <Compile Include="Entities\Match\IMatchScope.cs" />
     <Compile Include="Entities\Match\IOutboundMatch.cs" />
     <Compile Include="Entities\Match\IUsing.cs" />
+    <Compile Include="Entities\Match\MatchTag.cs" />
     <Compile Include="Entities\Match\MatchType.cs" />
     <Compile Include="Entities\Match\ScopeType.cs" />
     <Compile Include="Entities\Match\Using.cs" />
@@ -140,8 +141,9 @@
     <Compile Include="Templates\Conditions\Types\CheckIfInputStringTypeItem.cs" />
     <Compile Include="Templates\Conditions\Types\ConditionInputTypeItem.cs" />
     <Compile Include="Templates\Conditions\Types\LogicalGroupingTypeItem.cs" />
+    <Compile Include="Templates\Match\MatchTagItem.cs" />
+    <Compile Include="Templates\Match\MatchTagsItem.cs" />
     <Compile Include="Templates\Match\OutboundMatchItem.cs" />
-    <Compile Include="Templates\Match\MatchScopeValueItem.cs" />
     <Compile Include="Templates\Match\MatchScopeItem.cs" />
     <Compile Include="Templates\Settings\SettingsItem.cs" />
     <Compile Include="Templates\Folders\PreconditionsFolderItem.cs" />

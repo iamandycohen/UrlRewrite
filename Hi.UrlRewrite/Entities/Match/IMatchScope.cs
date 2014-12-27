@@ -1,8 +1,9 @@
-﻿namespace Hi.UrlRewrite.Entities.Match
+﻿using System.Collections.Generic;
+namespace Hi.UrlRewrite.Entities.Match
 {
     public interface IMatchScope
     {
         ScopeType? MatchingScope { get; set; }
-        string ScopeValue { get; set; }
+        List<MatchTag> MatchTheContentWithin { get; set; }
     }
 }

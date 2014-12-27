@@ -9,6 +9,9 @@ namespace Hi.UrlRewrite
         public const string MatchType_MatchesThePattern_ItemId = "{2C94D94E-6FDA-465B-BCA1-4C18EF249EAB}";
         public const string MatchType_DoesNotMatchThePattern_ItemId = "{35479F72-B51C-4878-8BE1-53373D66633A}";
 
+        public const string MatchScope_Response_ItemId = "{2ACBEB4A-DCA3-4D96-BA9C-CB592789BBF3}";
+        public const string MatchScope_ServerVariables_ItemId = "{BB9BA60D-CAA4-4D74-88A4-B0553BA67401}";
+
         public const string UsingType_RegularExpressions_ItemId = "{75BFA469-AE7D-47FD-9A2F-DD8B3AF0865C}";
         public const string UsingType_Wildcards_ItemId = "{E936A17D-0014-4848-9779-1D9BE9095A7D}";
         public const string UsingType_ExactMatch_ItemId = "{3323E74E-2BC8-4055-8A2B-B95656B2E786}";

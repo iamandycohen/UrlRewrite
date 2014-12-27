@@ -17,13 +17,6 @@ namespace Hi.UrlRewrite.Processing
             if (httpContext == null) throw new ArgumentNullException("httpContext");
             if (outboundRules == null) throw new ArgumentNullException("outboundRules");
 
-            var result = new ProcessOutboundRulesResult();
-
-            return result;
-        }
-
-        public void ExecuteResponse(HttpContextBase httpContext)
-        {
             // process outbound rules here... only set up event if it matches rules and preconditions
 
             // TODO: Check preconditions
@@ -31,6 +24,14 @@ namespace Hi.UrlRewrite.Processing
             // check rule matches
 
             // check conditions
+
+            var result = new ProcessOutboundRulesResult();
+
+            return result;
+        }
+
+        public void ExecuteResponse(HttpContextBase httpContext)
+        {
 
             // perform rewrites
 

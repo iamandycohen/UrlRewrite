@@ -11,7 +11,7 @@ namespace Hi.UrlRewrite.Templates
         #region Inherited Base Templates
 
         private readonly BaseUrlRewriteItem _BaseUrlRewriteItem;
-        public BaseUrlRewriteItem BaseUrlRewrite { get { return _BaseUrlRewriteItem; } }
+        public BaseUrlRewriteItem BaseUrlRewriteItem { get { return _BaseUrlRewriteItem; } }
 
         private readonly ConditionLogicalGroupingItem _ConditionLogicalGroupingItem;
         public ConditionLogicalGroupingItem ConditionLogicalGroupingItem { get { return _ConditionLogicalGroupingItem; } }

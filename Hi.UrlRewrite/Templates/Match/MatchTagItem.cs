@@ -1,35 +1,31 @@
 using Sitecore.Data.Fields;
 using Sitecore.Data.Items;
 
-namespace Hi.UrlRewrite.Templates.Inbound
+namespace Hi.UrlRewrite.Templates.Match
 {
-    public partial class SimpleRedirectItem : CustomItem
+    public partial class MatchTagItem : CustomItem
     {
 
-        public static readonly string TemplateId = "{E30B15B9-34CD-419C-8671-60FEAAAD5A46}";
+        public static readonly string TemplateId = "{B88D1713-7511-40D0-B71D-51A5E14C7C7E}";
 
-        #region Inherited Base Templates
 
         private readonly BaseUrlRewriteItem _BaseUrlRewriteItem;
         public BaseUrlRewriteItem BaseUrlRewriteItem { get { return _BaseUrlRewriteItem; } }
 
-        #endregion
-
         #region Boilerplate CustomItem Code
 
-        public SimpleRedirectItem(Item innerItem)
+        public MatchTagItem(Item innerItem)
             : base(innerItem)
         {
             _BaseUrlRewriteItem = new BaseUrlRewriteItem(innerItem);
-
         }
 
-        public static implicit operator SimpleRedirectItem(Item innerItem)
+        public static implicit operator MatchTagItem(Item innerItem)
         {
-            return innerItem != null ? new SimpleRedirectItem(innerItem) : null;
+            return innerItem != null ? new MatchTagItem(innerItem) : null;
         }
 
-        public static implicit operator Item(SimpleRedirectItem customItem)
+        public static implicit operator Item(MatchTagItem customItem)
         {
             return customItem != null ? customItem.InnerItem : null;
         }
@@ -39,24 +35,22 @@ namespace Hi.UrlRewrite.Templates.Inbound
 
         #region Field Instance Methods
 
-
-        public TextField Path
+        public TextField Tag
         {
             get
             {
-                return new TextField(InnerItem.Fields["Path"]);
+                return new TextField(InnerItem.Fields["Tag"]);
             }
         }
 
 
-        public LinkField Target
+        public TextField Attribute
         {
             get
             {
-                return new LinkField(InnerItem.Fields["Target"]);
+                return new TextField(InnerItem.Fields["Attribute"]);
             }
         }
-
 
         #endregion //Field Instance Methods
     }

@@ -14,7 +14,7 @@ namespace Hi.UrlRewrite.Templates.Action.Base
         #region Inherited Base Templates
 
         private readonly BaseUrlRewriteItem _BaseUrlRewriteItem;
-        public BaseUrlRewriteItem BaseUrlRewrite { get { return _BaseUrlRewriteItem; } }
+        public BaseUrlRewriteItem BaseUrlRewriteItem { get { return _BaseUrlRewriteItem; } }
 
         #endregion
 
