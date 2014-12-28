@@ -34,11 +34,13 @@ namespace Hi.UrlRewrite.Processing
 
             var outboundRules = GetOutboundRules(db);
             var rewriter = new OutboundRewriter();
-            var result = rewriter.ProcessContext(httpContext, outboundRules);
 
-            if (result == null || !result.MatchedAtLeastOneRule) return;
+            // check preconditions
 
-            rewriter.ExecuteResponse(httpContext);
+            var preconditionResult = rewriter.CheckPreconditions(httpContext, outboundRules);
+            if (!preconditionResult.Passed) return;
+
+            var transformer = new Tranformer(httpContext, outboundRules);
         }
 
         private List<OutboundRule> GetOutboundRules(Database db)
@@ -59,6 +61,38 @@ namespace Hi.UrlRewrite.Processing
             }
 
             return outboundRules;
+        }
+
+        private class Tranformer
+        {
+            public Tranformer(HttpContextBase httpContext, List<OutboundRule> outboundRules)
+            {
+                _outboundRules = outboundRules;
+                _responseFilterStream = new ResponseFilterStream(httpContext.Response.Filter);
+                _responseFilterStream.TransformString += TransformString;
+                httpContext.Response.Filter = _responseFilterStream;
+                _httpContext = httpContext;
+
+            }
+
+            string TransformString(string responseString)
+            {
+                Rewriter = new OutboundRewriter();
+                var result = Rewriter.ProcessContext(_httpContext, responseString, _outboundRules);
+                
+                if (result == null || !result.MatchedAtLeastOneRule)
+                    return responseString;
+
+                return result.ResponseString;
+            }
+
+            private readonly HttpContextBase _httpContext;
+
+            private readonly List<OutboundRule> _outboundRules;
+
+            private readonly ResponseFilterStream _responseFilterStream;
+
+            public OutboundRewriter Rewriter { get; set; }
         }
 
     }

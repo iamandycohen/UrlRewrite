@@ -11,7 +11,7 @@ namespace Hi.UrlRewrite.Processing
     public class OutboundRewriter
     {
 
-        public ProcessOutboundRulesResult ProcessContext(HttpContextBase httpContext, List<OutboundRule> outboundRules)
+        public ProcessOutboundRulesResult ProcessContext(HttpContextBase httpContext, string responseString, List<OutboundRule> outboundRules)
         {
 
             if (httpContext == null) throw new ArgumentNullException("httpContext");
@@ -25,26 +25,18 @@ namespace Hi.UrlRewrite.Processing
 
             // check conditions
 
-            var result = new ProcessOutboundRulesResult();
+            var result = new ProcessOutboundRulesResult
+            {
+                ResponseString = responseString
+            };
 
             return result;
         }
 
-        public void ExecuteResponse(HttpContextBase httpContext)
+        internal PreconditionResult CheckPreconditions(HttpContextBase httpContext, List<OutboundRule> outboundRules)
         {
-
-            // perform rewrites
-
-            var responseFilterStream = new ResponseFilterStream(httpContext.Response.Filter);
-            responseFilterStream.TransformString += responseFilterStream_TransformString;
-
-            httpContext.Response.Filter = responseFilterStream;
-
-        }
-
-        private string responseFilterStream_TransformString(string arg)
-        {
-            return arg;
+            var result = new PreconditionResult { Passed = true };
+            return result;
         }
     }
 }

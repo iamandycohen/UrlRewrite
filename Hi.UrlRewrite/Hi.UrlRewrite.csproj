@@ -105,6 +105,7 @@
     <Compile Include="Processing\OutboundRewriteProcessor.cs" />
     <Compile Include="Processing\OutboundRewriter.cs" />
     <Compile Include="Processing\Results\ConditionMatchResult.cs" />
+    <Compile Include="Processing\Results\PreconditionResult.cs" />
     <Compile Include="Processing\Results\ProcessInboundRulesResult.cs" />
     <Compile Include="Processing\Results\ProcessOutboundRulesResult.cs" />
     <Compile Include="Processing\Results\RuleResult.cs" />

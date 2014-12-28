@@ -8,5 +8,7 @@ namespace Hi.UrlRewrite.Processing.Results
     public class ProcessOutboundRulesResult
     {
         public bool MatchedAtLeastOneRule { get; set; }
+
+        public string ResponseString { get; set; }
     }
 }
