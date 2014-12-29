@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text.RegularExpressions;
 using System.Web;
 using Hi.UrlRewrite.Entities.Rules;
 using Hi.UrlRewrite.Module;
@@ -33,7 +34,28 @@ namespace Hi.UrlRewrite.Processing
 
         internal PreconditionResult CheckPreconditions(HttpContextBase httpContext, List<OutboundRule> outboundRules)
         {
-            var result = new PreconditionResult { Passed = true };
+
+            var originalUri = httpContext.Request.Url;
+            Match lastConditionMatch = null;
+            bool isPreconditionMatch = false;
+
+            var preconditions = outboundRules.Select(p => p.Precondition)
+                .Where(p => p != null);
+
+            foreach (var precondition in preconditions)
+            {
+                var conditions = precondition.Conditions;
+
+                // test conditions matches
+                if (conditions != null && conditions.Count > 0)
+                {
+                    var conditionMatchResult = RewriteHelper.TestConditionMatches(precondition, originalUri, out lastConditionMatch);
+                    isPreconditionMatch = conditionMatchResult.Matched;
+                }
+            }
+
+            var result = new PreconditionResult { Passed = isPreconditionMatch };
+
             return result;
         }
     }

@@ -41,6 +41,8 @@ namespace Hi.UrlRewrite
 
             GetOutboundMatchItem(outboundRuleItem.OutboundMatchItem, outboundRule);
 
+            GetPrecondition(outboundRuleItem.OutboundPreconditionItem, outboundRule);
+
             if (string.IsNullOrEmpty(outboundRuleItem.BaseRuleItem.BaseMatchItem.MatchPatternItem.Pattern.Value))
             {
                 Log.Warn(logObject, outboundRuleItem.Database, "No pattern set on rule with ItemID: {0}", outboundRuleItem.ID);
@@ -71,15 +73,56 @@ namespace Hi.UrlRewrite
 
             if (conditionItems != null)
             {
-                outboundRule.Conditions = conditionItems
-                    .Select(e => e.ToCondition())
-                    .Where(e => e != null)
-                    .ToList();
+                GetConditionItems(conditionItems, outboundRule);
             }
 
-
-
             return outboundRule;
+        }
+
+        private static void GetPrecondition(OutboundPreconditionItem outboundPreconditionItem, OutboundRule outboundRule)
+        {
+            if (outboundPreconditionItem == null || outboundPreconditionItem.Precondition == null ||
+                outboundPreconditionItem.Precondition.TargetItem == null) return;
+
+            var preconditionTargetItem = outboundPreconditionItem.Precondition.TargetItem;
+            var preconditionItem = new PreconditionItem(preconditionTargetItem);
+
+            var precondition = new Precondition
+            {
+                Name = preconditionItem.Name,
+            };
+
+            var conditionItems = RulesEngine.GetBaseConditionItems(preconditionItem);
+            if (conditionItems != null)
+            {
+                GetConditionItems(conditionItems, precondition);
+            }
+
+            var usingItem = preconditionItem.PreconditionUsingItem.Using.TargetItem;
+            Using? usingType = null;
+            if (usingItem != null)
+            {
+                var usingItemId = usingItem.ID.ToString();
+                switch (usingItemId)
+                {
+                    case Constants.UsingType_RegularExpressions_ItemId:
+                        usingType = Using.RegularExpressions;
+                        break;
+                    case Constants.UsingType_Wildcards_ItemId:
+                        usingType = Using.Wildcards;
+                        break;
+                    case Constants.UsingType_ExactMatch_ItemId:
+                        usingType = Using.ExactMatch;
+                        break;
+                    default:
+                        break;
+                }
+            }
+            precondition.Using = usingType;
+
+            GetConditionLogicalGrouping(preconditionItem.ConditionLogicalGroupingItem, precondition);
+
+            outboundRule.Precondition = precondition;
         }
 
         public static InboundRule ToInboundRule(this InboundRuleItem inboundRuleItem, IEnumerable<BaseConditionItem> conditionItems, string siteNameRestriction)
@@ -138,15 +181,20 @@ namespace Hi.UrlRewrite
 
             if (conditionItems != null)
             {
-                inboundRule.Conditions = conditionItems
-                    .Select(e => e.ToCondition())
-                    .Where(e => e != null)
-                    .ToList();
+                GetConditionItems(conditionItems, inboundRule);
             }
 
             inboundRule.SiteNameRestriction = siteNameRestriction;
 
             return inboundRule;
+        }
+
+        private static void GetConditionItems(IEnumerable<BaseConditionItem> conditionItems, IConditionList conditionList)
+        {
+            conditionList.Conditions = conditionItems
+                .Select(e => e.ToCondition())
+                .Where(e => e != null)
+                .ToList();
         }
 
         private static void GetBaseRuleItem(BaseRuleItem baseRuleItem, IBaseRule baseRule)
@@ -155,7 +203,12 @@ namespace Hi.UrlRewrite
 
             GetBaseMatchItem(baseRuleItem.BaseMatchItem, baseRule);
 
-            var logicalGroupingItem = baseRuleItem.ConditionLogicalGroupingItem.LogicalGrouping.TargetItem;
+            GetConditionLogicalGrouping(baseRuleItem.ConditionLogicalGroupingItem, baseRule);
+        }
+
+        private static void GetConditionLogicalGrouping(ConditionLogicalGroupingItem conditionLogicalGroupingItem, IConditionLogicalGrouping conditionLogicalGrouping)
+        {
+            var logicalGroupingItem = conditionLogicalGroupingItem.LogicalGrouping.TargetItem;
             LogicalGrouping? logicalGroupingType = null;
             if (logicalGroupingItem != null)
             {
@@ -172,7 +225,7 @@ namespace Hi.UrlRewrite
                         break;
                 }
             }
-            baseRule.ConditionLogicalGrouping = logicalGroupingType;
+            conditionLogicalGrouping.ConditionLogicalGrouping = logicalGroupingType;
         }
 
         private static void GetBaseMatchItem(BaseMatchItem baseMatchItem, IBaseMatch baseMatch)

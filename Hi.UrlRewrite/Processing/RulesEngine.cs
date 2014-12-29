@@ -212,7 +212,7 @@ namespace Hi.UrlRewrite.Processing
             return outboundRule;
         }
 
-        private static IEnumerable<BaseConditionItem> GetBaseConditionItems(Item item)
+        public static IEnumerable<BaseConditionItem> GetBaseConditionItems(Item item)
         {
             IEnumerable<BaseConditionItem> conditionItems = null;
 

@@ -7,7 +7,7 @@ using Hi.UrlRewrite.Entities.Match;
 namespace Hi.UrlRewrite.Entities.Rules
 {
     [Serializable]
-    public class OutboundRule : IBaseRule, IPrecondition, IOutboundMatch
+    public class OutboundRule : IBaseRule, IPrecondition, IOutboundMatch, IConditionList
     {
         public Guid ItemId { get; set; }
         public string Name { get; set; }

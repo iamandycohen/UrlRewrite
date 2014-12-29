@@ -8,7 +8,7 @@ using Hi.UrlRewrite.Entities.Rules;
 namespace Hi.UrlRewrite.Entities.Conditions
 {
     [Serializable]
-    public class Precondition : IUsing, IConditionLogicalGrouping, IConditionList
+    public class Precondition : IUsing, IConditionsProperties, IConditionList
     {
         public string Name { get; set; }
         public Using? Using { get; set; }

@@ -201,7 +201,7 @@ namespace Hi.UrlRewrite.sitecore_modules.Shell.UrlRewrite
                             conditionRepeater.DataSource = result.ConditionMatchResult.MatchedConditions
                                 .Select(
                                     c =>
-                                        new Tuple<Tuple<Condition, string>, LogicalGrouping, string>(c,
+                                        new Tuple<MatchedCondition, LogicalGrouping, string>(c,
                                             result.ConditionMatchResult.LogincalGrouping, itemId))
                                 .ToList();
                             conditionRepeater.DataBind();
@@ -218,15 +218,15 @@ namespace Hi.UrlRewrite.sitecore_modules.Shell.UrlRewrite
                 if (e.Item.DataItem == null)
                     return;
 
-                var conditionResult = e.Item.DataItem as Tuple<Tuple<Condition, string>, LogicalGrouping, string>;
+                var conditionResult = e.Item.DataItem as Tuple<MatchedCondition, LogicalGrouping, string>;
                 if (conditionResult != null)
                 {
 
                     var conditionTuple = conditionResult.Item1;
-                    var conditionTupleCondition = conditionTuple.Item1;
+                    var conditionTupleCondition = conditionTuple.Condition;
                     var pattern = conditionTupleCondition.Pattern;
                     var inputString = conditionTupleCondition.InputString;
-                    var tokenizedInput = conditionTuple.Item2;
+                    var tokenizedInput = conditionTuple.ConditionInput;
                     var matchType = conditionTupleCondition.CheckIfInputString.ToString();
 
                     var itemId = conditionResult.Item3;

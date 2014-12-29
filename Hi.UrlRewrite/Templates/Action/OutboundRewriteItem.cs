@@ -11,7 +11,7 @@ namespace Hi.UrlRewrite.Templates.Action
 {
     public class OutboundRewriteItem : CustomItem
     {
-        public static readonly string TemplateId = "{67D5899E-D30A-4D10-A8AA-25F3F837FFED}";
+        public static readonly string TemplateId = "{A5E7B43A-4387-4109-950E-6181452F4976}";
 
         #region Inherited Base Templates
 

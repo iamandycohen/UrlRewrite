@@ -6,7 +6,7 @@ using Sitecore.Web.UI.WebControls;
 
 namespace Hi.UrlRewrite.Templates.Conditions
 {
-    public partial class Precondition : CustomItem
+    public partial class PreconditionItem : CustomItem
     {
 
         public static readonly string TemplateId = "{A83E69AE-B93F-45C1-A20B-E6879BD04598}";
@@ -26,7 +26,7 @@ namespace Hi.UrlRewrite.Templates.Conditions
 
         #region Boilerplate CustomItem Code
 
-        public Precondition(Item innerItem)
+        public PreconditionItem(Item innerItem)
             : base(innerItem)
         {
             _BaseUrlRewriteItem = new BaseUrlRewriteItem(innerItem);
@@ -34,12 +34,12 @@ namespace Hi.UrlRewrite.Templates.Conditions
             _ConditionLogicalGroupingItem = new ConditionLogicalGroupingItem(innerItem);
         }
 
-        public static implicit operator Precondition(Item innerItem)
+        public static implicit operator PreconditionItem(Item innerItem)
         {
-            return innerItem != null ? new Precondition(innerItem) : null;
+            return innerItem != null ? new PreconditionItem(innerItem) : null;
         }
 
-        public static implicit operator Item(Precondition customItem)
+        public static implicit operator Item(PreconditionItem customItem)
         {
             return customItem != null ? customItem.InnerItem : null;
         }
