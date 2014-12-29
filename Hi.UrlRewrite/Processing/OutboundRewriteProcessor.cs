@@ -95,6 +95,7 @@ namespace Hi.UrlRewrite.Processing
 
             string TransformString(string responseString)
             {
+                _rewriter.SetupReplacements(_httpContext.Request.ServerVariables, _httpContext.Request.Headers, _httpContext.Response.Headers);
                 var result = _rewriter.ProcessContext(_httpContext, responseString, _outboundRules);
                 
                 if (result == null || !result.MatchedAtLeastOneRule)

@@ -8,6 +8,11 @@ namespace Hi.UrlRewrite.Processing.Results
     public class ProcessInboundRulesResult
     {
 
+        private readonly Uri _originalUri;
+        private readonly Uri _rewrittenUri;
+        private readonly IBaseAction _finalAction;
+        private readonly List<InboundRuleResult> _processedResults;
+
         public ProcessInboundRulesResult(Uri originalUri, List<InboundRuleResult> processedResults)
         {
             _originalUri = originalUri;
@@ -20,11 +25,6 @@ namespace Hi.UrlRewrite.Processing.Results
                 _finalAction = lastMatchedResult.ResultAction;
             }
         }
-
-        private readonly Uri _originalUri;
-        private readonly Uri _rewrittenUri;
-        private readonly IBaseAction _finalAction;
-        private readonly List<InboundRuleResult> _processedResults;
 
         public Uri OriginalUri
         {
