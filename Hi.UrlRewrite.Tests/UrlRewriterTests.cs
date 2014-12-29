@@ -1,4 +1,5 @@
-﻿using Hi.UrlRewrite.Entities.Actions;
+﻿using System.Collections.Specialized;
+using Hi.UrlRewrite.Entities.Actions;
 using Hi.UrlRewrite.Entities.Conditions;
 using Hi.UrlRewrite.Entities.Match;
 using Hi.UrlRewrite.Entities.Rules;
@@ -26,7 +27,11 @@ namespace Hi.UrlRewrite.Tests
         [TestMethod]
         public void ProcessRequestUrlTest()
         {
-            var rewriter = new InboundRewriter();
+            var serverVariables = new NameValueCollection
+            {
+                {"HTTP_HOST", "fictitioussite.com"}
+            };
+            var rewriter = new InboundRewriter(serverVariables, null);
             var rewriteResult = rewriter.ProcessRequestUrl(new Uri("http://fictitioussite.com/john"), InboundRules);
 
             var firstInboundRule = InboundRules.First();
@@ -35,13 +40,16 @@ namespace Hi.UrlRewrite.Tests
             var actionRewriteUri = new Uri(actionRewriteUrl);
 
             Assert.AreEqual(actionRewriteUri, rewriteResult.RewrittenUri);
-
         }
 
         [TestMethod]
         public void ProcessRequestUrlWithCaptureGroups()
         {
-            var rewriter = new InboundRewriter();
+            var serverVariables = new NameValueCollection
+            {
+                {"HTTP_HOST", "fictitioussite.com"}
+            };
+            var rewriter = new InboundRewriter(serverVariables, null);
             var rewriteResult = rewriter.ProcessRequestUrl(new Uri("http://fictitioussite.com/article/1/2"), InboundRules);
 
             var expectedUri = new Uri("http://fictitioussite.com/article.aspx?id=1&amp;title=2");
@@ -52,7 +60,11 @@ namespace Hi.UrlRewrite.Tests
         [TestMethod]
         public void ProcessRequestUrlWithHttpHostReplacement()
         {
-            var rewriter = new InboundRewriter();
+            var serverVariables = new NameValueCollection
+            {
+                {"HTTP_HOST", "fictitioussite.com"}
+            };
+            var rewriter = new InboundRewriter(serverVariables, null);
             var rewriteResult = rewriter.ProcessRequestUrl(new Uri("http://fictitioussite.com/hostreplacement"), InboundRules);
 
             var expectedUri = new Uri("http://fictitioussite.com/hostreplaced");
@@ -115,7 +127,12 @@ namespace Hi.UrlRewrite.Tests
         [TestMethod]
         public void ProcessRequestUrlWithMultipleConditionMatchBackReferences()
         {
-            var rewriter = new InboundRewriter();
+            var serverVariables = new NameValueCollection
+            {
+                {"HTTP_HOST", "fictitioussite.com"},
+                {"QUERY_STRING", "var1=1&var2=2"}
+            };
+            var rewriter = new InboundRewriter(serverVariables, null);
 
             InboundRules = new List<InboundRule>()
             {
@@ -167,7 +184,12 @@ namespace Hi.UrlRewrite.Tests
         [TestMethod]
         public void ProcessRequestUrlWithHttpsToHttp()
         {
-            var rewriter = new InboundRewriter();
+            var serverVariables = new NameValueCollection
+            {
+                {"HTTP_HOST", "www.secured.com"},
+                {"HTTPS", "on"}
+            };
+            var rewriter = new InboundRewriter(serverVariables, null);
 
             InboundRules = new List<InboundRule>()
             {

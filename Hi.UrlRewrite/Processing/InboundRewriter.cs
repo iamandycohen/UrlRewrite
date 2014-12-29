@@ -20,16 +20,19 @@ namespace Hi.UrlRewrite.Processing
     public class InboundRewriter
     {
 
-        public NameValueCollection ServerVariables { get; set; }
+        public NameValueCollection RequestServerVariables { get; set; }
+        public NameValueCollection RequestHeaders { get; set; }
 
         public InboundRewriter()
         {
-            ServerVariables = new NameValueCollection();
+            RequestServerVariables = new NameValueCollection();
+            RequestHeaders = new NameValueCollection();
         }
 
-        public InboundRewriter(NameValueCollection serverVariables)
+        public InboundRewriter(NameValueCollection requestServerVariables, NameValueCollection requestHeaders)
         {
-            ServerVariables = serverVariables;
+            RequestServerVariables = requestServerVariables;
+            RequestHeaders = requestHeaders;
         }
 
         public ProcessInboundRulesResult ProcessRequestUrl(Uri requestUri, List<InboundRule> inboundRules)
@@ -183,7 +186,13 @@ namespace Hi.UrlRewrite.Processing
             // test conditions matches
             if (isInboundRuleMatch && inboundRule.Conditions != null && inboundRule.Conditions.Count > 0)
             {
-                conditionMatchResult = RewriteHelper.TestConditionMatches(inboundRule, originalUri, out lastConditionMatch);
+                var replacements = new RewriteHelper.Replacements
+                {
+                    RequestHeaders = RequestHeaders,
+                    RequestServerVariables = RequestServerVariables
+                };
+
+                conditionMatchResult = RewriteHelper.TestConditionMatches(inboundRule, replacements, out lastConditionMatch);
                 isInboundRuleMatch = conditionMatchResult.Matched;
             }
 
@@ -330,8 +339,15 @@ namespace Hi.UrlRewrite.Processing
                 rewriteUrl = GetRewriteUrlFromItemId(rewriteItemId.Value, rewriteItemAnchor);
             }
 
+
             // process token replacements
-            rewriteUrl = RewriteHelper.ReplaceTokens(uri, rewriteUrl);
+            var replacements = new RewriteHelper.Replacements
+            {
+                RequestHeaders = RequestHeaders,
+                RequestServerVariables = RequestServerVariables
+            };
+
+            rewriteUrl = RewriteHelper.ReplaceTokens(replacements, rewriteUrl);
 
             if (redirectAction.AppendQueryString)
             {
@@ -371,8 +387,15 @@ namespace Hi.UrlRewrite.Processing
 
             string rewriteUrl = GetRewriteUrlFromItemId(rewriteItemId.Value, null);
 
+
             // process token replacements
-            rewriteUrl = RewriteHelper.ReplaceTokens(uri, rewriteUrl);
+            var replacements = new RewriteHelper.Replacements
+            {
+                RequestHeaders = RequestHeaders,
+                RequestServerVariables = RequestServerVariables
+            };
+
+            rewriteUrl = RewriteHelper.ReplaceTokens(replacements, rewriteUrl);
             rewriteUrl = RewriteHelper.ReplaceRuleBackReferences(inboundRuleMatch, rewriteUrl);
             rewriteUrl = RewriteHelper.ReplaceConditionBackReferences(lastConditionMatch, rewriteUrl);
 

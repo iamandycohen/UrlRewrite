@@ -49,7 +49,13 @@ namespace Hi.UrlRewrite.Processing
                 // test conditions matches
                 if (conditions != null && conditions.Count > 0)
                 {
-                    var conditionMatchResult = RewriteHelper.TestConditionMatches(precondition, originalUri, out lastConditionMatch);
+                    var replacements = new RewriteHelper.Replacements
+                    {
+                        RequestServerVariables = httpContext.Request.ServerVariables,
+                        RequestHeaders = httpContext.Request.Headers,
+                        ResponseHeaders = httpContext.Response.Headers
+                    };
+                    var conditionMatchResult = RewriteHelper.TestConditionMatches(precondition, replacements, out lastConditionMatch);
                     isPreconditionMatch = conditionMatchResult.Matched;
                 }
             }

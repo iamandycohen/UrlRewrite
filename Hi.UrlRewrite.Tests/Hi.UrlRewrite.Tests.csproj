@@ -60,6 +60,7 @@
   <ItemGroup>
     <Compile Include="InboundRulesData.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="RewriteHelperTests.cs" />
     <Compile Include="UrlRewriterTests.cs" />
   </ItemGroup>
   <ItemGroup>

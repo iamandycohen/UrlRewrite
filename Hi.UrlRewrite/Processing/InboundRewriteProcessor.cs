@@ -37,7 +37,7 @@ namespace Hi.UrlRewrite.Processing
                     return;
                 }
 
-                var urlRewriter = new InboundRewriter(httpContext.Request.ServerVariables);
+                var urlRewriter = new InboundRewriter(httpContext.Request.ServerVariables, httpContext.Request.Headers);
                 var requestResult = ProcessUri(requestUri, db, urlRewriter);
 
                 if (requestResult == null || !requestResult.MatchedAtLeastOneRule) return;

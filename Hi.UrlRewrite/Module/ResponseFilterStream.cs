@@ -137,6 +137,7 @@ namespace Hi.UrlRewrite.Module
         /// </summary>
         public event Func<string, string> TransformString;
 
+        public event Action<HttpContextBase> HeadersWritten;
 
         protected virtual void OnCaptureStream(MemoryStream ms)
         {
@@ -349,6 +350,8 @@ namespace Hi.UrlRewrite.Module
         /// <param name="count"></param>
         public override void Write(byte[] buffer, int offset, int count)
         {
+            HeadersWritten(new HttpContextWrapper(HttpContext.Current));
+
             if (IsCaptured)
             {
                 // copy to holding buffer only - we'll write out later

@@ -37,9 +37,6 @@ namespace Hi.UrlRewrite.Processing
 
             // check preconditions
 
-            var preconditionResult = rewriter.CheckPreconditions(httpContext, outboundRules);
-            if (!preconditionResult.Passed) return;
-
             var transformer = new Tranformer(httpContext, rewriter, outboundRules);
             transformer.SetupResponseFilter();
         }
@@ -83,8 +80,17 @@ namespace Hi.UrlRewrite.Processing
             public void SetupResponseFilter()
             {
                 _responseFilterStream = new ResponseFilterStream(_httpContext.Response.Filter);
+                _responseFilterStream.HeadersWritten += HeadersWritten;
+                 _httpContext.Response.Filter = _responseFilterStream;
+           }
+
+            void HeadersWritten(HttpContextBase httpContext)
+            {
+                var preconditionResult = _rewriter.CheckPreconditions(httpContext, _outboundRules);
+                if (!preconditionResult.Passed) return;
+
                 _responseFilterStream.TransformString += TransformString;
-                _httpContext.Response.Filter = _responseFilterStream;
+
             }
 
             string TransformString(string responseString)
