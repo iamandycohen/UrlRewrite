@@ -8,7 +8,7 @@ namespace Hi.UrlRewrite.Processing.Results
     public class ProcessInboundRulesResult
     {
 
-        public ProcessInboundRulesResult(Uri originalUri, List<RuleResult> processedResults)
+        public ProcessInboundRulesResult(Uri originalUri, List<InboundRuleResult> processedResults)
         {
             _originalUri = originalUri;
             _processedResults = processedResults;
@@ -24,7 +24,7 @@ namespace Hi.UrlRewrite.Processing.Results
         private readonly Uri _originalUri;
         private readonly Uri _rewrittenUri;
         private readonly IBaseAction _finalAction;
-        private readonly List<RuleResult> _processedResults;
+        private readonly List<InboundRuleResult> _processedResults;
 
         public Uri OriginalUri
         {
@@ -80,7 +80,7 @@ namespace Hi.UrlRewrite.Processing.Results
             }
         }
 
-        public List<RuleResult> ProcessedResults
+        public List<InboundRuleResult> ProcessedResults
         {
             get
             {

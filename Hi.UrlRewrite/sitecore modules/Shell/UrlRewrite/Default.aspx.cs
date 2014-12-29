@@ -124,7 +124,7 @@ namespace Hi.UrlRewrite.sitecore_modules.Shell.UrlRewrite
                 if (e.Item.DataItem == null)
                     return;
 
-                var result = e.Item.DataItem as RuleResult;
+                var result = e.Item.DataItem as InboundRuleResult;
                 if (result != null)
                 {
                     var ruleMatched = result.RuleMatched;

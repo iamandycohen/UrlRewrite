@@ -5,10 +5,9 @@ using Hi.UrlRewrite.Entities.Actions;
 namespace Hi.UrlRewrite.Processing.Results
 {
 
-    public class RuleResult
+    public class InboundRuleResult : IRuleResult
     {
         public bool StopProcessing { get; set; }
-        public bool StoppedProcessing { get; set; }
 
         public Uri OriginalUri { get; set; }
         public Uri RewrittenUri { get; set; }

@@ -43,12 +43,12 @@ namespace Hi.UrlRewrite.Processing
 
             Log.Debug(this, "Processing url: {0}", originalUri);
 
-            var ruleResult = new RuleResult
+            var ruleResult = new InboundRuleResult
             {
                 RewrittenUri = originalUri
             };
 
-            var processedResults = new List<RuleResult>();
+            var processedResults = new List<InboundRuleResult>();
 
             foreach (var inboundRule in inboundRules)
             {
@@ -60,11 +60,11 @@ namespace Hi.UrlRewrite.Processing
 
                 if (ruleResult.RuleMatched && ruleResult.StopProcessing)
                 {
-                    ruleResult.StoppedProcessing = true;
                     break;
                 }
             }
 
+            // TODO: log more information about what actually hapenned - this currently only reflects rewrites/redirects
             Log.Debug(this, "Processed originalUrl: {0} redirectedUrl: {1}", originalUri, ruleResult.RewrittenUri);
 
             var finalResult = new ProcessInboundRulesResult(originalUri, processedResults);
@@ -133,11 +133,11 @@ namespace Hi.UrlRewrite.Processing
             }
         }
 
-        private RuleResult ProcessInboundRule(Uri originalUri, InboundRule inboundRule)
+        private InboundRuleResult ProcessInboundRule(Uri originalUri, InboundRule inboundRule)
         {
             Log.Debug(this, "Processing inbound rule - requestUri: {0} inboundRule: {1}", originalUri, inboundRule.Name);
 
-            var ruleResult = new RuleResult
+            var ruleResult = new InboundRuleResult
             {
                 OriginalUri = originalUri,
                 RewrittenUri = originalUri
@@ -164,10 +164,10 @@ namespace Hi.UrlRewrite.Processing
             return ruleResult;
         }
 
-        private RuleResult ProcessRegularExpressionInboundRule(Uri originalUri, InboundRule inboundRule)
+        private InboundRuleResult ProcessRegularExpressionInboundRule(Uri originalUri, InboundRule inboundRule)
         {
 
-            var ruleResult = new RuleResult
+            var ruleResult = new InboundRuleResult
             {
                 OriginalUri = originalUri,
                 RewrittenUri = originalUri
@@ -369,12 +369,12 @@ namespace Hi.UrlRewrite.Processing
             return isInboundRuleMatch;
         }
 
-        private void ProcessActionProcessing(RuleResult ruleResult)
+        private void ProcessActionProcessing(InboundRuleResult ruleResult)
         {
             ruleResult.StopProcessing = true;
         }
 
-        private void ProcessRedirectAction(InboundRule inboundRule, Uri uri, Match inboundRuleMatch, Match lastConditionMatch, RuleResult ruleResult)
+        private void ProcessRedirectAction(InboundRule inboundRule, Uri uri, Match inboundRuleMatch, Match lastConditionMatch, InboundRuleResult ruleResult)
         {
             var redirectAction = inboundRule.Action as RedirectAction;
 
@@ -408,7 +408,7 @@ namespace Hi.UrlRewrite.Processing
             ruleResult.StopProcessing = redirectAction.StopProcessingOfSubsequentRules;
         }
 
-        private void ProcessItemQueryRedirectAction(InboundRule inboundRule, Uri uri, Match inboundRuleMatch, Match lastConditionMatch, RuleResult ruleResult)
+        private void ProcessItemQueryRedirectAction(InboundRule inboundRule, Uri uri, Match inboundRuleMatch, Match lastConditionMatch, InboundRuleResult ruleResult)
         {
             var redirectAction = inboundRule.Action as ItemQueryRedirectAction;
 
