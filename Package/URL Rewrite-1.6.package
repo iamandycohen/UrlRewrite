@@ -319,6 +319,10 @@ Version 1.0
         <x-item>/master/sitecore/templates/Modules/UrlRewrite/Templates/Action/ItemQueryRedirect/Action Properties/{F9007FD0-E092-41E4-96EC-D8E4F6B7170F}/invariant/0</x-item>
         <x-item>/master/sitecore/templates/Modules/UrlRewrite/Templates/Action/ItemQueryRedirect/Action Properties/Item Query/{6CDC6831-9172-4927-90F7-1592B68D6B25}/invariant/0</x-item>
         <x-item>/master/sitecore/templates/Modules/UrlRewrite/Templates/Action/None/{12FA1A86-77CC-4097-86DB-A66849AF157A}/invariant/0</x-item>
+        <x-item>/master/sitecore/templates/Modules/UrlRewrite/Templates/Action/Outbound Rewrite/__Standard Values/{33E995E9-0A17-4E4A-8C35-82C312FC15E0}/invariant/0</x-item>
+        <x-item>/master/sitecore/templates/Modules/UrlRewrite/Templates/Action/Outbound Rewrite/{A5E7B43A-4387-4109-950E-6181452F4976}/invariant/0</x-item>
+        <x-item>/master/sitecore/templates/Modules/UrlRewrite/Templates/Action/Outbound Rewrite/Action Properties/{E6445BFC-046A-425A-94F5-EBA0964FCDE2}/invariant/0</x-item>
+        <x-item>/master/sitecore/templates/Modules/UrlRewrite/Templates/Action/Outbound Rewrite/Action Properties/Value/{2D396EFC-6BA9-47A1-9AF5-2530BEDA636B}/invariant/0</x-item>
         <x-item>/master/sitecore/templates/Modules/UrlRewrite/Templates/Action/Redirect/__Standard Values/{3CEE875E-BD62-44C4-9C38-796EC9AB2DC9}/invariant/0</x-item>
         <x-item>/master/sitecore/templates/Modules/UrlRewrite/Templates/Action/Redirect/{D199EF8B-9D4D-420F-A283-E16D7B575625}/invariant/0</x-item>
         <x-item>/master/sitecore/templates/Modules/UrlRewrite/Templates/Action/Rewrite/__Standard Values/{FA1EB05B-D604-47E5-B2B8-553093CDA434}/invariant/0</x-item>
