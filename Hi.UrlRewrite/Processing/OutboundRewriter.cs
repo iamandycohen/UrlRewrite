@@ -19,8 +19,6 @@ namespace Hi.UrlRewrite.Processing
 
             // process outbound rules here... only set up event if it matches rules and preconditions
 
-            // TODO: Check preconditions
-
             // check rule matches
 
             // check conditions

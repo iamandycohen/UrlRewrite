@@ -40,7 +40,8 @@ namespace Hi.UrlRewrite.Processing
             var preconditionResult = rewriter.CheckPreconditions(httpContext, outboundRules);
             if (!preconditionResult.Passed) return;
 
-            var transformer = new Tranformer(httpContext, outboundRules);
+            var transformer = new Tranformer(httpContext, rewriter, outboundRules);
+            transformer.SetupResponseFilter();
         }
 
         private List<OutboundRule> GetOutboundRules(Database db)
@@ -65,20 +66,30 @@ namespace Hi.UrlRewrite.Processing
 
         private class Tranformer
         {
-            public Tranformer(HttpContextBase httpContext, List<OutboundRule> outboundRules)
+
+            private readonly HttpContextBase _httpContext;
+            private readonly List<OutboundRule> _outboundRules;
+            private readonly OutboundRewriter _rewriter;
+
+            private ResponseFilterStream _responseFilterStream;
+
+            public Tranformer(HttpContextBase httpContext, OutboundRewriter rewriter, List<OutboundRule> outboundRules)
             {
                 _outboundRules = outboundRules;
-                _responseFilterStream = new ResponseFilterStream(httpContext.Response.Filter);
-                _responseFilterStream.TransformString += TransformString;
-                httpContext.Response.Filter = _responseFilterStream;
                 _httpContext = httpContext;
+                _rewriter = rewriter;
+            }
 
+            public void SetupResponseFilter()
+            {
+                _responseFilterStream = new ResponseFilterStream(_httpContext.Response.Filter);
+                _responseFilterStream.TransformString += TransformString;
+                _httpContext.Response.Filter = _responseFilterStream;
             }
 
             string TransformString(string responseString)
             {
-                Rewriter = new OutboundRewriter();
-                var result = Rewriter.ProcessContext(_httpContext, responseString, _outboundRules);
+                var result = _rewriter.ProcessContext(_httpContext, responseString, _outboundRules);
                 
                 if (result == null || !result.MatchedAtLeastOneRule)
                     return responseString;
@@ -86,13 +97,6 @@ namespace Hi.UrlRewrite.Processing
                 return result.ResponseString;
             }
 
-            private readonly HttpContextBase _httpContext;
-
-            private readonly List<OutboundRule> _outboundRules;
-
-            private readonly ResponseFilterStream _responseFilterStream;
-
-            public OutboundRewriter Rewriter { get; set; }
         }
 
     }
