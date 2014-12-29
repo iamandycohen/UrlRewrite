@@ -117,7 +117,8 @@ namespace Hi.UrlRewrite.Processing
                 var replacements = new RewriteHelper.Replacements
                 {
                     RequestHeaders = RequestHeaders,
-                    RequestServerVariables = RequestServerVariables
+                    RequestServerVariables = RequestServerVariables,
+                    ResponseHeaders = ResponseHeaders
                 };
 
                 conditionMatchResult = RewriteHelper.TestConditionMatches(outboundRule, replacements, out lastConditionMatch);
@@ -135,7 +136,7 @@ namespace Hi.UrlRewrite.Processing
         private bool TestRuleMatches(string responseString, OutboundRule outboundRule, out Match outboundRuleMatch)
         {
             // TODO: test against all of the "match the content within"
-
+            string regexPattern = @"<{0}((\s+\w+(\s*=\s*(?:"".*?""|'.*?'|[^'"">\s]+))?)+\s*|\s*)\/?>";
 
             outboundRuleMatch = new Regex(@"").Match(@"");
             return true;

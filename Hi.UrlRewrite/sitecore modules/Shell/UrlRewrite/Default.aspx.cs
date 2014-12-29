@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.Specialized;
 using System.Linq;
 using System.Web;
 using System.Web.UI;
@@ -54,8 +55,17 @@ namespace Hi.UrlRewrite.sitecore_modules.Shell.UrlRewrite
                         using (new SiteContextSwitcher(siteContext))
                         using (new DatabaseSwitcher(_db))
                         {
-                            results = rewriter.ProcessRequestUrl(new Uri(txtUrl.Text), inboundRules);
-
+                            var url = new Uri(txtUrl.Text);
+                            rewriter.RequestServerVariables = new NameValueCollection
+                            {
+                                { "HTTP_HOST", url.Host},
+                                { "HTTPS", url.Scheme.Equals(Uri.UriSchemeHttps) ? "on" : "off" }
+                            };
+                            if (url.Query.Length > 0)
+                            {
+                                rewriter.RequestServerVariables.Add("QUERY_STRING", url.Query.Remove(0, 1));
+                            }
+                            results = rewriter.ProcessRequestUrl(url, inboundRules);
                         }
 
                         if (results == null)
