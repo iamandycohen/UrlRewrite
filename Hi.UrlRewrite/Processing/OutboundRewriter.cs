@@ -133,19 +133,34 @@ namespace Hi.UrlRewrite.Processing
             return ruleResult;
         }
 
-        private bool TestRuleMatches(string responseString, OutboundRule outboundRule, out Match outboundRuleMatch)
+        public static bool TestRuleMatches(string responseString, IMatchScope outboundRule, out Match outboundRuleMatch)
         {
             // TODO: test against all of the "match the content within"
-            string regexPattern = @"<{0}((\s+\w+(\s*=\s*(?:"".*?""|'.*?'|[^'"">\s]+))?)+\s*|\s*)\/?>";
 
-            outboundRuleMatch = new Regex(@"").Match(@"");
+            var matchTags = outboundRule.MatchTheContentWithin;
+            var regexPatternFormat = @"<{0}((\s+{1}(?:\s*=\s*(?:"".*?""|'.*?'|[^'"">\s]+))?)+\s*|\s*)\/?>";
+
+            foreach (var matchTag in matchTags)
+            {
+                var tag = matchTag.Tag;
+                var attribute = matchTag.Attribute;
+                var regexPattern = string.Format(regexPatternFormat, tag, attribute);
+                var regex = new Regex(regexPattern);
+                var matches = regex.Matches(responseString);
+
+                foreach (Match match in matches)
+                {
+                    var attributes = match.Groups[1];
+                }
+            }
+
+            outboundRuleMatch = null;
             return true;
         }
 
         internal PreconditionResult CheckPreconditions(HttpContextBase httpContext, List<OutboundRule> outboundRules)
         {
 
-            var originalUri = httpContext.Request.Url;
             Match lastConditionMatch = null;
             bool isPreconditionMatch = false;
 
