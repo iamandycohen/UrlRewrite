@@ -138,10 +138,13 @@ namespace Hi.UrlRewrite.Processing
 
         public static string ProcessRuleReplacements(string responseString, OutboundRule outboundRule)
         {
-            var output = responseString;
+            string output;
             var rewritePattern = outboundRule.Pattern;
+            // TODO: Not all actions will be OutboundRewriteActions - fix this
             var rewriteValue = ((OutboundRewriteAction)outboundRule.Action).Value;
             var matchTags = outboundRule.MatchTheContentWithin ?? new List<MatchTag>();
+
+            // TODO: catch invalid Regex compilations
 
             // if we are not matching on match tags, then we are doing matching on the entire response
             if (!matchTags.Any())
@@ -159,7 +162,6 @@ namespace Hi.UrlRewrite.Processing
             }
             else
             {
-
                 output = ProcessRuleReplacementsWithMatchTags(responseString, outboundRule.Using, matchTags, rewritePattern, rewriteValue);
             }
 
@@ -176,7 +178,6 @@ namespace Hi.UrlRewrite.Processing
             const string startquoteKey = "startquote";
             const string valueKey = "value";
             const string endquoteKey = "endquote";
-            string output = responseString;
 
             const string tagPatternFormat =
                 @"(?<" + startKey + @"><{0}\s+)(?<" + innerKey + @">.*?{1}=(?:""|').*?)(?<" + endKey + @">\s*/?>)";
@@ -184,6 +185,8 @@ namespace Hi.UrlRewrite.Processing
             const string attributePatternFormat =
                 @"(?<" + nameKey + @">{0}=)(?<" + startquoteKey + @">""|')(?<" + valueKey + @">.*?)(?<" +
                 endquoteKey + @">""|')";
+
+            var output = responseString;
 
             foreach (var matchTag in matchTags)
             {
