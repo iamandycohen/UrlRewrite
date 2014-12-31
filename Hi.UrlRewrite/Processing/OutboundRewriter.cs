@@ -14,7 +14,7 @@ namespace Hi.UrlRewrite.Processing
 {
     public class OutboundRewriter
     {
-        
+
         public NameValueCollection RequestServerVariables { get; set; }
         public NameValueCollection RequestHeaders { get; set; }
         public NameValueCollection ResponseHeaders { get; set; }
@@ -162,62 +162,83 @@ namespace Hi.UrlRewrite.Processing
         public static string ProcessRuleReplacements(string responseString, OutboundRule outboundRule)
         {
 
-            const string tagPatternFormat = @"(?<start><{0}\s+)(?<inner>.*?{1}=(?:""|').*?)(?<end>\s*/?>)";
-            const string attributePatternFormat = @"(?<name>{0}=)(?<startquote>""|')(?<value>.*?)(?<endquote>""|')";
-
-            string output = responseString;
-
+            var output = responseString;
+            var rewritePattern = outboundRule.Pattern;
+            var rewriteValue = ((OutboundRewriteAction)outboundRule.Action).Value;
             var matchTags = outboundRule.MatchTheContentWithin ?? new List<MatchTag>();
 
             // if we are not matching on match tags, then we are doing matching on the entire response
             if (!matchTags.Any())
             {
 
+                if (outboundRule.Using == Using.ExactMatch)
+                {
+                    output = responseString.Replace(rewritePattern, rewriteValue);
+                }
+                else
+                {
+                    var responseRegex = new Regex(rewritePattern);
+
+                    output = responseRegex.Replace(responseString, match => RewriteHelper.ReplaceRuleBackReferences(match, rewriteValue));
+                }
+
             }
             else
             {
+
+                const string tagPatternFormat = @"(?<start><{0}\s+)(?<inner>.*?{1}=(?:""|').*?)(?<end>\s*/?>)";
+                const string attributePatternFormat = @"(?<name>{0}=)(?<startquote>""|')(?<value>.*?)(?<endquote>""|')";
 
                 foreach (var matchTag in matchTags)
                 {
                     var tag = matchTag.Tag;
                     var attribute = matchTag.Attribute;
-                    var inputAttributePattern = outboundRule.Pattern;
-                    var inputAttributeRewrite = ((OutboundRewriteAction)outboundRule.Action).Value;
-
                     var tagPattern = string.Format(tagPatternFormat, tag, attribute);
-
                     var tagRegex = new Regex(tagPattern);
+
                     output = tagRegex.Replace(responseString, tagMatch =>
                     {
                         var tagMatchGroups = tagMatch.Groups;
                         var tagInnards = tagMatchGroups["inner"].Value;
                         var attributePattern = string.Format(attributePatternFormat, attribute);
-
                         var attributeRegex = new Regex(attributePattern);
+
                         var newTagInnards = attributeRegex.Replace(tagInnards, attributeMatch =>
                         {
                             var attributeMatchGroups = attributeMatch.Groups;
                             var attributeValue = attributeMatchGroups["value"].Value;
                             var newAttributeValue = attributeValue;
 
-                            var attributeValueRegex = new Regex(inputAttributePattern);
+                            var attributeValueRegex = new Regex(rewritePattern);
                             var attributeValueMatch = attributeValueRegex.Match(attributeValue);
 
                             if (attributeValueMatch.Success)
                             {
-                                // need to determine where the match occurs within the original sring
+                                // need to determine where the match occurs within the original string
                                 var attributeValueMatchIndex = attributeValueMatch.Index;
                                 var attributeValueMatchLength = attributeValueMatch.Length;
-                                var attributeValueReplaced = RewriteHelper.ReplaceRuleBackReferences(attributeValueMatch, inputAttributeRewrite);
+                                string attributeValueReplaced;
+
+                                if (outboundRule.Using == Using.ExactMatch)
+                                {
+                                    attributeValueReplaced = attributeValueMatch.Value.Replace(
+                                        attributeValueMatch.Value, rewriteValue);
+                                }
+                                else
+                                {
+                                    attributeValueReplaced = RewriteHelper.ReplaceRuleBackReferences(attributeValueMatch, rewriteValue);
+                                }
 
                                 newAttributeValue = attributeValue.Substring(0, attributeValueMatchIndex) +
-                                                    attributeValueReplaced +
-                                                    attributeValue.Substring(attributeValueMatchIndex +
-                                                                             attributeValueMatchLength);
+                                                           attributeValueReplaced +
+                                                           attributeValue.Substring(attributeValueMatchIndex +
+                                                                                    attributeValueMatchLength);
 
                             }
 
-                            return attributeMatchGroups["name"].Value + attributeMatchGroups["startquote"].Value + newAttributeValue + attributeMatchGroups["endquote"].Value;
+                            return attributeMatchGroups["name"].Value + attributeMatchGroups["startquote"].Value +
+                                   newAttributeValue + attributeMatchGroups["endquote"].Value;
+
                         });
 
                         return tagMatchGroups["start"].Value + newTagInnards + tagMatchGroups["end"].Value;

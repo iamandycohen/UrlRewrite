@@ -117,7 +117,85 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="ProcessRuleReplacementsTestExpectedOutput" xml:space="preserve">
+  <data name="ProcessRuleReplacementsWithExactMatchExpectedOutput" xml:space="preserve">
+    <value>&lt;!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"&gt;
+&lt;html lang="en" xml:lang="en" xmlns="http://www.w3.org/1999/xhtml"&gt;
+
+&lt;head&gt;&lt;title&gt;
+	Welcome to Sitecore
+&lt;/title&gt;&lt;meta http-equiv="Content-Type" content="text/html; charset=UTF-8" /&gt;&lt;meta name="CODE_LANGUAGE" content="C#" /&gt;&lt;meta name="vs_defaultClientScript" content="JavaScript" /&gt;&lt;meta name="vs_targetSchema" content="http://schemas.microsoft.com/intellisense/ie5" /&gt;&lt;link href="/default.css" rel="stylesheet" /&gt;&lt;/head&gt;
+&lt;body&gt; 
+  &lt;form method="post" action="/" id="mainform"&gt;
+&lt;div class="aspNetHidden"&gt;
+&lt;input type="hidden" name="__VIEWSTATE" id="__VIEWSTATE" value="/wEPDwULLTE2OTQ2MzEwODVkZDRnhQT/fyeOmbSjEUzemGjInk97u+hf+6XGKTsH8GL0" /&gt;
+&lt;/div&gt;
+
+&lt;div class="aspNetHidden"&gt;
+
+	&lt;input type="hidden" name="__VIEWSTATEGENERATOR" id="__VIEWSTATEGENERATOR" value="51A9F16C" /&gt;
+&lt;/div&gt;
+    &lt;div id="MainPanel"&gt;
+      
+&lt;div id="CenterColumn"&gt;
+  
+&lt;div id="Banner"&gt;
+  &lt;img width="42" height="42" alt="Sitecore Logo" src="/sitecore/shell/themes/standard/Images/HomeButton2.png?w=42&amp;amp;h=42&amp;amp;as=1" /&gt; 
+&lt;/div&gt;
+&lt;div id="Content"&gt;
+  &lt;div&gt;&lt;h1&gt;Andy&amp;#39;s Playground&lt;/h1&gt;&lt;div&gt;&lt;p&gt;Welcome to Andy's Playground&lt;/p&gt;
+&lt;p&gt;Here is a &lt;a href="http://localhost/article.aspx?id=1&amp;amp;title=article1" another="attribute"&gt;link&lt;/a&gt;.&lt;/p&gt;
+&lt;p&gt;Here is a &lt;a href='http://localhost/article.aspx?id=2&amp;amp;title=article2'&gt;link&lt;/a&gt;.&lt;/p&gt;
+&lt;p&gt;Here is another&amp;nbsp;&lt;a href="http://localhost/article.aspx?id=3&amp;amp;title=article-3"&gt;link&lt;/a&gt;.&lt;br /&gt;
+&lt;br /&gt;
+&lt;/p&gt;&lt;/div&gt;&lt;/div&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+ 
+    &lt;/div&gt;
+  &lt;/form&gt;
+ &lt;script type='text/javascript'&gt;//Your web analytics tracking code goes here...&lt;/script&gt;&lt;/body&gt;
+&lt;/html&gt;</value>
+  </data>
+  <data name="ProcessRuleReplacementsWithMatchTagsAndExactMatchExpectedOutput" xml:space="preserve">
+    <value>&lt;!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"&gt;
+&lt;html lang="en" xml:lang="en" xmlns="http://www.w3.org/1999/xhtml"&gt;
+
+&lt;head&gt;&lt;title&gt;
+	Welcome to Sitecore
+&lt;/title&gt;&lt;meta http-equiv="Content-Type" content="text/html; charset=UTF-8" /&gt;&lt;meta name="CODE_LANGUAGE" content="C#" /&gt;&lt;meta name="vs_defaultClientScript" content="JavaScript" /&gt;&lt;meta name="vs_targetSchema" content="http://schemas.microsoft.com/intellisense/ie5" /&gt;&lt;link href="/default.css" rel="stylesheet" /&gt;&lt;/head&gt;
+&lt;body&gt; 
+  &lt;form method="post" action="/" id="mainform"&gt;
+&lt;div class="aspNetHidden"&gt;
+&lt;input type="hidden" name="__VIEWSTATE" id="__VIEWSTATE" value="/wEPDwULLTE2OTQ2MzEwODVkZDRnhQT/fyeOmbSjEUzemGjInk97u+hf+6XGKTsH8GL0" /&gt;
+&lt;/div&gt;
+
+&lt;div class="aspNetHidden"&gt;
+
+	&lt;input type="hidden" name="__VIEWSTATEGENERATOR" id="__VIEWSTATEGENERATOR" value="51A9F16C" /&gt;
+&lt;/div&gt;
+    &lt;div id="MainPanel"&gt;
+      
+&lt;div id="CenterColumn"&gt;
+  
+&lt;div id="Banner"&gt;
+  &lt;img width="42" height="42" alt="Sitecore Logo" src="/sitecore/shell/themes/standard/Images/HomeButton2.png?w=42&amp;amp;h=42&amp;amp;as=1" /&gt; 
+&lt;/div&gt;
+&lt;div id="Content"&gt;
+  &lt;div&gt;&lt;h1&gt;Andy&amp;#39;s Playground&lt;/h1&gt;&lt;div&gt;&lt;p&gt;Welcome to Andy's Playground&lt;/p&gt;
+&lt;p&gt;Here is a &lt;a href="http://localhost/newarticle.aspx" another="attribute"&gt;link&lt;/a&gt;.&lt;/p&gt;
+&lt;p&gt;Here is a &lt;a href='http://localhost/newarticle.aspx'&gt;link&lt;/a&gt;.&lt;/p&gt;
+&lt;p&gt;Here is another&amp;nbsp;&lt;a href="http://localhost/newarticle.aspx"&gt;link&lt;/a&gt;.&lt;br /&gt;
+&lt;br /&gt;
+&lt;/p&gt;&lt;/div&gt;&lt;/div&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+ 
+    &lt;/div&gt;
+  &lt;/form&gt;
+ &lt;/body&gt;
+&lt;/html&gt;</value>
+  </data>
+  <data name="ProcessRuleReplacementsWithMatchTagsExpectedOutput" xml:space="preserve">
     <value>&lt;!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"&gt;
 &lt;html lang="en" xml:lang="en" xmlns="http://www.w3.org/1999/xhtml"&gt;
 
@@ -156,7 +234,7 @@
  &lt;/body&gt;
 &lt;/html&gt;</value>
   </data>
-  <data name="ProcessRuleReplacementsTestInput" xml:space="preserve">
+  <data name="ProcessRuleReplacementsWithMatchTagsInput" xml:space="preserve">
     <value>&lt;!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"&gt;
 &lt;html lang="en" xml:lang="en" xmlns="http://www.w3.org/1999/xhtml"&gt;
 
