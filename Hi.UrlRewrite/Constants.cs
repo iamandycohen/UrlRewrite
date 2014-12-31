@@ -4,7 +4,8 @@ namespace Hi.UrlRewrite
     public static class Constants
     {
         public const string RedirectFolderItemsQuery = "fast:{0}//*[@@templateid = '{1}']";
-        public const string RedirectFolderConditionItemsQuery = "*[@@templateid = '{0}' or @@templateid = '{1}']";
+        public const string TwoTemplateQuery = "*[@@templateid = '{0}' or @@templateid = '{1}']";
+        public const string SingleTemplateQuery = "*[@@templateid = '{0}']";
 
         public const string MatchType_MatchesThePattern_ItemId = "{2C94D94E-6FDA-465B-BCA1-4C18EF249EAB}";
         public const string MatchType_DoesNotMatchThePattern_ItemId = "{35479F72-B51C-4878-8BE1-53373D66633A}";

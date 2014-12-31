@@ -114,7 +114,7 @@ namespace Hi.UrlRewrite.Processing
             ConditionMatchResult conditionMatchResult = null;
 
             // test conditions matches
-            if (outboundRule.Conditions != null && outboundRule.Conditions.Count > 0)
+            if (outboundRule.Conditions != null && outboundRule.Conditions.Any())
             {
                 var replacements = new RewriteHelper.Replacements
                 {
@@ -270,7 +270,7 @@ namespace Hi.UrlRewrite.Processing
                 var conditions = precondition.Conditions;
 
                 // test conditions matches
-                if (conditions != null && conditions.Count > 0)
+                if (conditions != null && conditions.Any())
                 {
                     var replacements = new RewriteHelper.Replacements
                     {

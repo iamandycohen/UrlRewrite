@@ -96,6 +96,11 @@
     <Compile Include="Entities\Rules\InboundRule.cs" />
     <Compile Include="Entities\Rules\IPrecondition.cs" />
     <Compile Include="Entities\Rules\OutboundRule.cs" />
+    <Compile Include="Entities\ServerVariables\IBaseServerVariable.cs" />
+    <Compile Include="Entities\ServerVariables\IRequestHeaderList.cs" />
+    <Compile Include="Entities\ServerVariables\IServerVariableList.cs" />
+    <Compile Include="Entities\ServerVariables\RequestHeader.cs" />
+    <Compile Include="Entities\ServerVariables\ServerVariable.cs" />
     <Compile Include="Extensions\ItemExtensions.cs" />
     <Compile Include="Fields\SiteDropList.cs" />
     <Compile Include="Log.cs" />

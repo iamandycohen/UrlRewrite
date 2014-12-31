@@ -12,7 +12,7 @@ namespace Hi.UrlRewrite.Entities.Rules
         public Guid ItemId { get; set; }
         public string Name { get; set; }
         public bool Enabled { get; set; }
-        public List<Condition> Conditions { get; set; }
+        public IEnumerable<Condition> Conditions { get; set; }
         public LogicalGrouping? ConditionLogicalGrouping { get; set; }
         public MatchType? MatchType { get; set; }
         public Using? Using { get; set; }
@@ -20,7 +20,7 @@ namespace Hi.UrlRewrite.Entities.Rules
         public bool IgnoreCase { get; set; }
         public Precondition Precondition { get; set; }
         public ScopeType? MatchingScope { get; set; }
-        public List<MatchTag> MatchTheContentWithin { get; set; }
+        public IEnumerable<MatchTag> MatchTheContentWithin { get; set; }
         public IBaseAction Action { get; set; }
 
         public OutboundRule()

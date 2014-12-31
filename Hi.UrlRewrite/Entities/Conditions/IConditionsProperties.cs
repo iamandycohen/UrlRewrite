@@ -5,6 +5,6 @@ namespace Hi.UrlRewrite.Entities.Conditions
 {
     public interface IConditionsProperties : IConditionLogicalGrouping
     {
-        List<Condition> Conditions { get; set; }
+        IEnumerable<Condition> Conditions { get; set; }
     }
 }

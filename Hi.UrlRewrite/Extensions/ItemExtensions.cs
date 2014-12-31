@@ -2,6 +2,7 @@
 using Hi.UrlRewrite.Entities.Conditions;
 using Hi.UrlRewrite.Entities.Match;
 using Hi.UrlRewrite.Entities.Rules;
+using Hi.UrlRewrite.Entities.ServerVariables;
 using Hi.UrlRewrite.Processing;
 using Hi.UrlRewrite.Templates;
 using Hi.UrlRewrite.Templates.Action;
@@ -11,6 +12,7 @@ using Hi.UrlRewrite.Templates.Folders;
 using Hi.UrlRewrite.Templates.Inbound;
 using Hi.UrlRewrite.Templates.Match;
 using Hi.UrlRewrite.Templates.Outbound;
+using Hi.UrlRewrite.Templates.ServerVariables;
 using Sitecore.Data;
 using Sitecore.Data.Items;
 using System;
@@ -125,7 +127,7 @@ namespace Hi.UrlRewrite
             outboundRule.Precondition = precondition;
         }
 
-        public static InboundRule ToInboundRule(this InboundRuleItem inboundRuleItem, IEnumerable<BaseConditionItem> conditionItems, string siteNameRestriction)
+        public static InboundRule ToInboundRule(this InboundRuleItem inboundRuleItem, IEnumerable<BaseConditionItem> conditionItems, IEnumerable<ServerVariableItem> serverVariableItems, string siteNameRestriction)
         {
 
             if (inboundRuleItem == null) return null;
@@ -184,9 +186,24 @@ namespace Hi.UrlRewrite
                 GetConditionItems(conditionItems, inboundRule);
             }
 
+            if (serverVariableItems != null)
+            {
+                GetServerVariableItems(serverVariableItems, inboundRule);
+            }
+
             inboundRule.SiteNameRestriction = siteNameRestriction;
 
             return inboundRule;
+        }
+
+        private static void GetServerVariableItems(IEnumerable<ServerVariableItem> serverVariableItems, IServerVariableList serverVariableList)
+        {
+            var serverVariables = serverVariableItems
+                .Select(e => e.ToServerVariable())
+                .Where(e => e != null)
+                .ToList();
+
+            serverVariableList.ServerVariables = serverVariables;
         }
 
         private static void GetConditionItems(IEnumerable<BaseConditionItem> conditionItems, IConditionList conditionList)
@@ -302,8 +319,6 @@ namespace Hi.UrlRewrite
                 .ToList();
 
             outboundMatch.MatchTheContentWithin = matchTags;
-
-
         }
 
 
@@ -398,6 +413,63 @@ namespace Hi.UrlRewrite
             condition.CheckIfInputString = checkIfInputStringType;
 
             return condition;
+        }
+
+        #endregion
+
+        #region Server Variables
+
+        public static ServerVariable ToServerVariable(this ServerVariableItem serverVariableItem)
+        {
+            var serverVariable = GetBaseServerVariable(serverVariableItem);
+
+            return serverVariable as ServerVariable;
+        }
+
+        public static RequestHeader ToRequestHeader(this RequestHeaderItem requestHeaderItem)
+        {
+            var requestHeader = GetBaseServerVariable(requestHeaderItem);
+
+            return requestHeader as RequestHeader;
+        }
+
+        private static IBaseServerVariable GetBaseServerVariable(Item variableItem)
+        {
+            if (variableItem == null)
+            {
+                return null;
+            }
+
+            var templateId = variableItem.TemplateID;
+            var baseServerVariableItem = new BaseServerVariableItem(variableItem);
+            var variableName = baseServerVariableItem.VariableName.Value;
+            var name = baseServerVariableItem.Name;
+            var value = baseServerVariableItem.Value.Value;
+            var replaceExistingValue = baseServerVariableItem.ReplaceExistingValue.Checked;
+
+            if (templateId.Equals(new ID(ServerVariableItem.TemplateId)))
+            {
+                return new ServerVariable
+                {
+                    Name = name,
+                    VariableName = variableName,
+                    Value = value,
+                    ReplaceExistingValue = replaceExistingValue
+                };
+            }
+
+            if (templateId.Equals(new ID(RequestHeaderItem.TemplateId)))
+            {
+                return new RequestHeader
+                {
+                    Name = name,
+                    VariableName = variableName,
+                    Value = value,
+                    ReplaceExistingValue = replaceExistingValue
+                };
+            }
+
+            return null;
         }
 
         #endregion

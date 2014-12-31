@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
+using Hi.UrlRewrite.Entities.ServerVariables;
 
 namespace Hi.UrlRewrite.Processing.Results
 {
@@ -12,5 +13,12 @@ namespace Hi.UrlRewrite.Processing.Results
         public ConditionMatchResult ConditionMatchResult { get; set; }
         public bool RuleMatched { get; set; }
         public bool StopProcessing { get; set; }
+
+        public IEnumerable<ServerVariable> ServerVariables { get; set; }
+
+        public OutboundRuleResult()
+        {
+            ServerVariables = new List<ServerVariable>();
+        }
     }
 }

@@ -79,9 +79,23 @@ namespace Hi.UrlRewrite.Processing
         {
             try
             {
+                var httpRequest = httpContext.Request;
+                var serverVariables = ruleResult.ProcessedResults.SelectMany(e => e.ServerVariables);
+                var replacements = new RewriteHelper.Replacements
+                {
+                    RequestHeaders = RequestHeaders,
+                    RequestServerVariables = RequestServerVariables
+                };
+
+                foreach (var serverVariable in serverVariables)
+                {
+                    var serverVariableValue = RewriteHelper.ReplaceTokens(replacements, serverVariable.Value);
+                    httpRequest.ServerVariables.Set(serverVariable.VariableName, serverVariableValue);
+                }
+
                 var httpResponse = httpContext.Response;
                 httpResponse.Clear();
-
+                
                 if (ruleResult.FinalAction is IBaseRewrite)
                 {
                     var redirectAction = ruleResult.FinalAction as IBaseRewrite;
@@ -184,7 +198,7 @@ namespace Hi.UrlRewrite.Processing
             ConditionMatchResult conditionMatchResult = null;
 
             // test conditions matches
-            if (isInboundRuleMatch && inboundRule.Conditions != null && inboundRule.Conditions.Count > 0)
+            if (isInboundRuleMatch && inboundRule.Conditions != null && inboundRule.Conditions.Any())
             {
                 var replacements = new RewriteHelper.Replacements
                 {
@@ -205,6 +219,11 @@ namespace Hi.UrlRewrite.Processing
             if (isInboundRuleMatch && inboundRule.Action != null)
             {
                 ruleResult.RuleMatched = true;
+
+                if (inboundRule.ServerVariables.Any())
+                {
+                    ruleResult.ServerVariables = inboundRule.ServerVariables;
+                }
 
                 Log.Debug(this, "INBOUND RULE MATCH - requestUri: {0} inboundRule: {1}", originalUri, inboundRule.Name);
 

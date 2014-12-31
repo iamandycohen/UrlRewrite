@@ -31,6 +31,26 @@ namespace Hi.UrlRewrite.Templates.ServerVariables
             return customItem != null ? customItem.InnerItem : null;
         }
 
+        //public static implicit operator ServerVariableItem(BaseServerVariableItem innerItem)
+        //{
+        //    return innerItem != null ? new ServerVariableItem(innerItem) : null;
+        //}
+
+        //public static implicit operator BaseServerVariableItem(ServerVariableItem innerItem)
+        //{
+        //    return innerItem != null ? new BaseServerVariableItem(innerItem) : null;
+        //}
+
+        //public static implicit operator BaseServerVariableItem(RequestHeaderItem innerItem)
+        //{
+        //    return innerItem != null ? new BaseServerVariableItem(innerItem) : null;
+        //}
+
+        //public static implicit operator RequestHeaderItem(BaseServerVariableItem innerItem)
+        //{
+        //    return innerItem != null ? new RequestHeaderItem(innerItem) : null;
+        //}
+
         public TextField VariableName
         {
             get

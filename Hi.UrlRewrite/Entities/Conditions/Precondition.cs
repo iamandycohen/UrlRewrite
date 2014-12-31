@@ -13,7 +13,7 @@ namespace Hi.UrlRewrite.Entities.Conditions
         public string Name { get; set; }
         public Using? Using { get; set; }
         public LogicalGrouping? ConditionLogicalGrouping { get; set; }
-        public List<Condition> Conditions { get; set; }
+        public IEnumerable<Condition> Conditions { get; set; }
 
         public Precondition()
         {

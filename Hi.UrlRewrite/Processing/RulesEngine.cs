@@ -3,10 +3,12 @@ using Hi.UrlRewrite.Entities.Actions;
 using Hi.UrlRewrite.Entities.Conditions;
 using Hi.UrlRewrite.Entities.Match;
 using Hi.UrlRewrite.Entities.Rules;
+using Hi.UrlRewrite.Entities.ServerVariables;
 using Hi.UrlRewrite.Templates.Conditions;
 using Hi.UrlRewrite.Templates.Folders;
 using Hi.UrlRewrite.Templates.Inbound;
 using Hi.UrlRewrite.Templates.Outbound;
+using Hi.UrlRewrite.Templates.ServerVariables;
 using Hi.UrlRewrite.Templates.Settings;
 using Sitecore.Configuration;
 using Sitecore.Data;
@@ -198,7 +200,8 @@ namespace Hi.UrlRewrite.Processing
         {
             var siteNameRestriction = GetSiteNameRestriction(redirectFolderItem);
             var conditionItems = GetBaseConditionItems(inboundRuleItem);
-            var inboundRule = inboundRuleItem.ToInboundRule(conditionItems, siteNameRestriction);
+            var serverVariableItems = GetServerVariableItems(inboundRuleItem);
+            var inboundRule = inboundRuleItem.ToInboundRule(conditionItems, serverVariableItems, siteNameRestriction);
 
             return inboundRule;
         }
@@ -217,7 +220,7 @@ namespace Hi.UrlRewrite.Processing
             IEnumerable<BaseConditionItem> conditionItems = null;
 
             var conditions =
-                item.Axes.SelectItems(string.Format(Constants.RedirectFolderConditionItemsQuery,
+                item.Axes.SelectItems(string.Format(Constants.TwoTemplateQuery,
                     ConditionItem.TemplateId, ConditionAdvancedItem.TemplateId));
 
             if (conditions != null)
@@ -226,6 +229,21 @@ namespace Hi.UrlRewrite.Processing
             }
 
             return conditionItems;
+        }
+
+        public static IEnumerable<ServerVariableItem> GetServerVariableItems(Item item)
+        {
+            IEnumerable<ServerVariableItem> serverVariableItems = null;
+
+            var serverVariables =
+                item.Axes.SelectItems(string.Format(Constants.SingleTemplateQuery, ServerVariableItem.TemplateId));
+
+            if (serverVariables != null)
+            {
+                serverVariableItems = serverVariables.Select(e => new ServerVariableItem(e));
+            }
+
+            return serverVariableItems;
         }
 
         internal static string GetSiteNameRestriction(RedirectFolderItem redirectFolder)

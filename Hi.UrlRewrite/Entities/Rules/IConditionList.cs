@@ -5,6 +5,6 @@ namespace Hi.UrlRewrite.Entities.Rules
 {
     public interface IConditionList
     {
-        List<Condition> Conditions { get; set; }
+        IEnumerable<Condition> Conditions { get; set; }
     }
 }
