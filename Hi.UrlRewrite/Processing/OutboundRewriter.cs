@@ -8,6 +8,7 @@ using Hi.UrlRewrite.Entities.Rules;
 using Hi.UrlRewrite.Module;
 using Hi.UrlRewrite.Processing.Results;
 using Hi.UrlRewrite.Entities.Match;
+using Hi.UrlRewrite.Entities.Actions;
 
 namespace Hi.UrlRewrite.Processing
 {
@@ -156,6 +157,67 @@ namespace Hi.UrlRewrite.Processing
 
             outboundRuleMatch = null;
             return true;
+        }
+
+        public static string ProcessRuleReplacements(string responseString, OutboundRule outboundRule)
+        {
+
+            const string tagPatternFormat = @"(?<start><{0}\s+)(?<inner>.*?{1}=(?:""|').*?)(?<end>\s*/?>)";
+            const string attributePatternFormat = @"(?<name>{0}=)(?<startquote>""|')(?<value>.*?)(?<endquote>""|')";
+
+            string output = responseString;
+
+            var matchTags = outboundRule.MatchTheContentWithin ?? new List<MatchTag>();
+
+            if (!matchTags.Any())
+            {
+
+            }
+            else
+            {
+
+                foreach (var matchTag in matchTags)
+                {
+                    //var input = @"<a href='/article.aspx?id=342&title=some-article-title' />";
+                    var tag = matchTag.Tag;
+                    var attribute = matchTag.Attribute;
+                    var inputAttributePattern = outboundRule.Pattern;
+                    var inputAttributeRewrite = ((OutboundRewriteAction)outboundRule.Action).Value;
+
+                    var tagPattern = string.Format(tagPatternFormat, tag, attribute);
+
+                    var tagRegex = new Regex(tagPattern);
+                    output = tagRegex.Replace(responseString, tagMatch =>
+                    {
+                        var tagMatchGroups = tagMatch.Groups;
+                        var tagInnards = tagMatchGroups["inner"].Value;
+                        var attributePattern = string.Format(attributePatternFormat, attribute);
+
+                        var attributeRegex = new Regex(attributePattern);
+                        var newTagInnards = attributeRegex.Replace(tagInnards, attributeMatch =>
+                        {
+                            var attributeMatchGroups = attributeMatch.Groups;
+                            var attributeValue = attributeMatchGroups["value"].Value;
+                            var newAttributeValue = attributeValue;
+
+                            var attributeValueRegex = new Regex(inputAttributePattern);
+                            var attributeValueMatch = attributeValueRegex.Match(attributeValue);
+
+                            if (attributeValueMatch.Success)
+                            {
+                                newAttributeValue = RewriteHelper.ReplaceRuleBackReferences(attributeValueMatch, inputAttributeRewrite);
+                            }
+
+                            return attributeMatchGroups["name"].Value + attributeMatchGroups["startquote"].Value + newAttributeValue + attributeMatchGroups["endquote"].Value;
+                        });
+
+                        return tagMatchGroups["start"].Value + newTagInnards + tagMatchGroups["end"].Value;
+                    });
+                }
+            }
+
+            return output;
+
         }
 
         internal PreconditionResult CheckPreconditions(HttpContextBase httpContext, List<OutboundRule> outboundRules)
