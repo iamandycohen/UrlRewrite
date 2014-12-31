@@ -186,8 +186,20 @@ namespace Hi.UrlRewrite.Processing
             else
             {
 
-                const string tagPatternFormat = @"(?<start><{0}\s+)(?<inner>.*?{1}=(?:""|').*?)(?<end>\s*/?>)";
-                const string attributePatternFormat = @"(?<name>{0}=)(?<startquote>""|')(?<value>.*?)(?<endquote>""|')";
+                const string startKey = "start";
+                const string innerKey = "inner";
+                const string endKey = "end";
+                const string nameKey = "name";
+                const string startquoteKey = "startquote";
+                const string valueKey = "value";
+                const string endquoteKey = "endquote";
+
+                const string tagPatternFormat =
+                    @"(?<" + startKey + @"><{0}\s+)(?<" + innerKey + @">.*?{1}=(?:""|').*?)(?<" + endKey + @">\s*/?>)";
+
+                const string attributePatternFormat =
+                    @"(?<" + nameKey + @">{0}=)(?<" + startquoteKey + @">""|')(?<" + valueKey + @">.*?)(?<" +
+                    endquoteKey + @">""|')";
 
                 foreach (var matchTag in matchTags)
                 {
@@ -199,14 +211,14 @@ namespace Hi.UrlRewrite.Processing
                     output = tagRegex.Replace(responseString, tagMatch =>
                     {
                         var tagMatchGroups = tagMatch.Groups;
-                        var tagInnards = tagMatchGroups["inner"].Value;
+                        var tagInnards = tagMatchGroups[innerKey].Value;
                         var attributePattern = string.Format(attributePatternFormat, attribute);
                         var attributeRegex = new Regex(attributePattern);
 
                         var newTagInnards = attributeRegex.Replace(tagInnards, attributeMatch =>
                         {
                             var attributeMatchGroups = attributeMatch.Groups;
-                            var attributeValue = attributeMatchGroups["value"].Value;
+                            var attributeValue = attributeMatchGroups[valueKey].Value;
                             var newAttributeValue = attributeValue;
 
                             var attributeValueRegex = new Regex(rewritePattern);
@@ -236,12 +248,12 @@ namespace Hi.UrlRewrite.Processing
 
                             }
 
-                            return attributeMatchGroups["name"].Value + attributeMatchGroups["startquote"].Value +
-                                   newAttributeValue + attributeMatchGroups["endquote"].Value;
+                            return attributeMatchGroups[nameKey].Value + attributeMatchGroups[startquoteKey].Value +
+                                   newAttributeValue + attributeMatchGroups[endquoteKey].Value;
 
                         });
 
-                        return tagMatchGroups["start"].Value + newTagInnards + tagMatchGroups["end"].Value;
+                        return tagMatchGroups[startKey].Value + newTagInnards + tagMatchGroups[endKey].Value;
                     });
                 }
             }
