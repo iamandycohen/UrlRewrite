@@ -3,10 +3,12 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Hi.UrlRewrite.Entities.Actions;
 using Hi.UrlRewrite.Processing;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
 using Hi.UrlRewrite.Entities.Match;
+using Hi.UrlRewrite.Entities.Rules;
 
 namespace Hi.UrlRewrite.Tests
 {
@@ -15,25 +17,29 @@ namespace Hi.UrlRewrite.Tests
     {
 
         [TestMethod]
-        public void TestRuleMatches()
+        public void ProcessRuleReplacementsTest()
         {
             // arrange
-            var responseString = OutboundRewriterTestData.ResponseString;
-            var matchScope = new Mock<IMatchScope>();
-            var matchTags = new List<MatchTag>
+            var responseString = OutboundRewriterTestData.ProcessRuleReplacementsTestInput;
+            var outboundRule = new OutboundRule
             {
-                new MatchTag {Tag = "a", Attribute = "href"}
+                MatchTheContentWithin = new List<MatchTag>
+                {
+                    new MatchTag {Tag = "a", Attribute = "href"}
+                },
+                Pattern = @"/article\.aspx\?id=([0-9]+)(?:&|&amp;)title=([_0-9a-z-]+)$",
+                Action = new OutboundRewriteAction()
+                {
+                    Value = @"/article/{R:1}/{R:2}"
+                }
             };
-            matchScope.Setup(e => e.MatchTheContentWithin).Returns(matchTags);
-
-            matchScope.Object.MatchTheContentWithin = matchTags;
-            System.Text.RegularExpressions.Match match;
 
             // act
-            OutboundRewriter.TestRuleMatches(responseString, matchScope.Object, out match);
-
+            var output = OutboundRewriter.ProcessRuleReplacements(responseString, outboundRule);
 
             // assert
+            Assert.AreEqual(output, OutboundRewriterTestData.ProcessRuleReplacementsTestExpectedOutput);
+
         }
     }
 }

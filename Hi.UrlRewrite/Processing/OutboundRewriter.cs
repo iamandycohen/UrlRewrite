@@ -169,6 +169,7 @@ namespace Hi.UrlRewrite.Processing
 
             var matchTags = outboundRule.MatchTheContentWithin ?? new List<MatchTag>();
 
+            // if we are not matching on match tags, then we are doing matching on the entire response
             if (!matchTags.Any())
             {
 
@@ -178,7 +179,6 @@ namespace Hi.UrlRewrite.Processing
 
                 foreach (var matchTag in matchTags)
                 {
-                    //var input = @"<a href='/article.aspx?id=342&title=some-article-title' />";
                     var tag = matchTag.Tag;
                     var attribute = matchTag.Attribute;
                     var inputAttributePattern = outboundRule.Pattern;
@@ -205,7 +205,16 @@ namespace Hi.UrlRewrite.Processing
 
                             if (attributeValueMatch.Success)
                             {
-                                newAttributeValue = RewriteHelper.ReplaceRuleBackReferences(attributeValueMatch, inputAttributeRewrite);
+                                // need to determine where the match occurs within the original sring
+                                var attributeValueMatchIndex = attributeValueMatch.Index;
+                                var attributeValueMatchLength = attributeValueMatch.Length;
+                                var attributeValueReplaced = RewriteHelper.ReplaceRuleBackReferences(attributeValueMatch, inputAttributeRewrite);
+
+                                newAttributeValue = attributeValue.Substring(0, attributeValueMatchIndex) +
+                                                    attributeValueReplaced +
+                                                    attributeValue.Substring(attributeValueMatchIndex +
+                                                                             attributeValueMatchLength);
+
                             }
 
                             return attributeMatchGroups["name"].Value + attributeMatchGroups["startquote"].Value + newAttributeValue + attributeMatchGroups["endquote"].Value;

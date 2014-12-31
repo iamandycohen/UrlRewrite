@@ -68,9 +68,23 @@ namespace Hi.UrlRewrite.Tests {
         ///	Welcome to Sitecore
         ///&lt;/title&gt;&lt;meta http-equiv=&quot;Content-Type&quot; content=&quot;text/html; charset=UTF-8&quot; /&gt;&lt;meta name=&quot;CODE_LANGUAGE&quot; content=&quot;C#&quot; /&gt;&lt;meta name=&quot;vs_defaultClientScript&quot; content=&quot;JavaScript&quot; /&gt;&lt;meta name=&quot;vs_targetSchema&quot; content=&quot;http://schemas.microsoft.com/intellisense/ie5&quot; /&gt;&lt;link href=&quot;/def [rest of string was truncated]&quot;;.
         /// </summary>
-        internal static string ResponseString {
+        internal static string ProcessRuleReplacementsTestExpectedOutput {
             get {
-                return ResourceManager.GetString("ResponseString", resourceCulture);
+                return ResourceManager.GetString("ProcessRuleReplacementsTestExpectedOutput", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to &lt;!DOCTYPE html PUBLIC &quot;-//W3C//DTD XHTML 1.0 Transitional//EN&quot; &quot;http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd&quot;&gt;
+        ///&lt;html lang=&quot;en&quot; xml:lang=&quot;en&quot; xmlns=&quot;http://www.w3.org/1999/xhtml&quot;&gt;
+        ///
+        ///&lt;head&gt;&lt;title&gt;
+        ///	Welcome to Sitecore
+        ///&lt;/title&gt;&lt;meta http-equiv=&quot;Content-Type&quot; content=&quot;text/html; charset=UTF-8&quot; /&gt;&lt;meta name=&quot;CODE_LANGUAGE&quot; content=&quot;C#&quot; /&gt;&lt;meta name=&quot;vs_defaultClientScript&quot; content=&quot;JavaScript&quot; /&gt;&lt;meta name=&quot;vs_targetSchema&quot; content=&quot;http://schemas.microsoft.com/intellisense/ie5&quot; /&gt;&lt;link href=&quot;/def [rest of string was truncated]&quot;;.
+        /// </summary>
+        internal static string ProcessRuleReplacementsTestInput {
+            get {
+                return ResourceManager.GetString("ProcessRuleReplacementsTestInput", resourceCulture);
             }
         }
     }
