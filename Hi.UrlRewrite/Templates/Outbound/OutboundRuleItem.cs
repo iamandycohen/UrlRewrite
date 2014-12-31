@@ -47,6 +47,5 @@ namespace Hi.UrlRewrite.Templates.Outbound
             }
         }
 
-            
     }
 }

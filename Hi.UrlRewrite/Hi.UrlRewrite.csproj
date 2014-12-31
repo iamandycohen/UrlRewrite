@@ -151,6 +151,9 @@
     <Compile Include="Templates\Match\MatchTagsItem.cs" />
     <Compile Include="Templates\Match\OutboundMatchItem.cs" />
     <Compile Include="Templates\Match\MatchScopeItem.cs" />
+    <Compile Include="Templates\ServerVariables\BaseServerVariableItem.cs" />
+    <Compile Include="Templates\ServerVariables\RequestHeaderItem.cs" />
+    <Compile Include="Templates\ServerVariables\ServerVariableItem.cs" />
     <Compile Include="Templates\Settings\SettingsItem.cs" />
     <Compile Include="Templates\Folders\PreconditionsFolderItem.cs" />
     <Compile Include="Templates\Folders\RedirectFolderItem.cs" />
