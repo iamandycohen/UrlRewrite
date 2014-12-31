@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Collections.Specialized;
 using System.Linq;
+using System.Runtime.Remoting.Messaging;
 using System.Text.RegularExpressions;
 using System.Web;
 using Hi.UrlRewrite.Entities.Rules;
@@ -109,11 +110,11 @@ namespace Hi.UrlRewrite.Processing
                 lastConditionMatch = null;
 
             // test rule match
-            var isRuleMatch = TestRuleMatches(ruleResult.RewrittenResponseString, outboundRule, out outboundRuleMatch);
+            var isRuleMatch = true;
             ConditionMatchResult conditionMatchResult = null;
 
             // test conditions matches
-            if (isRuleMatch && outboundRule.Conditions != null && outboundRule.Conditions.Count > 0)
+            if (outboundRule.Conditions != null && outboundRule.Conditions.Count > 0)
             {
                 var replacements = new RewriteHelper.Replacements
                 {
@@ -128,40 +129,15 @@ namespace Hi.UrlRewrite.Processing
 
             if (isRuleMatch)
             {
+                ruleResult.RewrittenResponseString = ProcessRuleReplacements(ruleResult.OriginalResponseString, outboundRule);
                 ruleResult.RuleMatched = true;
             }
 
             return ruleResult;
         }
 
-        public static bool TestRuleMatches(string responseString, IMatchScope outboundRule, out Match outboundRuleMatch)
-        {
-            // TODO: test against all of the "match the content within"
-
-            var matchTags = outboundRule.MatchTheContentWithin;
-            var regexPatternFormat = @"<{0}((\s+{1}(?:\s*=\s*(?:"".*?""|'.*?'|[^'"">\s]+))?)+\s*|\s*)\/?>";
-
-            foreach (var matchTag in matchTags)
-            {
-                var tag = matchTag.Tag;
-                var attribute = matchTag.Attribute;
-                var regexPattern = string.Format(regexPatternFormat, tag, attribute);
-                var regex = new Regex(regexPattern);
-                var matches = regex.Matches(responseString);
-
-                foreach (Match match in matches)
-                {
-                    var attributes = match.Groups[1];
-                }
-            }
-
-            outboundRuleMatch = null;
-            return true;
-        }
-
         public static string ProcessRuleReplacements(string responseString, OutboundRule outboundRule)
         {
-
             var output = responseString;
             var rewritePattern = outboundRule.Pattern;
             var rewriteValue = ((OutboundRewriteAction)outboundRule.Action).Value;
@@ -170,7 +146,6 @@ namespace Hi.UrlRewrite.Processing
             // if we are not matching on match tags, then we are doing matching on the entire response
             if (!matchTags.Any())
             {
-
                 if (outboundRule.Using == Using.ExactMatch)
                 {
                     output = responseString.Replace(rewritePattern, rewriteValue);
@@ -181,85 +156,101 @@ namespace Hi.UrlRewrite.Processing
 
                     output = responseRegex.Replace(responseString, match => RewriteHelper.ReplaceRuleBackReferences(match, rewriteValue));
                 }
-
             }
             else
             {
 
-                const string startKey = "start";
-                const string innerKey = "inner";
-                const string endKey = "end";
-                const string nameKey = "name";
-                const string startquoteKey = "startquote";
-                const string valueKey = "value";
-                const string endquoteKey = "endquote";
-
-                const string tagPatternFormat =
-                    @"(?<" + startKey + @"><{0}\s+)(?<" + innerKey + @">.*?{1}=(?:""|').*?)(?<" + endKey + @">\s*/?>)";
-
-                const string attributePatternFormat =
-                    @"(?<" + nameKey + @">{0}=)(?<" + startquoteKey + @">""|')(?<" + valueKey + @">.*?)(?<" +
-                    endquoteKey + @">""|')";
-
-                foreach (var matchTag in matchTags)
-                {
-                    var tag = matchTag.Tag;
-                    var attribute = matchTag.Attribute;
-                    var tagPattern = string.Format(tagPatternFormat, tag, attribute);
-                    var tagRegex = new Regex(tagPattern);
-
-                    output = tagRegex.Replace(responseString, tagMatch =>
-                    {
-                        var tagMatchGroups = tagMatch.Groups;
-                        var tagInnards = tagMatchGroups[innerKey].Value;
-                        var attributePattern = string.Format(attributePatternFormat, attribute);
-                        var attributeRegex = new Regex(attributePattern);
-
-                        var newTagInnards = attributeRegex.Replace(tagInnards, attributeMatch =>
-                        {
-                            var attributeMatchGroups = attributeMatch.Groups;
-                            var attributeValue = attributeMatchGroups[valueKey].Value;
-                            var newAttributeValue = attributeValue;
-
-                            var attributeValueRegex = new Regex(rewritePattern);
-                            var attributeValueMatch = attributeValueRegex.Match(attributeValue);
-
-                            if (attributeValueMatch.Success)
-                            {
-                                // need to determine where the match occurs within the original string
-                                var attributeValueMatchIndex = attributeValueMatch.Index;
-                                var attributeValueMatchLength = attributeValueMatch.Length;
-                                string attributeValueReplaced;
-
-                                if (outboundRule.Using == Using.ExactMatch)
-                                {
-                                    attributeValueReplaced = attributeValueMatch.Value.Replace(
-                                        attributeValueMatch.Value, rewriteValue);
-                                }
-                                else
-                                {
-                                    attributeValueReplaced = RewriteHelper.ReplaceRuleBackReferences(attributeValueMatch, rewriteValue);
-                                }
-
-                                newAttributeValue = attributeValue.Substring(0, attributeValueMatchIndex) +
-                                                           attributeValueReplaced +
-                                                           attributeValue.Substring(attributeValueMatchIndex +
-                                                                                    attributeValueMatchLength);
-
-                            }
-
-                            return attributeMatchGroups[nameKey].Value + attributeMatchGroups[startquoteKey].Value +
-                                   newAttributeValue + attributeMatchGroups[endquoteKey].Value;
-
-                        });
-
-                        return tagMatchGroups[startKey].Value + newTagInnards + tagMatchGroups[endKey].Value;
-                    });
-                }
+                output = ProcessRuleReplacementsWithMatchTags(responseString, outboundRule.Using, matchTags, rewritePattern, rewriteValue);
             }
 
             return output;
+        }
 
+        private static string ProcessRuleReplacementsWithMatchTags(string responseString, Using? outboundRuleUsing,
+            IEnumerable<MatchTag> matchTags, string rewritePattern, string rewriteValue)
+        {
+            const string startKey = "start";
+            const string innerKey = "inner";
+            const string endKey = "end";
+            const string nameKey = "name";
+            const string startquoteKey = "startquote";
+            const string valueKey = "value";
+            const string endquoteKey = "endquote";
+            string output = responseString;
+
+            const string tagPatternFormat =
+                @"(?<" + startKey + @"><{0}\s+)(?<" + innerKey + @">.*?{1}=(?:""|').*?)(?<" + endKey + @">\s*/?>)";
+
+            const string attributePatternFormat =
+                @"(?<" + nameKey + @">{0}=)(?<" + startquoteKey + @">""|')(?<" + valueKey + @">.*?)(?<" +
+                endquoteKey + @">""|')";
+
+            foreach (var matchTag in matchTags)
+            {
+                var tag = matchTag.Tag;
+                var attribute = matchTag.Attribute;
+                var tagPattern = string.Format(tagPatternFormat, tag, attribute);
+                var tagRegex = new Regex(tagPattern);
+
+                output = tagRegex.Replace(responseString, tagMatch =>
+                {
+                    var tagMatchGroups = tagMatch.Groups;
+                    var tagStart = tagMatchGroups[startKey].Value;
+                    var tagInnards = tagMatchGroups[innerKey].Value;
+                    var tagEnd = tagMatchGroups[endKey].Value;
+                    var attributePattern = string.Format(attributePatternFormat, attribute);
+                    var attributeRegex = new Regex(attributePattern);
+
+                    var newTagInnards = attributeRegex.Replace(tagInnards, attributeMatch =>
+                    {
+                        var attributeMatchGroups = attributeMatch.Groups;
+                        var attributeValue = attributeMatchGroups[valueKey].Value;
+
+                        var attributeValueRegex = new Regex(rewritePattern);
+                        var attributeValueMatch = attributeValueRegex.Match(attributeValue);
+
+                        if (attributeValueMatch.Success)
+                        {
+                            var attributeName = attributeMatchGroups[nameKey].Value;
+                            var attributeStartQuote = attributeMatchGroups[startquoteKey].Value;
+                            var attributeEndQuote = attributeMatchGroups[endquoteKey].Value;
+
+                            // need to determine where the match occurs within the original string
+                            var attributeValueMatchIndex = attributeValueMatch.Index;
+                            var attributeValueMatchLength = attributeValueMatch.Length;
+                            string attributeValueReplaced;
+
+                            if (outboundRuleUsing == Using.ExactMatch)
+                            {
+                                attributeValueReplaced = attributeValueMatch.Value.Replace(
+                                    attributeValueMatch.Value, rewriteValue);
+                            }
+                            else
+                            {
+                                attributeValueReplaced = RewriteHelper.ReplaceRuleBackReferences(attributeValueMatch,
+                                    rewriteValue);
+                            }
+
+                            var newAttributeValue = attributeValue.Substring(0, attributeValueMatchIndex) +
+                                                       attributeValueReplaced +
+                                                       attributeValue.Substring(attributeValueMatchIndex +
+                                                                                attributeValueMatchLength);
+
+                            var attributeOutput = attributeName + attributeStartQuote + newAttributeValue +
+                                                  attributeEndQuote;
+
+                            return attributeOutput;
+                        }
+
+                        return attributeMatch.Value;
+                    });
+
+                    var tagOutput = tagStart + newTagInnards + tagEnd;
+
+                    return tagOutput;
+                });
+            }
+            return output;
         }
 
         internal PreconditionResult CheckPreconditions(HttpContextBase httpContext, List<OutboundRule> outboundRules)
