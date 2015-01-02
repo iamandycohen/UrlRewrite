@@ -1,7 +1,10 @@
-﻿using Hi.UrlRewrite.Entities.Actions;
+﻿using System.IO;
+using System.Net.Http;
+using Hi.UrlRewrite.Entities.Actions;
 using Hi.UrlRewrite.Entities.Actions.Base;
 using Hi.UrlRewrite.Entities.Match;
 using Hi.UrlRewrite.Entities.Rules;
+using Hi.UrlRewrite.Module;
 using Hi.UrlRewrite.Processing.Results;
 using Sitecore.Data;
 using Sitecore.Links;
@@ -120,8 +123,30 @@ namespace Hi.UrlRewrite.Processing
                 }
                 else if (ruleResult.FinalAction is IBaseRewrite)
                 {
-                    var pathAndQuery = ruleResult.RewrittenUri.PathAndQuery;
-                    httpContext.Server.TransferRequest(pathAndQuery);
+                    var httpClient = new HttpClient();
+                    var requestMessage = new HttpRequestMessage()
+                    {
+                        RequestUri = ruleResult.RewrittenUri,
+                        Method = httpRequest.HttpMethod.Equals("POST") ? HttpMethod.Post : HttpMethod.Get
+                    };
+                    var sendTask = httpClient.SendAsync(requestMessage);
+                    sendTask.Wait();
+                    var response = sendTask.Result;
+                    var responseStreamTask = response.Content.ReadAsStreamAsync();
+                    responseStreamTask.Wait();
+                    var responseStream = responseStreamTask.Result;
+
+                    var outputStream = new MemoryStream();
+                    responseStream.CopyTo(outputStream);
+
+                    httpResponse.BinaryWrite(outputStream.ToArray());
+
+                    var outboundRewriter = new OutboundRewriteProcessor();
+                    outboundRewriter.Process(httpContext);
+
+                    httpResponse.End();
+
+                    return;
                 }
                 else if (ruleResult.FinalAction is AbortRequest)
                 {

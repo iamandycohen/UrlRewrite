@@ -4,6 +4,7 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Web;
+using Sitecore.Shell.Feeds.Sections;
 
 namespace Hi.UrlRewrite.Module
 {
@@ -350,7 +351,10 @@ namespace Hi.UrlRewrite.Module
         /// <param name="count"></param>
         public override void Write(byte[] buffer, int offset, int count)
         {
-            HeadersWritten(new HttpContextWrapper(HttpContext.Current));
+            if (HeadersWritten != null)
+            {
+                HeadersWritten(new HttpContextWrapper(HttpContext.Current));
+            }
 
             if (IsCaptured)
             {
