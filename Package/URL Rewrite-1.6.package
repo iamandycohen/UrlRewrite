@@ -398,6 +398,7 @@ Version 1.0
         <x-item>/master/sitecore/templates/Modules/UrlRewrite/Templates/Match/Match Scope Type/{7B5B7C00-4708-485B-809E-1064B689B2DE}/invariant/0</x-item>
         <x-item>/master/sitecore/templates/Modules/UrlRewrite/Templates/Match/Match Scope Type/Match/{FACCCD1C-476F-43F3-A835-106F09B9388D}/invariant/0</x-item>
         <x-item>/master/sitecore/templates/Modules/UrlRewrite/Templates/Match/Match Scope Type/Match/Match Scope Type/{D7E99E56-654A-47A0-A228-5A61F3F7FE69}/invariant/0</x-item>
+        <x-item>/master/sitecore/templates/Modules/UrlRewrite/Templates/Match/Match Server Variable/__Standard Values/{9DF9645C-F001-4EB0-873D-FE4A744BC730}/invariant/0</x-item>
         <x-item>/master/sitecore/templates/Modules/UrlRewrite/Templates/Match/Match Server Variable/{31CBA307-BE81-4E55-96E4-62F70B2CBF47}/invariant/0</x-item>
         <x-item>/master/sitecore/templates/Modules/UrlRewrite/Templates/Match/Match Server Variable/Match/{A531956E-E732-4BEE-BBC2-A52EDF1D7EE5}/invariant/0</x-item>
         <x-item>/master/sitecore/templates/Modules/UrlRewrite/Templates/Match/Match Server Variable/Match/Server Variable Name/{90C0087E-39FD-4926-98DC-5F6AABEAFF87}/invariant/0</x-item>
