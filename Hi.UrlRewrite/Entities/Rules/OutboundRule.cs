@@ -18,15 +18,18 @@ namespace Hi.UrlRewrite.Entities.Rules
         public Using? Using { get; set; }
         public string Pattern { get; set; }
         public bool IgnoreCase { get; set; }
+
         public Precondition Precondition { get; set; }
-        public ScopeType? MatchingScope { get; set; }
-        public IEnumerable<MatchTag> MatchTheContentWithin { get; set; }
+
+        public ScopeType MatchingScopeType { get; set; }
         public IBaseAction Action { get; set; }
 
         public OutboundRule()
         {
+            MatchingScopeType = ScopeType.Response;
             Conditions = new List<Condition>();
-            MatchTheContentWithin = new List<MatchTag>();
         }
+
+        public IBaseMatchScope OutboundMatchScope { get; set; }
     }
 }

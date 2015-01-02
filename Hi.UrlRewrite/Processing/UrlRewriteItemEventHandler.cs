@@ -81,7 +81,7 @@ namespace Hi.UrlRewrite.Processing
 
                         rulesEngine.RefreshInboundRule(item, redirectFolderItem);
                     }
-                    else if (item.IsRedirectType() && item.IsInboundRuleItemChild())
+                    else if (item.IsRedirectType() && item.IsInboundRuleItemChild() && db.Name.Equals("master", StringComparison.CurrentCultureIgnoreCase))
                     {
                         var inboundRuleItem = item.Parent;
                         var inboundRule = new InboundRuleItem(inboundRuleItem);

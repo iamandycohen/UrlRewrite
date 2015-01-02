@@ -23,15 +23,19 @@ namespace Hi.UrlRewrite.Tests
             var responseString = OutboundRewriterTestData.ProcessRuleReplacementsWithMatchTagsInput;
             var outboundRule = new OutboundRule
             {
-                MatchTheContentWithin = new List<MatchTag>
+                OutboundMatchScope = new MatchResponseTags
                 {
-                    new MatchTag {Tag = "a", Attribute = "href"}
+                    MatchTheContentWithin = new List<MatchTag>
+                    {
+                        new MatchTag {Tag = "a", Attribute = "href"}
+                    }
                 },
                 Pattern = @"/article\.aspx\?id=([0-9]+)(?:&|&amp;)title=([_0-9a-z-]+)$",
                 Action = new OutboundRewrite()
                 {
                     Value = @"/article/{R:1}/{R:2}"
-                }
+                },
+                MatchingScopeType = ScopeType.Response
             };
 
             // act
@@ -52,7 +56,8 @@ namespace Hi.UrlRewrite.Tests
                 Action = new OutboundRewrite()
                 {
                     Value = @"/article/{R:1}/{R:2}"
-                }
+                },
+                MatchingScopeType = ScopeType.Response
             };
 
             // act
@@ -74,7 +79,8 @@ namespace Hi.UrlRewrite.Tests
                 Action = new OutboundRewrite()
                 {
                     Value = @"<script type='text/javascript'>//Your web analytics tracking code goes here...</script></body>"
-                }
+                },
+                MatchingScopeType = ScopeType.Response
             };
 
             // act
@@ -92,15 +98,19 @@ namespace Hi.UrlRewrite.Tests
             var outboundRule = new OutboundRule
             {
                 Using = Using.ExactMatch,
-                MatchTheContentWithin = new List<MatchTag>
+                OutboundMatchScope = new MatchResponseTags()
                 {
-                    new MatchTag {Tag = "a", Attribute = "href"}
+                    MatchTheContentWithin = new List<MatchTag>
+                    {
+                        new MatchTag {Tag = "a", Attribute = "href"}
+                    }
                 },
                 Pattern = @"/article\.aspx\?id=([0-9]+)(?:&|&amp;)title=([_0-9a-z-]+)$",
                 Action = new OutboundRewrite()
                 {
                     Value = @"/newarticle.aspx"
-                }
+                },
+                MatchingScopeType = ScopeType.Response
             };
 
             // act

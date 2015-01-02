@@ -10,6 +10,7 @@ using Hi.UrlRewrite.Module;
 using Hi.UrlRewrite.Processing.Results;
 using Hi.UrlRewrite.Entities.Match;
 using Hi.UrlRewrite.Entities.Actions;
+using Hi.UrlRewrite.Templates.Match;
 
 namespace Hi.UrlRewrite.Processing
 {
@@ -138,31 +139,50 @@ namespace Hi.UrlRewrite.Processing
 
         public static string ProcessRuleReplacements(string responseString, OutboundRule outboundRule)
         {
-            string output;
+            string output = null;
             var rewritePattern = outboundRule.Pattern;
             // TODO: Not all actions will be OutboundRewriteActions - fix this
-            var rewriteValue = ((OutboundRewrite)outboundRule.Action).Value;
-            var matchTags = outboundRule.MatchTheContentWithin ?? new List<MatchTag>();
+            var rewrite = ((OutboundRewrite)outboundRule.Action);
+            var rewriteValue = rewrite.Value;
+            var rewriteMatchScope = outboundRule.OutboundMatchScope;
+            var rewriteMatchScopeType = outboundRule.MatchingScopeType;
 
             // TODO: catch invalid Regex compilations
 
-            // if we are not matching on match tags, then we are doing matching on the entire response
-            if (!matchTags.Any())
+            if (rewriteMatchScopeType == ScopeType.Response)
             {
-                if (outboundRule.Using == Using.ExactMatch)
+                IEnumerable<MatchTag> matchTags = new List<MatchTag>();
+
+                if (rewriteMatchScope is MatchResponseTags)
                 {
-                    output = responseString.Replace(rewritePattern, rewriteValue);
+                    var matchResponseTags = rewriteMatchScope as MatchResponseTags;
+                    matchTags = matchResponseTags.MatchTheContentWithin ?? new List<MatchTag>();
+                }
+
+                // if we are not matching on match tags, then we are doing matching on the entire response
+                if (matchTags.Any())
+                {
+                    output = ProcessRuleReplacementsWithMatchTags(responseString, outboundRule.Using, matchTags,
+                        rewritePattern, rewriteValue);
                 }
                 else
                 {
-                    var responseRegex = new Regex(rewritePattern);
+                    if (outboundRule.Using == Using.ExactMatch)
+                    {
+                        output = responseString.Replace(rewritePattern, rewriteValue);
+                    }
+                    else
+                    {
+                        var responseRegex = new Regex(rewritePattern);
 
-                    output = responseRegex.Replace(responseString, match => RewriteHelper.ReplaceRuleBackReferences(match, rewriteValue));
+                        output = responseRegex.Replace(responseString,
+                            match => RewriteHelper.ReplaceRuleBackReferences(match, rewriteValue));
+                    }
                 }
             }
-            else
+            else if (rewriteMatchScopeType == ScopeType.ServerVariables)
             {
-                output = ProcessRuleReplacementsWithMatchTags(responseString, outboundRule.Using, matchTags, rewritePattern, rewriteValue);
+                
             }
 
             return output;

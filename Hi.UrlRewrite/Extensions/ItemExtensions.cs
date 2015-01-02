@@ -302,29 +302,49 @@ namespace Hi.UrlRewrite
         {
             GetBaseMatchItem(outboundMatchItem.BaseMatchItem, outboundMatch);
 
-            var scopeTypeItem = outboundMatchItem.MatchScopeItem.MatchingScope.TargetItem;
+            var scopeTypeItem = outboundMatchItem.MatchScopeItem.MatchScopeType.TargetItem;
             if (scopeTypeItem != null)
             {
                 var scopeTypeItemId = scopeTypeItem.ID;
                 if (scopeTypeItemId.Equals(new ID(Constants.MatchScope_Response_ItemId)))
                 {
-                    outboundMatch.MatchingScope = ScopeType.Response;
+                    outboundMatch.MatchingScopeType = ScopeType.Response;
                 } 
                 else if (scopeTypeItemId.Equals(new ID(Constants.MatchScope_ServerVariables_ItemId))) 
                 {
-                    outboundMatch.MatchingScope = ScopeType.ServerVariables;
+                    outboundMatch.MatchingScopeType = ScopeType.ServerVariables;
                 }
 
             }
 
-            var matchTags = outboundMatchItem.MatchTagsItem.MatchTheContentWithin.TargetIDs
-                .Select(i => outboundMatchItem.InnerItem.Database.GetItem(i))
-                .Select(i => new MatchTagItem(i))
-                .Where(i => i != null)
-                .Select(i => new MatchTag { Tag = i.Tag.Value, Attribute = i.Attribute.Value})
-                .ToList();
+            var outboundMatchScopeItem = outboundMatchItem.OutboundMatchScopeItem.MatchScope.TargetItem;
+            if (outboundMatchScopeItem != null)
+            {
+                if (outboundMatchScopeItem.TemplateID.Equals(new ID(MatchResponseTagsItem.TemplateId)))
+                {
 
-            outboundMatch.MatchTheContentWithin = matchTags;
+                    var matchTags = new MatchResponseTagsItem(outboundMatchScopeItem).MatchTheContentWithin.TargetIDs
+                        .Select(i => outboundMatchItem.InnerItem.Database.GetItem(i))
+                        .Select(i => new MatchTagItem(i))
+                        .Where(i => i != null)
+                        .Select(i => new MatchTag { Tag = i.Tag.Value, Attribute = i.Attribute.Value})
+                        .ToList();
+
+                    outboundMatch.OutboundMatchScope = new MatchResponseTags()
+                    {
+                        MatchTheContentWithin = matchTags
+                    };
+                }
+                else if (outboundMatchScopeItem.TemplateID.Equals(new ID(MatchServerVariableItem.TemplateId)))
+                {
+                    var serverVariableItem = new MatchServerVariableItem(outboundMatchScopeItem);
+                    outboundMatch.OutboundMatchScope = new MatchServerVariable
+                    {
+                        ServerVariableName = serverVariableItem.ServerVariableName.Value
+                    };
+                }
+            }
+
         }
 
 
@@ -751,6 +771,7 @@ namespace Hi.UrlRewrite
         {
             return !IsTemplate(item) && (new ID[]
                    {
+                       new ID(RewriteItem.TemplateId),
                        new ID(RedirectItem.TemplateId),
                        new ID(ItemQueryRedirectItem.TemplateId),
                        new ID(CustomResponseItem.TemplateId),

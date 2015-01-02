@@ -118,6 +118,11 @@ namespace Hi.UrlRewrite.Processing
                         httpResponse.Cache.SetCacheability(redirectAction.HttpCacheability.Value);
                     }
                 }
+                else if (ruleResult.FinalAction is IBaseRewrite)
+                {
+                    var pathAndQuery = ruleResult.RewrittenUri.PathAndQuery;
+                    httpContext.Server.TransferRequest(pathAndQuery);
+                }
                 else if (ruleResult.FinalAction is AbortRequest)
                 {
                     // do nothing
@@ -229,9 +234,13 @@ namespace Hi.UrlRewrite.Processing
 
                 // TODO: Need to implement Rewrite, None
 
-                if (inboundRule.Action is Redirect) // process the action if it is a RedirectAction  
+                if (inboundRule.Action is Redirect) 
                 {
                     ProcessRedirectAction(inboundRule, originalUri, inboundRuleMatch, lastConditionMatch, ruleResult);
+                }
+                else if (inboundRule.Action is Rewrite)
+                {
+                    ProcessRewriteAction(inboundRule, originalUri, inboundRuleMatch, lastConditionMatch, ruleResult);
                 }
                 else if (inboundRule.Action is ItemQueryRedirect)
                 {
@@ -358,6 +367,46 @@ namespace Hi.UrlRewrite.Processing
                 rewriteUrl = GetRewriteUrlFromItemId(rewriteItemId.Value, rewriteItemAnchor);
             }
 
+
+            // process token replacements
+            var replacements = new RewriteHelper.Replacements
+            {
+                RequestHeaders = RequestHeaders,
+                RequestServerVariables = RequestServerVariables
+            };
+
+            rewriteUrl = RewriteHelper.ReplaceTokens(replacements, rewriteUrl);
+
+            if (redirectAction.AppendQueryString)
+            {
+                rewriteUrl += uri.Query;
+            }
+
+            rewriteUrl = RewriteHelper.ReplaceRuleBackReferences(inboundRuleMatch, rewriteUrl);
+            rewriteUrl = RewriteHelper.ReplaceConditionBackReferences(lastConditionMatch, rewriteUrl);
+
+            ruleResult.RewrittenUri = new Uri(rewriteUrl);
+            ruleResult.StopProcessing = redirectAction.StopProcessingOfSubsequentRules;
+        }
+
+        private void ProcessRewriteAction(InboundRule inboundRule, Uri uri, Match inboundRuleMatch, Match lastConditionMatch, InboundRuleResult ruleResult)
+        {
+            var redirectAction = inboundRule.Action as Rewrite;
+
+            var rewriteUrl = redirectAction.RewriteUrl;
+            var rewriteItemId = redirectAction.RewriteItemId;
+            var rewriteItemAnchor = redirectAction.RewriteItemAnchor;
+
+            if (string.IsNullOrEmpty(rewriteUrl) && rewriteItemId == null)
+            {
+                ruleResult.RuleMatched = false;
+                return;
+            }
+
+            if (rewriteItemId.HasValue)
+            {
+                rewriteUrl = GetRewriteUrlFromItemId(rewriteItemId.Value, rewriteItemAnchor);
+            }
 
             // process token replacements
             var replacements = new RewriteHelper.Replacements

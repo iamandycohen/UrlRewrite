@@ -1,5 +1,6 @@
 using System;
 using Hi.UrlRewrite.Templates.Match;
+using Hi.UrlRewrite.Templates.Outbound;
 using Sitecore.Data.Items;
 using System.Collections.Generic;
 using Sitecore.Data.Fields;
@@ -17,11 +18,11 @@ namespace Hi.UrlRewrite.Templates.Conditions
         private readonly BaseMatchItem _BaseMatchItem;
         public BaseMatchItem BaseMatchItem { get { return _BaseMatchItem; } }
 
-        private readonly MatchScopeItem _MatchScopeItem;
-        public MatchScopeItem MatchScopeItem { get { return _MatchScopeItem; } }
+        private readonly MatchScopeTypeItem _MatchScopeItem;
+        public MatchScopeTypeItem MatchScopeItem { get { return _MatchScopeItem; } }
 
-        private readonly MatchTagsItem _MatchTagsItem;
-        public MatchTagsItem MatchTagsItem { get { return _MatchTagsItem; } }
+        private readonly OutboundMatchScopeItem _OutboundMatchScopeItem;
+        public OutboundMatchScopeItem OutboundMatchScopeItem { get { return _OutboundMatchScopeItem; } }
 
 
         #endregion
@@ -32,8 +33,8 @@ namespace Hi.UrlRewrite.Templates.Conditions
             : base(innerItem)
         {
             _BaseMatchItem = new BaseMatchItem(innerItem);
-            _MatchScopeItem = new MatchScopeItem(innerItem);
-            _MatchTagsItem = new MatchTagsItem(innerItem);
+            _MatchScopeItem = new MatchScopeTypeItem(innerItem);
+            _OutboundMatchScopeItem = new OutboundMatchScopeItem(innerItem);
         }
 
         public static implicit operator OutboundMatchItem(Item innerItem)

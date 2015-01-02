@@ -6,7 +6,8 @@ using System.Threading.Tasks;
 
 namespace Hi.UrlRewrite.Entities.Match
 {
-    public interface IOutboundMatch : IBaseMatch, IMatchScopeType, IOutboundMatchScope
+    public interface IOutboundMatchScope
     {
+        IBaseMatchScope OutboundMatchScope { get; set; }
     }
 }
