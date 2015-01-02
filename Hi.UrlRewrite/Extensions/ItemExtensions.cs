@@ -165,6 +165,11 @@ namespace Hi.UrlRewrite
                 {
                     baseAction = new RedirectItem(baseActionItem).ToRedirectAction();
                 }
+                else if (baseActionItemTemplateId.Equals(RewriteItem.TemplateId,
+                    StringComparison.InvariantCultureIgnoreCase))
+                {
+                    baseAction = new RewriteItem(baseActionItem).ToRewriteAction();
+                }
                 else if (baseActionItemTemplateId.Equals(AbortRequestItem.TemplateId,
                     StringComparison.InvariantCultureIgnoreCase))
                 {
@@ -485,10 +490,9 @@ namespace Hi.UrlRewrite
                 return null;
             }
 
-
             var redirectAction = new Redirect
             {
-                Name = redirectItem.Name,
+                Name = redirectItem.Name
             };
 
             GetBaseRewriteUrlItem(redirectItem.BaseRedirectItem.BaseRewriteUrlItem, redirectAction);
@@ -506,6 +510,29 @@ namespace Hi.UrlRewrite
             GetCacheability(httpCacheabilityTypeItem, redirectAction);
 
             return redirectAction;
+        }
+
+        public static Rewrite ToRewriteAction(this RewriteItem rewriteItem)
+        {
+            if (rewriteItem == null)
+            {
+                return null;
+            }
+
+            var rewriteAction = new Rewrite
+            {
+                Name = rewriteItem.Name
+            };
+
+            GetBaseRewriteUrlItem(rewriteItem.BaseRewriteItem.BaseRewriteUrlItem, rewriteAction);
+
+            var baseAppendQueryString = rewriteItem.BaseRewriteItem.BaseAppendQuerystringItem;
+            GetBaseAppendQueryStringItem(baseAppendQueryString, rewriteAction);
+
+            var stopProcessingItem = rewriteItem.BaseRewriteItem.BaseStopProcessingActionItem;
+            GetStopProcessing(stopProcessingItem, rewriteAction);
+
+            return rewriteAction;
         }
 
         public static AbortRequest ToAbortRequestAction(this AbortRequestItem abortRequestItem)
