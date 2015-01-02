@@ -16,14 +16,14 @@ namespace Hi.UrlRewrite.Templates.Action.Base
 
         #region Inherited Base Templates
 
-        private readonly BaseStopProcessingActionItem _BaseStopProcessingActionItem;
-        public BaseStopProcessingActionItem BaseStopProcessingActionItem { get { return _BaseStopProcessingActionItem; } }
+        private readonly BaseStopProcessingItem _BaseStopProcessingActionItem;
+        public BaseStopProcessingItem BaseStopProcessingActionItem { get { return _BaseStopProcessingActionItem; } }
 
-        private readonly BaseCacheItem _BaseCacheItem;
-        public BaseCacheItem BaseCacheItem { get { return _BaseCacheItem; } }
+        private readonly BaseAppendQuerystringItem _BaseAppendQuerystringItem;
+        public BaseAppendQuerystringItem BaseAppendQuerystringItem { get { return _BaseAppendQuerystringItem; } }
 
-        private readonly BaseRedirectTypeItem _BaseRedirectTypeItem;
-        public BaseRedirectTypeItem BaseRedirectTypeItem { get { return _BaseRedirectTypeItem; } }
+        private readonly BaseRewriteUrlItem _BaseRewriteUrlItem;
+        public BaseRewriteUrlItem BaseRewriteUrlItem { get { return _BaseRewriteUrlItem; } }
 
         #endregion
 
@@ -32,9 +32,9 @@ namespace Hi.UrlRewrite.Templates.Action.Base
         public BaseRewriteItem(Item innerItem)
             : base(innerItem)
         {
-            _BaseStopProcessingActionItem = new BaseStopProcessingActionItem(innerItem);
-            _BaseCacheItem = new BaseCacheItem(innerItem);
-            _BaseRedirectTypeItem = new BaseRedirectTypeItem(innerItem);
+            _BaseStopProcessingActionItem = new BaseStopProcessingItem(innerItem);
+            _BaseAppendQuerystringItem = new BaseAppendQuerystringItem(innerItem);
+            _BaseRewriteUrlItem = new BaseRewriteUrlItem(innerItem);
         }
 
         public static implicit operator BaseRewriteItem(Item innerItem)

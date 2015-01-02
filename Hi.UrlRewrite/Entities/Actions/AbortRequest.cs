@@ -1,9 +1,10 @@
-﻿using System;
+﻿using Hi.UrlRewrite.Entities.Actions.Base;
+using System;
 
 namespace Hi.UrlRewrite.Entities.Actions
 {
     [Serializable]
-    public class AbortRequestAction : IBaseAction
+    public class AbortRequest : IBaseAction
     {
         public string Name { get; set; }
     }

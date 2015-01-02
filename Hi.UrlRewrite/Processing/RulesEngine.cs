@@ -171,11 +171,11 @@ namespace Hi.UrlRewrite.Processing
 
             var inboundRule = new InboundRule
             {
-                Action = new RedirectAction
+                Action = new Redirect
                 {
                     AppendQueryString = true,
                     Name = "Redirect",
-                    StatusCode = RedirectActionStatusCode.Permanent,
+                    StatusCode = RedirectStatusCode.Permanent,
                     RewriteUrl = actionRewriteUrl,
                     RewriteItemId = redirectItem,
                     RewriteItemAnchor = redirectItemAnchor,

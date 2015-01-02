@@ -1,8 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using Hi.UrlRewrite.Entities.Actions;
+﻿using Hi.UrlRewrite.Entities.Actions.Base;
 using Hi.UrlRewrite.Entities.Conditions;
 using Hi.UrlRewrite.Entities.Match;
+using System;
+using System.Collections.Generic;
 
 namespace Hi.UrlRewrite.Entities.Rules
 {

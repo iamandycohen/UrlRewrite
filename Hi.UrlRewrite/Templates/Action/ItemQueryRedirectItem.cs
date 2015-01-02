@@ -13,9 +13,17 @@ namespace Hi.UrlRewrite.Templates.Action.Base
 
         #region Inherited Base Templates
 
-        private readonly BaseRewriteItem _BaseRewriteItem;
-        public BaseRewriteItem BaseRewriteItem { get { return _BaseRewriteItem; } }
+        private readonly BaseAppendQuerystringItem _BaseAppendQuerystringItem;
+        public BaseAppendQuerystringItem BaseAppendQuerystringItem { get { return _BaseAppendQuerystringItem; } }
 
+        private readonly BaseCacheItem _BaseCacheItem;
+        public BaseCacheItem BaseCacheItem { get { return _BaseCacheItem; } }
+
+        private readonly BaseRedirectTypeItem _BaseRedirectTypeItem;
+        public BaseRedirectTypeItem BaseRedirectTypeItem { get { return _BaseRedirectTypeItem; } }
+
+        private readonly BaseStopProcessingItem _BaseStopProcessingItem;
+        public BaseStopProcessingItem BaseStopProcessingItem { get { return _BaseStopProcessingItem; } }
         #endregion
 
         #region Boilerplate CustomItem Code
@@ -23,7 +31,10 @@ namespace Hi.UrlRewrite.Templates.Action.Base
         public ItemQueryRedirectItem(Item innerItem)
             : base(innerItem)
         {
-            _BaseRewriteItem = new BaseRewriteItem(innerItem);
+            _BaseAppendQuerystringItem = new BaseAppendQuerystringItem(innerItem);
+            _BaseCacheItem = new BaseCacheItem(innerItem);
+            _BaseRedirectTypeItem = new BaseRedirectTypeItem(innerItem);
+            _BaseStopProcessingItem = new BaseStopProcessingItem(innerItem);
         }
 
         public static implicit operator ItemQueryRedirectItem(Item innerItem)

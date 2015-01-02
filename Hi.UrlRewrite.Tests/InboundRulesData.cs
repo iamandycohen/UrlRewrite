@@ -15,12 +15,12 @@ namespace Hi.UrlRewrite.Tests
             {
                 new InboundRule()
                 {
-                    Action = new RedirectAction()
+                    Action = new Redirect()
                     {
                         AppendQueryString = true,
                         HttpCacheability = HttpCacheability.NoCache,
                         Name = "RedirectAction 1",
-                        StatusCode = RedirectActionStatusCode.Permanent,
+                        StatusCode = RedirectStatusCode.Permanent,
                         RewriteUrl = "http://www.google.com",
                         StopProcessingOfSubsequentRules = false
                     },
@@ -34,12 +34,12 @@ namespace Hi.UrlRewrite.Tests
                 },
                 new InboundRule()
                 {
-                    Action = new RedirectAction()
+                    Action = new Redirect()
                     {
                         AppendQueryString = true,
                         HttpCacheability = HttpCacheability.NoCache,
                         Name = "RedirectAction 1",
-                        StatusCode = RedirectActionStatusCode.Permanent,
+                        StatusCode = RedirectStatusCode.Permanent,
                         RewriteUrl = "http://{HTTP_HOST}/article.aspx?id={R:1}&amp;title={R:2}",
                         StopProcessingOfSubsequentRules = false
                     },
@@ -53,12 +53,12 @@ namespace Hi.UrlRewrite.Tests
                 },
                 new InboundRule()
                 {
-                    Action = new RedirectAction()
+                    Action = new Redirect()
                     {
                         AppendQueryString = true,
                         HttpCacheability = HttpCacheability.NoCache,
                         Name = "RedirectAction 1",
-                        StatusCode = RedirectActionStatusCode.Permanent,
+                        StatusCode = RedirectStatusCode.Permanent,
                         RewriteUrl = "http://{HTTP_HOST}/hostreplaced",
                         StopProcessingOfSubsequentRules = false
                     },

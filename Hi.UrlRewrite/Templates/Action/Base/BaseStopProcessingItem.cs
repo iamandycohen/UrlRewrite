@@ -6,7 +6,7 @@ using Sitecore.Web.UI.WebControls;
 
 namespace Hi.UrlRewrite.Templates.Action.Base
 {
-    public partial class BaseStopProcessingActionItem : CustomItem
+    public partial class BaseStopProcessingItem : CustomItem
     {
 
         public static readonly string TemplateId = "{05BB43CA-F36D-46CF-BBAB-D46C8E3FEF16}";
@@ -20,19 +20,19 @@ namespace Hi.UrlRewrite.Templates.Action.Base
 
         #region Boilerplate CustomItem Code
 
-        public BaseStopProcessingActionItem(Item innerItem)
+        public BaseStopProcessingItem(Item innerItem)
             : base(innerItem)
         {
             _BaseAction = new BaseActionItem(innerItem);
 
         }
 
-        public static implicit operator BaseStopProcessingActionItem(Item innerItem)
+        public static implicit operator BaseStopProcessingItem(Item innerItem)
         {
-            return innerItem != null ? new BaseStopProcessingActionItem(innerItem) : null;
+            return innerItem != null ? new BaseStopProcessingItem(innerItem) : null;
         }
 
-        public static implicit operator Item(BaseStopProcessingActionItem customItem)
+        public static implicit operator Item(BaseStopProcessingItem customItem)
         {
             return customItem != null ? customItem.InnerItem : null;
         }

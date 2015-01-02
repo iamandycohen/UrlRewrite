@@ -79,8 +79,8 @@ namespace Hi.UrlRewrite.sitecore_modules.Shell.UrlRewrite
                         resultsRepeater.DataSource = results.ProcessedResults;
                         resultsRepeater.DataBind();
 
-                        var isAbort = results.FinalAction is AbortRequestAction;
-                        var isCustomResponse = results.FinalAction is CustomResponseAction;
+                        var isAbort = results.FinalAction is AbortRequest;
+                        var isCustomResponse = results.FinalAction is CustomResponse;
 
                         if (isAbort)
                         {
@@ -88,7 +88,7 @@ namespace Hi.UrlRewrite.sitecore_modules.Shell.UrlRewrite
                         }
                         else if (isCustomResponse)
                         {
-                            var customResponse = results.FinalAction as CustomResponseAction;
+                            var customResponse = results.FinalAction as CustomResponse;
                             const string resultFormat = "Custom Response: {0} {1} {2}";
                             txtFinalUrl.InnerText = string.Format(resultFormat, customResponse.StatusCode,
                                 customResponse.SubStatusCode, customResponse.ErrorDescription);
@@ -138,8 +138,8 @@ namespace Hi.UrlRewrite.sitecore_modules.Shell.UrlRewrite
                 if (result != null)
                 {
                     var ruleMatched = result.RuleMatched;
-                    var isAbort = ruleMatched && result.ResultAction is AbortRequestAction;
-                    var isCustomResponse = ruleMatched && result.ResultAction is CustomResponseAction;
+                    var isAbort = ruleMatched && result.ResultAction is AbortRequest;
+                    var isCustomResponse = ruleMatched && result.ResultAction is CustomResponse;
                     var conditionMatched = result.ConditionMatchResult != null && result.ConditionMatchResult.Matched;
                     var itemId = new ID(result.ItemId).ToShortID().ToString();
 

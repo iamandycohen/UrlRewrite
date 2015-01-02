@@ -1,4 +1,4 @@
-﻿namespace Hi.UrlRewrite.Entities.Actions
+﻿namespace Hi.UrlRewrite.Entities.Actions.Base
 {
     public interface IBaseAction
     {

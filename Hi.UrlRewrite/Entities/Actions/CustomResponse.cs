@@ -1,9 +1,10 @@
-﻿using System;
+﻿using Hi.UrlRewrite.Entities.Actions.Base;
+using System;
 
 namespace Hi.UrlRewrite.Entities.Actions
 {
     [Serializable]
-    public class CustomResponseAction : IBaseAction
+    public class CustomResponse : IBaseAction
     {
         public int StatusCode { get; set; }
         public int? SubStatusCode { get; set; }

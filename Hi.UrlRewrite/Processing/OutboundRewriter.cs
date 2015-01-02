@@ -141,7 +141,7 @@ namespace Hi.UrlRewrite.Processing
             string output;
             var rewritePattern = outboundRule.Pattern;
             // TODO: Not all actions will be OutboundRewriteActions - fix this
-            var rewriteValue = ((OutboundRewriteAction)outboundRule.Action).Value;
+            var rewriteValue = ((OutboundRewrite)outboundRule.Action).Value;
             var matchTags = outboundRule.MatchTheContentWithin ?? new List<MatchTag>();
 
             // TODO: catch invalid Regex compilations

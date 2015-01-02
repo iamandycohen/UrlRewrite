@@ -1,9 +1,7 @@
-﻿using System;
-using System.CodeDom;
-using System.Collections.Generic;
-using System.Web;
-using Hi.UrlRewrite.Entities.Actions;
+﻿using Hi.UrlRewrite.Entities.Actions.Base;
 using Hi.UrlRewrite.Entities.ServerVariables;
+using System;
+using System.Collections.Generic;
 
 namespace Hi.UrlRewrite.Processing.Results
 {

@@ -28,7 +28,7 @@ namespace Hi.UrlRewrite.Tests
                     new MatchTag {Tag = "a", Attribute = "href"}
                 },
                 Pattern = @"/article\.aspx\?id=([0-9]+)(?:&|&amp;)title=([_0-9a-z-]+)$",
-                Action = new OutboundRewriteAction()
+                Action = new OutboundRewrite()
                 {
                     Value = @"/article/{R:1}/{R:2}"
                 }
@@ -49,7 +49,7 @@ namespace Hi.UrlRewrite.Tests
             var outboundRule = new OutboundRule
             {
                 Pattern = @"/article\.aspx\?id=([0-9]+)(?:&|&amp;)title=([_0-9a-z-]+)",
-                Action = new OutboundRewriteAction()
+                Action = new OutboundRewrite()
                 {
                     Value = @"/article/{R:1}/{R:2}"
                 }
@@ -71,7 +71,7 @@ namespace Hi.UrlRewrite.Tests
             {
                 Using = Using.ExactMatch,
                 Pattern = @"</body>",
-                Action = new OutboundRewriteAction()
+                Action = new OutboundRewrite()
                 {
                     Value = @"<script type='text/javascript'>//Your web analytics tracking code goes here...</script></body>"
                 }
@@ -97,7 +97,7 @@ namespace Hi.UrlRewrite.Tests
                     new MatchTag {Tag = "a", Attribute = "href"}
                 },
                 Pattern = @"/article\.aspx\?id=([0-9]+)(?:&|&amp;)title=([_0-9a-z-]+)$",
-                Action = new OutboundRewriteAction()
+                Action = new OutboundRewrite()
                 {
                     Value = @"/newarticle.aspx"
                 }

@@ -1,5 +1,5 @@
 ﻿using Hi.UrlRewrite.Entities.Actions;
-using Hi.UrlRewrite.Entities.Conditions;
+using Hi.UrlRewrite.Entities.Actions.Base;
 using Hi.UrlRewrite.Entities.Match;
 using Hi.UrlRewrite.Entities.Rules;
 using Hi.UrlRewrite.Processing.Results;
@@ -96,9 +96,9 @@ namespace Hi.UrlRewrite.Processing
                 var httpResponse = httpContext.Response;
                 httpResponse.Clear();
                 
-                if (ruleResult.FinalAction is IBaseRewrite)
+                if (ruleResult.FinalAction is IBaseRedirect)
                 {
-                    var redirectAction = ruleResult.FinalAction as IBaseRewrite;
+                    var redirectAction = ruleResult.FinalAction as IBaseRedirect;
                     int statusCode;
 
                     if (redirectAction.StatusCode.HasValue)
@@ -118,13 +118,13 @@ namespace Hi.UrlRewrite.Processing
                         httpResponse.Cache.SetCacheability(redirectAction.HttpCacheability.Value);
                     }
                 }
-                else if (ruleResult.FinalAction is AbortRequestAction)
+                else if (ruleResult.FinalAction is AbortRequest)
                 {
                     // do nothing
                 }
-                else if (ruleResult.FinalAction is CustomResponseAction)
+                else if (ruleResult.FinalAction is CustomResponse)
                 {
-                    var customResponse = ruleResult.FinalAction as CustomResponseAction;
+                    var customResponse = ruleResult.FinalAction as CustomResponse;
 
                     httpResponse.TrySkipIisCustomErrors = true;
 
@@ -229,15 +229,15 @@ namespace Hi.UrlRewrite.Processing
 
                 // TODO: Need to implement Rewrite, None
 
-                if (inboundRule.Action is RedirectAction) // process the action if it is a RedirectAction  
+                if (inboundRule.Action is Redirect) // process the action if it is a RedirectAction  
                 {
                     ProcessRedirectAction(inboundRule, originalUri, inboundRuleMatch, lastConditionMatch, ruleResult);
                 }
-                else if (inboundRule.Action is ItemQueryRedirectAction)
+                else if (inboundRule.Action is ItemQueryRedirect)
                 {
                     ProcessItemQueryRedirectAction(inboundRule, originalUri, inboundRuleMatch, lastConditionMatch, ruleResult);
                 }
-                else if (inboundRule.Action is AbortRequestAction || inboundRule.Action is CustomResponseAction)
+                else if (inboundRule.Action is AbortRequest || inboundRule.Action is CustomResponse)
                 {
                     ProcessActionProcessing(ruleResult);
                 }
@@ -341,7 +341,7 @@ namespace Hi.UrlRewrite.Processing
 
         private void ProcessRedirectAction(InboundRule inboundRule, Uri uri, Match inboundRuleMatch, Match lastConditionMatch, InboundRuleResult ruleResult)
         {
-            var redirectAction = inboundRule.Action as RedirectAction;
+            var redirectAction = inboundRule.Action as Redirect;
 
             var rewriteUrl = redirectAction.RewriteUrl;
             var rewriteItemId = redirectAction.RewriteItemId;
@@ -382,7 +382,7 @@ namespace Hi.UrlRewrite.Processing
 
         private void ProcessItemQueryRedirectAction(InboundRule inboundRule, Uri uri, Match inboundRuleMatch, Match lastConditionMatch, InboundRuleResult ruleResult)
         {
-            var redirectAction = inboundRule.Action as ItemQueryRedirectAction;
+            var redirectAction = inboundRule.Action as ItemQueryRedirect;
 
             var itemQuery = redirectAction.ItemQuery;
 

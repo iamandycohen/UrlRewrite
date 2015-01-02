@@ -65,18 +65,21 @@
     <Compile Include="Caching\RulesCacheManager.cs" />
     <Compile Include="Configuration.cs" />
     <Compile Include="Constants.cs" />
-    <Compile Include="Entities\Actions\AbortRequestAction.cs" />
-    <Compile Include="Entities\Actions\IBaseAction.cs" />
-    <Compile Include="Entities\Actions\BaseRedirectAction.cs" />
-    <Compile Include="Entities\Actions\IBaseStopProcessingAction.cs" />
-    <Compile Include="Entities\Actions\CustomResponseAction.cs" />
-    <Compile Include="Entities\Actions\IBaseCache.cs" />
-    <Compile Include="Entities\Actions\IBaseRewrite.cs" />
-    <Compile Include="Entities\Actions\IBaseStatusCode.cs" />
-    <Compile Include="Entities\Actions\ItemQueryRedirectAction.cs" />
-    <Compile Include="Entities\Actions\OutboundRewriteAction.cs" />
-    <Compile Include="Entities\Actions\RedirectAction.cs" />
-    <Compile Include="Entities\Actions\RedirectActionStatusCode.cs" />
+    <Compile Include="Entities\Actions\AbortRequest.cs" />
+    <Compile Include="Entities\Actions\Base\IBaseAction.cs" />
+    <Compile Include="Entities\Actions\Base\IBaseAppendQueryString.cs" />
+    <Compile Include="Entities\Actions\Base\IBaseCache.cs" />
+    <Compile Include="Entities\Actions\Base\IBaseRedirect.cs" />
+    <Compile Include="Entities\Actions\Base\IBaseRewrite.cs" />
+    <Compile Include="Entities\Actions\Base\IBaseRewriteUrl.cs" />
+    <Compile Include="Entities\Actions\Base\IBaseStatusCode.cs" />
+    <Compile Include="Entities\Actions\Base\IBaseStopProcessing.cs" />
+    <Compile Include="Entities\Actions\CustomResponse.cs" />
+    <Compile Include="Entities\Actions\ItemQueryRedirect.cs" />
+    <Compile Include="Entities\Actions\OutboundRewrite.cs" />
+    <Compile Include="Entities\Actions\Redirect.cs" />
+    <Compile Include="Entities\Actions\RedirectStatusCode.cs" />
+    <Compile Include="Entities\Actions\Rewrite.cs" />
     <Compile Include="Entities\Conditions\CheckIfInputString.cs" />
     <Compile Include="Entities\Conditions\Condition.cs" />
     <Compile Include="Entities\Conditions\IConditionLogicalGrouping.cs" />
@@ -131,6 +134,8 @@
     <Compile Include="sitecore modules\Shell\UrlRewrite\Default.aspx.designer.cs">
       <DependentUpon>Default.aspx</DependentUpon>
     </Compile>
+    <Compile Include="Templates\Action\Base\BaseAppendQuerystringItem.cs" />
+    <Compile Include="Templates\Action\Base\BaseRewriteUrlItem.cs" />
     <Compile Include="Templates\Action\OutboundRewriteItem.cs" />
     <Compile Include="Templates\Action\NoneItem.cs" />
     <Compile Include="Templates\Action\AbortRequestItem.cs" />
@@ -139,6 +144,7 @@
     <Compile Include="Templates\Action\ItemQueryRedirectItem.cs" />
     <Compile Include="Templates\Action\Base\BaseCacheItem.cs" />
     <Compile Include="Templates\Action\CustomResponseItem.cs" />
+    <Compile Include="Templates\Action\RewriteItem.cs" />
     <Compile Include="Templates\Action\Types\HttpCacheabilityTypeItem.cs" />
     <Compile Include="Templates\Action\Types\RedirectTypeItem.cs" />
     <Compile Include="Templates\BaseUrlRewriteItem.cs" />
@@ -175,8 +181,8 @@
     <Compile Include="Templates\Match\Types\MatchTypeItem.cs" />
     <Compile Include="Templates\Match\Types\UsingTypeItem.cs" />
     <Compile Include="Templates\Action\Base\BaseActionItem.cs" />
-    <Compile Include="Templates\Action\Base\BaseRedirectActionItem.cs" />
-    <Compile Include="Templates\Action\Base\BaseStopProcessingActionItem.cs" />
+    <Compile Include="Templates\Action\Base\BaseRedirectItem.cs" />
+    <Compile Include="Templates\Action\Base\BaseStopProcessingItem.cs" />
     <Compile Include="Templates\Action\RedirectItem.cs" />
     <Compile Include="Templates\Conditions\ConditionItem.cs" />
     <Compile Include="Templates\Folders\FolderItem.cs" />

@@ -1,11 +1,13 @@
-﻿using System;
+﻿using Hi.UrlRewrite.Entities.Actions.Base;
+using System;
 using System.Web;
 
 namespace Hi.UrlRewrite.Entities.Actions
 {
     [Serializable]
-    public class BaseRedirectAction : IBaseRewrite
+    public class Redirect : IBaseRedirect
     {
+        public string Name { get; set; }
         public string RewriteUrl { get; set; }
         public Guid? RewriteItemId { get; set; }
         public string RewriteItemAnchor { get; set; }
@@ -13,7 +15,7 @@ namespace Hi.UrlRewrite.Entities.Actions
 
         public HttpCacheability? HttpCacheability { get; set; }
         public bool StopProcessingOfSubsequentRules { get; set; }
-        public string Name { get; set; }
-        public RedirectActionStatusCode? StatusCode { get; set; }
+        public RedirectStatusCode? StatusCode { get; set; }
+
     }
 }

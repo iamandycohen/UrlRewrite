@@ -1,9 +1,10 @@
-﻿using System;
+﻿using Hi.UrlRewrite.Entities.Actions.Base;
+using System;
 
 namespace Hi.UrlRewrite.Entities.Actions
 {
     [Serializable]
-    public class OutboundRewriteAction : IBaseStopProcessingAction
+    public class OutboundRewrite : IBaseStopProcessing
     {
         public bool StopProcessingOfSubsequentRules { get; set; }
         public string Name { get; set; }

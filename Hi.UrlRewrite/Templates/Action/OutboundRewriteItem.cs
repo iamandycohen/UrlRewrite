@@ -15,8 +15,8 @@ namespace Hi.UrlRewrite.Templates.Action
 
         #region Inherited Base Templates
 
-        private readonly BaseStopProcessingActionItem _BaseStopProcessingActionItem;
-        public BaseStopProcessingActionItem BaseStopProcessingActionItem { get { return _BaseStopProcessingActionItem; } }
+        private readonly BaseStopProcessingItem _BaseStopProcessingItem;
+        public BaseStopProcessingItem BaseStopProcessingItem { get { return _BaseStopProcessingItem; } }
 
         #endregion
 
@@ -25,7 +25,7 @@ namespace Hi.UrlRewrite.Templates.Action
         public OutboundRewriteItem(Item innerItem)
             : base(innerItem)
         {
-            _BaseStopProcessingActionItem = new BaseStopProcessingActionItem(innerItem);
+            _BaseStopProcessingItem = new BaseStopProcessingItem(innerItem);
         }
 
         public static implicit operator OutboundRewriteItem(Item innerItem)

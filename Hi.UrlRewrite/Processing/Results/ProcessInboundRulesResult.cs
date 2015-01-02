@@ -1,7 +1,8 @@
-﻿using System;
+﻿using Hi.UrlRewrite.Entities.Actions;
+using Hi.UrlRewrite.Entities.Actions.Base;
+using System;
 using System.Collections.Generic;
 using System.Linq;
-using Hi.UrlRewrite.Entities.Actions;
 
 namespace Hi.UrlRewrite.Processing.Results
 {
@@ -54,17 +55,17 @@ namespace Hi.UrlRewrite.Processing.Results
         { 
             get 
             {
-                if (FinalAction is RedirectAction)
+                if (FinalAction is Redirect)
                 {
-                    var redirectAction = FinalAction as RedirectAction;
+                    var redirectAction = FinalAction as Redirect;
                     if (redirectAction.StatusCode.HasValue)
                     {
                         return (int) (redirectAction.StatusCode.Value);
                     }
                 }
-                else if (FinalAction is CustomResponseAction)
+                else if (FinalAction is CustomResponse)
                 {
-                    var customResponse = FinalAction as CustomResponseAction;
+                    var customResponse = FinalAction as CustomResponse;
                     return customResponse.StatusCode;
                 }
 

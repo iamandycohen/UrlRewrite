@@ -1,6 +1,6 @@
 ﻿namespace Hi.UrlRewrite.Entities.Actions
 {
-    public enum RedirectActionStatusCode
+    public enum RedirectStatusCode
     {
         Permanent = 301,
         Found = 302,

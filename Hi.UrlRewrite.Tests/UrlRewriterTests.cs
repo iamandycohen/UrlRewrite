@@ -35,7 +35,7 @@ namespace Hi.UrlRewrite.Tests
             var rewriteResult = rewriter.ProcessRequestUrl(new Uri("http://fictitioussite.com/john"), InboundRules);
 
             var firstInboundRule = InboundRules.First();
-            var actionToCompare = firstInboundRule.Action as RedirectAction;
+            var actionToCompare = firstInboundRule.Action as Redirect;
             var actionRewriteUrl = actionToCompare.RewriteUrl;
             var actionRewriteUri = new Uri(actionRewriteUrl);
 
@@ -81,7 +81,7 @@ namespace Hi.UrlRewrite.Tests
                 Name = "Abort Rule",
                 Pattern = "^abort$",
                 Using = Using.RegularExpressions,
-                Action = new AbortRequestAction() { Name = "Abort Action" },
+                Action = new AbortRequest() { Name = "Abort Action" },
                 MatchType = MatchType.MatchesThePattern
             };
 
@@ -89,7 +89,7 @@ namespace Hi.UrlRewrite.Tests
 
             var rewriteResult = rewriter.ProcessRequestUrl(new Uri("http://fictitioussite.com/abort"), InboundRules);
 
-            Assert.IsInstanceOfType(rewriteResult.FinalAction, typeof(AbortRequestAction));
+            Assert.IsInstanceOfType(rewriteResult.FinalAction, typeof(AbortRequest));
             Assert.IsTrue(rewriteResult.ProcessedResults.Count == 2);
         }
 
@@ -102,7 +102,7 @@ namespace Hi.UrlRewrite.Tests
                 Name = "Custom Response Rule",
                 Pattern = "customresponse",
                 Using = Using.ExactMatch,
-                Action = new CustomResponseAction()
+                Action = new CustomResponse()
                 {
                     Name = "Custom Response Action", 
                     StatusCode = 550, 
@@ -116,7 +116,7 @@ namespace Hi.UrlRewrite.Tests
             InboundRules.Insert(0, newInboundRule);
 
             var rewriteResult = rewriter.ProcessRequestUrl(new Uri("http://fictitioussite.com/customresponse"), InboundRules);
-            var customResponse = rewriteResult.FinalAction as CustomResponseAction;
+            var customResponse = rewriteResult.FinalAction as CustomResponse;
 
             Assert.IsNotNull(customResponse);
             Assert.AreEqual(customResponse.StatusCode, 550);
@@ -141,12 +141,12 @@ namespace Hi.UrlRewrite.Tests
                     Name = "Multiple Variable Rules",
                     Pattern = "^(.*)$",
                     Using = Using.RegularExpressions,
-                    Action = new RedirectAction()
+                    Action = new Redirect()
                     {
                         Name = "Redirect to C1 and C2",
                         AppendQueryString = false,
                         HttpCacheability = HttpCacheability.NoCache,
-                        StatusCode = RedirectActionStatusCode.Permanent,
+                        StatusCode = RedirectStatusCode.Permanent,
                         RewriteUrl = "http://{HTTP_HOST}/newpage/{C:1}/{C:2}"
                     },
                     MatchType = MatchType.MatchesThePattern,
@@ -196,11 +196,11 @@ namespace Hi.UrlRewrite.Tests
                 new InboundRule()
                 {
                     Name = "Redirect HTTPS to HTTP",
-                    Action = new RedirectAction()
+                    Action = new Redirect()
                     {
                         Name = "Redirect",
                         AppendQueryString = true,
-                        StatusCode = RedirectActionStatusCode.Permanent,
+                        StatusCode = RedirectStatusCode.Permanent,
                         HttpCacheability = HttpCacheability.NoCache,
                         StopProcessingOfSubsequentRules = true,
                         RewriteUrl = "http://{HTTP_HOST}/{R:1}"
