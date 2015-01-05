@@ -123,30 +123,18 @@ namespace Hi.UrlRewrite.Processing
                 }
                 else if (ruleResult.FinalAction is IBaseRewrite)
                 {
-                    var httpClient = new HttpClient();
-                    var requestMessage = new HttpRequestMessage()
+
+                    var rewrittenUrl = ruleResult.RewrittenUri;
+
+                    var isLocal = String.Equals(httpRequest.Url.Host, rewrittenUrl.Host,
+                                StringComparison.OrdinalIgnoreCase);
+
+                    if (!isLocal)
                     {
-                        RequestUri = ruleResult.RewrittenUri,
-                        Method = httpRequest.HttpMethod.Equals("POST") ? HttpMethod.Post : HttpMethod.Get
-                    };
-                    var sendTask = httpClient.SendAsync(requestMessage);
-                    sendTask.Wait();
-                    var response = sendTask.Result;
-                    var responseStreamTask = response.Content.ReadAsStreamAsync();
-                    responseStreamTask.Wait();
-                    var responseStream = responseStreamTask.Result;
+                        throw new ApplicationException("Rewrite Url must be a local URL");
+                    }
 
-                    var outputStream = new MemoryStream();
-                    responseStream.CopyTo(outputStream);
-
-                    httpResponse.BinaryWrite(outputStream.ToArray());
-
-                    var outboundRewriter = new OutboundRewriteProcessor();
-                    outboundRewriter.Process(httpContext);
-
-                    httpResponse.End();
-
-                    return;
+                    httpContext.Server.TransferRequest(rewrittenUrl.PathAndQuery, true, httpRequest.HttpMethod, RequestHeaders, true);
                 }
                 else if (ruleResult.FinalAction is AbortRequest)
                 {
@@ -546,6 +534,5 @@ namespace Hi.UrlRewrite.Processing
 
             return rewriteUrl;
         }
-
     }
 }

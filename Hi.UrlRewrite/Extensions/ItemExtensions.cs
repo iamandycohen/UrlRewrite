@@ -30,9 +30,11 @@ namespace Hi.UrlRewrite
 
         #region Rules
 
-        public static OutboundRule ToOutboundRule(this OutboundRuleItem outboundRuleItem, IEnumerable<BaseConditionItem> conditionItems)
+        public static OutboundRule ToOutboundRule(this OutboundRuleItem outboundRuleItem)
         {
             if (outboundRuleItem == null) return null;
+
+            var conditionItems = GetBaseConditionItems(outboundRuleItem);
 
             var outboundRule = new OutboundRule
             {
@@ -40,9 +42,9 @@ namespace Hi.UrlRewrite
                 Name = outboundRuleItem.Name
             };
 
-            GetBaseRuleItem(outboundRuleItem.BaseRuleItem, outboundRule);
+            SetBaseRule(outboundRuleItem.BaseRuleItem, outboundRule);
 
-            GetOutboundMatchItem(outboundRuleItem.OutboundMatchItem, outboundRule);
+            SetOutboundMatch(outboundRuleItem.OutboundMatchItem, outboundRule);
 
             GetPrecondition(outboundRuleItem.OutboundPreconditionItem, outboundRule);
 
@@ -76,7 +78,7 @@ namespace Hi.UrlRewrite
 
             if (conditionItems != null)
             {
-                GetConditionItems(conditionItems, outboundRule);
+                SetConditions(conditionItems, outboundRule);
             }
 
             return outboundRule;
@@ -95,10 +97,10 @@ namespace Hi.UrlRewrite
                 Name = preconditionItem.Name,
             };
 
-            var conditionItems = RulesEngine.GetBaseConditionItems(preconditionItem);
+            var conditionItems = GetBaseConditionItems(preconditionItem);
             if (conditionItems != null)
             {
-                GetConditionItems(conditionItems, precondition);
+                SetConditions(conditionItems, precondition);
             }
 
             var usingItem = preconditionItem.PreconditionUsingItem.Using.TargetItem;
@@ -123,15 +125,18 @@ namespace Hi.UrlRewrite
             }
             precondition.Using = usingType;
 
-            GetConditionLogicalGrouping(preconditionItem.ConditionLogicalGroupingItem, precondition);
+            SetConditionLogicalGrouping(preconditionItem.ConditionLogicalGroupingItem, precondition);
 
             outboundRule.Precondition = precondition;
         }
 
-        public static InboundRule ToInboundRule(this InboundRuleItem inboundRuleItem, IEnumerable<BaseConditionItem> conditionItems, IEnumerable<ServerVariableItem> serverVariableItems, string siteNameRestriction)
+        public static InboundRule ToInboundRule(this InboundRuleItem inboundRuleItem, string siteNameRestriction)
         {
 
             if (inboundRuleItem == null) return null;
+
+            var conditionItems = GetBaseConditionItems(inboundRuleItem);
+            var serverVariableItems = GetServerVariableItems(inboundRuleItem);
 
             var inboundRule = new InboundRule
             {
@@ -139,7 +144,7 @@ namespace Hi.UrlRewrite
                 Name = inboundRuleItem.Name
             };
 
-            GetBaseRuleItem(inboundRuleItem.BaseRuleItem, inboundRule);
+            SetBaseRule(inboundRuleItem.BaseRuleItem, inboundRule);
 
             if (string.IsNullOrEmpty(inboundRuleItem.BaseRuleItem.BaseMatchItem.MatchPatternItem.Pattern.Value))
             {
@@ -189,12 +194,12 @@ namespace Hi.UrlRewrite
 
             if (conditionItems != null)
             {
-                GetConditionItems(conditionItems, inboundRule);
+                SetConditions(conditionItems, inboundRule);
             }
 
             if (serverVariableItems != null)
             {
-                GetServerVariableItems(serverVariableItems, inboundRule);
+                SetServerVariables(serverVariableItems, inboundRule);
             }
 
             inboundRule.SiteNameRestriction = siteNameRestriction;
@@ -202,7 +207,68 @@ namespace Hi.UrlRewrite
             return inboundRule;
         }
 
-        private static void GetServerVariableItems(IEnumerable<ServerVariableItem> serverVariableItems, IServerVariableList serverVariableList)
+        public static IEnumerable<BaseConditionItem> GetBaseConditionItems(Item item)
+        {
+            IEnumerable<BaseConditionItem> conditionItems = null;
+
+            var conditions =
+                item.Axes.SelectItems(string.Format(Constants.TwoTemplateQuery,
+                    ConditionItem.TemplateId, ConditionAdvancedItem.TemplateId));
+
+            if (conditions != null)
+            {
+                conditionItems = conditions.Select(e => new BaseConditionItem(e));
+            }
+
+            return conditionItems;
+        }
+
+        public static IEnumerable<ServerVariableItem> GetServerVariableItems(Item item)
+        {
+            IEnumerable<ServerVariableItem> serverVariableItems = null;
+
+            var serverVariables =
+                item.Axes.SelectItems(string.Format(Constants.SingleTemplateQuery, ServerVariableItem.TemplateId));
+
+            if (serverVariables != null)
+            {
+                serverVariableItems = serverVariables.Select(e => new ServerVariableItem(e));
+            }
+
+            return serverVariableItems;
+        }
+
+        public static IEnumerable<RequestHeaderItem> GetRequestHeaderItems(Item item)
+        {
+            IEnumerable<RequestHeaderItem> requestHeaderItems = null;
+
+            var requestHeaders =
+                item.Axes.SelectItems(string.Format(Constants.SingleTemplateQuery, RequestHeaderItem.TemplateId));
+
+            if (requestHeaders != null)
+            {
+                requestHeaderItems = requestHeaders.Select(e => new RequestHeaderItem(e));
+            }
+
+            return requestHeaderItems;
+        }
+
+        public static IEnumerable<ResponseHeaderItem> GetResponseHeaderItems(Item item)
+        {
+            IEnumerable<ResponseHeaderItem> responeHeaderItems = null;
+
+            var responseHeaders =
+                item.Axes.SelectItems(string.Format(Constants.SingleTemplateQuery, ResponseHeaderItem.TemplateId));
+
+            if (responseHeaders != null)
+            {
+                responeHeaderItems = responseHeaders.Select(e => new ResponseHeaderItem(e));
+            }
+
+            return responeHeaderItems;
+        }
+
+        private static void SetServerVariables(IEnumerable<ServerVariableItem> serverVariableItems, IServerVariableList serverVariableList)
         {
             var serverVariables = serverVariableItems
                 .Select(e => e.ToServerVariable())
@@ -212,7 +278,7 @@ namespace Hi.UrlRewrite
             serverVariableList.ServerVariables = serverVariables;
         }
 
-        private static void GetConditionItems(IEnumerable<BaseConditionItem> conditionItems, IConditionList conditionList)
+        private static void SetConditions(IEnumerable<BaseConditionItem> conditionItems, IConditionList conditionList)
         {
             conditionList.Conditions = conditionItems
                 .Select(e => e.ToCondition())
@@ -220,16 +286,16 @@ namespace Hi.UrlRewrite
                 .ToList();
         }
 
-        private static void GetBaseRuleItem(BaseRuleItem baseRuleItem, IBaseRule baseRule)
+        private static void SetBaseRule(BaseRuleItem baseRuleItem, IBaseRule baseRule)
         {
             baseRule.Enabled = baseRuleItem.Enabled.Checked;
 
-            GetBaseMatchItem(baseRuleItem.BaseMatchItem, baseRule);
+            SetBaseMatch(baseRuleItem.BaseMatchItem, baseRule);
 
-            GetConditionLogicalGrouping(baseRuleItem.ConditionLogicalGroupingItem, baseRule);
+            SetConditionLogicalGrouping(baseRuleItem.ConditionLogicalGroupingItem, baseRule);
         }
 
-        private static void GetConditionLogicalGrouping(ConditionLogicalGroupingItem conditionLogicalGroupingItem, IConditionLogicalGrouping conditionLogicalGrouping)
+        private static void SetConditionLogicalGrouping(ConditionLogicalGroupingItem conditionLogicalGroupingItem, IConditionLogicalGrouping conditionLogicalGrouping)
         {
             var logicalGroupingItem = conditionLogicalGroupingItem.LogicalGrouping.TargetItem;
             LogicalGrouping? logicalGroupingType = null;
@@ -251,7 +317,7 @@ namespace Hi.UrlRewrite
             conditionLogicalGrouping.ConditionLogicalGrouping = logicalGroupingType;
         }
 
-        private static void GetBaseMatchItem(BaseMatchItem baseMatchItem, IBaseMatch baseMatch)
+        private static void SetBaseMatch(BaseMatchItem baseMatchItem, IBaseMatch baseMatch)
         {
             baseMatch.IgnoreCase = baseMatchItem.MatchIgnoreCaseItem.IgnoreCase.Checked;
             baseMatch.Pattern = baseMatchItem.MatchPatternItem.Pattern.Value;
@@ -298,9 +364,9 @@ namespace Hi.UrlRewrite
             baseMatch.Using = usingType;
         }
 
-        private static void GetOutboundMatchItem(OutboundMatchItem outboundMatchItem, IOutboundMatch outboundMatch)
+        private static void SetOutboundMatch(OutboundMatchItem outboundMatchItem, IOutboundMatch outboundMatch)
         {
-            GetBaseMatchItem(outboundMatchItem.BaseMatchItem, outboundMatch);
+            SetBaseMatch(outboundMatchItem.BaseMatchItem, outboundMatch);
 
             var scopeTypeItem = outboundMatchItem.MatchScopeItem.MatchScopeType.TargetItem;
             if (scopeTypeItem != null)
@@ -346,7 +412,6 @@ namespace Hi.UrlRewrite
             }
 
         }
-
 
         #endregion
 
@@ -459,6 +524,13 @@ namespace Hi.UrlRewrite
             return requestHeader as RequestHeader;
         }
 
+        public static ResponseHeader ToResponseHeader(this ResponseHeaderItem responseHeaderItem)
+        {
+            var responseHeader = GetBaseServerVariable(responseHeaderItem);
+
+            return responseHeader as ResponseHeader;
+        }
+
         private static IBaseServerVariable GetBaseServerVariable(Item variableItem)
         {
             if (variableItem == null)
@@ -487,6 +559,17 @@ namespace Hi.UrlRewrite
             if (templateId.Equals(new ID(RequestHeaderItem.TemplateId)))
             {
                 return new RequestHeader
+                {
+                    Name = name,
+                    VariableName = variableName,
+                    Value = value,
+                    ReplaceExistingValue = replaceExistingValue
+                };
+            }
+
+            if (templateId.Equals(new ID(ResponseHeaderItem.TemplateId)))
+            {
+                return new ResponseHeader
                 {
                     Name = name,
                     VariableName = variableName,

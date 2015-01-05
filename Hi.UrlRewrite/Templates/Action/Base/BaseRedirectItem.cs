@@ -8,7 +8,7 @@ namespace Hi.UrlRewrite.Templates.Action.Base
 {
     public class BaseRedirectItem : CustomItem
     {
-        public static readonly string TemplateId = "{7E95E23F-437C-46DC-97AA-F2F6C79B78C1}";
+        public static readonly string TemplateId = "{D28318B2-5793-4ABA-BFB3-3C3FBC00AA92}";
 
         #region Inherited Base Templates
 

@@ -199,9 +199,7 @@ namespace Hi.UrlRewrite.Processing
         internal static InboundRule CreateInboundRuleFromInboundRuleItem(InboundRuleItem inboundRuleItem, RedirectFolderItem redirectFolderItem)
         {
             var siteNameRestriction = GetSiteNameRestriction(redirectFolderItem);
-            var conditionItems = GetBaseConditionItems(inboundRuleItem);
-            var serverVariableItems = GetServerVariableItems(inboundRuleItem);
-            var inboundRule = inboundRuleItem.ToInboundRule(conditionItems, serverVariableItems, siteNameRestriction);
+            var inboundRule = inboundRuleItem.ToInboundRule(siteNameRestriction);
 
             return inboundRule;
         }
@@ -209,41 +207,9 @@ namespace Hi.UrlRewrite.Processing
         internal static OutboundRule CreateOutboundRuleFromOutboundRuleItem(OutboundRuleItem outboundRuleItem,
             RedirectFolderItem redirectFolderItem)
         {
-            var conditionItems = GetBaseConditionItems(outboundRuleItem);
-            var outboundRule = outboundRuleItem.ToOutboundRule(conditionItems);
+            var outboundRule = outboundRuleItem.ToOutboundRule();
 
             return outboundRule;
-        }
-
-        public static IEnumerable<BaseConditionItem> GetBaseConditionItems(Item item)
-        {
-            IEnumerable<BaseConditionItem> conditionItems = null;
-
-            var conditions =
-                item.Axes.SelectItems(string.Format(Constants.TwoTemplateQuery,
-                    ConditionItem.TemplateId, ConditionAdvancedItem.TemplateId));
-
-            if (conditions != null)
-            {
-                conditionItems = conditions.Select(e => new BaseConditionItem(e));
-            }
-
-            return conditionItems;
-        }
-
-        public static IEnumerable<ServerVariableItem> GetServerVariableItems(Item item)
-        {
-            IEnumerable<ServerVariableItem> serverVariableItems = null;
-
-            var serverVariables =
-                item.Axes.SelectItems(string.Format(Constants.SingleTemplateQuery, ServerVariableItem.TemplateId));
-
-            if (serverVariables != null)
-            {
-                serverVariableItems = serverVariables.Select(e => new ServerVariableItem(e));
-            }
-
-            return serverVariableItems;
         }
 
         internal static string GetSiteNameRestriction(RedirectFolderItem redirectFolder)

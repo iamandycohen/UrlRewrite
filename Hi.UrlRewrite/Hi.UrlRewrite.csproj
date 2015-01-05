@@ -110,6 +110,7 @@
     <Compile Include="Entities\ServerVariables\IRequestHeaderList.cs" />
     <Compile Include="Entities\ServerVariables\IServerVariableList.cs" />
     <Compile Include="Entities\ServerVariables\RequestHeader.cs" />
+    <Compile Include="Entities\ServerVariables\ResponseHeader.cs" />
     <Compile Include="Entities\ServerVariables\ServerVariable.cs" />
     <Compile Include="Extensions\ItemExtensions.cs" />
     <Compile Include="Fields\SiteDropList.cs" />
@@ -174,6 +175,7 @@
     <Compile Include="Templates\Outbound\OutboundMatchScopeItem.cs" />
     <Compile Include="Templates\ServerVariables\BaseServerVariableItem.cs" />
     <Compile Include="Templates\ServerVariables\RequestHeaderItem.cs" />
+    <Compile Include="Templates\ServerVariables\ResponseHeaderItem.cs" />
     <Compile Include="Templates\ServerVariables\ServerVariableItem.cs" />
     <Compile Include="Templates\Settings\SettingsItem.cs" />
     <Compile Include="Templates\Folders\PreconditionsFolderItem.cs" />
