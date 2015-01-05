@@ -9,6 +9,13 @@ In addition to adding Site specific redirect capabilities, I have modeled the da
 Changelog
 =========
 
+Version 1.7
+* Added outbound rules
+* Added ability to set response headers
+* Added inbound rule rewrite action
+* General cleanup
+* Added Sample Rewrites
+
 Version 1.6
 * Added information about conditions to the Url Rewrite application in the Sitecore Admin UI
 * Fixed UrlRewriteHandler displaying blank page if the StaticMapHandler didn't find the file. Allowed exceptions to be bubbled up.
