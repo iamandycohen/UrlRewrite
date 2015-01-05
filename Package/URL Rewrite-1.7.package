@@ -149,6 +149,37 @@ Version 1.0
     </xitems>
     <xitems>
       <Entries>
+        <x-item>/master/sitecore/content/Sample Rewrites/{0DA6100D-E4FB-4ADD-AD4C-373F410A1952}/invariant/0</x-item>
+        <x-item>/master/sitecore/content/Sample Rewrites/Inbound Redirect to External/{0004EE90-0BF7-44B4-8701-FC0519F1523D}/invariant/0</x-item>
+        <x-item>/master/sitecore/content/Sample Rewrites/Inbound Redirect to External/Redirect to Google/{6B4F6B4A-926D-4FE7-8B3C-E7FC34E2B777}/invariant/0</x-item>
+        <x-item>/master/sitecore/content/Sample Rewrites/Redirect HTTPS to HTTP/{086325DC-885E-4C19-83F1-648247A82490}/invariant/0</x-item>
+        <x-item>/master/sitecore/content/Sample Rewrites/Redirect HTTPS to HTTP/HTTPS/{629ED022-E46F-49DF-85DB-E1E5A8CBBBE7}/invariant/0</x-item>
+        <x-item>/master/sitecore/content/Sample Rewrites/Redirect HTTPS to HTTP/Redirect to HTTP/{A6D8FB2F-B90A-4153-A3AA-8E6F265F84A7}/invariant/0</x-item>
+        <x-item>/master/sitecore/content/Sample Rewrites/Redirect with a Condition Back Reference/{1073AF4B-BA42-4F0D-BE6D-E95B0F64FD76}/invariant/0</x-item>
+        <x-item>/master/sitecore/content/Sample Rewrites/Redirect with a Condition Back Reference/Query string path/{76DFFB5F-578F-44DF-93E4-BDDE1261AF72}/invariant/0</x-item>
+        <x-item>/master/sitecore/content/Sample Rewrites/Redirect with a Condition Back Reference/Redirect to Back Refrerence/{90B91823-8DBE-4055-AF78-3F7C35664201}/invariant/0</x-item>
+        <x-item>/master/sitecore/content/Sample Rewrites/Simple External Redirect/{255DB7E0-8EE7-4E6A-B86A-3DABE86471DA}/invariant/0</x-item>
+        <x-item>/master/sitecore/content/Sample Rewrites/Simple Internal Redirect/{540C3ED4-E14C-4A34-9AFB-5F3C7251CBE0}/invariant/0</x-item>
+      </Entries>
+      <SkipVersions>False</SkipVersions>
+        <ItemToEntryConverter>
+          <Transforms>
+            <InstallerConfigurationTransform>
+              <Options>
+                <BehaviourOptions>
+                  <ItemMode>Skip</ItemMode>
+                  <ItemMergeMode>Undefined</ItemMergeMode>
+                </BehaviourOptions>
+              </Options>
+            </InstallerConfigurationTransform>
+          </Transforms>
+        </ItemToEntryConverter>
+      <Include />
+      <Exclude />
+      <Name>samples</Name>
+    </xitems>
+    <xitems>
+      <Entries>
         <x-item>/master/sitecore/templates/Modules/UrlRewrite/{5D183D73-5F71-48D5-B381-47D96E9687B9}/invariant/0</x-item>
         <x-item>/master/sitecore/templates/Modules/UrlRewrite/Content/{FBD48044-53B0-4DCA-9D3E-E73682E78F9F}/invariant/0</x-item>
         <x-item>/master/sitecore/templates/Modules/UrlRewrite/Content/Types/{8997D0DE-51EC-4A98-9862-A915AE6FA2C2}/invariant/0</x-item>
