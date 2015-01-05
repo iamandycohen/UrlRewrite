@@ -438,6 +438,8 @@ Version 1.0
         <x-item>/master/sitecore/templates/Modules/UrlRewrite/Templates/Server Variables/Base Server Variable/General/Variable Name/{16032853-2874-4634-B733-D5D4CCA11D38}/invariant/0</x-item>
         <x-item>/master/sitecore/templates/Modules/UrlRewrite/Templates/Server Variables/Request Header/__Standard Values/{1BECA04A-C86A-43F4-9016-C7DCE7763BF2}/invariant/0</x-item>
         <x-item>/master/sitecore/templates/Modules/UrlRewrite/Templates/Server Variables/Request Header/{698FFCC4-0D22-4B97-ACFE-3D04994B4B65}/invariant/0</x-item>
+        <x-item>/master/sitecore/templates/Modules/UrlRewrite/Templates/Server Variables/Response Header/__Standard Values/{62F09718-643C-4B83-8956-FD989038243F}/invariant/0</x-item>
+        <x-item>/master/sitecore/templates/Modules/UrlRewrite/Templates/Server Variables/Response Header/{BA67D115-9A49-4EAB-8CDF-596CB6F0CBF1}/invariant/0</x-item>
         <x-item>/master/sitecore/templates/Modules/UrlRewrite/Templates/Server Variables/Server Variable/__Standard Values/{05F33225-473A-4861-BE67-C4B9E3891E9F}/invariant/0</x-item>
         <x-item>/master/sitecore/templates/Modules/UrlRewrite/Templates/Server Variables/Server Variable/{E073CD4C-2747-433D-B6C0-3C52BA953C97}/invariant/0</x-item>
         <x-item>/master/sitecore/templates/Modules/UrlRewrite/Templates/Settings/{DF8F5B75-A344-4B7B-9929-6EE4415ED13E}/invariant/0</x-item>
