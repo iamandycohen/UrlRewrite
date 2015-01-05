@@ -6,6 +6,7 @@ using Hi.UrlRewrite.Entities.Actions.Base;
 
 namespace Hi.UrlRewrite.Entities.Actions
 {
+    [Serializable]
     public class Rewrite : IBaseRewrite
     {
         public bool StopProcessingOfSubsequentRules { get; set; }
