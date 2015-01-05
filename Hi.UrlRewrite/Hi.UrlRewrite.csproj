@@ -142,6 +142,7 @@
       <DependentUpon>Default.aspx</DependentUpon>
     </Compile>
     <Compile Include="Templates\Action\Base\BaseAppendQuerystringItem.cs" />
+    <Compile Include="Templates\Action\Base\BaseRedirectItem.cs" />
     <Compile Include="Templates\Action\Base\BaseRewriteUrlItem.cs" />
     <Compile Include="Templates\Action\OutboundRewriteItem.cs" />
     <Compile Include="Templates\Action\NoneItem.cs" />
@@ -190,7 +191,6 @@
     <Compile Include="Templates\Match\Types\MatchTypeItem.cs" />
     <Compile Include="Templates\Match\Types\UsingTypeItem.cs" />
     <Compile Include="Templates\Action\Base\BaseActionItem.cs" />
-    <Compile Include="Templates\Action\Base\BaseRedirectItem.cs" />
     <Compile Include="Templates\Action\Base\BaseStopProcessingItem.cs" />
     <Compile Include="Templates\Action\RedirectItem.cs" />
     <Compile Include="Templates\Conditions\ConditionItem.cs" />

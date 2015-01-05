@@ -549,7 +549,7 @@ namespace Hi.UrlRewrite
             var baseAppendQueryString = rewriteItem.BaseRewriteItem.BaseAppendQuerystringItem;
             GetBaseAppendQueryStringItem(baseAppendQueryString, rewriteAction);
 
-            var stopProcessingItem = rewriteItem.BaseRewriteItem.BaseStopProcessingActionItem;
+            var stopProcessingItem = rewriteItem.BaseRewriteItem.BaseStopProcessingItem;
             GetStopProcessing(stopProcessingItem, rewriteAction);
 
             return rewriteAction;
