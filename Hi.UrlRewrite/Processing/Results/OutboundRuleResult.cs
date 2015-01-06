@@ -14,11 +14,13 @@ namespace Hi.UrlRewrite.Processing.Results
         public bool RuleMatched { get; set; }
         public bool StopProcessing { get; set; }
 
-        public IEnumerable<ServerVariable> ServerVariables { get; set; }
+        //public IEnumerable<ServerVariable> ServerVariables { get; set; }
+        public IEnumerable<ResponseHeader> ResponseHeaders { get; set; }
 
         public OutboundRuleResult()
         {
-            ServerVariables = new List<ServerVariable>();
+            //ServerVariables = new List<ServerVariable>();
+            ResponseHeaders = new List<ResponseHeader>();
         }
     }
 }

@@ -83,22 +83,23 @@ namespace Hi.UrlRewrite.Processing
             try
             {
                 var httpRequest = httpContext.Request;
-                var serverVariables = ruleResult.ProcessedResults.SelectMany(e => e.ServerVariables);
+                var httpResponse = httpContext.Response;
+
+                var responseHeaders = ruleResult.ProcessedResults.SelectMany(e => e.ResponseHeaders);
                 var replacements = new RewriteHelper.Replacements
                 {
                     RequestHeaders = RequestHeaders,
                     RequestServerVariables = RequestServerVariables
                 };
 
-                foreach (var serverVariable in serverVariables)
-                {
-                    var serverVariableValue = RewriteHelper.ReplaceTokens(replacements, serverVariable.Value);
-                    httpRequest.ServerVariables.Set(serverVariable.VariableName, serverVariableValue);
-                }
-
-                var httpResponse = httpContext.Response;
                 httpResponse.Clear();
                 
+                foreach (var responseHeader in responseHeaders)
+                {
+                    var responseHeaderValue = RewriteHelper.ReplaceTokens(replacements, responseHeader.Value);
+                    httpResponse.Headers.Set(responseHeader.VariableName, responseHeaderValue);
+                }
+
                 if (ruleResult.FinalAction is IBaseRedirect)
                 {
                     var redirectAction = ruleResult.FinalAction as IBaseRedirect;
@@ -238,9 +239,9 @@ namespace Hi.UrlRewrite.Processing
             {
                 ruleResult.RuleMatched = true;
 
-                if (inboundRule.ServerVariables.Any())
+                if (inboundRule.ResponseHeaders.Any())
                 {
-                    ruleResult.ServerVariables = inboundRule.ServerVariables;
+                    ruleResult.ResponseHeaders = inboundRule.ResponseHeaders;
                 }
 
                 Log.Debug(this, "INBOUND RULE MATCH - requestUri: {0} inboundRule: {1}", originalUri, inboundRule.Name);

@@ -8,7 +8,7 @@ using System.Collections.Generic;
 namespace Hi.UrlRewrite.Entities.Rules
 {
     [Serializable]
-    public class InboundRule : IBaseRule, IConditionList, IServerVariableList
+    public class InboundRule : IBaseRule, IConditionList, /*IServerVariableList, IRequestHeaderList,*/ IResponseHeaderList
     {
         public Guid ItemId { get; set; }
         public string Name { get; set; }
@@ -26,13 +26,19 @@ namespace Hi.UrlRewrite.Entities.Rules
         public string Pattern { get; set; }
         public bool IgnoreCase { get; set; }
 
-        public IEnumerable<ServerVariable> ServerVariables { get; set; }
+        //public IEnumerable<ServerVariable> ServerVariables { get; set; }
+        //public IEnumerable<RequestHeader> RequestHeaders { get; set; }
+        public IEnumerable<ResponseHeader> ResponseHeaders { get; set; }
 
         public InboundRule()
         {
             Conditions = new List<Condition>();
-            ServerVariables = new List<ServerVariable>();
+            //ServerVariables = new List<ServerVariable>();
+            //RequestHeaders = new List<RequestHeader>();
+            ResponseHeaders = new List<ResponseHeader>();
         }
+
+
 
     }
 }

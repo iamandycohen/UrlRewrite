@@ -136,7 +136,9 @@ namespace Hi.UrlRewrite
             if (inboundRuleItem == null) return null;
 
             var conditionItems = GetBaseConditionItems(inboundRuleItem);
-            var serverVariableItems = GetServerVariableItems(inboundRuleItem);
+            //var serverVariableItems = GetServerVariableItems(inboundRuleItem);
+            //var requestHeaderItems = GetRequestHeaderItems(inboundRuleItem);
+            var responseHeaderItems = GetResponseHeaderItems(inboundRuleItem);
 
             var inboundRule = new InboundRule
             {
@@ -197,9 +199,19 @@ namespace Hi.UrlRewrite
                 SetConditions(conditionItems, inboundRule);
             }
 
-            if (serverVariableItems != null)
+            //if (serverVariableItems != null)
+            //{
+            //    SetServerVariables(serverVariableItems, inboundRule);
+            //}
+
+            //if (requestHeaderItems != null)
+            //{
+            //    SetRequestHeaders(requestHeaderItems, inboundRule);
+            //}
+
+            if (responseHeaderItems != null)
             {
-                SetServerVariables(serverVariableItems, inboundRule);
+                SetResponseHeaders(responseHeaderItems, inboundRule);
             }
 
             inboundRule.SiteNameRestriction = siteNameRestriction;
@@ -276,6 +288,26 @@ namespace Hi.UrlRewrite
                 .ToList();
 
             serverVariableList.ServerVariables = serverVariables;
+        }
+
+        private static void SetResponseHeaders(IEnumerable<ResponseHeaderItem> responseHeaderItems, IResponseHeaderList responseHeaderList)
+        {
+            var responseHeaders = responseHeaderItems
+                .Select(e => e.ToResponseHeader())
+                .Where(e => e != null)
+                .ToList();
+
+            responseHeaderList.ResponseHeaders = responseHeaders;
+        }
+
+        private static void SetRequestHeaders(IEnumerable<RequestHeaderItem> requestHeaderItems, IRequestHeaderList requestHeaderList)
+        {
+            var requestHeaders = requestHeaderItems
+                .Select(e => e.ToRequestHeader())
+                .Where(e => e != null)
+                .ToList();
+
+            requestHeaderList.RequestHeaders = requestHeaders;
         }
 
         private static void SetConditions(IEnumerable<BaseConditionItem> conditionItems, IConditionList conditionList)

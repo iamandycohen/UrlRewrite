@@ -19,11 +19,13 @@ namespace Hi.UrlRewrite.Processing.Results
         public IBaseAction ResultAction { get; set; }
         public ConditionMatchResult ConditionMatchResult { get; set; }
 
-        public IEnumerable<ServerVariable> ServerVariables { get; set; }
+        //public IEnumerable<ServerVariable> ServerVariables { get; set; }
+        public IEnumerable<ResponseHeader> ResponseHeaders { get; set; }
 
         public InboundRuleResult()
         {
-            ServerVariables = new List<ServerVariable>();
+            //ServerVariables = new List<ServerVariable>();
+            ResponseHeaders = new List<ResponseHeader>();
         }
     }
 }

@@ -107,6 +107,7 @@
     <Compile Include="Entities\Rules\IPrecondition.cs" />
     <Compile Include="Entities\Rules\OutboundRule.cs" />
     <Compile Include="Entities\ServerVariables\IBaseServerVariable.cs" />
+    <Compile Include="Entities\ServerVariables\IResponseHeaderList.cs" />
     <Compile Include="Entities\ServerVariables\IRequestHeaderList.cs" />
     <Compile Include="Entities\ServerVariables\IServerVariableList.cs" />
     <Compile Include="Entities\ServerVariables\RequestHeader.cs" />
