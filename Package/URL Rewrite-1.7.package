@@ -170,18 +170,20 @@
         <x-item>/master/sitecore/content/Sample Rewrites/Simple Internal Redirect/{540C3ED4-E14C-4A34-9AFB-5F3C7251CBE0}/invariant/0</x-item>
       </Entries>
       <SkipVersions>False</SkipVersions>
+      <Converter>
         <ItemToEntryConverter>
           <Transforms>
             <InstallerConfigurationTransform>
               <Options>
                 <BehaviourOptions>
-                  <ItemMode>Skip</ItemMode>
+                  <ItemMode>Undefined</ItemMode>
                   <ItemMergeMode>Undefined</ItemMergeMode>
                 </BehaviourOptions>
               </Options>
             </InstallerConfigurationTransform>
           </Transforms>
         </ItemToEntryConverter>
+      </Converter>
       <Include />
       <Exclude />
       <Name>samples</Name>
@@ -364,6 +366,7 @@
         <x-item>/master/sitecore/templates/Modules/UrlRewrite/Templates/Base Rule/{995478B6-29FB-4CF8-B5FB-5C1C5B21BF5A}/invariant/0</x-item>
         <x-item>/master/sitecore/templates/Modules/UrlRewrite/Templates/Base Rule/General/{46D1F2F1-F364-4310-BCB0-200034C85C22}/invariant/0</x-item>
         <x-item>/master/sitecore/templates/Modules/UrlRewrite/Templates/Base Rule/General/Enabled/{14C30096-C351-4AB4-9E08-2DE9B61C8D4F}/invariant/0</x-item>
+        <x-item>/master/sitecore/templates/Modules/UrlRewrite/Templates/Base Rule/General/Hit Count/{064200D2-1ADF-4A19-AFED-45654B412FF1}/invariant/0</x-item>
         <x-item>/master/sitecore/templates/Modules/UrlRewrite/Templates/Conditions/{B2078EBD-B872-4B6F-98BD-49AB69426A74}/invariant/0</x-item>
         <x-item>/master/sitecore/templates/Modules/UrlRewrite/Templates/Conditions/Base Condition/__Standard Values/{6291A074-DCB6-47AF-A578-58F9A945A563}/invariant/0</x-item>
         <x-item>/master/sitecore/templates/Modules/UrlRewrite/Templates/Conditions/Base Condition/{1CDF3BDD-0A44-42CD-9D40-FBA83B981F48}/invariant/0</x-item>
