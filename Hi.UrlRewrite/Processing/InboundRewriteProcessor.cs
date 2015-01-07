@@ -1,19 +1,14 @@
-﻿using System;
+﻿using Hi.UrlRewrite.Caching;
+using Hi.UrlRewrite.Entities.Rules;
+using Hi.UrlRewrite.Processing.Results;
+using Sitecore.Data;
+using Sitecore.Pipelines.HttpRequest;
+using Sitecore.SecurityModel;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using System.Web;
-using Hi.UrlRewrite.Caching;
-using Hi.UrlRewrite.Entities.Rules;
-using Hi.UrlRewrite.Processing.Results;
-using Hi.UrlRewrite.Templates;
-using Sitecore.Configuration;
-using Sitecore.Data;
-using Sitecore.Data.Items;
-using Sitecore.Diagnostics;
-using Sitecore.Pipelines.HttpRequest;
-using Sitecore.Publishing;
-using Sitecore.SecurityModel;
 
 namespace Hi.UrlRewrite.Processing
 {

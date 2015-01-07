@@ -1,11 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using Hi.UrlRewrite.Entities.Conditions;
+using Hi.UrlRewrite.Processing.Results;
+using System;
 using System.Collections.Specialized;
-using System.Linq;
 using System.Text.RegularExpressions;
 using System.Web;
-using Hi.UrlRewrite.Entities.Conditions;
-using Hi.UrlRewrite.Processing.Results;
 
 namespace Hi.UrlRewrite.Processing
 {

@@ -1,13 +1,9 @@
-﻿using System;
+﻿using Sitecore.Pipelines.HttpRequest;
+using Sitecore.Sites;
+using System;
 using System.Linq;
-using System.Net;
 using System.Threading;
 using System.Web;
-using System.Web.UI;
-using Sitecore.Diagnostics;
-using Sitecore.Pipelines.HttpRequest;
-using Sitecore.Sites;
-using System.Reflection;
 
 namespace Hi.UrlRewrite.Processing
 {

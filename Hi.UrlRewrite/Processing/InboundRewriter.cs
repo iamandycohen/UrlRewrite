@@ -1,10 +1,7 @@
-﻿using System.IO;
-using System.Net.Http;
-using Hi.UrlRewrite.Entities.Actions;
+﻿using Hi.UrlRewrite.Entities.Actions;
 using Hi.UrlRewrite.Entities.Actions.Base;
 using Hi.UrlRewrite.Entities.Match;
 using Hi.UrlRewrite.Entities.Rules;
-using Hi.UrlRewrite.Module;
 using Hi.UrlRewrite.Processing.Results;
 using Sitecore.Data;
 using Sitecore.Links;
