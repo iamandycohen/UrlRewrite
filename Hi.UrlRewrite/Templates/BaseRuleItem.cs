@@ -47,6 +47,14 @@ namespace Hi.UrlRewrite.Templates
                 return new CheckboxField(InnerItem.Fields["Enabled"]);
             }
         }
+
+        public TextField HitCount
+        {
+            get
+            {
+                return new TextField(InnerItem.Fields["Hit Count"]);
+            }
+        }
             
     }
 }

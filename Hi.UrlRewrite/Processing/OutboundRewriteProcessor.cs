@@ -46,9 +46,8 @@ namespace Hi.UrlRewrite.Processing
             var cache = RulesCacheManager.GetCache(db);
             var outboundRules = cache.GetOutboundRules();
 
-#if !DEBUG
             if (outboundRules != null) return outboundRules;
-#endif
+
             Log.Info(this, db, "Initializing Outbound Rules.");
 
             using (new SecurityDisabler())

@@ -3,7 +3,9 @@ using Hi.UrlRewrite.Entities.Actions.Base;
 using Hi.UrlRewrite.Entities.Match;
 using Hi.UrlRewrite.Entities.Rules;
 using Hi.UrlRewrite.Processing.Results;
+using Hi.UrlRewrite.Templates.Inbound;
 using Sitecore.Data;
+using Sitecore.Data.Events;
 using Sitecore.Links;
 using Sitecore.Resources.Media;
 using System;
@@ -13,6 +15,7 @@ using System.Linq;
 using System.Net;
 using System.Text.RegularExpressions;
 using System.Threading;
+using System.Threading.Tasks;
 using System.Web;
 
 namespace Hi.UrlRewrite.Processing
@@ -77,93 +80,119 @@ namespace Hi.UrlRewrite.Processing
 
         public void ExecuteResult(HttpContextBase httpContext, ProcessInboundRulesResult ruleResult)
         {
-            try
+            var httpRequest = httpContext.Request;
+            var httpResponse = httpContext.Response;
+
+            var responseHeaders = ruleResult.ProcessedResults.SelectMany(e => e.ResponseHeaders);
+            var replacements = new RewriteHelper.Replacements
             {
-                var httpRequest = httpContext.Request;
-                var httpResponse = httpContext.Response;
+                RequestHeaders = RequestHeaders,
+                RequestServerVariables = RequestServerVariables
+            };
 
-                var responseHeaders = ruleResult.ProcessedResults.SelectMany(e => e.ResponseHeaders);
-                var replacements = new RewriteHelper.Replacements
-                {
-                    RequestHeaders = RequestHeaders,
-                    RequestServerVariables = RequestServerVariables
-                };
+            httpResponse.Clear();
 
-                httpResponse.Clear();
-                
-                foreach (var responseHeader in responseHeaders)
-                {
-                    var responseHeaderValue = RewriteHelper.ReplaceTokens(replacements, responseHeader.Value);
-                    httpResponse.Headers.Set(responseHeader.VariableName, responseHeaderValue);
-                }
-
-                if (ruleResult.FinalAction is IBaseRedirect)
-                {
-                    var redirectAction = ruleResult.FinalAction as IBaseRedirect;
-                    int statusCode;
-
-                    if (redirectAction.StatusCode.HasValue)
-                    {
-                        statusCode = (int)(redirectAction.StatusCode.Value);
-                    }
-                    else
-                    {
-                        statusCode = (int)HttpStatusCode.MovedPermanently;
-                    }
-
-                    httpResponse.RedirectLocation = ruleResult.RewrittenUri.ToString();
-                    httpResponse.StatusCode = statusCode;
-
-                    if (redirectAction.HttpCacheability.HasValue)
-                    {
-                        httpResponse.Cache.SetCacheability(redirectAction.HttpCacheability.Value);
-                    }
-                }
-                else if (ruleResult.FinalAction is IBaseRewrite)
-                {
-
-                    var rewrittenUrl = ruleResult.RewrittenUri;
-
-                    var isLocal = String.Equals(httpRequest.Url.Host, rewrittenUrl.Host,
-                                StringComparison.OrdinalIgnoreCase);
-
-                    if (!isLocal)
-                    {
-                        throw new ApplicationException("Rewrite Url must be a local URL");
-                    }
-
-                    httpContext.Server.TransferRequest(rewrittenUrl.PathAndQuery, true, httpRequest.HttpMethod, RequestHeaders, true);
-                }
-                else if (ruleResult.FinalAction is AbortRequest)
-                {
-                    // do nothing
-                }
-                else if (ruleResult.FinalAction is CustomResponse)
-                {
-                    var customResponse = ruleResult.FinalAction as CustomResponse;
-
-                    httpResponse.TrySkipIisCustomErrors = true;
-
-                    httpResponse.StatusCode = customResponse.StatusCode;
-                    httpResponse.StatusDescription = customResponse.ErrorDescription;
-
-                    // TODO: Implement Status Reason?
-                    //httpResponse.??? = customResponse.Reason;
-
-                    if (customResponse.SubStatusCode.HasValue)
-                    {
-                        httpResponse.SubStatusCode = customResponse.SubStatusCode.Value;
-                    }
-
-                }
-
-                //httpContext.ApplicationInstance.CompleteRequest();
-                httpResponse.End();
-            }
-            catch (ThreadAbortException)
+            foreach (var responseHeader in responseHeaders)
             {
-                // swallow this exception because we may have called Response.End
+                var responseHeaderValue = RewriteHelper.ReplaceTokens(replacements, responseHeader.Value);
+                httpResponse.Headers.Set(responseHeader.VariableName, responseHeaderValue);
             }
+
+            if (ruleResult.FinalAction is IBaseRedirect)
+            {
+                var redirectAction = ruleResult.FinalAction as IBaseRedirect;
+                int statusCode;
+
+                if (redirectAction.StatusCode.HasValue)
+                {
+                    statusCode = (int)(redirectAction.StatusCode.Value);
+                }
+                else
+                {
+                    statusCode = (int)HttpStatusCode.MovedPermanently;
+                }
+
+                httpResponse.RedirectLocation = ruleResult.RewrittenUri.ToString();
+                httpResponse.StatusCode = statusCode;
+
+                if (redirectAction.HttpCacheability.HasValue)
+                {
+                    httpResponse.Cache.SetCacheability(redirectAction.HttpCacheability.Value);
+                }
+
+                var task = Task.Factory.StartNew(() =>
+                {
+                    Database db = null;
+                    Guid? ruleId = null;
+
+                    try
+                    {
+                        if (!ruleResult.ItemId.HasValue) return;
+
+                        ruleId = ruleResult.ItemId.Value;
+                        var ruleItemId = new ID(ruleResult.ItemId.Value);
+                        db = Database.GetDatabase("master");
+                        var ruleItem = db.GetItem(ruleItemId);
+                        var rule = new InboundRuleItem(ruleItem);
+
+                        int currentHitCount;
+
+                        if (!int.TryParse(rule.BaseRuleItem.HitCount.Value, out currentHitCount)) return;
+
+                        var newHitCount = currentHitCount + 1;
+
+                        //using (new EventDisabler())
+                        //{
+                            rule.InnerItem.Editing.BeginEdit();
+                            rule.BaseRuleItem.HitCount.InnerField.SetValue(newHitCount.ToString(), true);
+                            rule.InnerItem.Editing.EndEdit();
+                        //}
+                    }
+                    catch (Exception ex)
+                    {
+                        Log.Error(this, ex, db, "Error saving hit count on rule with item id: '{0}'", ruleId);
+                    }
+                });
+            }
+            else if (ruleResult.FinalAction is IBaseRewrite)
+            {
+
+                var rewrittenUrl = ruleResult.RewrittenUri;
+
+                var isLocal = String.Equals(httpRequest.Url.Host, rewrittenUrl.Host,
+                            StringComparison.OrdinalIgnoreCase);
+
+                if (!isLocal)
+                {
+                    throw new ApplicationException("Rewrite Url must be a local URL");
+                }
+
+                httpContext.Server.TransferRequest(rewrittenUrl.PathAndQuery, true, httpRequest.HttpMethod, RequestHeaders, true);
+            }
+            else if (ruleResult.FinalAction is AbortRequest)
+            {
+                // do nothing
+            }
+            else if (ruleResult.FinalAction is CustomResponse)
+            {
+                var customResponse = ruleResult.FinalAction as CustomResponse;
+
+                httpResponse.TrySkipIisCustomErrors = true;
+
+                httpResponse.StatusCode = customResponse.StatusCode;
+                httpResponse.StatusDescription = customResponse.ErrorDescription;
+
+                // TODO: Implement Status Reason?
+                //httpResponse.??? = customResponse.Reason;
+
+                if (customResponse.SubStatusCode.HasValue)
+                {
+                    httpResponse.SubStatusCode = customResponse.SubStatusCode.Value;
+                }
+
+            }
+
+            httpResponse.End();
         }
 
         private InboundRuleResult ProcessInboundRule(Uri originalUri, InboundRule inboundRule)
@@ -245,7 +274,7 @@ namespace Hi.UrlRewrite.Processing
 
                 // TODO: Need to implement Rewrite, None
 
-                if (inboundRule.Action is Redirect) 
+                if (inboundRule.Action is Redirect)
                 {
                     ProcessRedirectAction(inboundRule, originalUri, inboundRuleMatch, lastConditionMatch, ruleResult);
                 }

@@ -13,6 +13,7 @@ namespace Hi.UrlRewrite.Processing.Results
         private readonly Uri _rewrittenUri;
         private readonly IBaseAction _finalAction;
         private readonly List<InboundRuleResult> _processedResults;
+        private readonly Guid? _itemId;
 
         public ProcessInboundRulesResult(Uri originalUri, List<InboundRuleResult> processedResults)
         {
@@ -24,6 +25,15 @@ namespace Hi.UrlRewrite.Processing.Results
             {
                 _rewrittenUri = lastMatchedResult.RewrittenUri;
                 _finalAction = lastMatchedResult.ResultAction;
+                _itemId = lastMatchedResult.ItemId;
+            }
+        }
+
+        public Guid? ItemId
+        {
+            get
+            {
+                return _itemId;
             }
         }
 

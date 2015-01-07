@@ -1,5 +1,6 @@
 ﻿using Hi.UrlRewrite.Templates.Folders;
 using Hi.UrlRewrite.Templates.Inbound;
+using Sitecore;
 using Sitecore.Data;
 using Sitecore.Data.Events;
 using Sitecore.Data.Items;
@@ -18,12 +19,14 @@ namespace Hi.UrlRewrite.Processing
         public void OnItemSaved(object sender, EventArgs args)
         {
             var item = Event.ExtractParameter(args, 0) as Item;
+            var itemChanges = Event.ExtractParameter(args, 1) as ItemChanges;
+
             if (item == null)
             {
                 return;
             }
 
-            RunItemSaved(item);
+            RunItemSaved(item, itemChanges);
         }
 
         public void OnItemSavedRemote(object sender, EventArgs args)
@@ -40,14 +43,13 @@ namespace Hi.UrlRewrite.Processing
 
             using (new SecurityDisabler())
             {
-                //var db = Database.GetDatabase(Configuration.Database);
                 item = db.GetItem(itemId);
             }
 
-            RunItemSaved(item);
+            RunItemSaved(item, itemSavedRemoteEventArg.Changes);
         }
 
-        private void RunItemSaved(Item item)
+        private void RunItemSaved(Item item, ItemChanges itemChanges)
         {
             var db = item.Database;
             var rulesEngine = new RulesEngine();
@@ -75,6 +77,8 @@ namespace Hi.UrlRewrite.Processing
                     }
                     else if (item.IsInboundRuleItem())
                     {
+                        if (OnlyUpdatedHitCount(itemChanges)) return;
+
                         Log.Info(this, db, "Refreshing Inbound Rule [{0}] after save event", item.Paths.FullPath);
 
                         rulesEngine.RefreshInboundRule(item, redirectFolderItem);
@@ -101,6 +105,20 @@ namespace Hi.UrlRewrite.Processing
                 Log.Error(this, ex, db, "Exception occured when saving item after save - Item ID: {0} Item Path: {1}", item.ID, item.Paths.FullPath);
             }
 
+        }
+
+        private static bool OnlyUpdatedHitCount(ItemChanges itemChanges)
+        {
+            var fieldChanges = itemChanges.FieldChanges.Cast<FieldChange>().ToList();
+            var revisionField = fieldChanges.Find(e => e.Definition.ID.Equals(FieldIDs.Revision));
+            var updatedByField = fieldChanges.Find(e => e.Definition.ID.Equals(FieldIDs.UpdatedBy));
+            var updatedField = fieldChanges.Find(e => e.Definition.ID.Equals(FieldIDs.Updated));
+
+            fieldChanges.Remove(revisionField);
+            fieldChanges.Remove(updatedByField);
+            fieldChanges.Remove(updatedField);
+
+            return fieldChanges.Count == 1 && fieldChanges.Any(e => e.Definition.Name.Equals("Hit Count"));
         }
 
         #endregion
