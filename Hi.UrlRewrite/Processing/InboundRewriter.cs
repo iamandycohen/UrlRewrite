@@ -120,39 +120,7 @@ namespace Hi.UrlRewrite.Processing
                     httpResponse.Cache.SetCacheability(redirectAction.HttpCacheability.Value);
                 }
 
-                var task = Task.Factory.StartNew(() =>
-                {
-                    Database db = null;
-                    Guid? ruleId = null;
-
-                    try
-                    {
-                        if (!ruleResult.ItemId.HasValue) return;
-
-                        ruleId = ruleResult.ItemId.Value;
-                        var ruleItemId = new ID(ruleResult.ItemId.Value);
-                        db = Database.GetDatabase("master");
-                        var ruleItem = db.GetItem(ruleItemId);
-                        var rule = new InboundRuleItem(ruleItem);
-
-                        int currentHitCount;
-
-                        if (!int.TryParse(rule.BaseRuleItem.HitCount.Value, out currentHitCount)) return;
-
-                        var newHitCount = currentHitCount + 1;
-
-                        //using (new EventDisabler())
-                        //{
-                            rule.InnerItem.Editing.BeginEdit();
-                            rule.BaseRuleItem.HitCount.InnerField.SetValue(newHitCount.ToString(), true);
-                            rule.InnerItem.Editing.EndEdit();
-                        //}
-                    }
-                    catch (Exception ex)
-                    {
-                        Log.Error(this, ex, db, "Error saving hit count on rule with item id: '{0}'", ruleId);
-                    }
-                });
+                IncrementHitCount(ruleResult);
             }
             else if (ruleResult.FinalAction is IBaseRewrite)
             {
@@ -193,6 +161,43 @@ namespace Hi.UrlRewrite.Processing
             }
 
             httpResponse.End();
+        }
+
+        private void IncrementHitCount(ProcessInboundRulesResult ruleResult)
+        {
+            var task = Task.Factory.StartNew(() =>
+            {
+                Database db = null;
+                Guid? ruleId = null;
+
+                try
+                {
+                    if (!ruleResult.ItemId.HasValue) return;
+
+                    ruleId = ruleResult.ItemId.Value;
+                    var ruleItemId = new ID(ruleResult.ItemId.Value);
+                    db = Database.GetDatabase("master");
+                    var ruleItem = db.GetItem(ruleItemId);
+                    var rule = new InboundRuleItem(ruleItem);
+
+                    int currentHitCount;
+
+                    if (!int.TryParse(rule.BaseRuleItem.HitCount.Value, out currentHitCount)) return;
+
+                    var newHitCount = currentHitCount + 1;
+
+                    //using (new EventDisabler())
+                    //{
+                    rule.InnerItem.Editing.BeginEdit();
+                    rule.BaseRuleItem.HitCount.InnerField.SetValue(newHitCount.ToString(), true);
+                    rule.InnerItem.Editing.EndEdit();
+                    //}
+                }
+                catch (Exception ex)
+                {
+                    Log.Error(this, ex, db, "Error saving hit count on rule with item id: '{0}'", ruleId);
+                }
+            });
         }
 
         private InboundRuleResult ProcessInboundRule(Uri originalUri, InboundRule inboundRule)
