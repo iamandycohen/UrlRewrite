@@ -1,5 +1,5 @@
-UrlRewrite
-==========
+Url Rewrite
+===========
 
 While there are many Redirect / Rewrite modules available in the Sitecore Marketplace, I created this one to address the fact that most of them cannot create redirects that are Site specific.
 
@@ -15,6 +15,7 @@ Version 1.7
 * Added inbound rule rewrite action
 * General cleanup
 * Added Sample Rewrites
+* Added hit count tracking
 
 Version 1.6
 * Added information about conditions to the Url Rewrite application in the Sitecore Admin UI
