@@ -115,6 +115,7 @@
     <Compile Include="Entities\ServerVariables\ServerVariable.cs" />
     <Compile Include="Extensions\ItemExtensions.cs" />
     <Compile Include="Fields\SiteDropList.cs" />
+    <Compile Include="Jobs\ReportingService.cs" />
     <Compile Include="Log.cs" />
     <Compile Include="LogHelper.cs" />
     <Compile Include="Module\OutboundModule.cs" />
