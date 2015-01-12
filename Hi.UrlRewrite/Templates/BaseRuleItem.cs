@@ -19,7 +19,6 @@ namespace Hi.UrlRewrite.Templates
         private readonly BaseMatchItem _BaseMatchItem;
         public BaseMatchItem BaseMatchItem { get { return _BaseMatchItem; } }
 
-
         #endregion
 
         public BaseRuleItem(Item innerItem)
@@ -45,14 +44,6 @@ namespace Hi.UrlRewrite.Templates
             get
             {
                 return new CheckboxField(InnerItem.Fields["Enabled"]);
-            }
-        }
-
-        public TextField HitCount
-        {
-            get
-            {
-                return new TextField(InnerItem.Fields["Hit Count"]);
             }
         }
             

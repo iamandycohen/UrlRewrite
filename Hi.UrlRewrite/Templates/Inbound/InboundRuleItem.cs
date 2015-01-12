@@ -12,6 +12,8 @@ namespace Hi.UrlRewrite.Templates.Inbound
         private readonly BaseRuleItem _BaseRuleItem;
         public BaseRuleItem BaseRuleItem { get { return _BaseRuleItem; } }
 
+        private readonly BaseHitCountItem _BaseHitCountItem;
+        public BaseHitCountItem BaseHitCountItem { get { return _BaseHitCountItem; } }
 
         #endregion
 
@@ -19,6 +21,8 @@ namespace Hi.UrlRewrite.Templates.Inbound
             : base(innerItem)
         {
             _BaseRuleItem = new BaseRuleItem(innerItem);
+            _BaseHitCountItem = new BaseHitCountItem(innerItem);
+
         }
 
         public static implicit operator InboundRuleItem(Item innerItem)

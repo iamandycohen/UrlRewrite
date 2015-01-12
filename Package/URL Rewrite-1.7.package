@@ -8,48 +8,48 @@
       <License />
       <Comment />
       <Attributes />
-      <Readme>
-        UrlRewrite
-        ==========
+      <Readme>Url Rewrite
+===========
 
-        While there are many Redirect / Rewrite modules available in the Sitecore Marketplace, I created this one to address the fact that most of them cannot create redirects that are Site specific.
+While there are many Redirect / Rewrite modules available in the Sitecore Marketplace, I created this one to address the fact that most of them cannot create redirects that are Site specific.
 
-        In addition to adding Site specific redirect capabilities, I have modeled the data structure to closely match the functionality of Microsoft's IIS Url Rewrite plugin.
+In addition to adding Site specific redirect capabilities, I have modeled the data structure to closely match the functionality of Microsoft's IIS Url Rewrite plugin.
 
 
-        Changelog
-        =========
+Changelog
+=========
 
-        Version 1.7
-        * Added outbound rules
-        * Added ability to set response headers
-        * Added inbound rule rewrite action
-        * General cleanup
-        * Added Sample Rewrites
+Version 1.7
+* Added outbound rules
+* Added ability to set response headers
+* Added inbound rule rewrite action
+* General cleanup
+* Added Sample Rewrites
+* Added hit count tracking
 
-        Version 1.6
-        * Added information about conditions to the Url Rewrite application in the Sitecore Admin UI
-        * Fixed UrlRewriteHandler displaying blank page if the StaticMapHandler didn't find the file. Allowed exceptions to be bubbled up.
-        * Added a new type of rediret action - Item Query Redirect which allows you to use a Sitecore Query to find an item.  Ability to utilize back references from conditions.
+Version 1.6
+* Added information about conditions to the Url Rewrite application in the Sitecore Admin UI
+* Fixed UrlRewriteHandler displaying blank page if the StaticMapHandler didn't find the file. Allowed exceptions to be bubbled up.
+* Added a new type of rediret action - Item Query Redirect which allows you to use a Sitecore Query to find an item.  Ability to utilize back references from conditions.
 
-        Version 1.5
-        * Added support for Custom Response
-        * Added support for Abort
-        * Added Bootstrap UI for testing the redirects and visually seeing how the rules are processed.
-        * Fixed UrlRewriteHandler so that it calls the StaticFileHandler if it no rules are matched.
-        * Added drop down list so you can select your site instead of having to type a regular expression to match the site on.  NOTE *** All Redirect Folder's are currently reset so you have to reset the Site Name Restriction field.
-        * Added the ability to have sub folders in a top level Redirect Folder
-        * removed the top level Redirect Folder from the package so that rules don't get overwritten when you reinstall the package
-        * Updated how back references work for Rules and Conditions
-        * Fixed security on Redirect Workflow
+Version 1.5
+* Added support for Custom Response
+* Added support for Abort
+* Added Bootstrap UI for testing the redirects and visually seeing how the rules are processed.
+* Fixed UrlRewriteHandler so that it calls the StaticFileHandler if it no rules are matched. 
+* Added drop down list so you can select your site instead of having to type a regular expression to match the site on.  NOTE *** All Redirect Folder's are currently reset so you have to reset the Site Name Restriction field.
+* Added the ability to have sub folders in a top level Redirect Folder
+* removed the top level Redirect Folder from the package so that rules don't get overwritten when you reinstall the package
+* Updated how back references work for Rules and Conditions
+* Fixed security on Redirect Workflow
 
-        Version 1.1
-        * Major refactor to support instantiation of the UrlRewriter without needing HttpContext or a web site.
-        * Supports Unit Tests.
+Version 1.1
+* Major refactor to support instantiation of the UrlRewriter without needing HttpContext or a web site.  
+* Supports Unit Tests.
 
-        Version 1.0
-        * Initial Release
-      </Readme>
+Version 1.0
+* Initial Release
+</Readme>
       <Publisher>Andy Cohen</Publisher>
       <PostStep />
       <PackageID />
@@ -362,11 +362,14 @@
         <x-item>/master/sitecore/templates/Modules/UrlRewrite/Templates/Action/Types/{B95A1866-B1C5-4A04-922E-02E669BD23FA}/invariant/0</x-item>
         <x-item>/master/sitecore/templates/Modules/UrlRewrite/Templates/Action/Types/HttpCacheability Type/{482F740A-FEF3-4C88-AE89-3D5859FD0D6D}/invariant/0</x-item>
         <x-item>/master/sitecore/templates/Modules/UrlRewrite/Templates/Action/Types/Redirect Type/{5E020836-C778-4283-B199-82147C4C122F}/invariant/0</x-item>
+        <x-item>/master/sitecore/templates/Modules/UrlRewrite/Templates/Base Hit Count/__Standard Values/{8D782413-BC17-436C-8639-545191C37539}/invariant/0</x-item>
+        <x-item>/master/sitecore/templates/Modules/UrlRewrite/Templates/Base Hit Count/{A012FA42-BB6D-414F-B78B-C1576B3E1B8B}/invariant/0</x-item>
+        <x-item>/master/sitecore/templates/Modules/UrlRewrite/Templates/Base Hit Count/General/{1C39BD47-E294-41CD-B08A-503F59CCEAF5}/invariant/0</x-item>
+        <x-item>/master/sitecore/templates/Modules/UrlRewrite/Templates/Base Hit Count/General/Hit Count/{064200D2-1ADF-4A19-AFED-45654B412FF1}/invariant/0</x-item>
         <x-item>/master/sitecore/templates/Modules/UrlRewrite/Templates/Base Rule/__Standard Values/{F60ABD97-95BE-4882-805F-1B7CC3F122A9}/invariant/0</x-item>
         <x-item>/master/sitecore/templates/Modules/UrlRewrite/Templates/Base Rule/{995478B6-29FB-4CF8-B5FB-5C1C5B21BF5A}/invariant/0</x-item>
         <x-item>/master/sitecore/templates/Modules/UrlRewrite/Templates/Base Rule/General/{46D1F2F1-F364-4310-BCB0-200034C85C22}/invariant/0</x-item>
         <x-item>/master/sitecore/templates/Modules/UrlRewrite/Templates/Base Rule/General/Enabled/{14C30096-C351-4AB4-9E08-2DE9B61C8D4F}/invariant/0</x-item>
-        <x-item>/master/sitecore/templates/Modules/UrlRewrite/Templates/Base Rule/General/Hit Count/{064200D2-1ADF-4A19-AFED-45654B412FF1}/invariant/0</x-item>
         <x-item>/master/sitecore/templates/Modules/UrlRewrite/Templates/Conditions/{B2078EBD-B872-4B6F-98BD-49AB69426A74}/invariant/0</x-item>
         <x-item>/master/sitecore/templates/Modules/UrlRewrite/Templates/Conditions/Base Condition/__Standard Values/{6291A074-DCB6-47AF-A578-58F9A945A563}/invariant/0</x-item>
         <x-item>/master/sitecore/templates/Modules/UrlRewrite/Templates/Conditions/Base Condition/{1CDF3BDD-0A44-42CD-9D40-FBA83B981F48}/invariant/0</x-item>

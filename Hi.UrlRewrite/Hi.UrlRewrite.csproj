@@ -157,13 +157,14 @@
     <Compile Include="Templates\Action\RewriteItem.cs" />
     <Compile Include="Templates\Action\Types\HttpCacheabilityTypeItem.cs" />
     <Compile Include="Templates\Action\Types\RedirectTypeItem.cs" />
+    <Compile Include="Templates\BaseRuleItem.cs" />
+    <Compile Include="Templates\BaseHitCountItem.cs" />
     <Compile Include="Templates\BaseUrlRewriteItem.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Templates\Conditions\BaseConditionItem.cs" />
     <Compile Include="Templates\Conditions\PreconditionItem.cs" />
     <Compile Include="Templates\Conditions\ConditionLogicalGroupingItem.cs" />
     <Compile Include="Templates\Conditions\ConditionAdvancedItem.cs" />
-    <Compile Include="Templates\BaseRuleItem.cs" />
     <Compile Include="Templates\Conditions\PreconditionUsingItem.cs" />
     <Compile Include="Templates\Conditions\Types\CheckIfInputStringTypeItem.cs" />
     <Compile Include="Templates\Conditions\Types\ConditionInputTypeItem.cs" />

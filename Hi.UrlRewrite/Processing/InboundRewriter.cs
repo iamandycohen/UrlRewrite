@@ -3,6 +3,7 @@ using Hi.UrlRewrite.Entities.Actions.Base;
 using Hi.UrlRewrite.Entities.Match;
 using Hi.UrlRewrite.Entities.Rules;
 using Hi.UrlRewrite.Processing.Results;
+using Hi.UrlRewrite.Templates;
 using Hi.UrlRewrite.Templates.Inbound;
 using Sitecore.Data;
 using Sitecore.Data.Events;
@@ -178,18 +179,18 @@ namespace Hi.UrlRewrite.Processing
                     var ruleItemId = new ID(ruleResult.ItemId.Value);
                     db = Database.GetDatabase("master");
                     var ruleItem = db.GetItem(ruleItemId);
-                    var rule = new InboundRuleItem(ruleItem);
+                    var rule = new BaseHitCountItem(ruleItem);
 
                     int currentHitCount;
 
-                    if (!int.TryParse(rule.BaseRuleItem.HitCount.Value, out currentHitCount)) return;
+                    if (!int.TryParse(rule.HitCount.Value, out currentHitCount)) return;
 
                     var newHitCount = currentHitCount + 1;
 
                     //using (new EventDisabler())
                     //{
                     rule.InnerItem.Editing.BeginEdit();
-                    rule.BaseRuleItem.HitCount.InnerField.SetValue(newHitCount.ToString(), true);
+                    rule.HitCount.InnerField.SetValue(newHitCount.ToString(), true);
                     rule.InnerItem.Editing.EndEdit();
                     //}
                 }
