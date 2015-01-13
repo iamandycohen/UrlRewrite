@@ -126,7 +126,7 @@ namespace Hi.UrlRewrite.Processing
                     httpResponse.Cache.SetCacheability(redirectAction.HttpCacheability.Value);
                 }
 
-                ReportingService.ReportRewrites(ruleResult.ProcessedResults.Where(e => e.RuleMatched));
+                ReportingService.ReportRewrites(ruleResult.ProcessedResults.Where(e => e.RuleMatched), Sitecore.Context.Database);
                 IncrementHitCount(ruleResult);
             }
             else if (ruleResult.FinalAction is IBaseRewrite)
