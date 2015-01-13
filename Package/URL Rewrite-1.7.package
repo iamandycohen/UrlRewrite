@@ -408,10 +408,6 @@ Version 1.0
         <x-item>/master/sitecore/templates/User Defined/UrlRewrite/Templates/Action/Types/{B95A1866-B1C5-4A04-922E-02E669BD23FA}/invariant/0</x-item>
         <x-item>/master/sitecore/templates/User Defined/UrlRewrite/Templates/Action/Types/HttpCacheability Type/{482F740A-FEF3-4C88-AE89-3D5859FD0D6D}/invariant/0</x-item>
         <x-item>/master/sitecore/templates/User Defined/UrlRewrite/Templates/Action/Types/Redirect Type/{5E020836-C778-4283-B199-82147C4C122F}/invariant/0</x-item>
-        <x-item>/master/sitecore/templates/User Defined/UrlRewrite/Templates/Base Hit Count/__Standard Values/{8D782413-BC17-436C-8639-545191C37539}/invariant/0</x-item>
-        <x-item>/master/sitecore/templates/User Defined/UrlRewrite/Templates/Base Hit Count/{A012FA42-BB6D-414F-B78B-C1576B3E1B8B}/invariant/0</x-item>
-        <x-item>/master/sitecore/templates/User Defined/UrlRewrite/Templates/Base Hit Count/General/{1C39BD47-E294-41CD-B08A-503F59CCEAF5}/invariant/0</x-item>
-        <x-item>/master/sitecore/templates/User Defined/UrlRewrite/Templates/Base Hit Count/General/Hit Count/{064200D2-1ADF-4A19-AFED-45654B412FF1}/invariant/0</x-item>
         <x-item>/master/sitecore/templates/User Defined/UrlRewrite/Templates/Base Rule/__Standard Values/{F60ABD97-95BE-4882-805F-1B7CC3F122A9}/invariant/0</x-item>
         <x-item>/master/sitecore/templates/User Defined/UrlRewrite/Templates/Base Rule/{995478B6-29FB-4CF8-B5FB-5C1C5B21BF5A}/invariant/0</x-item>
         <x-item>/master/sitecore/templates/User Defined/UrlRewrite/Templates/Base Rule/General/{46D1F2F1-F364-4310-BCB0-200034C85C22}/invariant/0</x-item>

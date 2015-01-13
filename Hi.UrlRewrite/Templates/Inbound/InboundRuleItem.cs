@@ -12,16 +12,12 @@ namespace Hi.UrlRewrite.Templates.Inbound
         private readonly BaseRuleItem _BaseRuleItem;
         public BaseRuleItem BaseRuleItem { get { return _BaseRuleItem; } }
 
-        private readonly BaseHitCountItem _BaseHitCountItem;
-        public BaseHitCountItem BaseHitCountItem { get { return _BaseHitCountItem; } }
-
         #endregion
 
         public InboundRuleItem(Item innerItem)
             : base(innerItem)
         {
             _BaseRuleItem = new BaseRuleItem(innerItem);
-            _BaseHitCountItem = new BaseHitCountItem(innerItem);
 
         }
 
