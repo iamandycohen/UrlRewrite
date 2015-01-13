@@ -44,7 +44,8 @@ namespace Hi.UrlRewrite
         public const string ConditionInputType_HttpHost_ItemId = "{CE714D26-9BC2-44AB-91CB-5D98F7BF7DE4}";
         public const string ConditionInputType_Https_ItemId = "{F9D6EA61-3C0B-41FA-8DA1-8405BED83BAD}";
 
-        public const string UrlRewriteModuleFolder_ItemId = "{5D183D73-5F71-48D5-B381-47D96E9687B9}";
+        public const string UrlRewriteModuleFolder_ItemId = "{76C853FC-AA0B-4412-BA5A-BCF44BF0194C}";
+        public const string UrlRewriteTemplatesFolder_ItemId = "{5D183D73-5F71-48D5-B381-47D96E9687B9}";
         public const string UrlRewriteSettings_ItemId = "{CD887CD4-9837-4929-B68E-366E3A7D1FEA}";
 
         public const string ReportingFolder_ItemId = "{1D07EFA5-88F6-482D-98EF-5C0AAB2EE4B1}";

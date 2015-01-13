@@ -36,9 +36,13 @@ namespace Hi.UrlRewrite.Processing
                 var settings = new SettingsItem(settingsItem);
                 var publishingTargets = settings.InstallationPublishingTargets.GetItems();
                 var dbArray = publishingTargets.Select(x => Factory.GetDatabase(x.Fields["Target database"].Value)).ToArray();
-                var urlRewriteModuleItem = settingsDb.GetItem(new ID(Constants.UrlRewriteModuleFolder_ItemId));
+                var urlRewriteTemplatesFolderItem = settingsDb.GetItem(new ID(Constants.UrlRewriteTemplatesFolder_ItemId));
 
-                PublishManager.PublishItem(urlRewriteModuleItem, dbArray, urlRewriteModuleItem.Languages, true,
+                PublishManager.PublishItem(urlRewriteTemplatesFolderItem, dbArray, urlRewriteTemplatesFolderItem.Languages, true,
+                    true);
+
+                var urlRewriteModuleFolderItem = settingsDb.GetItem(new ID(Constants.UrlRewriteModuleFolder_ItemId));
+                PublishManager.PublishItem(urlRewriteModuleFolderItem, dbArray, urlRewriteModuleFolderItem.Languages, true,
                     true);
             }
         }

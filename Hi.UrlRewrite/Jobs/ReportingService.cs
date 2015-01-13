@@ -39,7 +39,7 @@ namespace Hi.UrlRewrite.Jobs
 
         public void SaveRewriteInfo(InboundRuleResult ruleResult, Database database)
         {
-            var reportingFolder = Database.GetDatabase("master").GetItem(new ID(Constants.ReportingFolder_ItemId));
+            var reportingFolder = database.GetItem(new ID(Constants.ReportingFolder_ItemId));
             var uniqueId = new ID(Guid.NewGuid()).ToShortID().ToString();
             var reportingItem = reportingFolder.Add(uniqueId, new TemplateID(new ID(RewriteReportItem.TemplateId)));
             var report = new RewriteReportItem(reportingItem);
