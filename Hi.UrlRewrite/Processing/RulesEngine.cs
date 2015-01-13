@@ -38,12 +38,18 @@ namespace Hi.UrlRewrite.Processing
                 var dbArray = publishingTargets.Select(x => Factory.GetDatabase(x.Fields["Target database"].Value)).ToArray();
                 var urlRewriteTemplatesFolderItem = settingsDb.GetItem(new ID(Constants.UrlRewriteTemplatesFolder_ItemId));
 
-                PublishManager.PublishItem(urlRewriteTemplatesFolderItem, dbArray, urlRewriteTemplatesFolderItem.Languages, true,
-                    true);
+                if (urlRewriteTemplatesFolderItem != null)
+                {
+                    PublishManager.PublishItem(urlRewriteTemplatesFolderItem, dbArray, urlRewriteTemplatesFolderItem.Languages, true,
+                        true);
+                }
 
                 var urlRewriteModuleFolderItem = settingsDb.GetItem(new ID(Constants.UrlRewriteModuleFolder_ItemId));
-                PublishManager.PublishItem(urlRewriteModuleFolderItem, dbArray, urlRewriteModuleFolderItem.Languages, true,
-                    true);
+                if (urlRewriteModuleFolderItem != null)
+                {
+                    PublishManager.PublishItem(urlRewriteModuleFolderItem, dbArray, urlRewriteModuleFolderItem.Languages, true,
+                        true);
+                }
             }
         }
 
