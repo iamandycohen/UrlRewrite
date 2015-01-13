@@ -1,4 +1,5 @@
-﻿using Sitecore;
+﻿using Hi.UrlRewrite.Processing.Results;
+using Sitecore;
 using Sitecore.Data.Items;
 using Sitecore.Jobs;
 using System;
@@ -11,22 +12,34 @@ namespace Hi.UrlRewrite.Jobs
     public class ReportingService
     {
 
-        public Job StartJob()
+        public List<Job> StartJob(ProcessInboundRulesResult ruleResult)
         {
-            var jobName = string.Format("UrlRewrite::Reporting - Saving rewrite info");
+            var jobs = new List<Job>();
+            var rewrites = ruleResult.ProcessedResults.Where(e => e.RuleMatched);
 
-            JobOptions options = new JobOptions(jobName,
-                                                "UrlRewrite",
-                                                Context.Site.Name,
-                                                this,
-                                                "SaveRewriteInfo",
-                                                new object[] {  });
-            return JobManager.Start(options);
+            foreach (var rewrite in rewrites)
+            {
+                var jobName = string.Format("UrlRewrite::Reporting - Saving rewrite info for item '{0}'", rewrite.ItemId);
+
+
+                JobOptions options = new JobOptions(jobName,
+                                                    "UrlRewrite",
+                                                    Context.Site.Name,
+                                                    this,
+                                                    "SaveRewriteInfo",
+                                                    new object[] { rewrite });
+
+                var job = JobManager.Start(options);
+
+                jobs.Add(job);
+            }
+
+            return jobs;
         }
 
-        public void SaveRewriteInfo(Item root)
+        public void SaveRewriteInfo(InboundRuleResult ruleResult)
         {
-           
+            Log.Info(this, "Logging Reporting rewrite {0}", ruleResult.ItemId);
         }
     }
 }

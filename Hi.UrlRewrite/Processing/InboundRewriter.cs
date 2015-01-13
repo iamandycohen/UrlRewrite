@@ -2,6 +2,7 @@
 using Hi.UrlRewrite.Entities.Actions.Base;
 using Hi.UrlRewrite.Entities.Match;
 using Hi.UrlRewrite.Entities.Rules;
+using Hi.UrlRewrite.Jobs;
 using Hi.UrlRewrite.Processing.Results;
 using Hi.UrlRewrite.Templates;
 using Hi.UrlRewrite.Templates.Inbound;
@@ -121,6 +122,8 @@ namespace Hi.UrlRewrite.Processing
                     httpResponse.Cache.SetCacheability(redirectAction.HttpCacheability.Value);
                 }
 
+                var reportingService = new ReportingService();
+                reportingService.StartJob(ruleResult);
                 IncrementHitCount(ruleResult);
             }
             else if (ruleResult.FinalAction is IBaseRewrite)
