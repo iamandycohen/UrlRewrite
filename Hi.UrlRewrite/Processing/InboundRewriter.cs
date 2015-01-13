@@ -28,16 +28,20 @@ namespace Hi.UrlRewrite.Processing
         public NameValueCollection RequestServerVariables { get; set; }
         public NameValueCollection RequestHeaders { get; set; }
 
+        private readonly ReportingService ReportingService;
+
         public InboundRewriter()
         {
             RequestServerVariables = new NameValueCollection();
             RequestHeaders = new NameValueCollection();
+            ReportingService = new ReportingService();
         }
 
         public InboundRewriter(NameValueCollection requestServerVariables, NameValueCollection requestHeaders)
         {
             RequestServerVariables = requestServerVariables;
             RequestHeaders = requestHeaders;
+            ReportingService = new ReportingService();
         }
 
         public ProcessInboundRulesResult ProcessRequestUrl(Uri requestUri, List<InboundRule> inboundRules)
@@ -122,8 +126,7 @@ namespace Hi.UrlRewrite.Processing
                     httpResponse.Cache.SetCacheability(redirectAction.HttpCacheability.Value);
                 }
 
-                var reportingService = new ReportingService();
-                reportingService.StartJob(ruleResult);
+                ReportingService.ReportRewrites(ruleResult.ProcessedResults.Where(e => e.RuleMatched));
                 IncrementHitCount(ruleResult);
             }
             else if (ruleResult.FinalAction is IBaseRewrite)

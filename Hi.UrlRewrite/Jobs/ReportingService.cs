@@ -1,25 +1,23 @@
 ﻿using Hi.UrlRewrite.Processing.Results;
 using Sitecore;
-using Sitecore.Data.Items;
 using Sitecore.Jobs;
-using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Web;
 
 namespace Hi.UrlRewrite.Jobs
 {
     public class ReportingService
     {
 
-        public List<Job> StartJob(ProcessInboundRulesResult ruleResult)
+        public List<Job> ReportRewrites(IEnumerable<InboundRuleResult> ruleResults)
         {
             var jobs = new List<Job>();
-            var rewrites = ruleResult.ProcessedResults.Where(e => e.RuleMatched);
 
-            foreach (var rewrite in rewrites)
+            ruleResults
+                .AsParallel()
+                .ForAll(result =>
             {
-                var jobName = string.Format("UrlRewrite::Reporting - Saving rewrite info for item '{0}'", rewrite.ItemId);
+                var jobName = string.Format("UrlRewrite::Reporting - Saving rewrite info for item '{0}'", result.ItemId);
 
 
                 JobOptions options = new JobOptions(jobName,
@@ -27,12 +25,12 @@ namespace Hi.UrlRewrite.Jobs
                                                     Context.Site.Name,
                                                     this,
                                                     "SaveRewriteInfo",
-                                                    new object[] { rewrite });
+                                                    new object[] { result });
 
                 var job = JobManager.Start(options);
 
                 jobs.Add(job);
-            }
+            });
 
             return jobs;
         }
