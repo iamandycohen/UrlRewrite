@@ -43,12 +43,14 @@ namespace Hi.UrlRewrite.Jobs
             var uniqueId = new ID(Guid.NewGuid()).ToShortID().ToString();
             var reportingItem = reportingFolder.Add(uniqueId, new TemplateID(new ID(RewriteReportItem.TemplateId)));
             var report = new RewriteReportItem(reportingItem);
+
             report.BeginEdit();
 
             report.OriginalUrl.Value = ruleResult.OriginalUri.ToString();
             report.RewrittenUrl.Value = ruleResult.RewrittenUri.ToString();
             report.RewriteDate.InnerField.Value = DateUtil.ToIsoDate(DateTime.Now);
             report.DatabaseName.Value = database.Name;
+
             var ruleItem = database.GetItem(new ID(ruleResult.ItemId));
             report.Rule.InnerField.Value = ruleItem.Paths.Path;
 
