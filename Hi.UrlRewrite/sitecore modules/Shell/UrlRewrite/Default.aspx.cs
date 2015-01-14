@@ -37,74 +37,8 @@ namespace Hi.UrlRewrite.sitecore_modules.Shell.UrlRewrite
 
                     if (Page.IsValid)
                     {
-                        divFormGroup.Attributes["class"] = "form-group";
-                        divTable.Visible = true;
-
-                        var rewriter = new InboundRewriter();
-                        _db = Sitecore.Context.ContentDatabase;
-
-                        var rulesEngine = new RulesEngine();
-                        var inboundRules = rulesEngine.GetInboundRules(_db);
-
-                        ProcessInboundRulesResult results;
-
-                        var requestUri = new Uri(txtUrl.Text);
-                        var siteContext = SiteContextFactory.GetSiteContext(requestUri.Host, requestUri.AbsolutePath,
-                            requestUri.Port);
-
-                        using (new SiteContextSwitcher(siteContext))
-                        using (new DatabaseSwitcher(_db))
-                        {
-                            var url = new Uri(txtUrl.Text);
-                            rewriter.RequestServerVariables = new NameValueCollection
-                            {
-                                { "HTTP_HOST", url.Host},
-                                { "HTTPS", url.Scheme.Equals(Uri.UriSchemeHttps) ? "on" : "off" }
-                            };
-                            if (url.Query.Length > 0)
-                            {
-                                rewriter.RequestServerVariables.Add("QUERY_STRING", url.Query.Remove(0, 1));
-                            }
-                            results = rewriter.ProcessRequestUrl(url, inboundRules);
-                        }
-
-                        if (results == null)
-                        {
-                            divTable.Visible = false;
-                            divInfo.Visible = true;
-                            divInfo.InnerText = "Sorry, I couldn't find any rules to process. :(";
-                            return;
-                        }
-
-                        resultsRepeater.DataSource = results.ProcessedResults;
-                        resultsRepeater.DataBind();
-
-                        var isAbort = results.FinalAction is AbortRequest;
-                        var isCustomResponse = results.FinalAction is CustomResponse;
-
-                        if (isAbort)
-                        {
-                            txtFinalUrl.InnerText = "Aborted";
-                        }
-                        else if (isCustomResponse)
-                        {
-                            var customResponse = results.FinalAction as CustomResponse;
-                            const string resultFormat = "Custom Response: {0} {1} {2}";
-                            txtFinalUrl.InnerText = string.Format(resultFormat, customResponse.StatusCode,
-                                customResponse.SubStatusCode, customResponse.ErrorDescription);
-                        }
-                        else
-                        {
-                            if (!results.MatchedAtLeastOneRule)
-                            {
-                                txtFinalUrl.InnerText = "No matches.";
-                            }
-                            else
-                            {
-                                const string resultFormat = "Redirected to {0}.";
-                                txtFinalUrl.InnerText = string.Format(resultFormat, results.RewrittenUri.ToString());
-                            }
-                        }
+                        CreateRewriteForm();
+                        CreateReportingTable();
                     }
                     else
                     {
@@ -125,6 +59,90 @@ namespace Hi.UrlRewrite.sitecore_modules.Shell.UrlRewrite
                 }
 
             }
+        }
+
+        private void CreateReportingTable()
+        {
+            //throw new NotImplementedException();
+        }
+
+        private void CreateRewriteForm()
+        {
+            divFormGroup.Attributes["class"] = "form-group";
+            divTable.Visible = true;
+
+            var results = GetUrlResults();
+
+            if (results == null)
+            {
+                divTable.Visible = false;
+                divInfo.Visible = true;
+                divInfo.InnerText = "Sorry, I couldn't find any rules to process. :(";
+            }
+            else
+            {
+                resultsRepeater.DataSource = results.ProcessedResults;
+                resultsRepeater.DataBind();
+
+                var isAbort = results.FinalAction is AbortRequest;
+                var isCustomResponse = results.FinalAction is CustomResponse;
+
+                if (isAbort)
+                {
+                    txtFinalUrl.InnerText = "Aborted";
+                }
+                else if (isCustomResponse)
+                {
+                    var customResponse = results.FinalAction as CustomResponse;
+                    const string resultFormat = "Custom Response: {0} {1} {2}";
+                    txtFinalUrl.InnerText = string.Format(resultFormat, customResponse.StatusCode,
+                        customResponse.SubStatusCode, customResponse.ErrorDescription);
+                }
+                else
+                {
+                    if (!results.MatchedAtLeastOneRule)
+                    {
+                        txtFinalUrl.InnerText = "No matches.";
+                    }
+                    else
+                    {
+                        const string resultFormat = "Redirected to {0}.";
+                        txtFinalUrl.InnerText = string.Format(resultFormat, results.RewrittenUri.ToString());
+                    }
+                }
+            }
+        }
+
+        private ProcessInboundRulesResult GetUrlResults()
+        {
+            ProcessInboundRulesResult results;
+            var rewriter = new InboundRewriter();
+            _db = Sitecore.Context.ContentDatabase;
+
+            var rulesEngine = new RulesEngine();
+            var inboundRules = rulesEngine.GetInboundRules(_db);
+
+
+            var requestUri = new Uri(txtUrl.Text);
+            var siteContext = SiteContextFactory.GetSiteContext(requestUri.Host, requestUri.AbsolutePath,
+                requestUri.Port);
+
+            using (new SiteContextSwitcher(siteContext))
+            using (new DatabaseSwitcher(_db))
+            {
+                var url = new Uri(txtUrl.Text);
+                rewriter.RequestServerVariables = new NameValueCollection
+                {
+                    {"HTTP_HOST", url.Host},
+                    {"HTTPS", url.Scheme.Equals(Uri.UriSchemeHttps) ? "on" : "off"}
+                };
+                if (url.Query.Length > 0)
+                {
+                    rewriter.RequestServerVariables.Add("QUERY_STRING", url.Query.Remove(0, 1));
+                }
+                results = rewriter.ProcessRequestUrl(url, inboundRules);
+            }
+            return results;
         }
 
         protected void resultsRepeater_OnItemDataBound(object sender, RepeaterItemEventArgs e)
