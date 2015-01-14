@@ -131,6 +131,8 @@ namespace Hi.UrlRewrite.sitecore_modules.Shell.UrlRewrite
             using (new DatabaseSwitcher(_db))
             {
                 var url = new Uri(txtUrl.Text);
+
+                // TODO: allow variables to be set in the UI
                 rewriter.RequestServerVariables = new NameValueCollection
                 {
                     {"HTTP_HOST", url.Host},
