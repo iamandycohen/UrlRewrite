@@ -15,6 +15,9 @@ using Sitecore.Data;
 using Sitecore.Data.Query;
 using Sitecore.Shell.Applications.ContentEditor;
 using Sitecore.Sites;
+using Sitecore.Search;
+using Sitecore;
+using Hi.UrlRewrite.Templates;
 
 namespace Hi.UrlRewrite.sitecore_modules.Shell.UrlRewrite
 {
@@ -63,7 +66,14 @@ namespace Hi.UrlRewrite.sitecore_modules.Shell.UrlRewrite
 
         private void CreateReportingTable()
         {
-            //throw new NotImplementedException();
+            var index = SearchManager.GetIndex("Url Rewrite Reporting");
+            using (var indexSearchContext = index.CreateSearchContext())
+            {
+                var searchContext = new SearchContext();
+                var fieldQuery = new FieldQuery(BuiltinFields.Template, ShortID.Encode(RewriteReportItem.TemplateId));
+
+                var results = indexSearchContext.Search(fieldQuery);
+            }
         }
 
         private void CreateRewriteForm()
