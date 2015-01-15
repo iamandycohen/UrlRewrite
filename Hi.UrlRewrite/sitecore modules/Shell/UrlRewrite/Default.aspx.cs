@@ -11,13 +11,21 @@ using Hi.UrlRewrite.Entities.Conditions;
 using Hi.UrlRewrite.Entities.Rules;
 using Hi.UrlRewrite.Processing;
 using Hi.UrlRewrite.Processing.Results;
+using Hi.UrlRewrite.Templates.Inbound;
+using Lucene.Net.Search;
 using Sitecore.Data;
 using Sitecore.Data.Query;
+using Sitecore.Diagnostics;
 using Sitecore.Shell.Applications.ContentEditor;
 using Sitecore.Sites;
 using Sitecore.Search;
 using Sitecore;
 using Hi.UrlRewrite.Templates;
+using Sitecore.Data.Items;
+using Sitecore.Visualization;
+using Hi.UrlRewrite.Templates.Folders;
+using Hi.UrlRewrite.Entities.Reporting;
+using Hi.UrlRewrite.Reporting;
 
 namespace Hi.UrlRewrite.sitecore_modules.Shell.UrlRewrite
 {
@@ -53,27 +61,26 @@ namespace Hi.UrlRewrite.sitecore_modules.Shell.UrlRewrite
                 }
                 catch (Exception ex)
                 {
-                    divTable.Visible = false;
-                    divInfo.Visible = false;
-                    divError.Visible = true;
-                    txtError.InnerText = @"Exception: 
-
-    " + ex.Message;
+                    DisplayException(ex);
                 }
 
             }
         }
 
+        private void DisplayException(Exception ex)
+        {
+            divTable.Visible = false;
+            divInfo.Visible = false;
+            divError.Visible = true;
+            txtError.InnerText = @"Exception: 
+
+    " + ex.Message;
+        }
+
         private void CreateReportingTable()
         {
-            var index = SearchManager.GetIndex("Url Rewrite Reporting");
-            using (var indexSearchContext = index.CreateSearchContext())
-            {
-                var searchContext = new SearchContext();
-                var fieldQuery = new FieldQuery(BuiltinFields.Template, ShortID.Encode(RewriteReportItem.TemplateId));
-
-                var results = indexSearchContext.Search(fieldQuery);
-            }
+            var reportingManager = new ReportingManager();
+            var rewriteReports = reportingManager.GetRewriteReports();
         }
 
         private void CreateRewriteForm()
@@ -125,40 +132,36 @@ namespace Hi.UrlRewrite.sitecore_modules.Shell.UrlRewrite
 
         private ProcessInboundRulesResult GetUrlResults()
         {
-            ProcessInboundRulesResult results;
             var rewriter = new InboundRewriter();
             _db = Sitecore.Context.ContentDatabase;
 
             var rulesEngine = new RulesEngine();
             var inboundRules = rulesEngine.GetInboundRules(_db);
 
-
             var requestUri = new Uri(txtUrl.Text);
             var siteContext = SiteContextFactory.GetSiteContext(requestUri.Host, requestUri.AbsolutePath,
                 requestUri.Port);
 
-            using (new SiteContextSwitcher(siteContext))
-            using (new DatabaseSwitcher(_db))
-            {
-                var url = new Uri(txtUrl.Text);
+            var url = new Uri(txtUrl.Text);
 
-                // TODO: allow variables to be set in the UI
-                rewriter.RequestServerVariables = new NameValueCollection
-                {
-                    {"HTTP_HOST", url.Host},
-                    {"HTTPS", url.Scheme.Equals(Uri.UriSchemeHttps) ? "on" : "off"}
-                };
-                if (url.Query.Length > 0)
-                {
-                    rewriter.RequestServerVariables.Add("QUERY_STRING", url.Query.Remove(0, 1));
-                }
-                results = rewriter.ProcessRequestUrl(url, inboundRules);
+            // TODO: allow variables to be set in the UI
+            rewriter.RequestServerVariables = new NameValueCollection
+            {
+                {"HTTP_HOST", url.Host},
+                {"HTTPS", url.Scheme.Equals(Uri.UriSchemeHttps) ? "on" : "off"}
+            };
+            if (url.Query.Length > 0)
+            {
+                rewriter.RequestServerVariables.Add("QUERY_STRING", url.Query.Remove(0, 1));
             }
+            var results = rewriter.ProcessRequestUrl(url, inboundRules, siteContext, _db);
+
             return results;
         }
 
         protected void resultsRepeater_OnItemDataBound(object sender, RepeaterItemEventArgs e)
         {
+
             if (e.Item.ItemType == ListItemType.AlternatingItem || e.Item.ItemType == ListItemType.Item)
             {
                 if (e.Item.DataItem == null)

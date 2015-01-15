@@ -1,18 +1,18 @@
-﻿using Hi.UrlRewrite.Processing.Results;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using Hi.UrlRewrite.Processing.Results;
 using Hi.UrlRewrite.Templates;
 using Sitecore;
 using Sitecore.Data;
 using Sitecore.Jobs;
-using System;
-using System.Collections.Generic;
-using System.Linq;
 
-namespace Hi.UrlRewrite.Jobs
+namespace Hi.UrlRewrite.Reporting
 {
     public class ReportingService
     {
 
-        public List<Job> ReportRewrites(IEnumerable<InboundRuleResult> ruleResults, Database database)
+        public List<Job> QueueReport(IEnumerable<InboundRuleResult> ruleResults, Database database)
         {
             var jobs = new List<Job>();
             var siteName = Context.Site.Name;
@@ -37,7 +37,7 @@ namespace Hi.UrlRewrite.Jobs
             return jobs;
         }
 
-        public void SaveRewriteInfo(InboundRuleResult ruleResult, Database database)
+        public void SaveRewriteReport(InboundRuleResult ruleResult, Database database)
         {
             var reportingFolder = database.GetItem(new ID(Constants.ReportingFolder_ItemId));
             var uniqueId = new ID(Guid.NewGuid()).ToShortID().ToString();
@@ -56,5 +56,6 @@ namespace Hi.UrlRewrite.Jobs
 
             report.EndEdit();
         }
+
     }
 }

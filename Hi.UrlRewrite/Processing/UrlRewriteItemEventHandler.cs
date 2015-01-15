@@ -59,7 +59,7 @@ namespace Hi.UrlRewrite.Processing
                 using (new SecurityDisabler())
                 {
                     var redirectFolderItem = item.Axes.GetAncestors()
-                        .FirstOrDefault(a => a.TemplateID == new ID(RedirectFolderItem.TemplateId));
+                        .FirstOrDefault(a => a.TemplateID.Equals(new ID(RedirectFolderItem.TemplateId)));
 
                     if (redirectFolderItem == null) return;
 
@@ -143,7 +143,7 @@ namespace Hi.UrlRewrite.Processing
                 {
 
                     var redirectFolderItem = item.Axes.GetAncestors()
-                        .FirstOrDefault(a => a.TemplateID == new ID(RedirectFolderItem.TemplateId));
+                        .FirstOrDefault(a => a.TemplateID.Equals(new ID(RedirectFolderItem.TemplateId)));
 
                     if (redirectFolderItem != null)
                     {

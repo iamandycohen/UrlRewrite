@@ -2,22 +2,18 @@
 using Hi.UrlRewrite.Entities.Actions.Base;
 using Hi.UrlRewrite.Entities.Match;
 using Hi.UrlRewrite.Entities.Rules;
-using Hi.UrlRewrite.Jobs;
 using Hi.UrlRewrite.Processing.Results;
-using Hi.UrlRewrite.Templates;
-using Hi.UrlRewrite.Templates.Inbound;
+using Hi.UrlRewrite.Reporting;
 using Sitecore.Data;
-using Sitecore.Data.Events;
 using Sitecore.Links;
 using Sitecore.Resources.Media;
+using Sitecore.Sites;
 using System;
 using System.Collections.Generic;
 using System.Collections.Specialized;
 using System.Linq;
 using System.Net;
 using System.Text.RegularExpressions;
-using System.Threading;
-using System.Threading.Tasks;
 using System.Web;
 
 namespace Hi.UrlRewrite.Processing
@@ -84,6 +80,33 @@ namespace Hi.UrlRewrite.Processing
             return finalResult;
         }
 
+        public ProcessInboundRulesResult ProcessRequestUrl(Uri requestUri, List<InboundRule> inboundRules, SiteContext siteContext)
+        {
+            using (new SiteContextSwitcher(siteContext))
+            {
+                return ProcessRequestUrl(requestUri, inboundRules);
+            }
+        }
+
+        public ProcessInboundRulesResult ProcessRequestUrl(Uri requestUri, List<InboundRule> inboundRules, Database database)
+        {
+            using (new DatabaseSwitcher(database))
+            {
+                return ProcessRequestUrl(requestUri, inboundRules);
+            }
+        }
+
+        public ProcessInboundRulesResult ProcessRequestUrl(Uri requestUri, List<InboundRule> inboundRules, SiteContext siteContext, Database database)
+        {
+            using (new SiteContextSwitcher(siteContext))
+            using (new DatabaseSwitcher(database))
+            {
+                return ProcessRequestUrl(requestUri, inboundRules);
+            }
+        }
+
+
+
         public void ExecuteResult(HttpContextBase httpContext, ProcessInboundRulesResult ruleResult)
         {
             var httpRequest = httpContext.Request;
@@ -126,7 +149,7 @@ namespace Hi.UrlRewrite.Processing
                     httpResponse.Cache.SetCacheability(redirectAction.HttpCacheability.Value);
                 }
 
-                ReportingService.ReportRewrites(ruleResult.ProcessedResults.Where(e => e.RuleMatched), Sitecore.Context.Database);
+                ReportingService.QueueReport(ruleResult.ProcessedResults.Where(e => e.RuleMatched), Sitecore.Context.Database);
             }
             else if (ruleResult.FinalAction is IBaseRewrite)
             {

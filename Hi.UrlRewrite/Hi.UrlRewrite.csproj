@@ -104,6 +104,7 @@
     <Compile Include="Entities\Match\MatchType.cs" />
     <Compile Include="Entities\Match\ScopeType.cs" />
     <Compile Include="Entities\Match\Using.cs" />
+    <Compile Include="Entities\Reporting\RewriteReport.cs" />
     <Compile Include="Entities\Rules\IBaseRule.cs" />
     <Compile Include="Entities\Rules\IConditionList.cs" />
     <Compile Include="Entities\Rules\InboundRule.cs" />
@@ -118,7 +119,6 @@
     <Compile Include="Entities\ServerVariables\ServerVariable.cs" />
     <Compile Include="Extensions\ItemExtensions.cs" />
     <Compile Include="Fields\SiteDropList.cs" />
-    <Compile Include="Jobs\ReportingService.cs" />
     <Compile Include="Log.cs" />
     <Compile Include="LogHelper.cs" />
     <Compile Include="Module\OutboundModule.cs" />
@@ -140,6 +140,8 @@
     <Compile Include="Processing\UrlRewriteItemEventHandler.cs" />
     <Compile Include="Processing\InboundRewriteProcessor.cs" />
     <Compile Include="Processing\InboundRewriter.cs" />
+    <Compile Include="Reporting\ReportingManager.cs" />
+    <Compile Include="Reporting\ReportingService.cs" />
     <Compile Include="sitecore modules\Shell\UrlRewrite\Default.aspx.cs">
       <DependentUpon>Default.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>

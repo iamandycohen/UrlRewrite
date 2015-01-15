@@ -45,24 +45,24 @@ namespace Hi.UrlRewrite.Processing
                         true);
                 }
 
-                // install module folder
-                var urlRewriteModuleFolderItem = settingsDb.GetItem(new ID
-                    (Constants.UrlRewriteModuleFolder_ItemId));
+        //        // install module folder
+        //        var urlRewriteModuleFolderItem = settingsDb.GetItem(new ID
+        //            (Constants.UrlRewriteModuleFolder_ItemId));
 
-                if (urlRewriteModuleFolderItem != null)
-                {
-                    PublishManager.PublishItem(urlRewriteModuleFolderItem, dbArray, urlRewriteModuleFolderItem.Languages, false,
-                        true);
-                }
+        //        if (urlRewriteModuleFolderItem != null)
+        //        {
+        //            PublishManager.PublishItem(urlRewriteModuleFolderItem, dbArray, urlRewriteModuleFolderItem.Languages, false,
+        //                true);
+        //        }
 
-                // install reporting folder
-                var reportingFolderItem = settingsDb.GetItem(new ID
-        (Constants.ReportingFolder_ItemId));
-                if (reportingFolderItem != null)
-                {
-                    PublishManager.PublishItem(reportingFolderItem, dbArray, urlRewriteModuleFolderItem.Languages, false,
-                        true);
-                }
+        //        // install reporting folder
+        //        var reportingFolderItem = settingsDb.GetItem(new ID
+        //(Constants.ReportingFolder_ItemId));
+        //        if (reportingFolderItem != null)
+        //        {
+        //            PublishManager.PublishItem(reportingFolderItem, dbArray, urlRewriteModuleFolderItem.Languages, false,
+        //                true);
+        //        }
             }
         }
 
@@ -174,20 +174,20 @@ namespace Hi.UrlRewrite.Processing
             return redirectFolderItems;
         }
 
-        internal InboundRule CreateInboundRuleFromSimpleRedirectItem(SimpleRedirectItem simpleRedirectInternalItem, RedirectFolderItem redirectFolderItem)
+        internal InboundRule CreateInboundRuleFromSimpleRedirectItem(SimpleRedirectItem simpleRedirectItem, RedirectFolderItem redirectFolderItem)
         {
-            string inboundRulePattern = string.Format("^{0}/?$", simpleRedirectInternalItem.Path.Value);
+            var inboundRulePattern = string.Format("^{0}/?$", simpleRedirectItem.Path.Value);
 
             var siteNameRestriction = GetSiteNameRestriction(redirectFolderItem);
 
-            var redirectTo = simpleRedirectInternalItem.Target;
+            var redirectTo = simpleRedirectItem.Target;
             string actionRewriteUrl;
             Guid? redirectItem;
             string redirectItemAnchor;
 
             GetRedirectUrlOrItemId(redirectTo, out actionRewriteUrl, out redirectItem, out redirectItemAnchor);
 
-            Log.Debug(this, simpleRedirectInternalItem.Database, "Creating Inbound Rule From Simple Redirect Item - {0} - id: {1} actionRewriteUrl: {2} redirectItem: {3}", simpleRedirectInternalItem.Name, simpleRedirectInternalItem.ID.Guid, actionRewriteUrl, redirectItem);
+            Log.Debug(this, simpleRedirectItem.Database, "Creating Inbound Rule From Simple Redirect Item - {0} - id: {1} actionRewriteUrl: {2} redirectItem: {3}", simpleRedirectItem.Name, simpleRedirectItem.ID.Guid, actionRewriteUrl, redirectItem);
 
             var inboundRule = new InboundRule
             {
@@ -205,9 +205,9 @@ namespace Hi.UrlRewrite.Processing
                 SiteNameRestriction = siteNameRestriction,
                 Enabled = true,
                 IgnoreCase = true,
-                ItemId = simpleRedirectInternalItem.ID.Guid,
+                ItemId = simpleRedirectItem.ID.Guid,
                 ConditionLogicalGrouping = LogicalGrouping.MatchAll,
-                Name = simpleRedirectInternalItem.Name,
+                Name = simpleRedirectItem.Name,
                 Pattern = inboundRulePattern,
                 MatchType = MatchType.MatchesThePattern,
                 Using = Using.RegularExpressions
@@ -216,7 +216,7 @@ namespace Hi.UrlRewrite.Processing
             return inboundRule;
         }
 
-        internal static InboundRule CreateInboundRuleFromInboundRuleItem(InboundRuleItem inboundRuleItem, RedirectFolderItem redirectFolderItem)
+        internal InboundRule CreateInboundRuleFromInboundRuleItem(InboundRuleItem inboundRuleItem, RedirectFolderItem redirectFolderItem)
         {
             var siteNameRestriction = GetSiteNameRestriction(redirectFolderItem);
             var inboundRule = inboundRuleItem.ToInboundRule(siteNameRestriction);
@@ -224,7 +224,7 @@ namespace Hi.UrlRewrite.Processing
             return inboundRule;
         }
 
-        internal static OutboundRule CreateOutboundRuleFromOutboundRuleItem(OutboundRuleItem outboundRuleItem,
+        internal OutboundRule CreateOutboundRuleFromOutboundRuleItem(OutboundRuleItem outboundRuleItem,
             RedirectFolderItem redirectFolderItem)
         {
             var outboundRule = outboundRuleItem.ToOutboundRule();
@@ -355,7 +355,7 @@ namespace Hi.UrlRewrite.Processing
 
             var inboundRuleItem = new InboundRuleItem(item);
 
-            var newInboundRule = RulesEngine.CreateInboundRuleFromInboundRuleItem(inboundRuleItem, redirectFolderItem);
+            var newInboundRule = CreateInboundRuleFromInboundRuleItem(inboundRuleItem, redirectFolderItem);
 
             if (newInboundRule != null)
             {
