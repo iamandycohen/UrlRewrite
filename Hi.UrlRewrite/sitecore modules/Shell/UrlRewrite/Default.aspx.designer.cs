@@ -94,6 +94,24 @@ namespace Hi.UrlRewrite.sitecore_modules.Shell.UrlRewrite {
         protected global::System.Web.UI.HtmlControls.HtmlGenericControl divInfo;
         
         /// <summary>
+        /// divReporting control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.HtmlControls.HtmlGenericControl divReporting;
+        
+        /// <summary>
+        /// rptReportRow control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Repeater rptReportRow;
+        
+        /// <summary>
         /// divError control.
         /// </summary>
         /// <remarks>

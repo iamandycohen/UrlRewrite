@@ -109,6 +109,17 @@
                     
                 </div>
                 
+                <div id="divReporting" runat="server">
+                    <table id="tblReporting" class="table table-striped">
+                        <tbody>
+                            <asp:Repeater runat="server" ID="rptReportRow" OnItemDataBound="rptReportRow_OnItemDataBound">
+                                <ItemTemplate>
+                                    <tr><td><asp:Literal runat="server" ID="litReportRow"></asp:Literal></td></tr>
+                                </ItemTemplate>
+                            </asp:Repeater>
+                        </tbody>
+                    </table>
+                </div>
                 <div id="divError" runat="server" Visible="False">
                     <pre id="txtError" runat="server">
 

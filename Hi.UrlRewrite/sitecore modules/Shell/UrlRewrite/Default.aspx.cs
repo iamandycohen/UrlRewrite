@@ -81,6 +81,9 @@ namespace Hi.UrlRewrite.sitecore_modules.Shell.UrlRewrite
         {
             var reportingManager = new ReportingManager();
             var rewriteReports = reportingManager.GetRewriteReports();
+            rptReportRow.DataSource = rewriteReports;
+            rptReportRow.DataBind();
+
         }
 
         private void CreateRewriteForm()
@@ -291,6 +294,26 @@ namespace Hi.UrlRewrite.sitecore_modules.Shell.UrlRewrite
                     {
                         conditionRow.Attributes["class"] = "hide warning condition-item condition";
                         conditionRow.Attributes["data-itemid"] = itemId;
+                    }
+                }
+            }
+        }
+
+        protected void rptReportRow_OnItemDataBound(object sender, RepeaterItemEventArgs e)
+        {
+            if (e.Item.ItemType == ListItemType.AlternatingItem || e.Item.ItemType == ListItemType.Item)
+            {
+                if (e.Item.DataItem == null)
+                    return;
+
+                var rewriteReport = e.Item.DataItem as RewriteReport;
+                if (rewriteReport != null)
+                {
+                    var rowLiteral = e.Item.FindControl("litReportRow") as System.Web.UI.WebControls.Literal;
+                    if (rowLiteral != null)
+                    {
+                        rowLiteral.Text = string.Format("{0} {1} {2} {3}", rewriteReport.DatabaseName,
+                            rewriteReport.RewriteDate, rewriteReport.OriginalUrl, rewriteReport.RewrittenUrl);
                     }
                 }
             }
