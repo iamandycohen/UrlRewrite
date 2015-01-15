@@ -66,7 +66,8 @@ namespace Hi.UrlRewrite.sitecore_modules.Shell.UrlRewrite
         private void CreateReportingTable()
         {
             var reportingManager = new ReportingManager();
-            var rewriteReports = reportingManager.GetRewriteReports();
+            var rulesEngine = new RulesEngine();
+            var rewriteReports = reportingManager.GetRewriteReportsGrouped(rulesEngine);
             rptReportRow.DataSource = rewriteReports;
             rptReportRow.DataBind();
 
@@ -292,14 +293,13 @@ namespace Hi.UrlRewrite.sitecore_modules.Shell.UrlRewrite
             if (e.Item.DataItem == null)
                 return;
 
-            var rewriteReport = e.Item.DataItem as RewriteReport;
+            var rewriteReport = e.Item.DataItem as RewriteReportGroup;
             if (rewriteReport == null) return;
 
             var rowLiteral = e.Item.FindControl("litReportRow") as Literal;
             if (rowLiteral != null)
             {
-                rowLiteral.Text = string.Format("{0} {1} {2} {3}", rewriteReport.DatabaseName,
-                    rewriteReport.RewriteDate, rewriteReport.OriginalUrl, rewriteReport.RewrittenUrl);
+                rowLiteral.Text = string.Format("{0} {1}", rewriteReport.Name, rewriteReport.Count);
             }
         }
     }

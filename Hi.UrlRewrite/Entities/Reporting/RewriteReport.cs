@@ -12,6 +12,7 @@ namespace Hi.UrlRewrite.Entities.Reporting
         public string RewrittenUrl { get; set; }
         public DateTime RewriteDate { get; set; }
         public string DatabaseName { get; set; }
-        public InboundRule Rule { get; set; }
+        //public InboundRule Rule { get; set; }
+        public string RulePath { get; set; }
     }
 }

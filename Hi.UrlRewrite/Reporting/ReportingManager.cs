@@ -17,14 +17,54 @@ namespace Hi.UrlRewrite.Reporting
 {
     public class ReportingManager
     {
+
+        public IEnumerable<RewriteReportGroup> GetRewriteReportsGrouped(RulesEngine rulesEngine)
+        {
+            var rewriteReports = GetRewriteReports();
+            var rewriteReportsGrouped = rewriteReports
+                .GroupBy(r => new { DatabaseName = r.DatabaseName, RulePath = r.RulePath })
+                .Select(group => new RewriteReportGroup
+                {
+                    Name = string.Format("{0}::{1}", group.Key.DatabaseName, group.Key.RulePath),
+                    Count = group.Count(),
+                    Rule = GetInboundRule(rulesEngine, group.Key.DatabaseName, group.Key.RulePath),
+                    Reports = group.ToList()
+                });
+
+            return rewriteReportsGrouped;
+        }
+
+        public InboundRule GetInboundRule(RulesEngine rulesEngine, string databaseName, string rewriteReportItemPath)
+        {
+            var database = Database.GetDatabase(databaseName);
+            var rewriteReportItem = database.GetItem(rewriteReportItemPath);
+            var redirectFolderItem = rewriteReportItem.Axes.GetAncestors()
+                .FirstOrDefault(a => a.TemplateID.Equals(new ID(RedirectFolderItem.TemplateId)));
+
+            InboundRule rule;
+
+            if (rewriteReportItem.TemplateID.Equals(new ID(SimpleRedirectItem.TemplateId)))
+            {
+                rule = rulesEngine.CreateInboundRuleFromSimpleRedirectItem(rewriteReportItem, redirectFolderItem);
+            }
+            else if (rewriteReportItem.TemplateID.Equals(new ID(InboundRuleItem.TemplateId)))
+            {
+                rule = rulesEngine.CreateInboundRuleFromInboundRuleItem(rewriteReportItem, redirectFolderItem);
+            }
+            else
+            {
+                return null;
+            }
+
+            return rule;
+        }
+
         public IEnumerable<RewriteReport> GetRewriteReports()
         {
             IEnumerable<RewriteReport> rewriteReports = new List<RewriteReport>();
 
             var index = SearchManager.GetIndex("UrlRewriteReporting");
             if (index == null) return rewriteReports;
-
-            var rulesEngine = new RulesEngine();
 
             using (var indexSearchContext = index.CreateSearchContext())
             {
@@ -34,34 +74,16 @@ namespace Hi.UrlRewrite.Reporting
 
                 rewriteReports = searchHits.FetchResults(0, int.MaxValue)
                     .Select(searchResult => searchResult.GetObject<Item>())
-                    .Select(item => GetRewriteReport(item, rulesEngine))
+                    .Select(item => GetRewriteReport(item))
                     .Where(report => report != null);
             }
 
             return rewriteReports;
         }
 
-        private RewriteReport GetRewriteReport(Item rewriteReportItem, RulesEngine rulesEngine)
+        private RewriteReport GetRewriteReport(RewriteReportItem rewriteReport)
         {
-            var rewriteReport = new RewriteReportItem(rewriteReportItem);
-            var ruleItem = rewriteReportItem.Database.GetItem(rewriteReport.Rule.Value);
-            var redirectFolderItem = ruleItem.Axes.GetAncestors()
-                .FirstOrDefault(a => a.TemplateID.Equals(new ID(RedirectFolderItem.TemplateId)));
-
-            InboundRule rule;
-
-            if (ruleItem.TemplateID.Equals(new ID(SimpleRedirectItem.TemplateId)))
-            {
-                rule = rulesEngine.CreateInboundRuleFromSimpleRedirectItem(ruleItem, redirectFolderItem);
-            }
-            else if (ruleItem.TemplateID.Equals(new ID(InboundRuleItem.TemplateId)))
-            {
-                rule = rulesEngine.CreateInboundRuleFromInboundRuleItem(ruleItem, redirectFolderItem);
-            }
-            else
-            {
-                return null;
-            }
+            var ruleItem = rewriteReport.InnerItem.Database.GetItem(rewriteReport.Rule.Value);
 
             var report = new RewriteReport
             {
@@ -69,7 +91,7 @@ namespace Hi.UrlRewrite.Reporting
                 OriginalUrl = rewriteReport.OriginalUrl.Value,
                 RewrittenUrl = rewriteReport.RewrittenUrl.Value,
                 RewriteDate = rewriteReport.RewriteDate.DateTime,
-                Rule = rule
+                RulePath = rewriteReport.Rule.Value
             };
 
             return report;

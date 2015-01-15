@@ -105,6 +105,7 @@
     <Compile Include="Entities\Match\ScopeType.cs" />
     <Compile Include="Entities\Match\Using.cs" />
     <Compile Include="Entities\Reporting\RewriteReport.cs" />
+    <Compile Include="Entities\Reporting\RewriteReportGroup.cs" />
     <Compile Include="Entities\Rules\IBaseRule.cs" />
     <Compile Include="Entities\Rules\IConditionList.cs" />
     <Compile Include="Entities\Rules\InboundRule.cs" />
