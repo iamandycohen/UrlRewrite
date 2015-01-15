@@ -193,6 +193,8 @@ Version 1.0
         <x-item>/master/sitecore/system/Modules/Url Rewrite/{76C853FC-AA0B-4412-BA5A-BCF44BF0194C}/invariant/0</x-item>
         <x-item>/master/sitecore/system/Modules/Url Rewrite/Reporting/{1D07EFA5-88F6-482D-98EF-5C0AAB2EE4B1}/invariant/0</x-item>
         <x-item>/master/sitecore/system/Modules/Url Rewrite/Settings/{CD928F1B-676F-4437-9AD0-7DF80F415946}/invariant/0</x-item>
+        <x-item>/web/sitecore/system/Modules/Url Rewrite/{76C853FC-AA0B-4412-BA5A-BCF44BF0194C}/invariant/0</x-item>
+        <x-item>/web/sitecore/system/Modules/Url Rewrite/Reporting/{1D07EFA5-88F6-482D-98EF-5C0AAB2EE4B1}/invariant/0</x-item>
       </Entries>
       <SkipVersions>False</SkipVersions>
       <Converter>

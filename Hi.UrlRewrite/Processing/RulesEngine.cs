@@ -23,7 +23,7 @@ namespace Hi.UrlRewrite.Processing
     public class RulesEngine
     {
 
-        public void InstallTemplates()
+        public void InstallItems()
         {
             var settingsDb = Database.GetDatabase("master");
             if (settingsDb == null) return;
@@ -36,18 +36,31 @@ namespace Hi.UrlRewrite.Processing
                 var settings = new SettingsItem(settingsItem);
                 var publishingTargets = settings.InstallationPublishingTargets.GetItems();
                 var dbArray = publishingTargets.Select(x => Factory.GetDatabase(x.Fields["Target database"].Value)).ToArray();
-                var urlRewriteTemplatesFolderItem = settingsDb.GetItem(new ID(Constants.UrlRewriteTemplatesFolder_ItemId));
 
+                // install templates
+                var urlRewriteTemplatesFolderItem = settingsDb.GetItem(new ID(Constants.UrlRewriteTemplatesFolder_ItemId));
                 if (urlRewriteTemplatesFolderItem != null)
                 {
                     PublishManager.PublishItem(urlRewriteTemplatesFolderItem, dbArray, urlRewriteTemplatesFolderItem.Languages, true,
                         true);
                 }
 
-                var urlRewriteModuleFolderItem = settingsDb.GetItem(new ID(Constants.UrlRewriteModuleFolder_ItemId));
+                // install module folder
+                var urlRewriteModuleFolderItem = settingsDb.GetItem(new ID
+                    (Constants.UrlRewriteModuleFolder_ItemId));
+
                 if (urlRewriteModuleFolderItem != null)
                 {
-                    PublishManager.PublishItem(urlRewriteModuleFolderItem, dbArray, urlRewriteModuleFolderItem.Languages, true,
+                    PublishManager.PublishItem(urlRewriteModuleFolderItem, dbArray, urlRewriteModuleFolderItem.Languages, false,
+                        true);
+                }
+
+                // install reporting folder
+                var reportingFolderItem = settingsDb.GetItem(new ID
+        (Constants.ReportingFolder_ItemId));
+                if (reportingFolderItem != null)
+                {
+                    PublishManager.PublishItem(reportingFolderItem, dbArray, urlRewriteModuleFolderItem.Languages, false,
                         true);
                 }
             }

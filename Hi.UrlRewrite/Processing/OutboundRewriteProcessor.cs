@@ -53,7 +53,7 @@ namespace Hi.UrlRewrite.Processing
             using (new SecurityDisabler())
             {
                 var rulesEngine = new RulesEngine();
-                rulesEngine.InstallTemplates();
+                rulesEngine.InstallItems();
                 outboundRules = rulesEngine.GetCachedOutboundRules(db);
             }
 
