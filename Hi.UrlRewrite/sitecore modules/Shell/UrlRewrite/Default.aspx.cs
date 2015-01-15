@@ -1,31 +1,17 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using Hi.UrlRewrite.Entities.Actions;
+using Hi.UrlRewrite.Entities.Conditions;
+using Hi.UrlRewrite.Entities.Reporting;
+using Hi.UrlRewrite.Processing;
+using Hi.UrlRewrite.Processing.Results;
+using Hi.UrlRewrite.Reporting;
+using Sitecore.Data;
+using Sitecore.Sites;
+using System;
 using System.Collections.Specialized;
 using System.Linq;
-using System.Web;
 using System.Web.UI;
 using System.Web.UI.HtmlControls;
 using System.Web.UI.WebControls;
-using Hi.UrlRewrite.Entities.Actions;
-using Hi.UrlRewrite.Entities.Conditions;
-using Hi.UrlRewrite.Entities.Rules;
-using Hi.UrlRewrite.Processing;
-using Hi.UrlRewrite.Processing.Results;
-using Hi.UrlRewrite.Templates.Inbound;
-using Lucene.Net.Search;
-using Sitecore.Data;
-using Sitecore.Data.Query;
-using Sitecore.Diagnostics;
-using Sitecore.Shell.Applications.ContentEditor;
-using Sitecore.Sites;
-using Sitecore.Search;
-using Sitecore;
-using Hi.UrlRewrite.Templates;
-using Sitecore.Data.Items;
-using Sitecore.Visualization;
-using Hi.UrlRewrite.Templates.Folders;
-using Hi.UrlRewrite.Entities.Reporting;
-using Hi.UrlRewrite.Reporting;
 
 namespace Hi.UrlRewrite.sitecore_modules.Shell.UrlRewrite
 {
@@ -301,21 +287,19 @@ namespace Hi.UrlRewrite.sitecore_modules.Shell.UrlRewrite
 
         protected void rptReportRow_OnItemDataBound(object sender, RepeaterItemEventArgs e)
         {
-            if (e.Item.ItemType == ListItemType.AlternatingItem || e.Item.ItemType == ListItemType.Item)
-            {
-                if (e.Item.DataItem == null)
-                    return;
+            if (e.Item.ItemType != ListItemType.AlternatingItem && e.Item.ItemType != ListItemType.Item) return;
 
-                var rewriteReport = e.Item.DataItem as RewriteReport;
-                if (rewriteReport != null)
-                {
-                    var rowLiteral = e.Item.FindControl("litReportRow") as System.Web.UI.WebControls.Literal;
-                    if (rowLiteral != null)
-                    {
-                        rowLiteral.Text = string.Format("{0} {1} {2} {3}", rewriteReport.DatabaseName,
-                            rewriteReport.RewriteDate, rewriteReport.OriginalUrl, rewriteReport.RewrittenUrl);
-                    }
-                }
+            if (e.Item.DataItem == null)
+                return;
+
+            var rewriteReport = e.Item.DataItem as RewriteReport;
+            if (rewriteReport == null) return;
+
+            var rowLiteral = e.Item.FindControl("litReportRow") as Literal;
+            if (rowLiteral != null)
+            {
+                rowLiteral.Text = string.Format("{0} {1} {2} {3}", rewriteReport.DatabaseName,
+                    rewriteReport.RewriteDate, rewriteReport.OriginalUrl, rewriteReport.RewrittenUrl);
             }
         }
     }

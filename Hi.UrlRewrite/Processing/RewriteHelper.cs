@@ -138,7 +138,7 @@ namespace Hi.UrlRewrite.Processing
             {
                 foreach (var condition in rule.Conditions)
                 {
-                    var conditionMatched = RewriteHelper.TestConditionMatch(replacements, condition, lastConditionMatch);
+                    var conditionMatched = TestConditionMatch(replacements, condition, lastConditionMatch);
                     var conditionMatch = conditionMatched.Match;
                     var conditionInput = conditionMatched.ConditionInput;
 
@@ -161,7 +161,7 @@ namespace Hi.UrlRewrite.Processing
             {
                 foreach (var condition in rule.Conditions)
                 {
-                    var conditionMatched = RewriteHelper.TestConditionMatch(replacements, condition);
+                    var conditionMatched = TestConditionMatch(replacements, condition);
                     var conditionMatch = conditionMatched.Match;
                     var conditionInput = conditionMatched.ConditionInput;
 
