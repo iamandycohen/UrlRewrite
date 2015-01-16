@@ -33,6 +33,23 @@
 
             <form id="form1" runat="server" role="form" class="form-horizontal">
 
+                <div class="form-group">
+
+                    <div class="dropdown">
+                        <button class="btn btn-default dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-expanded="true">
+                            Database
+                            <span class="caret"></span>
+                        </button>
+                        <ul class="dropdown-menu" role="menu" aria-labelledby="dropdownMenu1">
+                            <li role="presentation"><a role="menuitem" tabindex="-1" href="#">Action</a></li>
+                            <li role="presentation"><a role="menuitem" tabindex="-1" href="#">Another action</a></li>
+                            <li role="presentation"><a role="menuitem" tabindex="-1" href="#">Something else here</a></li>
+                            <li role="presentation"><a role="menuitem" tabindex="-1" href="#">Separated link</a></li>
+                        </ul>
+                    </div>
+
+                </div>
+
                 <div runat="server" id="divFormGroup" class="form-group">
                     <label for="<%= txtUrl.ClientID %>" class="control-label">Url</label>
                     <asp:TextBox ID="txtUrl" runat="server" placeholder="Please enter a fully qualified URL to test..." CssClass="form-control" CausesValidation="True"></asp:TextBox>
@@ -104,23 +121,25 @@
                         </div>
                     </div>
                 </div>
-                
-                <div id="divInfo" runat="server" Visible="False">
-                    
+
+                <div id="divInfo" runat="server" visible="False">
                 </div>
-                
+
                 <div id="divReporting" runat="server">
                     <table id="tblReporting" class="table table-striped">
                         <tbody>
                             <asp:Repeater runat="server" ID="rptReportRow" OnItemDataBound="rptReportRow_OnItemDataBound">
                                 <ItemTemplate>
-                                    <tr><td><asp:Literal runat="server" ID="litReportRow"></asp:Literal></td></tr>
+                                    <tr>
+                                        <td>
+                                            <asp:Literal runat="server" ID="litReportRow"></asp:Literal></td>
+                                    </tr>
                                 </ItemTemplate>
                             </asp:Repeater>
                         </tbody>
                     </table>
                 </div>
-                <div id="divError" runat="server" Visible="False">
+                <div id="divError" runat="server" visible="False">
                     <pre id="txtError" runat="server">
 
                     </pre>

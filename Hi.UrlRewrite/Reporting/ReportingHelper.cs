@@ -15,7 +15,7 @@ using System.Web;
 
 namespace Hi.UrlRewrite.Reporting
 {
-    public class ReportingManager
+    public class ReportingHelper
     {
 
         public IEnumerable<RewriteReportGroup> GetRewriteReportsGrouped(RulesEngine rulesEngine)

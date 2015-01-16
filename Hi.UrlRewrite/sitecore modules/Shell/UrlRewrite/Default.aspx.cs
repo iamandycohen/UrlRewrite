@@ -34,6 +34,7 @@ namespace Hi.UrlRewrite.sitecore_modules.Shell.UrlRewrite
 
                     if (Page.IsValid)
                     {
+                        _db = Sitecore.Context.ContentDatabase;
                         CreateRewriteForm();
                         CreateReportingTable();
                     }
@@ -65,7 +66,7 @@ namespace Hi.UrlRewrite.sitecore_modules.Shell.UrlRewrite
 
         private void CreateReportingTable()
         {
-            var reportingManager = new ReportingManager();
+            var reportingManager = new ReportingHelper();
             var rulesEngine = new RulesEngine();
             var rewriteReports = reportingManager.GetRewriteReportsGrouped(rulesEngine);
             rptReportRow.DataSource = rewriteReports;
@@ -78,7 +79,11 @@ namespace Hi.UrlRewrite.sitecore_modules.Shell.UrlRewrite
             divFormGroup.Attributes["class"] = "form-group";
             divTable.Visible = true;
 
-            var results = GetUrlResults();
+            var inboundRulesHelper = new InboundRulesHelper();
+
+            // TODO: allow variables to be set in the UI
+
+            var results = inboundRulesHelper.GetUrlResults(txtUrl.Text, _db);
 
             if (results == null)
             {
@@ -118,35 +123,6 @@ namespace Hi.UrlRewrite.sitecore_modules.Shell.UrlRewrite
                     }
                 }
             }
-        }
-
-        private ProcessInboundRulesResult GetUrlResults()
-        {
-            var rewriter = new InboundRewriter();
-            _db = Sitecore.Context.ContentDatabase;
-
-            var rulesEngine = new RulesEngine();
-            var inboundRules = rulesEngine.GetInboundRules(_db);
-
-            var requestUri = new Uri(txtUrl.Text);
-            var siteContext = SiteContextFactory.GetSiteContext(requestUri.Host, requestUri.AbsolutePath,
-                requestUri.Port);
-
-            var url = new Uri(txtUrl.Text);
-
-            // TODO: allow variables to be set in the UI
-            rewriter.RequestServerVariables = new NameValueCollection
-            {
-                {"HTTP_HOST", url.Host},
-                {"HTTPS", url.Scheme.Equals(Uri.UriSchemeHttps) ? "on" : "off"}
-            };
-            if (url.Query.Length > 0)
-            {
-                rewriter.RequestServerVariables.Add("QUERY_STRING", url.Query.Remove(0, 1));
-            }
-            var results = rewriter.ProcessRequestUrl(url, inboundRules, siteContext, _db);
-
-            return results;
         }
 
         protected void resultsRepeater_OnItemDataBound(object sender, RepeaterItemEventArgs e)
