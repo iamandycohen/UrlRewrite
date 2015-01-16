@@ -22,6 +22,24 @@ namespace Hi.UrlRewrite.sitecore_modules.Shell.UrlRewrite {
         protected global::System.Web.UI.HtmlControls.HtmlForm form1;
         
         /// <summary>
+        /// litCurrentDatabase control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Literal litCurrentDatabase;
+        
+        /// <summary>
+        /// rptDatabase control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Repeater rptDatabase;
+        
+        /// <summary>
         /// divFormGroup control.
         /// </summary>
         /// <remarks>

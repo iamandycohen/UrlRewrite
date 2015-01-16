@@ -4,6 +4,7 @@ using Hi.UrlRewrite.Entities.Reporting;
 using Hi.UrlRewrite.Processing;
 using Hi.UrlRewrite.Processing.Results;
 using Hi.UrlRewrite.Reporting;
+using Sitecore.Configuration;
 using Sitecore.Data;
 using Sitecore.Sites;
 using System;
@@ -21,6 +22,9 @@ namespace Hi.UrlRewrite.sitecore_modules.Shell.UrlRewrite
 
         protected void Page_Load(object sender, EventArgs e)
         {
+
+            CreateDatabaseDropdown();
+
             if (!IsPostBack)
             {
 
@@ -30,11 +34,11 @@ namespace Hi.UrlRewrite.sitecore_modules.Shell.UrlRewrite
 
                 try
                 {
+
                     Page.Validate();
 
                     if (Page.IsValid)
                     {
-                        _db = Sitecore.Context.ContentDatabase;
                         CreateRewriteForm();
                         CreateReportingTable();
                     }
@@ -52,6 +56,26 @@ namespace Hi.UrlRewrite.sitecore_modules.Shell.UrlRewrite
                 }
 
             }
+        }
+
+        private void CreateDatabaseDropdown()
+        {
+
+            var currentDatabase = Request.QueryString["db"];
+            if (!string.IsNullOrEmpty(currentDatabase))
+            {
+                _db = Factory.GetDatabase(currentDatabase);
+            }
+            else
+            {
+                _db = Sitecore.Context.ContentDatabase;
+            }
+
+            litCurrentDatabase.Text = _db.Name;
+
+            var databases = Factory.GetDatabases();
+            rptDatabase.DataSource = databases;
+            rptDatabase.DataBind(); 
         }
 
         private void DisplayException(Exception ex)
@@ -277,6 +301,23 @@ namespace Hi.UrlRewrite.sitecore_modules.Shell.UrlRewrite
             {
                 rowLiteral.Text = string.Format("{0} {1}", rewriteReport.Name, rewriteReport.Count);
             }
+        }
+
+        protected void rptDatabase_OnItemDataBound(object sender, RepeaterItemEventArgs e)
+        {
+            if (e.Item.ItemType != ListItemType.AlternatingItem && e.Item.ItemType != ListItemType.Item) return;
+
+            if (e.Item.DataItem == null)
+                return;
+
+            var database = e.Item.DataItem as Database;
+            if (database == null) return;
+
+            var link = e.Item.FindControl("lnkDatabase") as HtmlAnchor;
+            if (link == null) return;
+
+            link.InnerText = database.Name;
+            link.HRef = "?db=" + database.Name;
         }
     }
 }

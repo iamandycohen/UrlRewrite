@@ -37,15 +37,20 @@
 
                     <div class="dropdown">
                         <button class="btn btn-default dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-expanded="true">
-                            Database
+                            <asp:Literal runat="server" ID="litCurrentDatabase"></asp:Literal>
                             <span class="caret"></span>
                         </button>
-                        <ul class="dropdown-menu" role="menu" aria-labelledby="dropdownMenu1">
-                            <li role="presentation"><a role="menuitem" tabindex="-1" href="#">Action</a></li>
-                            <li role="presentation"><a role="menuitem" tabindex="-1" href="#">Another action</a></li>
-                            <li role="presentation"><a role="menuitem" tabindex="-1" href="#">Something else here</a></li>
-                            <li role="presentation"><a role="menuitem" tabindex="-1" href="#">Separated link</a></li>
-                        </ul>
+                        <asp:Repeater runat="server" ID="rptDatabase" OnItemDataBound="rptDatabase_OnItemDataBound">
+                            <HeaderTemplate>
+                                <ul class="dropdown-menu" role="menu" aria-labelledby="dropdownMenu1">
+                            </HeaderTemplate>
+                            <ItemTemplate>
+                                <li role="presentation"><a runat="server" id="lnkDatabase" role="menuitem" tabindex="-1" href="#">Database Name</a></li>
+                            </ItemTemplate>
+                            <FooterTemplate>
+                                </ul>
+                            </FooterTemplate>
+                        </asp:Repeater>
                     </div>
 
                 </div>
