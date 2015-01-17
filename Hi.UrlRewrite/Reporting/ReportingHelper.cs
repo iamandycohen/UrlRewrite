@@ -4,6 +4,7 @@ using Hi.UrlRewrite.Processing;
 using Hi.UrlRewrite.Templates;
 using Hi.UrlRewrite.Templates.Folders;
 using Hi.UrlRewrite.Templates.Inbound;
+using Lucene.Net.Index;
 using Lucene.Net.Search;
 using Sitecore.Data;
 using Sitecore.Data.Items;
@@ -18,9 +19,9 @@ namespace Hi.UrlRewrite.Reporting
     public class ReportingHelper
     {
 
-        public IEnumerable<RewriteReportGroup> GetRewriteReportsGrouped(RulesEngine rulesEngine)
+        public IEnumerable<RewriteReportGroup> GetRewriteReportsGrouped(RulesEngine rulesEngine, Database database)
         {
-            var rewriteReports = GetRewriteReports();
+            var rewriteReports = GetRewriteReports(database);
             var rewriteReportsGrouped = rewriteReports
                 .GroupBy(r => new { DatabaseName = r.DatabaseName, RulePath = r.RulePath })
                 .Select(group => new RewriteReportGroup
@@ -59,7 +60,7 @@ namespace Hi.UrlRewrite.Reporting
             return rule;
         }
 
-        public IEnumerable<RewriteReport> GetRewriteReports()
+        public IEnumerable<RewriteReport> GetRewriteReports(Database database)
         {
             IEnumerable<RewriteReport> rewriteReports = new List<RewriteReport>();
 
@@ -69,7 +70,10 @@ namespace Hi.UrlRewrite.Reporting
             using (var indexSearchContext = index.CreateSearchContext())
             {
                 //var query = new FieldQuery(BuiltinFields.Template, ShortID.Encode(RewriteReportItem.TemplateId));
-                var query = new MatchAllDocsQuery();
+                var query = new BooleanQuery();
+                query.Add(new MatchAllDocsQuery(), Occur.MUST);
+                query.Add(new TermQuery(new Term(BuiltinFields.Database, database.Name)), Occur.MUST);
+
                 var searchHits = indexSearchContext.Search(query, int.MaxValue);
 
                 rewriteReports = searchHits.FetchResults(0, int.MaxValue)
