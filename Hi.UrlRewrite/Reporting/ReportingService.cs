@@ -24,7 +24,7 @@ namespace Hi.UrlRewrite.Reporting
                 var jobName = string.Format("UrlRewrite::Reporting - Saving rewrite info for item '{0}'", result.ItemId);
 
 
-                var jobOptions = new JobOptions(jobName, "UrlRewrite", siteName, this, "SaveRewriteInfo", new object[] { result, database })
+                var jobOptions = new JobOptions(jobName, "UrlRewrite", siteName, this, "SaveRewriteReport", new object[] { result, database })
                                                 {
                                                     WriteToLog = false
                                                 };
