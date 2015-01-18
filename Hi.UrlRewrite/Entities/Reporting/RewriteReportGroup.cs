@@ -9,9 +9,14 @@ namespace Hi.UrlRewrite.Entities.Reporting
     public class RewriteReportGroup
     {
         public string Name { get; set; }
-        public int Count { get; set; }
+        public int Count { get { return Reports.Count(); } }
         public InboundRule Rule { get; set; }
         public IEnumerable<RewriteReport> Reports { get; set; }
+
+        public RewriteReportGroup()
+        {
+            Reports = new List<RewriteReport>();
+        }
 
     }
 }

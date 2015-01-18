@@ -30,25 +30,6 @@ namespace Hi.UrlRewrite.Processing
                     PublishManager.PublishItem(urlRewriteTemplatesFolderItem, dbArray, urlRewriteTemplatesFolderItem.Languages, true,
                         true);
                 }
-
-                //        // install module folder
-                //        var urlRewriteModuleFolderItem = settingsDb.GetItem(new ID
-                //            (Constants.UrlRewriteModuleFolder_ItemId));
-
-                //        if (urlRewriteModuleFolderItem != null)
-                //        {
-                //            PublishManager.PublishItem(urlRewriteModuleFolderItem, dbArray, urlRewriteModuleFolderItem.Languages, false,
-                //                true);
-                //        }
-
-                //        // install reporting folder
-                //        var reportingFolderItem = settingsDb.GetItem(new ID
-                //(Constants.ReportingFolder_ItemId));
-                //        if (reportingFolderItem != null)
-                //        {
-                //            PublishManager.PublishItem(reportingFolderItem, dbArray, urlRewriteModuleFolderItem.Languages, false,
-                //                true);
-                //        }
             }
         }
     }

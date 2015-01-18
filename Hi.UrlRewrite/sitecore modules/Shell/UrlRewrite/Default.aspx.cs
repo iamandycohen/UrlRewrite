@@ -22,7 +22,7 @@ namespace Hi.UrlRewrite.sitecore_modules.Shell.UrlRewrite
 
         protected void Page_Load(object sender, EventArgs e)
         {
-
+            GetAndSetCurrentDatabase();
             CreateDatabaseDropdown();
 
             if (!IsPostBack)
@@ -60,7 +60,15 @@ namespace Hi.UrlRewrite.sitecore_modules.Shell.UrlRewrite
 
         private void CreateDatabaseDropdown()
         {
+            litCurrentDatabase.Text = _db.Name;
 
+            var databases = Factory.GetDatabases();
+            rptDatabase.DataSource = databases;
+            rptDatabase.DataBind(); 
+        }
+
+        private void GetAndSetCurrentDatabase()
+        {
             var currentDatabase = Request.QueryString["db"];
             if (!string.IsNullOrEmpty(currentDatabase))
             {
@@ -70,12 +78,6 @@ namespace Hi.UrlRewrite.sitecore_modules.Shell.UrlRewrite
             {
                 _db = Sitecore.Context.ContentDatabase;
             }
-
-            litCurrentDatabase.Text = _db.Name;
-
-            var databases = Factory.GetDatabases();
-            rptDatabase.DataSource = databases;
-            rptDatabase.DataBind(); 
         }
 
         private void DisplayException(Exception ex)
@@ -91,8 +93,7 @@ namespace Hi.UrlRewrite.sitecore_modules.Shell.UrlRewrite
         private void CreateReportingTable()
         {
             var reportingHelper = new ReportingHelper();
-            var rulesEngine = new RulesEngine(_db);
-            var rewriteReports = reportingHelper.GetRewriteReportsGrouped(rulesEngine, _db);
+            var rewriteReports = reportingHelper.GetRewriteReportsGrouped(_db);
 
             rptReportRow.DataSource = rewriteReports;
             rptReportRow.DataBind();
