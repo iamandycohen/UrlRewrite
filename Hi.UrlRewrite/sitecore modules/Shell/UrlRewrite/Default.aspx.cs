@@ -1,4 +1,5 @@
-﻿using Hi.UrlRewrite.Entities.Actions;
+﻿using Hi.UrlRewrite.Data;
+using Hi.UrlRewrite.Entities.Actions;
 using Hi.UrlRewrite.Entities.Conditions;
 using Hi.UrlRewrite.Entities.Reporting;
 using Hi.UrlRewrite.Processing;
@@ -301,6 +302,12 @@ namespace Hi.UrlRewrite.sitecore_modules.Shell.UrlRewrite
             var rowLiteral = e.Item.FindControl("litReportRow") as Literal;
             if (rowLiteral != null)
             {
+
+
+                var ruleId = new ID(rewriteReport.Rule.ItemId);
+                var itemWebApi = new WebServiceData(_db, Context.Request.Url.Host);
+                var getTask = itemWebApi.GetItem(ruleId);
+
                 rowLiteral.Text = string.Format("{0} {1}", rewriteReport.Name, rewriteReport.Count);
             }
         }
