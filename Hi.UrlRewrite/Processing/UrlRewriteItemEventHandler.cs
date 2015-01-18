@@ -52,7 +52,7 @@ namespace Hi.UrlRewrite.Processing
         private void RunItemSaved(Item item, ItemChanges itemChanges)
         {
             var db = item.Database;
-            var rulesEngine = new RulesEngine();
+            var rulesEngine = new RulesEngine(db);
 
             try
             {
@@ -67,7 +67,7 @@ namespace Hi.UrlRewrite.Processing
                     {
                         Log.Info(this, db, "Refreshing Redirect Folder [{0}] after save event", item.Paths.FullPath);
 
-                        rulesEngine.GetCachedInboundRules(db);
+                        rulesEngine.GetCachedInboundRules();
                     }
                     else if (item.IsSimpleRedirectItem())
                     {
@@ -134,7 +134,7 @@ namespace Hi.UrlRewrite.Processing
         private void RunItemDeleted(Item item)
         {
 
-            var rulesEngine = new RulesEngine();
+            var rulesEngine = new RulesEngine(item.Database);
 
             try
             {

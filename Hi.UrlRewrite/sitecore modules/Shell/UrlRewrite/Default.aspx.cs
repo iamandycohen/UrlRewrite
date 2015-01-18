@@ -91,8 +91,9 @@ namespace Hi.UrlRewrite.sitecore_modules.Shell.UrlRewrite
         private void CreateReportingTable()
         {
             var reportingHelper = new ReportingHelper();
-            var rulesEngine = new RulesEngine();
+            var rulesEngine = new RulesEngine(_db);
             var rewriteReports = reportingHelper.GetRewriteReportsGrouped(rulesEngine, _db);
+
             rptReportRow.DataSource = rewriteReports;
             rptReportRow.DataBind();
 

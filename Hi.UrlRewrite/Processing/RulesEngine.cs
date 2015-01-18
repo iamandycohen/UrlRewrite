@@ -23,57 +23,29 @@ namespace Hi.UrlRewrite.Processing
     public class RulesEngine
     {
 
-        public void InstallItems()
+        private readonly Database db;
+
+        public Database Database
         {
-            var settingsDb = Database.GetDatabase("master");
-            if (settingsDb == null) return;
-
-            using (new SecurityDisabler())
+            get
             {
-                var settingsItem = settingsDb.GetItem(new ID(Constants.UrlRewriteSettings_ItemId));
-                if (settingsItem == null) return;
-
-                var settings = new SettingsItem(settingsItem);
-                var publishingTargets = settings.InstallationPublishingTargets.GetItems();
-                var dbArray = publishingTargets.Select(x => Factory.GetDatabase(x.Fields["Target database"].Value)).ToArray();
-
-                // install templates
-                var urlRewriteTemplatesFolderItem = settingsDb.GetItem(new ID(Constants.UrlRewriteTemplatesFolder_ItemId));
-                if (urlRewriteTemplatesFolderItem != null)
-                {
-                    PublishManager.PublishItem(urlRewriteTemplatesFolderItem, dbArray, urlRewriteTemplatesFolderItem.Languages, true,
-                        true);
-                }
-
-        //        // install module folder
-        //        var urlRewriteModuleFolderItem = settingsDb.GetItem(new ID
-        //            (Constants.UrlRewriteModuleFolder_ItemId));
-
-        //        if (urlRewriteModuleFolderItem != null)
-        //        {
-        //            PublishManager.PublishItem(urlRewriteModuleFolderItem, dbArray, urlRewriteModuleFolderItem.Languages, false,
-        //                true);
-        //        }
-
-        //        // install reporting folder
-        //        var reportingFolderItem = settingsDb.GetItem(new ID
-        //(Constants.ReportingFolder_ItemId));
-        //        if (reportingFolderItem != null)
-        //        {
-        //            PublishManager.PublishItem(reportingFolderItem, dbArray, urlRewriteModuleFolderItem.Languages, false,
-        //                true);
-        //        }
+                return db;
             }
         }
 
-        public List<InboundRule> GetInboundRules(Database db)
+        public RulesEngine(Database db)
+        {
+            this.db = db;
+        }
+
+        public List<InboundRule> GetInboundRules()
         {
             if (db == null)
             {
                 return null;
             }
 
-            var redirectFolderItems = GetRedirectFolderItems(db);
+            var redirectFolderItems = GetRedirectFolderItems();
 
             if (redirectFolderItems == null)
             {
@@ -121,14 +93,14 @@ namespace Hi.UrlRewrite.Processing
             return inboundRules;
         }
 
-        public List<OutboundRule> GetOutboundRules(Database db)
+        public List<OutboundRule> GetOutboundRules()
         {
             if (db == null)
             {
                 return null;
             }
 
-            var redirectFolderItems = GetRedirectFolderItems(db);
+            var redirectFolderItems = GetRedirectFolderItems();
 
             if (redirectFolderItems == null)
             {
@@ -165,7 +137,7 @@ namespace Hi.UrlRewrite.Processing
             return outboundRules;
         }
 
-        private static IEnumerable<Item> GetRedirectFolderItems(Database db)
+        private IEnumerable<Item> GetRedirectFolderItems()
         {
             var query = string.Format(Constants.RedirectFolderItemsQuery, Configuration.RewriteFolderSearchRoot,
                 RedirectFolderItem.TemplateId);
@@ -258,20 +230,20 @@ namespace Hi.UrlRewrite.Processing
 
         #region Caching
 
-        private RulesCache GetRulesCache(Database db)
+        private RulesCache GetRulesCache()
         {
             return RulesCacheManager.GetCache(db);
         }
 
-        internal List<InboundRule> GetCachedInboundRules(Database db)
+        internal List<InboundRule> GetCachedInboundRules()
         {
-            var inboundRules = GetInboundRules(db);
+            var inboundRules = GetInboundRules();
 
             if (inboundRules != null)
             {
                 Log.Info(this, db, "Adding {0} rules to Cache [{1}]", inboundRules.Count(), db.Name);
 
-                var cache = GetRulesCache(db);
+                var cache = GetRulesCache();
                 cache.SetInboundRules(inboundRules);
             }
             else
@@ -282,15 +254,15 @@ namespace Hi.UrlRewrite.Processing
             return inboundRules;
         }
 
-        internal List<OutboundRule> GetCachedOutboundRules(Database db)
+        internal List<OutboundRule> GetCachedOutboundRules()
         {
-            var outboundRules = GetOutboundRules(db);
+            var outboundRules = GetOutboundRules();
 
             if (outboundRules != null)
             {
                 Log.Info(this, db, "Adding {0} rules to Cache [{1}]", outboundRules.Count(), db.Name);
 
-                var cache = GetRulesCache(db);
+                var cache = GetRulesCache();
                 cache.SetOutboundRules(outboundRules);
             }
             else
@@ -318,12 +290,12 @@ namespace Hi.UrlRewrite.Processing
 
         private void UpdateRulesCache(Item item, Item redirectFolderItem, Action<Item, Item, List<InboundRule>> action)
         {
-            var cache = GetRulesCache(item.Database);
+            var cache = GetRulesCache();
             var inboundRules = cache.GetInboundRules();
 
             if (inboundRules == null)
             {
-                inboundRules = GetInboundRules(item.Database);
+                inboundRules = GetInboundRules();
             }
 
             if (inboundRules != null)

@@ -16,8 +16,8 @@ namespace Hi.UrlRewrite.Processing
         {
             var rewriter = new InboundRewriter();
 
-            var rulesEngine = new RulesEngine();
-            var inboundRules = rulesEngine.GetInboundRules(database);
+            var rulesEngine = new RulesEngine(database);
+            var inboundRules = rulesEngine.GetInboundRules();
 
             var requestUri = new Uri(url);
             var siteContext = SiteContextFactory.GetSiteContext(requestUri.Host, requestUri.AbsolutePath,

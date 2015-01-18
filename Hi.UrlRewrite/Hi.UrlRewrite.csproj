@@ -138,6 +138,7 @@
     <Compile Include="Processing\Results\InboundRuleResult.cs" />
     <Compile Include="Processing\RewriteHelper.cs" />
     <Compile Include="Processing\RulesEngine.cs" />
+    <Compile Include="Processing\Setup.cs" />
     <Compile Include="Processing\UrlRewriteHandler.cs" />
     <Compile Include="Processing\UrlRewriteItemEventHandler.cs" />
     <Compile Include="Processing\InboundRewriteProcessor.cs" />
