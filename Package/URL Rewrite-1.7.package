@@ -546,6 +546,10 @@ Version 1.0
         <x-item>/master/sitecore/templates/User Defined/UrlRewrite/Templates/Settings/Settings/{B3A4B170-59DE-4438-B4E8-FE74A3C24C00}/invariant/0</x-item>
         <x-item>/master/sitecore/templates/User Defined/UrlRewrite/Templates/Settings/Settings/Url Rewrite Settings/{1A4C6755-F370-4D7D-8654-BF03759F3881}/invariant/0</x-item>
         <x-item>/master/sitecore/templates/User Defined/UrlRewrite/Templates/Settings/Settings/Url Rewrite Settings/Installation Publishing Targets/{64727107-1326-48B7-A428-6E469CB99B47}/invariant/0</x-item>
+        <x-item>/master/sitecore/templates/User Defined/UrlRewrite/Templates/Base Enabled/__Standard Values/{9B090BE1-6530-474A-8EAB-B7F7AAE506BA}/invariant/0</x-item>
+        <x-item>/master/sitecore/templates/User Defined/UrlRewrite/Templates/Base Enabled/{9CE37445-8572-4244-87E7-B0AAFBF87A35}/invariant/0</x-item>
+        <x-item>/master/sitecore/templates/User Defined/UrlRewrite/Templates/Base Enabled/General/{46D1F2F1-F364-4310-BCB0-200034C85C22}/invariant/0</x-item>
+        <x-item>/master/sitecore/templates/User Defined/UrlRewrite/Templates/Base Enabled/General/Enabled/{14C30096-C351-4AB4-9E08-2DE9B61C8D4F}/invariant/0</x-item>
       </Entries>
       <SkipVersions>False</SkipVersions>
       <Converter>

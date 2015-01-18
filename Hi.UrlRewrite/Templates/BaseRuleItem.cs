@@ -19,6 +19,9 @@ namespace Hi.UrlRewrite.Templates
         private readonly BaseMatchItem _BaseMatchItem;
         public BaseMatchItem BaseMatchItem { get { return _BaseMatchItem; } }
 
+        private readonly BaseEnabledItem _BaseEnabledItem;
+        public BaseEnabledItem BaseEnabledItem { get { return _BaseEnabledItem; } }
+
         #endregion
 
         public BaseRuleItem(Item innerItem)
@@ -27,6 +30,7 @@ namespace Hi.UrlRewrite.Templates
             _BaseUrlRewriteItem = new BaseUrlRewriteItem(innerItem);
             _ConditionLogicalGroupingItem = new ConditionLogicalGroupingItem(innerItem);
             _BaseMatchItem = new BaseMatchItem(innerItem);
+            _BaseEnabledItem = new BaseEnabledItem(innerItem);
         }
 
         public static implicit operator BaseRuleItem(Item innerItem)
@@ -39,13 +43,5 @@ namespace Hi.UrlRewrite.Templates
 	        return customItem != null ? customItem.InnerItem : null;
         }
 
-        public CheckboxField Enabled
-        {
-            get
-            {
-                return new CheckboxField(InnerItem.Fields["Enabled"]);
-            }
-        }
-            
     }
 }

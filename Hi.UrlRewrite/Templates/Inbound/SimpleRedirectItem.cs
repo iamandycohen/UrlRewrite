@@ -13,6 +13,9 @@ namespace Hi.UrlRewrite.Templates.Inbound
         private readonly BaseUrlRewriteItem _BaseUrlRewriteItem;
         public BaseUrlRewriteItem BaseUrlRewriteItem { get { return _BaseUrlRewriteItem; } }
 
+        private readonly BaseEnabledItem _BaseEnabledItem;
+        public BaseEnabledItem BaseEnabledItem { get { return _BaseEnabledItem; } }
+
         #endregion
 
         #region Boilerplate CustomItem Code
@@ -21,6 +24,7 @@ namespace Hi.UrlRewrite.Templates.Inbound
             : base(innerItem)
         {
             _BaseUrlRewriteItem = new BaseUrlRewriteItem(innerItem);
+            _BaseEnabledItem = new BaseEnabledItem(innerItem);
         }
 
         public static implicit operator SimpleRedirectItem(Item innerItem)

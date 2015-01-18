@@ -320,11 +320,16 @@ namespace Hi.UrlRewrite
 
         private static void SetBaseRule(BaseRuleItem baseRuleItem, IBaseRule baseRule)
         {
-            baseRule.Enabled = baseRuleItem.Enabled.Checked;
+            SetBaseEnabled(baseRuleItem.InnerItem, baseRule);
 
             SetBaseMatch(baseRuleItem.BaseMatchItem, baseRule);
 
             SetConditionLogicalGrouping(baseRuleItem.ConditionLogicalGroupingItem, baseRule);
+        }
+
+        private static void SetBaseEnabled(BaseEnabledItem baseEnabledItem, IBaseEnabled baseEnabled)
+        {
+            baseEnabled.Enabled = baseEnabledItem.Enabled.Checked;
         }
 
         private static void SetConditionLogicalGrouping(ConditionLogicalGroupingItem conditionLogicalGroupingItem, IConditionLogicalGrouping conditionLogicalGrouping)

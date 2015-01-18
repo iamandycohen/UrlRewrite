@@ -72,7 +72,10 @@ namespace Hi.UrlRewrite.Processing
 
                         var inboundRule = CreateInboundRuleFromSimpleRedirectItem(simpleRedirectItem, redirectFolderItem);
 
-                        inboundRules.Add(inboundRule);
+                        if (inboundRule != null && inboundRule.Enabled)
+                        {
+                            inboundRules.Add(inboundRule);
+                        }
                     }
                     else if (descendantItem.TemplateID == new ID(new Guid(InboundRuleItem.TemplateId)))
                     {
@@ -175,7 +178,7 @@ namespace Hi.UrlRewrite.Processing
                     HttpCacheability = HttpCacheability.NoCache
                 },
                 SiteNameRestriction = siteNameRestriction,
-                Enabled = true,
+                Enabled = simpleRedirectItem.BaseEnabledItem.Enabled.Checked,
                 IgnoreCase = true,
                 ItemId = simpleRedirectItem.ID.Guid,
                 ConditionLogicalGrouping = LogicalGrouping.MatchAll,
@@ -359,7 +362,6 @@ namespace Hi.UrlRewrite.Processing
             }
             else
             {
-
                 RemoveInboundRule(item, redirectFolderItem, inboundRules);
             }
         }

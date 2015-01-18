@@ -109,6 +109,7 @@
     <Compile Include="Entities\Match\Using.cs" />
     <Compile Include="Entities\Reporting\RewriteReport.cs" />
     <Compile Include="Entities\Reporting\RewriteReportGroup.cs" />
+    <Compile Include="Entities\Rules\IBaseEnabled.cs" />
     <Compile Include="Entities\Rules\IBaseRule.cs" />
     <Compile Include="Entities\Rules\IConditionList.cs" />
     <Compile Include="Entities\Rules\InboundRule.cs" />
@@ -177,6 +178,7 @@
     <Compile Include="Templates\BaseRuleItem.cs" />
     <Compile Include="Templates\BaseUrlRewriteItem.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Templates\BaseEnabledItem.cs" />
     <Compile Include="Templates\Conditions\BaseConditionItem.cs" />
     <Compile Include="Templates\Conditions\PreconditionItem.cs" />
     <Compile Include="Templates\Conditions\ConditionLogicalGroupingItem.cs" />
