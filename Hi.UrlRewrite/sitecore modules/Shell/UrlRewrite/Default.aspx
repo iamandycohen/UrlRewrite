@@ -33,7 +33,7 @@
 
             <form id="form1" runat="server" role="form" class="form-horizontal">
 
-                <div class="form-group">
+                <div id="dropdownWrapper">
 
                     <div class="dropdown">
                         <button class="btn btn-default dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-expanded="true">
@@ -55,94 +55,118 @@
 
                 </div>
 
-                <div runat="server" id="divFormGroup" class="form-group">
-                    <label for="<%= txtUrl.ClientID %>" class="control-label">Url</label>
-                    <asp:TextBox ID="txtUrl" runat="server" placeholder="Please enter a fully qualified URL to test..." CssClass="form-control" CausesValidation="True"></asp:TextBox>
-                    <asp:RequiredFieldValidator ID="vldTxtUrl" runat="server" ErrorMessage="URL is required." ControlToValidate="txtUrl" Display="Dynamic" Text="URL is required." ValidationGroup="AllValidators" CssClass="control-label"></asp:RequiredFieldValidator>
-                </div>
 
-                <div class="form-group">
-                    <asp:Button ID="btnSubmit" runat="server" Text="Run" UseSubmitBehavior="True" CssClass="btn btn-primary" />
-                </div>
 
-                <div id="divTable" runat="server" visible="False">
-                    <table id="tblResults" class="table table-striped">
-                        <thead>
-                            <tr>
-                                <th>Name</th>
-                                <th>Path</th>
-                                <th>Original Url</th>
-                                <th>Rewritten Url</th>
-                                <th>Match?</th>
-                                <th>Action</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <asp:Repeater runat="server" ID="resultsRepeater" OnItemDataBound="resultsRepeater_OnItemDataBound">
-                                <ItemTemplate>
-                                    <tr id="tableRow" runat="server">
-                                        <td id="cellName" runat="server"></td>
-                                        <td id="cellPath" runat="server"></td>
-                                        <td id="cellOriginalUrl" runat="server"></td>
-                                        <td id="cellRewrittenUrl" runat="server"></td>
-                                        <td id="cellMatch" runat="server"></td>
-                                        <td id="cellAction" runat="server"></td>
-                                    </tr>
+                <div role="tabpanel">
 
-                                    <tr id="conditionHeader" runat="server" class="hide">
-                                        <th></th>
-                                        <th>Pattern</th>
-                                        <th>Input (w/ tokens)</th>
-                                        <th>Input</th>
-                                        <th>Match Type</th>
-                                        <th></th>
-                                    </tr>
+                    <!-- Nav tabs -->
+                    <ul class="nav nav-tabs" role="tablist">
+                        <li role="presentation" class="active"><a href="#tab-simulation" aria-controls="tab-simulation" role="tab" data-toggle="tab">Simulation</a></li>
+                        <li role="presentation"><a href="#tab-reports" aria-controls="tab-reports" role="tab" data-toggle="tab">Reports</a></li>
+                    </ul>
 
-                                    <asp:Repeater runat="server" ID="conditionRepeater" OnItemDataBound="conditionRepeater_OnItemDataBound">
-                                        <ItemTemplate>
-                                            <tr id="conditionRow" runat="server">
-                                                <td></td>
-                                                <td id="conditionPattern" runat="server"></td>
-                                                <td id="conditionInputToken" runat="server"></td>
-                                                <td id="conditionInput" runat="server"></td>
-                                                <td id="conditionMatchType"></td>
-                                                <td></td>
-                                            </tr>
-                                        </ItemTemplate>
+                    <!-- Tab panes -->
+                    <div class="tab-content">
+                        <div role="tabpanel" class="tab-pane active" id="tab-simulation">
 
-                                    </asp:Repeater>
 
-                                </ItemTemplate>
-                            </asp:Repeater>
-                        </tbody>
-                    </table>
+                            <div runat="server" id="divFormGroup" class="form-group">
+                                <label for="<%= txtUrl.ClientID %>" class="control-label">Url</label>
+                                <asp:TextBox ID="txtUrl" runat="server" placeholder="Please enter a fully qualified URL to test..." CssClass="form-control" CausesValidation="True"></asp:TextBox>
+                                <asp:RequiredFieldValidator ID="vldTxtUrl" runat="server" ErrorMessage="URL is required." ControlToValidate="txtUrl" Display="Dynamic" Text="URL is required." ValidationGroup="AllValidators" CssClass="control-label"></asp:RequiredFieldValidator>
+                            </div>
 
-                    <div class="panel panel-default">
-                        <div class="panel-heading">
-                            <h3 class="panel-title">Final Result</h3>
+                            <div class="form-group">
+                                <asp:Button ID="btnSubmit" runat="server" Text="Run" UseSubmitBehavior="True" CssClass="btn btn-primary" />
+                            </div>
+
+                            <div id="divTable" runat="server" visible="False">
+                                <table id="tblResults" class="table table-striped">
+                                    <thead>
+                                        <tr>
+                                            <th>Name</th>
+                                            <th>Path</th>
+                                            <th>Original Url</th>
+                                            <th>Rewritten Url</th>
+                                            <th>Match?</th>
+                                            <th>Action</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <asp:Repeater runat="server" ID="resultsRepeater" OnItemDataBound="resultsRepeater_OnItemDataBound">
+                                            <ItemTemplate>
+                                                <tr id="tableRow" runat="server">
+                                                    <td id="cellName" runat="server"></td>
+                                                    <td id="cellPath" runat="server"></td>
+                                                    <td id="cellOriginalUrl" runat="server"></td>
+                                                    <td id="cellRewrittenUrl" runat="server"></td>
+                                                    <td id="cellMatch" runat="server"></td>
+                                                    <td id="cellAction" runat="server"></td>
+                                                </tr>
+
+                                                <tr id="conditionHeader" runat="server" class="hide">
+                                                    <th></th>
+                                                    <th>Pattern</th>
+                                                    <th>Input (w/ tokens)</th>
+                                                    <th>Input</th>
+                                                    <th>Match Type</th>
+                                                    <th></th>
+                                                </tr>
+
+                                                <asp:Repeater runat="server" ID="conditionRepeater" OnItemDataBound="conditionRepeater_OnItemDataBound">
+                                                    <ItemTemplate>
+                                                        <tr id="conditionRow" runat="server">
+                                                            <td></td>
+                                                            <td id="conditionPattern" runat="server"></td>
+                                                            <td id="conditionInputToken" runat="server"></td>
+                                                            <td id="conditionInput" runat="server"></td>
+                                                            <td id="conditionMatchType"></td>
+                                                            <td></td>
+                                                        </tr>
+                                                    </ItemTemplate>
+
+                                                </asp:Repeater>
+
+                                            </ItemTemplate>
+                                        </asp:Repeater>
+                                    </tbody>
+                                </table>
+
+                                <div class="panel panel-default">
+                                    <div class="panel-heading">
+                                        <h3 class="panel-title">Final Result</h3>
+                                    </div>
+                                    <div class="panel-body">
+                                        <div id="txtFinalUrl" runat="server"></div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div id="divInfo" runat="server" visible="False">
+                            </div>
+
+
                         </div>
-                        <div class="panel-body">
-                            <div id="txtFinalUrl" runat="server"></div>
+
+                        <div role="tabpanel" class="tab-pane" id="tab-reports">
+
+                            <div id="divReporting" runat="server">
+                                <table id="tblReporting" class="table table-striped">
+                                    <tbody>
+                                        <asp:Repeater runat="server" ID="rptReportRow" OnItemDataBound="rptReportRow_OnItemDataBound">
+                                            <ItemTemplate>
+                                                <tr>
+                                                    <td>
+                                                        <asp:Literal runat="server" ID="litReportRow"></asp:Literal></td>
+                                                </tr>
+                                            </ItemTemplate>
+                                        </asp:Repeater>
+                                    </tbody>
+                                </table>
+
+                            </div>
                         </div>
                     </div>
-                </div>
-
-                <div id="divInfo" runat="server" visible="False">
-                </div>
-
-                <div id="divReporting" runat="server">
-                    <table id="tblReporting" class="table table-striped">
-                        <tbody>
-                            <asp:Repeater runat="server" ID="rptReportRow" OnItemDataBound="rptReportRow_OnItemDataBound">
-                                <ItemTemplate>
-                                    <tr>
-                                        <td>
-                                            <asp:Literal runat="server" ID="litReportRow"></asp:Literal></td>
-                                    </tr>
-                                </ItemTemplate>
-                            </asp:Repeater>
-                        </tbody>
-                    </table>
                 </div>
                 <div id="divError" runat="server" visible="False">
                     <pre id="txtError" runat="server">
