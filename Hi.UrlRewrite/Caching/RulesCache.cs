@@ -25,7 +25,7 @@ namespace Hi.UrlRewrite.Caching
             return GetObject(inboundRulesKey) as List<InboundRule>;
         }
 
-        public void SetInboundRules(List<InboundRule> inboundRules)
+        public void SetInboundRules(IEnumerable<InboundRule> inboundRules)
         {
             long size;
 
@@ -44,7 +44,7 @@ namespace Hi.UrlRewrite.Caching
             return GetObject(outboundRulesKey) as List<OutboundRule>;
         }
 
-        public void SetOutboundRules(List<OutboundRule> outboundRules)
+        public void SetOutboundRules(IEnumerable<OutboundRule> outboundRules)
         {
             long size;
 

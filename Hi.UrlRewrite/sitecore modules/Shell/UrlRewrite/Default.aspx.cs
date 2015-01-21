@@ -25,6 +25,7 @@ namespace Hi.UrlRewrite.sitecore_modules.Shell.UrlRewrite
         {
             GetAndSetCurrentDatabase();
             CreateDatabaseDropdown();
+            CreateReportingTable();
 
             if (!IsPostBack)
             {
@@ -41,7 +42,6 @@ namespace Hi.UrlRewrite.sitecore_modules.Shell.UrlRewrite
                     if (Page.IsValid)
                     {
                         CreateRewriteForm();
-                        CreateReportingTable();
                     }
                     else
                     {
@@ -65,7 +65,7 @@ namespace Hi.UrlRewrite.sitecore_modules.Shell.UrlRewrite
 
             var databases = Factory.GetDatabases();
             rptDatabase.DataSource = databases;
-            rptDatabase.DataBind(); 
+            rptDatabase.DataBind();
         }
 
         private void GetAndSetCurrentDatabase()

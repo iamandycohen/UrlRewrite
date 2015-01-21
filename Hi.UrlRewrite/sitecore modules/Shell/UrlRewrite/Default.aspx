@@ -182,7 +182,7 @@
     <!-- Bootstrap core JavaScript
     ================================================== -->
     <!-- Placed at the end of the document so the pages load faster -->
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+    <script src="/sitecore modules/Shell/UrlRewrite/Scripts/jquery-1.10.2.min.js"></script>
     <script src="/sitecore modules/Shell/UrlRewrite/Scripts/bootstrap.min.js"></script>
     <script src="/sitecore modules/Shell/UrlRewrite/Scripts/app.js"></script>
 </body>

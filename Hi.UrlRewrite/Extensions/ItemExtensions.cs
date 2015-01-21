@@ -863,6 +863,11 @@ namespace Hi.UrlRewrite
 
         #region Helpers
 
+        public static bool IsOutboundRuleItem(this Item item)
+        {
+            return !IsTemplate(item) && item.TemplateID.ToString().Equals(OutboundRuleItem.TemplateId, StringComparison.InvariantCultureIgnoreCase);
+        }
+
         public static bool IsRedirectFolderItem(this Item item)
         {
             return !IsTemplate(item) && item.TemplateID.ToString().Equals(RedirectFolderItem.TemplateId, StringComparison.InvariantCultureIgnoreCase);
@@ -883,6 +888,15 @@ namespace Hi.UrlRewrite
             if (item.Parent != null)
             {
                 return !IsTemplate(item) && item.Parent.TemplateID.ToString().Equals(InboundRuleItem.TemplateId, StringComparison.InvariantCultureIgnoreCase);
+            }
+            return false;
+        }
+
+        public static bool IsOutboundRuleItemChild(this Item item)
+        {
+            if (item.Parent != null)
+            {
+                return !IsTemplate(item) && item.Parent.TemplateID.ToString().Equals(OutboundRuleItem.TemplateId, StringComparison.InvariantCultureIgnoreCase);
             }
             return false;
         }

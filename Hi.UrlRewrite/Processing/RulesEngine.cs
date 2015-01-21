@@ -276,99 +276,113 @@ namespace Hi.UrlRewrite.Processing
             return outboundRules;
         }
 
-        internal void RefreshSimpleRedirect(Item item, Item redirectFolderItem)
+        internal void RefreshRule(Item item, Item redirectFolderItem)
         {
-            UpdateRulesCache(item, redirectFolderItem, AddSimpleRedirect);
+            UpdateRulesCache(item, redirectFolderItem, AddRule);
         }
 
-        internal void RefreshInboundRule(Item item, Item redirectFolderItem)
+        internal void DeleteRule(Item item, Item redirectFolderItem)
         {
-            UpdateRulesCache(item, redirectFolderItem, AddInboundRule);
+            UpdateRulesCache(item, redirectFolderItem, RemoveRule);
         }
 
-        internal void DeleteInboundRule(Item item, Item redirectFolderItem)
-        {
-            UpdateRulesCache(item, redirectFolderItem, RemoveInboundRule);
-        }
-
-        private void UpdateRulesCache(Item item, Item redirectFolderItem, Action<Item, Item, List<InboundRule>> action)
+        private void UpdateRulesCache(Item item, Item redirectFolderItem, Action<Item, Item, List<IBaseRule>> action)
         {
             var cache = GetRulesCache();
-            var inboundRules = cache.GetInboundRules();
-
-            if (inboundRules == null)
+            IEnumerable<IBaseRule> rules = null;
+            if (item.IsSimpleRedirectItem() || item.IsInboundRuleItem())
             {
-                inboundRules = GetInboundRules();
+                rules = cache.GetInboundRules();
+                if (rules == null)
+                {
+                    rules = GetInboundRules();
+                }
+            }
+            else if (item.IsOutboundRuleItem())
+            {
+                rules = cache.GetOutboundRules();
+                if (rules == null)
+                {
+                    rules = GetOutboundRules();
+                }
             }
 
-            if (inboundRules != null)
-            {
-                action(item, redirectFolderItem, inboundRules);
 
-                Log.Debug(this, item.Database, "Updating Rules Cache - count: {0}", inboundRules.Count);
+            if (rules != null)
+            {
+                action(item, redirectFolderItem, rules.ToList());
+
+                Log.Debug(this, item.Database, "Updating Rules Cache - count: {0}", rules.Count());
 
                 // update the cache
-                cache.SetInboundRules(inboundRules);
+                if (item.IsSimpleRedirectItem() || item.IsInboundRuleItem())
+                {
+                    cache.SetInboundRules(rules.OfType<InboundRule>());
+                }
+                else if (item.IsOutboundRuleItem())
+                {
+                    cache.SetOutboundRules(rules.OfType<OutboundRule>());
+                }
+
             }
         }
 
-        private void AddSimpleRedirect(Item item, Item redirectFolderItem, List<InboundRule> inboundRules)
+        private void AddRule(Item item, Item redirectFolderItem, List<IBaseRule> inboundRules)
         {
+            IBaseRule newRule = null;
 
-            Log.Debug(this, item.Database, "Adding Simple Redirect - item: [{0}]", item.Paths.FullPath);
+            Log.Debug(this, item.Database, "Adding Rule - item: [{0}]", item.Paths.FullPath);
 
-            var simpleRedirectItem = new SimpleRedirectItem(item);
-            var newInboundRule = CreateInboundRuleFromSimpleRedirectItem(simpleRedirectItem, redirectFolderItem);
-
-            AddOrRemoveRule(item, redirectFolderItem, inboundRules, newInboundRule);
-        }
-
-        private void AddInboundRule(Item item, Item redirectFolderItem, List<InboundRule> inboundRules)
-        {
-
-            Log.Debug(this, item.Database, "Adding Inbound Rule - item: [{0}]", item.Paths.FullPath);
-
-            var inboundRuleItem = new InboundRuleItem(item);
-
-            var newInboundRule = CreateInboundRuleFromInboundRuleItem(inboundRuleItem, redirectFolderItem);
-
-            if (newInboundRule != null)
+            if (item.IsInboundRuleItem())
             {
-                AddOrRemoveRule(item, redirectFolderItem, inboundRules, newInboundRule);
+                newRule = CreateInboundRuleFromInboundRuleItem(item, redirectFolderItem);
+            }
+            else if (item.IsSimpleRedirectItem())
+            {
+                newRule = CreateInboundRuleFromSimpleRedirectItem(item, redirectFolderItem);
+            }
+            else if (item.IsOutboundRuleItem())
+            {
+                newRule = CreateOutboundRuleFromOutboundRuleItem(item, redirectFolderItem);
+            }
+
+            if (newRule != null)
+            {
+                AddOrRemoveRule(item, redirectFolderItem, inboundRules, newRule);
             }
         }
 
-        private void AddOrRemoveRule(Item item, Item redirectFolderItem, List<InboundRule> inboundRules, InboundRule newInboundRule)
+        private void AddOrRemoveRule(Item item, Item redirectFolderItem, List<IBaseRule> rules, IBaseRule newRule)
         {
-            if (newInboundRule.Enabled)
+            if (newRule.Enabled)
             {
-                var existingInboundRule = inboundRules.FirstOrDefault(e => e.ItemId == item.ID.Guid);
-                if (existingInboundRule != null)
+                var existingRule = rules.FirstOrDefault(e => e.ItemId == item.ID.Guid);
+                if (existingRule != null)
                 {
 
-                    Log.Debug(this, item.Database, "Replacing Inbound Rule - item: [{0}]", item.Paths.FullPath);
+                    Log.Debug(this, item.Database, "Replacing Rule - item: [{0}]", item.Paths.FullPath);
 
-                    var index = inboundRules.FindIndex(e => e.ItemId == existingInboundRule.ItemId);
-                    inboundRules.RemoveAt(index);
-                    inboundRules.Insert(index, newInboundRule);
+                    var index = rules.FindIndex(e => e.ItemId == existingRule.ItemId);
+                    rules.RemoveAt(index);
+                    rules.Insert(index, newRule);
                 }
                 else
                 {
 
-                    Log.Debug(this, item.Database, "Adding Inbound Rule - item: [{0}]", item.Paths.FullPath);
+                    Log.Debug(this, item.Database, "Adding Rule - item: [{0}]", item.Paths.FullPath);
 
-                    inboundRules.Add(newInboundRule);
+                    rules.Add(newRule);
                 }
             }
             else
             {
-                RemoveInboundRule(item, redirectFolderItem, inboundRules);
+                RemoveRule(item, redirectFolderItem, rules);
             }
         }
 
-        private void RemoveInboundRule(Item item, Item redirectFolderItem, List<InboundRule> inboundRules)
+        private void RemoveRule(Item item, Item redirectFolderItem, List<IBaseRule> inboundRules)
         {
-            Log.Debug(this, item.Database, "Removing Inbound Rule - item: [{0}]", item.Paths.FullPath);
+            Log.Debug(this, item.Database, "Removing Rule - item: [{0}]", item.Paths.FullPath);
 
             var existingInboundRule = inboundRules.FirstOrDefault(e => e.ItemId == item.ID.Guid);
             if (existingInboundRule != null)

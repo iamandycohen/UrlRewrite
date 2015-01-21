@@ -26,7 +26,8 @@ namespace Hi.UrlRewrite.Reporting
                     Name = string.Format("{0}::{1}", group.Key.DatabaseName, group.Key.RulePath),
                     Rule = GetInboundRule(group.Key.DatabaseName, group.Key.RulePath),
                     Reports = group.ToList()
-                });
+                })
+                .OrderByDescending(group => group.Count);
 
             return rewriteReportsGrouped;
         }

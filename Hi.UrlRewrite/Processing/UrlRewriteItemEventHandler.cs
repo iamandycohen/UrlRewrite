@@ -69,17 +69,23 @@ namespace Hi.UrlRewrite.Processing
 
                         rulesEngine.GetCachedInboundRules();
                     }
+                    else if (item.IsOutboundRuleItem())
+                    {
+                        Log.Info(this, db, "Refreshing Outbound Rule [{0}] after save event", item.Paths.FullPath);
+
+                        rulesEngine.RefreshRule(item, redirectFolderItem);
+                    }
                     else if (item.IsSimpleRedirectItem())
                     {
                         Log.Info(this, db, "Refreshing Simple Redirect [{0}] after save event", item.Paths.FullPath);
 
-                        rulesEngine.RefreshSimpleRedirect(item, redirectFolderItem);
+                        rulesEngine.RefreshRule(item, redirectFolderItem);
                     }
                     else if (item.IsInboundRuleItem())
                     {
                         Log.Info(this, db, "Refreshing Inbound Rule [{0}] after save event", item.Paths.FullPath);
 
-                        rulesEngine.RefreshInboundRule(item, redirectFolderItem);
+                        rulesEngine.RefreshRule(item, redirectFolderItem);
                     }
                     else if (item.IsRedirectType() && item.IsInboundRuleItemChild() && db.Name.Equals("master", StringComparison.CurrentCultureIgnoreCase))
                     {
@@ -94,7 +100,13 @@ namespace Hi.UrlRewrite.Processing
                     {
                         Log.Info(this, db, "Refreshing Inbound Rule [{0}] after save event", item.Parent.Paths.FullPath);
 
-                        rulesEngine.RefreshInboundRule(item.Parent, redirectFolderItem);
+                        rulesEngine.RefreshRule(item.Parent, redirectFolderItem);
+                    }
+                    else if (item.IsOutboundRuleItemChild())
+                    {
+                        Log.Info(this, db, "Refreshing Outbound Rule [{0}] after save event", item.Parent.Paths.FullPath);
+
+                        rulesEngine.RefreshRule(item.Parent, redirectFolderItem);
                     }
                 }
             }
@@ -147,19 +159,19 @@ namespace Hi.UrlRewrite.Processing
 
                     if (redirectFolderItem != null)
                     {
-                        if (item.IsInboundRuleItem() || item.IsSimpleRedirectItem())
+                        if (item.IsInboundRuleItem() || item.IsSimpleRedirectItem() || item.IsOutboundRuleItem())
                         {
-                            Log.Info(this, item.Database, "Removing Inbound Rule [{0}] after delete event",
+                            Log.Info(this, item.Database, "Removing Rule [{0}] after delete event",
                                 item.Paths.FullPath);
 
-                            rulesEngine.DeleteInboundRule(item, redirectFolderItem);
+                            rulesEngine.DeleteRule(item, redirectFolderItem);
                         }
-                        else if (item.IsInboundRuleItemChild())
+                        else if (item.IsInboundRuleItemChild() || item.IsOutboundRuleItemChild())
                         {
-                            Log.Info(this, item.Database, "Removing Inbound Rule [{0}] after delete event",
+                            Log.Info(this, item.Database, "Removing Rule [{0}] after delete event",
                                 item.Parent.Paths.FullPath);
 
-                            rulesEngine.RefreshInboundRule(item.Parent, redirectFolderItem);
+                            rulesEngine.RefreshRule(item.Parent, redirectFolderItem);
                         }
                     }
                 }
