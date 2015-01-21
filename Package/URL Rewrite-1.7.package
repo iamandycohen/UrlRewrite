@@ -168,6 +168,8 @@ Version 1.0
         <x-item>/master/sitecore/content/Sample Rewrites/Redirect with a Condition Back Reference/Redirect to Back Refrerence/{90B91823-8DBE-4055-AF78-3F7C35664201}/invariant/0</x-item>
         <x-item>/master/sitecore/content/Sample Rewrites/Simple External Redirect/{255DB7E0-8EE7-4E6A-B86A-3DABE86471DA}/invariant/0</x-item>
         <x-item>/master/sitecore/content/Sample Rewrites/Simple Internal Redirect/{540C3ED4-E14C-4A34-9AFB-5F3C7251CBE0}/invariant/0</x-item>
+        <x-item>/master/sitecore/content/Sample Rewrites/Rewrite Sitecore in Response/{61D4183E-9160-477C-8DCC-FA7EF510B2C5}/invariant/0</x-item>
+        <x-item>/master/sitecore/content/Sample Rewrites/Rewrite Sitecore in Response/Replace with Awesome/{CA4345D3-0098-42D1-9703-22FE8A2A704F}/invariant/0</x-item>
       </Entries>
       <SkipVersions>False</SkipVersions>
       <Converter>
