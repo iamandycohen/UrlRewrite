@@ -919,6 +919,11 @@ namespace Hi.UrlRewrite
             return item.Paths.FullPath.StartsWith("/sitecore/templates", StringComparison.InvariantCultureIgnoreCase);
         }
 
+        public static Item GetRuleItem(this IBaseRule rule, Database db)
+        {
+            return db.GetItem(new ID(rule.ItemId));
+        }
+
         #endregion
 
         #region LogObject

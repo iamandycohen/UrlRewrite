@@ -19,6 +19,7 @@ namespace Hi.UrlRewrite.Reporting
         public IEnumerable<RewriteReportGroup> GetRewriteReportsGrouped(Database database)
         {
             var rewriteReports = GetRewriteReports(database);
+            var rulesEngine = new RulesEngine(database);
             var rewriteReportsGrouped = rewriteReports
                 .GroupBy(report => new { DatabaseName = report.DatabaseName, RulePath = report.RulePath })
                 .Select(group => new RewriteReportGroup
@@ -26,10 +27,21 @@ namespace Hi.UrlRewrite.Reporting
                     Name = string.Format("{0}::{1}", group.Key.DatabaseName, group.Key.RulePath),
                     Rule = GetInboundRule(group.Key.DatabaseName, group.Key.RulePath),
                     Reports = group.ToList()
-                })
+                });
+
+            var all = rulesEngine
+                    .GetInboundRules()
+                    .Where(rule => !rewriteReportsGrouped.Any(group => group.Rule.ItemId.Equals(rule.ItemId)))
+                    .Select(rule => new RewriteReportGroup {
+                        Name = string.Format("{0}::{1}", database.Name, rule.GetRuleItem(database).Paths.FullPath),
+                        Rule = rule,
+                        Reports = new List<RewriteReport>()
+                    });
+
+            var finalGroup = rewriteReportsGrouped.Concat(all)
                 .OrderByDescending(group => group.Count);
 
-            return rewriteReportsGrouped;
+            return finalGroup;
         }
 
         public IEnumerable<RewriteReport> GetRewriteReports(Database database)

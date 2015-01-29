@@ -63,7 +63,9 @@ namespace Hi.UrlRewrite.sitecore_modules.Shell.UrlRewrite
         {
             litCurrentDatabase.Text = _db.Name;
 
-            var databases = Factory.GetDatabases();
+            var databases = Factory.GetDatabases()
+                .Where(db => db.HasContentItem);
+
             rptDatabase.DataSource = databases;
             rptDatabase.DataBind();
         }
