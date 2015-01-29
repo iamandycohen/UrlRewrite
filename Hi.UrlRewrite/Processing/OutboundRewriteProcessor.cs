@@ -65,7 +65,7 @@ namespace Hi.UrlRewrite.Processing
         {
 
             private readonly HttpContextBase _httpContext;
-            private readonly List<OutboundRule> _outboundRules;
+            private IEnumerable<OutboundRule> _outboundRules;
             private readonly OutboundRewriter _rewriter;
 
             private ResponseFilterStream _responseFilterStream;
@@ -81,13 +81,13 @@ namespace Hi.UrlRewrite.Processing
             {
                 _responseFilterStream = new ResponseFilterStream(_httpContext.Response.Filter);
                 _responseFilterStream.HeadersWritten += HeadersWritten;
-                 _httpContext.Response.Filter = _responseFilterStream;
-           }
+                _httpContext.Response.Filter = _responseFilterStream;
+            }
 
             void HeadersWritten(HttpContextBase httpContext)
             {
-                var preconditionResult = _rewriter.CheckPreconditions(httpContext, _outboundRules);
-                if (!preconditionResult.Passed) return;
+                _outboundRules = _outboundRules.Where(rule => _rewriter.CheckPrecondition(httpContext, rule));
+                if (!_outboundRules.Any()) return;
 
                 _responseFilterStream.TransformString += TransformString;
 
@@ -97,7 +97,7 @@ namespace Hi.UrlRewrite.Processing
             {
                 _rewriter.SetupReplacements(_httpContext.Request.ServerVariables, _httpContext.Request.Headers, _httpContext.Response.Headers);
                 var result = _rewriter.ProcessContext(_httpContext, responseString, _outboundRules);
-                
+
                 if (result == null || !result.MatchedAtLeastOneRule)
                     return responseString;
 

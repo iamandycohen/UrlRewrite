@@ -33,7 +33,7 @@ namespace Hi.UrlRewrite.Processing
             ResponseHeaders = responseHeaders;
         }
 
-        public ProcessOutboundRulesResult ProcessContext(HttpContextBase httpContext, string responseString, List<OutboundRule> outboundRules)
+        public ProcessOutboundRulesResult ProcessContext(HttpContextBase httpContext, string responseString, IEnumerable<OutboundRule> outboundRules)
         {
 
             if (httpContext == null) throw new ArgumentNullException("httpContext");
@@ -179,7 +179,7 @@ namespace Hi.UrlRewrite.Processing
             }
             else if (rewriteMatchScopeType == ScopeType.ServerVariables)
             {
-                
+
             }
 
             return output;
@@ -303,6 +303,34 @@ namespace Hi.UrlRewrite.Processing
             var result = new PreconditionResult { Passed = isPreconditionMatch };
 
             return result;
+        }
+
+        internal bool CheckPrecondition(HttpContextBase httpContext, OutboundRule outboundRule)
+        {
+
+            Match lastConditionMatch = null;
+            bool isPreconditionMatch = true;
+
+            if (outboundRule == null) return isPreconditionMatch;
+            var precondition = outboundRule.Precondition;
+
+            if (precondition == null) return isPreconditionMatch;
+            var conditions = precondition.Conditions;
+
+            // test conditions matches
+            if (conditions != null && conditions.Any())
+            {
+                var replacements = new RewriteHelper.Replacements
+                {
+                    RequestServerVariables = httpContext.Request.ServerVariables,
+                    RequestHeaders = httpContext.Request.Headers,
+                    ResponseHeaders = httpContext.Response.Headers
+                };
+                var conditionMatchResult = RewriteHelper.TestConditionMatches(precondition, replacements, out lastConditionMatch);
+                isPreconditionMatch = conditionMatchResult.Matched;
+            }
+
+            return isPreconditionMatch;
         }
     }
 }

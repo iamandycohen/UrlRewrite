@@ -5,6 +5,7 @@ using Sitecore;
 using Sitecore.Caching;
 using Sitecore.Data;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace Hi.UrlRewrite.Caching
 {
@@ -32,7 +33,7 @@ namespace Hi.UrlRewrite.Caching
             using (var memoryStream = new MemoryStream())
             {
                 var binaryFormatter = new BinaryFormatter();
-                binaryFormatter.Serialize(memoryStream, inboundRules);
+                binaryFormatter.Serialize(memoryStream, inboundRules.ToList());
                 size = memoryStream.Length;
             }
 
@@ -51,7 +52,7 @@ namespace Hi.UrlRewrite.Caching
             using (var memoryStream = new MemoryStream())
             {
                 var binaryFormatter = new BinaryFormatter();
-                binaryFormatter.Serialize(memoryStream, outboundRules);
+                binaryFormatter.Serialize(memoryStream, outboundRules.ToList());
                 size = memoryStream.Length;
             }
 
