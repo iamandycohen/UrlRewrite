@@ -62,6 +62,7 @@ namespace Hi.UrlRewrite.Reporting
 
             rewriteReports = searchResults
                 .Select(searchResult => searchResult.GetObject<Item>())
+                .Where(item => item != null)
                 .Select(item => GetRewriteReport(item))
                 .Where(report => report != null)
                 .OrderBy(r => r.DatabaseName)
