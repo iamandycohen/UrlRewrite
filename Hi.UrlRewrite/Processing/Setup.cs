@@ -15,6 +15,8 @@ namespace Hi.UrlRewrite.Processing
         {
             try
             {
+                if (!Factory.GetDatabaseNames().Any(e => e.Equals("master"))) return;
+
                 var settingsDb = Factory.GetDatabase("master");
                 if (settingsDb == null) return;
 
