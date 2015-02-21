@@ -135,6 +135,15 @@ Version 1.0
       <Entries>
         <x-item>/master/sitecore/templates/User Defined/UrlRewrite/Templates/Base UrlRewrite Item/__Standard Values/{A6C7AD1A-99CE-47AC-9D7F-EF66287E7F09}/invariant/0</x-item>
         <x-item>/master/sitecore/templates/User Defined/UrlRewrite/Templates/Base UrlRewrite Item/{83AFF04D-C0DA-44D4-8A7E-4BC0A89903E8}/invariant/0</x-item>
+        <x-item>/master/sitecore/system/Workflows/Redirect Workflow/{30D1BA49-44F5-4A99-8B3A-9815F41A31AA}/invariant/0</x-item>
+        <x-item>/master/sitecore/system/Workflows/Redirect Workflow/Approved/{7C920CDE-F8EC-44BA-9DCB-47B80329A50F}/invariant/0</x-item>
+        <x-item>/master/sitecore/system/Workflows/Redirect Workflow/Awaiting Approval/{DF6A09DC-7245-4903-831F-416273069473}/invariant/0</x-item>
+        <x-item>/master/sitecore/system/Workflows/Redirect Workflow/Awaiting Approval/Approve/{12E10F20-CB26-48BC-9D70-F1877A74D961}/invariant/0</x-item>
+        <x-item>/master/sitecore/system/Workflows/Redirect Workflow/Awaiting Approval/Reject/{1A662076-EA82-44D9-8158-C0DF8F9F754B}/invariant/0</x-item>
+        <x-item>/master/sitecore/system/Workflows/Redirect Workflow/Draft/{1123B394-7D58-48AF-A635-B5E8F36D76B3}/invariant/0</x-item>
+        <x-item>/master/sitecore/system/Workflows/Redirect Workflow/Draft/Fast Track/{B274FBE1-93E3-4E19-A8CE-E141A8680AA6}/invariant/0</x-item>
+        <x-item>/master/sitecore/system/Workflows/Redirect Workflow/Draft/Submit/{EF46356A-5DEC-4948-AC32-AFE74FD7F96F}/invariant/0</x-item>
+        <x-item>/master/sitecore/system/Workflows/Redirect Workflow/Draft/Submit/Validation Action/{E71E5D39-845C-49C4-AA5F-60960EF67F14}/invariant/0</x-item>
       </Entries>
       <SkipVersions>False</SkipVersions>
       <Converter>
