@@ -1,5 +1,4 @@
-﻿using Hi.UrlRewrite.Data;
-using Hi.UrlRewrite.Entities.Actions;
+﻿using Hi.UrlRewrite.Entities.Actions;
 using Hi.UrlRewrite.Entities.Conditions;
 using Hi.UrlRewrite.Entities.Reporting;
 using Hi.UrlRewrite.Processing;
@@ -7,9 +6,7 @@ using Hi.UrlRewrite.Processing.Results;
 using Hi.UrlRewrite.Reporting;
 using Sitecore.Configuration;
 using Sitecore.Data;
-using Sitecore.Sites;
 using System;
-using System.Collections.Specialized;
 using System.Linq;
 using System.Web.UI;
 using System.Web.UI.HtmlControls;

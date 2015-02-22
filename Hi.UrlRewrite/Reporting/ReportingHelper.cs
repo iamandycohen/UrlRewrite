@@ -4,6 +4,7 @@ using Hi.UrlRewrite.Processing;
 using Hi.UrlRewrite.Templates;
 using Hi.UrlRewrite.Templates.Folders;
 using Hi.UrlRewrite.Templates.Inbound;
+using Hi.UrlRewrite.Templates.Reporting;
 using Sitecore;
 using Sitecore.Data;
 using Sitecore.Data.Items;
@@ -115,8 +116,6 @@ namespace Hi.UrlRewrite.Reporting
 
         private RewriteReport GetRewriteReport(RewriteReportItem rewriteReport)
         {
-            var ruleItem = rewriteReport.InnerItem.Database.GetItem(rewriteReport.Rule.Value);
-
             var report = new RewriteReport
             {
                 DatabaseName = rewriteReport.DatabaseName.Value,

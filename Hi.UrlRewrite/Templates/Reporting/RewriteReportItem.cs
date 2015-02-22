@@ -2,7 +2,7 @@
 using Sitecore.Data.Fields;
 using Sitecore.Data.Items;
 
-namespace Hi.UrlRewrite.Templates
+namespace Hi.UrlRewrite.Templates.Reporting
 {
     public class RewriteReportItem : CustomItem
     {

@@ -71,7 +71,6 @@
     <Compile Include="Caching\RulesCacheManager.cs" />
     <Compile Include="Configuration.cs" />
     <Compile Include="Constants.cs" />
-    <Compile Include="Module\Data\WebServiceData.cs" />
     <Compile Include="Entities\Actions\AbortRequest.cs" />
     <Compile Include="Entities\Actions\Base\IBaseAction.cs" />
     <Compile Include="Entities\Actions\Base\IBaseAppendQueryString.cs" />
@@ -150,11 +149,6 @@
     <Compile Include="Reporting\ReportingHelper.cs" />
     <Compile Include="Reporting\ReportingService.cs" />
     <Compile Include="Rules\OutbounModuleIsInstalled.cs" />
-    <Compile Include="Service References\ScWebService\Reference.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>Reference.svcmap</DependentUpon>
-    </Compile>
     <Compile Include="sitecore modules\Shell\UrlRewrite\Default.aspx.cs">
       <DependentUpon>Default.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
@@ -225,76 +219,7 @@
   <ItemGroup>
     <Content Include="App_Config\Include\Hi.UrlRewrite.config" />
     <Content Include="Properties\DataSources\System.Xml.Linq.XElement.datasource" />
-    <Content Include="Service References\ScWebService\Hi.UrlRewrite.ScWebService.AddFromMasterResponse.datasource">
-      <DependentUpon>Reference.svcmap</DependentUpon>
-    </Content>
-    <Content Include="Service References\ScWebService\Hi.UrlRewrite.ScWebService.AddFromTemplateResponse.datasource">
-      <DependentUpon>Reference.svcmap</DependentUpon>
-    </Content>
-    <Content Include="Service References\ScWebService\Hi.UrlRewrite.ScWebService.AddVersionResponse.datasource">
-      <DependentUpon>Reference.svcmap</DependentUpon>
-    </Content>
-    <Content Include="Service References\ScWebService\Hi.UrlRewrite.ScWebService.CopyToResponse.datasource">
-      <DependentUpon>Reference.svcmap</DependentUpon>
-    </Content>
-    <Content Include="Service References\ScWebService\Hi.UrlRewrite.ScWebService.DeleteChildrenResponse.datasource">
-      <DependentUpon>Reference.svcmap</DependentUpon>
-    </Content>
-    <Content Include="Service References\ScWebService\Hi.UrlRewrite.ScWebService.DeleteResponse.datasource">
-      <DependentUpon>Reference.svcmap</DependentUpon>
-    </Content>
-    <Content Include="Service References\ScWebService\Hi.UrlRewrite.ScWebService.DuplicateResponse.datasource">
-      <DependentUpon>Reference.svcmap</DependentUpon>
-    </Content>
-    <Content Include="Service References\ScWebService\Hi.UrlRewrite.ScWebService.GetChildrenResponse.datasource">
-      <DependentUpon>Reference.svcmap</DependentUpon>
-    </Content>
-    <Content Include="Service References\ScWebService\Hi.UrlRewrite.ScWebService.GetDatabasesResponse.datasource">
-      <DependentUpon>Reference.svcmap</DependentUpon>
-    </Content>
-    <Content Include="Service References\ScWebService\Hi.UrlRewrite.ScWebService.GetItemFieldsResponse.datasource">
-      <DependentUpon>Reference.svcmap</DependentUpon>
-    </Content>
-    <Content Include="Service References\ScWebService\Hi.UrlRewrite.ScWebService.GetItemMastersResponse.datasource">
-      <DependentUpon>Reference.svcmap</DependentUpon>
-    </Content>
-    <Content Include="Service References\ScWebService\Hi.UrlRewrite.ScWebService.GetLanguagesResponse.datasource">
-      <DependentUpon>Reference.svcmap</DependentUpon>
-    </Content>
-    <Content Include="Service References\ScWebService\Hi.UrlRewrite.ScWebService.GetMastersResponse.datasource">
-      <DependentUpon>Reference.svcmap</DependentUpon>
-    </Content>
-    <Content Include="Service References\ScWebService\Hi.UrlRewrite.ScWebService.GetTemplatesResponse.datasource">
-      <DependentUpon>Reference.svcmap</DependentUpon>
-    </Content>
-    <Content Include="Service References\ScWebService\Hi.UrlRewrite.ScWebService.GetXMLResponse.datasource">
-      <DependentUpon>Reference.svcmap</DependentUpon>
-    </Content>
-    <Content Include="Service References\ScWebService\Hi.UrlRewrite.ScWebService.InsertXMLResponse.datasource">
-      <DependentUpon>Reference.svcmap</DependentUpon>
-    </Content>
-    <Content Include="Service References\ScWebService\Hi.UrlRewrite.ScWebService.MoveToResponse.datasource">
-      <DependentUpon>Reference.svcmap</DependentUpon>
-    </Content>
-    <Content Include="Service References\ScWebService\Hi.UrlRewrite.ScWebService.RemoveVersionResponse.datasource">
-      <DependentUpon>Reference.svcmap</DependentUpon>
-    </Content>
-    <Content Include="Service References\ScWebService\Hi.UrlRewrite.ScWebService.RenameResponse.datasource">
-      <DependentUpon>Reference.svcmap</DependentUpon>
-    </Content>
-    <Content Include="Service References\ScWebService\Hi.UrlRewrite.ScWebService.SaveResponse.datasource">
-      <DependentUpon>Reference.svcmap</DependentUpon>
-    </Content>
-    <Content Include="Service References\ScWebService\Hi.UrlRewrite.ScWebService.VerifyCredentialsResponse.datasource">
-      <DependentUpon>Reference.svcmap</DependentUpon>
-    </Content>
-    <None Include="Service References\ScWebService\service.disco" />
-    <None Include="Service References\ScWebService\configuration91.svcinfo" />
-    <None Include="Service References\ScWebService\configuration.svcinfo" />
-    <None Include="Service References\ScWebService\Reference.svcmap">
-      <Generator>WCF Proxy Generator</Generator>
-      <LastGenOutput>Reference.cs</LastGenOutput>
-    </None>
+    <Content Include="App_Config\Include\Hi.UrlRewrite.Indexing.CM.config" />
     <Content Include="sitecore modules\Shell\UrlRewrite\Content\app.css" />
     <Content Include="sitecore modules\Shell\UrlRewrite\Content\bootstrap-theme.css" />
     <Content Include="sitecore modules\Shell\UrlRewrite\Content\bootstrap-theme.min.css" />
@@ -307,7 +232,6 @@
     <Content Include="sitecore modules\Shell\UrlRewrite\fonts\glyphicons-halflings-regular.eot" />
     <Content Include="sitecore modules\Shell\UrlRewrite\Content\bootstrap-theme.css.map" />
     <Content Include="sitecore modules\Shell\UrlRewrite\Content\bootstrap.css.map" />
-    <None Include="Service References\ScWebService\service.wsdl" />
     <Content Include="sitecore modules\Shell\UrlRewrite\Scripts\jquery-1.10.2.min.map" />
     <None Include="sitecore modules\Shell\UrlRewrite\Scripts\jquery-1.9.0.intellisense.js" />
     <Content Include="sitecore modules\Shell\UrlRewrite\Scripts\app.js" />
@@ -324,12 +248,6 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="Properties\PublishProfiles\Deploy.pubxml" />
-  </ItemGroup>
-  <ItemGroup>
-    <WCFMetadata Include="Service References\" />
-  </ItemGroup>
-  <ItemGroup>
-    <WCFMetadataStorage Include="Service References\ScWebService\" />
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>

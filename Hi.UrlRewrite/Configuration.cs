@@ -52,5 +52,30 @@ namespace Hi.UrlRewrite
                 return Settings.GetSetting("Hi.UrlRewrite.LogFileLevel", "INFO");
             }
         }
+
+        public static string ItemWebApiHost
+        {
+            get
+            {
+                return Settings.GetSetting("Hi.UrlRewrite.ItemWebApiHost", @"http://andysplayground");
+            }
+        }
+
+        public static string ItemWebApiUser
+        {
+            get
+            {
+                return Settings.GetSetting("Hi.UrlRewrite.ItemWebApiUser", @"sitecore\admin");
+            }
+        }
+
+        public static string ItemWebApiPassword
+        {
+            get
+            {
+                return Settings.GetSetting("Hi.UrlRewrite.ItemWebApiPassword", "b");
+            }
+        }
+
     }
 }
