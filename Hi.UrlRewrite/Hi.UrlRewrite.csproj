@@ -71,7 +71,7 @@
     <Compile Include="Caching\RulesCacheManager.cs" />
     <Compile Include="Configuration.cs" />
     <Compile Include="Constants.cs" />
-    <Compile Include="Data\WebServiceData.cs" />
+    <Compile Include="Module\Data\WebServiceData.cs" />
     <Compile Include="Entities\Actions\AbortRequest.cs" />
     <Compile Include="Entities\Actions\Base\IBaseAction.cs" />
     <Compile Include="Entities\Actions\Base\IBaseAppendQueryString.cs" />
@@ -149,6 +149,7 @@
     <Compile Include="Processing\InboundRewriter.cs" />
     <Compile Include="Reporting\ReportingHelper.cs" />
     <Compile Include="Reporting\ReportingService.cs" />
+    <Compile Include="Rules\OutbounModuleIsInstalled.cs" />
     <Compile Include="Service References\ScWebService\Reference.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>

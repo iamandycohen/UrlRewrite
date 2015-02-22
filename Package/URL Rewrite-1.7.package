@@ -581,6 +581,21 @@ Version 1.0
       <Exclude />
       <Name>templates</Name>
     </xitems>
+    <xitems>
+      <Entries>
+        <x-item>/master/sitecore/system/Settings/Rules/Definitions/Elements/System/Url Rewrite OutboundModule Installed/{293A0E29-EF18-40C3-8766-A53363E5D37C}/invariant/0</x-item>
+        <x-item>/master/sitecore/system/Settings/Rules/Insert Options/Rules/Url Rewrite Outbound Rule/{CD21866D-51CA-49D9-A705-FE4B593BC5CD}/invariant/0</x-item>
+      </Entries>
+      <SkipVersions>False</SkipVersions>
+      <Converter>
+        <ItemToEntryConverter>
+          <Transforms />
+        </ItemToEntryConverter>
+      </Converter>
+      <Include />
+      <Exclude />
+      <Name>rules</Name>
+    </xitems>
   </Sources>
   <Converter>
     <TrivialConverter>
