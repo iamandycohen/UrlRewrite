@@ -1,8 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.Specialized;
 using System.Linq;
+using System.Net;
+using System.Text;
+using System.Web;
 using Hi.UrlRewrite.Processing.Results;
 using Hi.UrlRewrite.Templates;
+using Hi.UrlRewrite.Templates.Reporting;
 using Sitecore;
 using Sitecore.Data;
 using Sitecore.Jobs;
@@ -39,20 +44,26 @@ namespace Hi.UrlRewrite.Reporting
         {
             var reportingFolder = database.GetItem(new ID(Constants.ReportingFolder_ItemId));
             var uniqueId = new ID(Guid.NewGuid()).ToShortID().ToString();
-            var reportingItem = reportingFolder.Add(uniqueId, new TemplateID(new ID(RewriteReportItem.TemplateId)));
-            var report = new RewriteReportItem(reportingItem);
+            var rule = database.GetItem(new ID(ruleResult.ItemId));
 
-            report.BeginEdit();
+            var values = new NameValueCollection
+            {
+                {"Rule", rule.Paths.Path},
+                {"Original Url", ruleResult.OriginalUri.ToString()},
+                {"Rewritten Url", ruleResult.RewrittenUri.ToString()},
+                {"Database Name", database.Name}
+            };
 
-            report.OriginalUrl.Value = ruleResult.OriginalUri.ToString();
-            report.RewrittenUrl.Value = ruleResult.RewrittenUri.ToString();
-            report.RewriteDate.InnerField.Value = DateUtil.ToIsoDate(DateTime.Now);
-            report.DatabaseName.Value = database.Name;
+            var url = string.Format("{0}/-/item/v1/{1}?name={2}&template={3}&sc_database=master", Configuration.ItemWebApiHost, reportingFolder.Paths.Path, uniqueId, RewriteReportItem.TemplateId).ToLower();
 
-            var ruleItem = database.GetItem(new ID(ruleResult.ItemId));
-            report.Rule.InnerField.Value = ruleItem.Paths.Path;
+            using (var client = new WebClient())
+            {
+                client.Headers.Add("X-Scitemwebapi-Username", Configuration.ItemWebApiUser);
+                client.Headers.Add("X-Scitemwebapi-Password", Configuration.ItemWebApiPassword);
+                client.Headers.Add("Content-Type", "application/x-www-form-urlencoded");
+                client.UploadValues(url, "POST", values);
+            }
 
-            report.EndEdit();
         }
 
     }

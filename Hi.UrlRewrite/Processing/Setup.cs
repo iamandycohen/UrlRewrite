@@ -15,28 +15,28 @@ namespace Hi.UrlRewrite.Processing
         {
             try
             {
-                if (!Factory.GetDatabaseNames().Any(e => e.Equals("master"))) return;
+                //if (!Factory.GetDatabaseNames().Any(e => e.Equals("master"))) return;
 
-                var settingsDb = Factory.GetDatabase("master");
-                if (settingsDb == null) return;
+                //var settingsDb = Factory.GetDatabase("master");
+                //if (settingsDb == null) return;
 
-                using (new SecurityDisabler())
-                {
-                    var settingsItem = settingsDb.GetItem(new ID(Constants.UrlRewriteSettings_ItemId));
-                    if (settingsItem == null) return;
+                //using (new SecurityDisabler())
+                //{
+                //    var settingsItem = settingsDb.GetItem(new ID(Constants.UrlRewriteSettings_ItemId));
+                //    if (settingsItem == null) return;
 
-                    var settings = new SettingsItem(settingsItem);
-                    var publishingTargets = settings.InstallationPublishingTargets.GetItems();
-                    var dbArray = publishingTargets.Select(x => Factory.GetDatabase(x.Fields["Target database"].Value)).ToArray();
+                //    var settings = new SettingsItem(settingsItem);
+                //    var publishingTargets = settings.InstallationPublishingTargets.GetItems();
+                //    var dbArray = publishingTargets.Select(x => Factory.GetDatabase(x.Fields["Target database"].Value)).ToArray();
 
-                    // install templates
-                    var urlRewriteTemplatesFolderItem = settingsDb.GetItem(new ID(Constants.UrlRewriteTemplatesFolder_ItemId));
-                    if (urlRewriteTemplatesFolderItem != null)
-                    {
-                        PublishManager.PublishItem(urlRewriteTemplatesFolderItem, dbArray, urlRewriteTemplatesFolderItem.Languages, true,
-                            true);
-                    }
-                }
+                //    // install templates
+                //    var urlRewriteTemplatesFolderItem = settingsDb.GetItem(new ID(Constants.UrlRewriteTemplatesFolder_ItemId));
+                //    if (urlRewriteTemplatesFolderItem != null)
+                //    {
+                //        PublishManager.PublishItem(urlRewriteTemplatesFolderItem, dbArray, urlRewriteTemplatesFolderItem.Languages, true,
+                //            true);
+                //    }
+                //}
             }
             catch (Exception)
             {
