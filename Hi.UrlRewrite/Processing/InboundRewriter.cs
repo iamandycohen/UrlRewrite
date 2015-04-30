@@ -149,7 +149,7 @@ namespace Hi.UrlRewrite.Processing
                     httpResponse.Cache.SetCacheability(redirectAction.HttpCacheability.Value);
                 }
 
-                ReportingService.QueueReport(ruleResult.ProcessedResults.Where(e => e.RuleMatched), Sitecore.Context.Database);
+                //ReportingService.QueueReport(ruleResult.ProcessedResults.Where(e => e.RuleMatched), Sitecore.Context.Database);
             }
             else if (ruleResult.FinalAction is IBaseRewrite)
             {

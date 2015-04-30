@@ -22,7 +22,7 @@ namespace Hi.UrlRewrite.sitecore_modules.Shell.UrlRewrite
         {
             GetAndSetCurrentDatabase();
             CreateDatabaseDropdown();
-            CreateReportingTable();
+            //CreateReportingTable();
 
             if (!IsPostBack)
             {

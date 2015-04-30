@@ -219,7 +219,7 @@
   <ItemGroup>
     <Content Include="App_Config\Include\Hi.UrlRewrite.config" />
     <Content Include="Properties\DataSources\System.Xml.Linq.XElement.datasource" />
-    <Content Include="App_Config\Include\Hi.UrlRewrite.Indexing.CM.config" />
+    <Content Include="App_Config\Include\Hi.UrlRewrite.Indexing.CM.config.disabled" />
     <Content Include="sitecore modules\Shell\UrlRewrite\Content\app.css" />
     <Content Include="sitecore modules\Shell\UrlRewrite\Content\bootstrap-theme.css" />
     <Content Include="sitecore modules\Shell\UrlRewrite\Content\bootstrap-theme.min.css" />
