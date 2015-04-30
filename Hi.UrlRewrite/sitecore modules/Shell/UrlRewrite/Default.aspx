@@ -62,7 +62,7 @@
                     <!-- Nav tabs -->
                     <ul class="nav nav-tabs" role="tablist">
                         <li role="presentation" class="active"><a href="#tab-simulation" aria-controls="tab-simulation" role="tab" data-toggle="tab">Simulation</a></li>
-                        <li role="presentation"><a href="#tab-reports" aria-controls="tab-reports" role="tab" data-toggle="tab">Reports</a></li>
+                        <li role="presentation" style="display: none;"><a href="#tab-reports" aria-controls="tab-reports" role="tab" data-toggle="tab">Reports</a></li>
                     </ul>
 
                     <!-- Tab panes -->
@@ -148,7 +148,7 @@
 
                         </div>
 
-                        <div role="tabpanel" class="tab-pane" id="tab-reports">
+                        <div role="tabpanel" class="tab-pane" id="tab-reports" style="display: none;">
 
                             <div id="divReporting" runat="server">
                                 <table id="tblReporting" class="table table-striped">

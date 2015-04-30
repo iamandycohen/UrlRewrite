@@ -9,6 +9,9 @@ In addition to adding Site specific redirect capabilities, I have modeled the da
 Changelog
 =========
 
+Version 1.7.1
+* Fixed missing reporting item in the web database that prevented publishing from working after installing the module.
+
 Version 1.7
 * Added outbound rules
 * Added ability to set response headers
