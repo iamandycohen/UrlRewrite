@@ -9,6 +9,9 @@ In addition to adding Site specific redirect capabilities, I have modeled the da
 Changelog
 =========
 
+Version 1.7.2
+* Fixed potential for a redirect loop if you have a database problem, you are using the html extension on the handler, and you have a custom error page that is pointing to an html page
+
 Version 1.7.1
 * Fixed missing reporting item in the web database that prevented publishing from working after installing the module.
 
