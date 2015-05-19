@@ -33,22 +33,6 @@ namespace Hi.UrlRewrite.Processing
                     }
                 }
 
-                // if we have come this far, the url rewrite processor didn't match on anything so the request is passed to the static request handler
-
-                // Serve static content:
-                var systemWebAssemblyName =
-                    GetType()
-                        .Assembly.GetReferencedAssemblies()
-                        .First(assembly => assembly.FullName.StartsWith("System.Web, "));
-                var systemWeb = AppDomain.CurrentDomain.Load(systemWebAssemblyName);
-
-                var staticFileHandlerType = systemWeb.GetType("System.Web.StaticFileHandler", true);
-                var staticFileHanlder = Activator.CreateInstance(staticFileHandlerType, true) as IHttpHandler;
-
-                if (staticFileHanlder != null)
-                {
-                    staticFileHanlder.ProcessRequest(context);
-                }
             }
             catch (ThreadAbortException)
             {
@@ -67,8 +51,35 @@ namespace Hi.UrlRewrite.Processing
                 // log it in sitecore
                 Log.Error(this, ex, "Error in UrlRewriteHandler.");
 
-                throw;
-                // throw the error, but instead let it fall through
+                // throw;
+                // don't re-throw the error, but instead let it fall through
+            }
+
+            // if we have come this far, the url rewrite processor didn't match on anything so the request is passed to the static request handler
+
+            // Serve static content:
+            IHttpHandler staticFileHanlder = null;
+
+            try
+            {
+                var systemWebAssemblyName =
+                    GetType()
+                        .Assembly.GetReferencedAssemblies()
+                        .First(assembly => assembly.FullName.StartsWith("System.Web, "));
+                var systemWeb = AppDomain.CurrentDomain.Load(systemWebAssemblyName);
+
+                var staticFileHandlerType = systemWeb.GetType("System.Web.StaticFileHandler", true);
+                staticFileHanlder = Activator.CreateInstance(staticFileHandlerType, true) as IHttpHandler;
+
+            }
+            catch (Exception)
+            {
+
+            }
+
+            if (staticFileHanlder != null)
+            {
+                staticFileHanlder.ProcessRequest(context);
             }
 
         }
