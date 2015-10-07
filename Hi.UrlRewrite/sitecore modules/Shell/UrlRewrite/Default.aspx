@@ -62,7 +62,6 @@
                     <!-- Nav tabs -->
                     <ul class="nav nav-tabs" role="tablist">
                         <li role="presentation" class="active"><a href="#tab-simulation" aria-controls="tab-simulation" role="tab" data-toggle="tab">Simulation</a></li>
-                        <li role="presentation" style="display: none;"><a href="#tab-reports" aria-controls="tab-reports" role="tab" data-toggle="tab">Reports</a></li>
                     </ul>
 
                     <!-- Tab panes -->
@@ -148,24 +147,6 @@
 
                         </div>
 
-                        <div role="tabpanel" class="tab-pane" id="tab-reports" style="display: none;">
-
-                            <div id="divReporting" runat="server">
-                                <table id="tblReporting" class="table table-striped">
-                                    <tbody>
-                                        <asp:Repeater runat="server" ID="rptReportRow" OnItemDataBound="rptReportRow_OnItemDataBound">
-                                            <ItemTemplate>
-                                                <tr>
-                                                    <td>
-                                                        <asp:Literal runat="server" ID="litReportRow"></asp:Literal></td>
-                                                </tr>
-                                            </ItemTemplate>
-                                        </asp:Repeater>
-                                    </tbody>
-                                </table>
-
-                            </div>
-                        </div>
                     </div>
                 </div>
                 <div id="divError" runat="server" visible="False">

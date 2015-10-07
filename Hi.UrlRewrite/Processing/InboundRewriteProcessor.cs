@@ -79,8 +79,6 @@ namespace Hi.UrlRewrite.Processing
             using (new SecurityDisabler())
             {
                 var rulesEngine = new RulesEngine(db);
-                var setup = new Setup();
-                setup.InstallItems();
                 inboundRules = rulesEngine.GetCachedInboundRules();
             }
 

@@ -106,8 +106,6 @@
     <Compile Include="Entities\Match\MatchType.cs" />
     <Compile Include="Entities\Match\ScopeType.cs" />
     <Compile Include="Entities\Match\Using.cs" />
-    <Compile Include="Entities\Reporting\RewriteReport.cs" />
-    <Compile Include="Entities\Reporting\RewriteReportGroup.cs" />
     <Compile Include="Entities\Rules\IBaseEnabled.cs" />
     <Compile Include="Entities\Rules\IBaseRule.cs" />
     <Compile Include="Entities\Rules\IConditionList.cs" />
@@ -141,13 +139,10 @@
     <Compile Include="Processing\Results\InboundRuleResult.cs" />
     <Compile Include="Processing\RewriteHelper.cs" />
     <Compile Include="Processing\RulesEngine.cs" />
-    <Compile Include="Processing\Setup.cs" />
     <Compile Include="Processing\UrlRewriteHandler.cs" />
     <Compile Include="Processing\UrlRewriteItemEventHandler.cs" />
     <Compile Include="Processing\InboundRewriteProcessor.cs" />
     <Compile Include="Processing\InboundRewriter.cs" />
-    <Compile Include="Reporting\ReportingHelper.cs" />
-    <Compile Include="Reporting\ReportingService.cs" />
     <Compile Include="Rules\OutbounModuleIsInstalled.cs" />
     <Compile Include="sitecore modules\Shell\UrlRewrite\Default.aspx.cs">
       <DependentUpon>Default.aspx</DependentUpon>
@@ -219,7 +214,6 @@
   <ItemGroup>
     <Content Include="App_Config\Include\Hi.UrlRewrite.config" />
     <Content Include="Properties\DataSources\System.Xml.Linq.XElement.datasource" />
-    <Content Include="App_Config\Include\Hi.UrlRewrite.Indexing.CM.config.disabled" />
     <Content Include="sitecore modules\Shell\UrlRewrite\Content\app.css" />
     <Content Include="sitecore modules\Shell\UrlRewrite\Content\bootstrap-theme.css" />
     <Content Include="sitecore modules\Shell\UrlRewrite\Content\bootstrap-theme.min.css" />

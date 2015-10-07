@@ -3,7 +3,6 @@ using Hi.UrlRewrite.Entities.Actions.Base;
 using Hi.UrlRewrite.Entities.Match;
 using Hi.UrlRewrite.Entities.Rules;
 using Hi.UrlRewrite.Processing.Results;
-using Hi.UrlRewrite.Reporting;
 using Sitecore.Data;
 using Sitecore.Links;
 using Sitecore.Resources.Media;
@@ -24,20 +23,16 @@ namespace Hi.UrlRewrite.Processing
         public NameValueCollection RequestServerVariables { get; set; }
         public NameValueCollection RequestHeaders { get; set; }
 
-        private readonly ReportingService ReportingService;
-
         public InboundRewriter()
         {
             RequestServerVariables = new NameValueCollection();
             RequestHeaders = new NameValueCollection();
-            ReportingService = new ReportingService();
         }
 
         public InboundRewriter(NameValueCollection requestServerVariables, NameValueCollection requestHeaders)
         {
             RequestServerVariables = requestServerVariables;
             RequestHeaders = requestHeaders;
-            ReportingService = new ReportingService();
         }
 
         public ProcessInboundRulesResult ProcessRequestUrl(Uri requestUri, List<InboundRule> inboundRules)

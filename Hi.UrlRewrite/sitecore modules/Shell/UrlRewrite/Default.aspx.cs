@@ -1,9 +1,7 @@
 ﻿using Hi.UrlRewrite.Entities.Actions;
 using Hi.UrlRewrite.Entities.Conditions;
-using Hi.UrlRewrite.Entities.Reporting;
 using Hi.UrlRewrite.Processing;
 using Hi.UrlRewrite.Processing.Results;
-using Hi.UrlRewrite.Reporting;
 using Sitecore.Configuration;
 using Sitecore.Data;
 using System;
@@ -22,7 +20,6 @@ namespace Hi.UrlRewrite.sitecore_modules.Shell.UrlRewrite
         {
             GetAndSetCurrentDatabase();
             CreateDatabaseDropdown();
-            //CreateReportingTable();
 
             if (!IsPostBack)
             {
@@ -88,16 +85,6 @@ namespace Hi.UrlRewrite.sitecore_modules.Shell.UrlRewrite
             txtError.InnerText = @"Exception: 
 
     " + ex.Message;
-        }
-
-        private void CreateReportingTable()
-        {
-            var reportingHelper = new ReportingHelper();
-            var rewriteReports = reportingHelper.GetRewriteReportsGrouped(_db);
-
-            rptReportRow.DataSource = rewriteReports;
-            rptReportRow.DataBind();
-
         }
 
         private void CreateRewriteForm()
@@ -288,44 +275,5 @@ namespace Hi.UrlRewrite.sitecore_modules.Shell.UrlRewrite
             }
         }
 
-        protected void rptReportRow_OnItemDataBound(object sender, RepeaterItemEventArgs e)
-        {
-            if (e.Item.ItemType != ListItemType.AlternatingItem && e.Item.ItemType != ListItemType.Item) return;
-
-            if (e.Item.DataItem == null)
-                return;
-
-            var rewriteReport = e.Item.DataItem as RewriteReportGroup;
-            if (rewriteReport == null) return;
-
-            var rowLiteral = e.Item.FindControl("litReportRow") as Literal;
-            if (rowLiteral != null)
-            {
-
-
-                //var ruleId = new ID(rewriteReport.Rule.ItemId);
-                //var itemWebApi = new WebServiceData(_db, Context.Request.Url.Host);
-                //var getTask = itemWebApi.GetItem(ruleId);
-
-                rowLiteral.Text = string.Format("{0} {1}", rewriteReport.Name, rewriteReport.Count);
-            }
-        }
-
-        protected void rptDatabase_OnItemDataBound(object sender, RepeaterItemEventArgs e)
-        {
-            if (e.Item.ItemType != ListItemType.AlternatingItem && e.Item.ItemType != ListItemType.Item) return;
-
-            if (e.Item.DataItem == null)
-                return;
-
-            var database = e.Item.DataItem as Database;
-            if (database == null) return;
-
-            var link = e.Item.FindControl("lnkDatabase") as HtmlAnchor;
-            if (link == null) return;
-
-            link.InnerText = database.Name;
-            link.HRef = "?db=" + database.Name;
-        }
     }
 }
