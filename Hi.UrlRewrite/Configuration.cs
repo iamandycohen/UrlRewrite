@@ -17,7 +17,7 @@ namespace Hi.UrlRewrite
         {
             get
             {
-                return Settings.GetSetting("Hi.UrlRewrite.RewriteFolderSearchRoot", "/sitecore");
+                return Settings.GetSetting("Hi.UrlRewrite.RewriteFolderSearchRoot", "/sitecore/content");
             }
         }
 
