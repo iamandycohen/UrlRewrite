@@ -125,6 +125,7 @@
     <Compile Include="LogHelper.cs" />
     <Compile Include="Module\OutboundModule.cs" />
     <Compile Include="Module\ResponseFilterStream.cs" />
+    <Compile Include="Processing\InboundRuleInitializer.cs" />
     <Compile Include="Processing\InboundRulesHelper.cs" />
     <Compile Include="Processing\OutboundRewriteProcessor.cs" />
     <Compile Include="Processing\OutboundRewriter.cs" />

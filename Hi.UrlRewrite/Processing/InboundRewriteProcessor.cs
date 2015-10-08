@@ -72,14 +72,9 @@ namespace Hi.UrlRewrite.Processing
             var cache = RulesCacheManager.GetCache(db);
             var inboundRules = cache.GetInboundRules();
 
-            if (inboundRules != null) return inboundRules;
-
-            Log.Info(this, db, "Initializing Inbound Rules.");
-
-            using (new SecurityDisabler())
+            if (inboundRules == null)
             {
-                var rulesEngine = new RulesEngine(db);
-                inboundRules = rulesEngine.GetCachedInboundRules();
+                Log.Info(this, db, "Url Rewrite cache has not been initialized yet.");
             }
 
             return inboundRules;
