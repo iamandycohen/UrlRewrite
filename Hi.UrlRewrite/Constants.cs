@@ -3,7 +3,9 @@ namespace Hi.UrlRewrite
 {
     public static class Constants
     {
-        public const string RedirectFolderItemsQuery = "fast:{0}//*[@@templateid = '{1}']";
+        //public const string RedirectFolderItemsQuery = "fast:{0}//*[@@templateid = '{1}']";
+        public const string RewriteFolderSearchQueryDefault = "{0}/descendant-or-self::*[@@templateid = '{1}']";
+        public const string RewriteFolderSearchRootDefault = "/sitecore/content";
         public const string TwoTemplateQuery = "*[@@templateid = '{0}' or @@templateid = '{1}']";
         public const string SingleTemplateQuery = "*[@@templateid = '{0}']";
 

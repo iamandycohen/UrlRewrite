@@ -275,5 +275,21 @@ namespace Hi.UrlRewrite.sitecore_modules.Shell.UrlRewrite
             }
         }
 
+        protected void rptDatabase_OnItemDataBound(object sender, RepeaterItemEventArgs e)
+        {
+            if (e.Item.ItemType != ListItemType.AlternatingItem && e.Item.ItemType != ListItemType.Item) return;
+
+            if (e.Item.DataItem == null)
+                return;
+
+            var database = e.Item.DataItem as Database;
+            if (database == null) return;
+
+            var link = e.Item.FindControl("lnkDatabase") as HtmlAnchor;
+            if (link == null) return;
+
+            link.InnerText = database.Name;
+            link.HRef = "?db=" + database.Name;
+        }
     }
 }
