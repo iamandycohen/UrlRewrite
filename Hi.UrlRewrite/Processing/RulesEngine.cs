@@ -142,10 +142,10 @@ namespace Hi.UrlRewrite.Processing
 
         private IEnumerable<Item> GetRedirectFolderItems()
         {
-            var query = string.Format(Configuration.RewriteFolderSearchQuery, Configuration.RewriteFolderSearchRoot,
-                RedirectFolderItem.TemplateId);
-            var redirectFolderItems = db.SelectItems(query);
-
+            //var query = string.Format(Configuration.RewriteFolderSearchQuery, Configuration.RewriteFolderSearchRoot,
+            //    RedirectFolderItem.TemplateId);
+            //var redirectFolderItems = db.SelectItems(query);
+            var redirectFolderItems = db.GetItem(RedirectFolderItem.TemplateId).GetReferrers();
             return redirectFolderItems;
         }
 

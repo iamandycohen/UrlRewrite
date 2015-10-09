@@ -14,6 +14,7 @@ using Hi.UrlRewrite.Templates.Inbound;
 using Hi.UrlRewrite.Templates.Match;
 using Hi.UrlRewrite.Templates.Outbound;
 using Hi.UrlRewrite.Templates.ServerVariables;
+using Sitecore;
 using Sitecore.Data;
 using Sitecore.Data.Items;
 using System;
@@ -925,6 +926,18 @@ namespace Hi.UrlRewrite
         }
 
         #endregion
+
+        public static Item[] GetReferrers(this Item item, bool includeStandardValues = false)
+        {
+            if (item == null) return new Item[0];
+            var links = Globals.LinkDatabase.GetReferrers(item);
+            if (links == null)
+                return new Item[0];
+            var linkedItems = links.Select(i => i.GetSourceItem()).Where(i => i != null);
+            if (!includeStandardValues)
+                linkedItems = linkedItems.Where(i => !i.Name.Equals("__Standard Values", StringComparison.InvariantCultureIgnoreCase));
+            return linkedItems.ToArray();
+        }
 
         #region LogObject
 

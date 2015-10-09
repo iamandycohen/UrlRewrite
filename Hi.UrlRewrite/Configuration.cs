@@ -13,22 +13,6 @@ namespace Hi.UrlRewrite
             }
         }
 
-        public static string RewriteFolderSearchRoot
-        {
-            get
-            {
-                return Settings.GetSetting("Hi.UrlRewrite.RewriteFolderSearchRoot", Constants.RewriteFolderSearchRootDefault);
-            }
-        }
-
-        public static string RewriteFolderSearchQuery
-        {
-            get
-            {
-                return Settings.GetSetting("Hi.UrlRewrite.RewriteFolderSearchQuery", Constants.RewriteFolderSearchQueryDefault);
-            }
-        }
-
         public static string CacheSize
         {
             get
