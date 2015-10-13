@@ -1,9 +1,11 @@
 ﻿using Sitecore.Pipelines.HttpRequest;
 using Sitecore.Sites;
 using System;
+using System.Configuration;
 using System.Linq;
 using System.Threading;
 using System.Web;
+using System.Web.Configuration;
 
 namespace Hi.UrlRewrite.Processing
 {
@@ -79,9 +81,57 @@ namespace Hi.UrlRewrite.Processing
 
             if (staticFileHanlder != null)
             {
-                staticFileHanlder.ProcessRequest(context);
+                try
+                {
+                    staticFileHanlder.ProcessRequest(context);
+                }
+                catch (Exception ex)
+                {
+                    if (ex.Message == "File does not exist.")
+                    {
+                        if (string.IsNullOrEmpty(NotFoundPage))
+                        {
+                            context.Response.StatusCode = 404;
+                            context.Response.End();
+                        }
+
+                        if (CustomErrorsRedirectMode == CustomErrorsRedirectMode.ResponseRedirect)
+                        {
+                            context.Response.Redirect(NotFoundPage);
+                        }
+                        else
+                        {
+                            context.Server.Transfer(NotFoundPage);
+                        }
+                    }
+                    else
+                    {
+                        throw;
+                    }
+
+                }    
             }
 
         }
+
+        static CustomErrorsSection CustomErrorsSection = ConfigurationManager.GetSection("system.web/customErrors") as CustomErrorsSection;
+        static CustomErrorsRedirectMode CustomErrorsRedirectMode = CustomErrorsSection.RedirectMode;
+        static string NotFoundPage = GetCustomError("404");
+
+        static protected string GetCustomError(string code)
+        {
+            if (CustomErrorsSection != null)
+            {
+                CustomError page = CustomErrorsSection.Errors[code];
+
+                if (page != null)
+                {
+                    return page.Redirect;
+                }
+            }
+
+            return CustomErrorsSection.DefaultRedirect;
+        }
+
     }
 }
