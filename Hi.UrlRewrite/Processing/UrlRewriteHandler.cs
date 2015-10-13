@@ -89,22 +89,7 @@ namespace Hi.UrlRewrite.Processing
                 {
                     if (ex.Message == "File does not exist.")
                     {
-                        if (string.IsNullOrEmpty(NotFoundPage))
-                        {
-                            context.Response.StatusCode = 404;
-                            context.Response.End();
-                        }
-                        else
-                        {
-                            if (CustomErrorsRedirectMode == CustomErrorsRedirectMode.ResponseRedirect)
-                            {
-                                context.Response.Redirect(NotFoundPage);
-                            }
-                            else
-                            {
-                                context.Server.Transfer(NotFoundPage);
-                            }
-                        }
+                        HandleNotFound(context);
                     }
                     else
                     {
@@ -114,6 +99,26 @@ namespace Hi.UrlRewrite.Processing
                 }    
             }
 
+        }
+
+        private static void HandleNotFound(HttpContext context)
+        {
+            if (string.IsNullOrEmpty(NotFoundPage))
+            {
+                context.Response.StatusCode = 404;
+                context.Response.End();
+            }
+            else
+            {
+                if (CustomErrorsRedirectMode == CustomErrorsRedirectMode.ResponseRedirect)
+                {
+                    context.Response.Redirect(NotFoundPage);
+                }
+                else
+                {
+                    context.Server.Transfer(NotFoundPage);
+                }
+            }
         }
 
         static CustomErrorsSection CustomErrorsSection = ConfigurationManager.GetSection("system.web/customErrors") as CustomErrorsSection;
