@@ -94,14 +94,16 @@ namespace Hi.UrlRewrite.Processing
                             context.Response.StatusCode = 404;
                             context.Response.End();
                         }
-
-                        if (CustomErrorsRedirectMode == CustomErrorsRedirectMode.ResponseRedirect)
-                        {
-                            context.Response.Redirect(NotFoundPage);
-                        }
                         else
                         {
-                            context.Server.Transfer(NotFoundPage);
+                            if (CustomErrorsRedirectMode == CustomErrorsRedirectMode.ResponseRedirect)
+                            {
+                                context.Response.Redirect(NotFoundPage);
+                            }
+                            else
+                            {
+                                context.Server.Transfer(NotFoundPage);
+                            }
                         }
                     }
                     else
