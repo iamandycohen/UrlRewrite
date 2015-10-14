@@ -85,9 +85,9 @@ namespace Hi.UrlRewrite.Processing
                 {
                     staticFileHanlder.ProcessRequest(context);
                 }
-                catch (Exception ex)
+                catch (HttpException httpException)
                 {
-                    if (ex.Message == "File does not exist.")
+                    if (httpException.GetHttpCode() == 404)
                     {
                         HandleNotFound(context);
                     }
