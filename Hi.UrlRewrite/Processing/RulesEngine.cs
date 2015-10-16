@@ -142,13 +142,11 @@ namespace Hi.UrlRewrite.Processing
 
         private IEnumerable<Item> GetRedirectFolderItems()
         {
-            //var query = string.Format(Configuration.RewriteFolderSearchQuery, Configuration.RewriteFolderSearchRoot,
-            //    RedirectFolderItem.TemplateId);
-            //var redirectFolderItems = db.SelectItems(query);
             var redirectFolderItems = db.GetItem(RedirectFolderItem.TemplateId).GetReferrers();
             return redirectFolderItems;
         }
 
+        #region Serialization 
         internal InboundRule CreateInboundRuleFromSimpleRedirectItem(SimpleRedirectItem simpleRedirectItem, RedirectFolderItem redirectFolderItem)
         {
             var inboundRulePattern = string.Format("^{0}/?$", simpleRedirectItem.Path.Value);
@@ -231,6 +229,8 @@ namespace Hi.UrlRewrite.Processing
             }
         }
 
+        #endregion
+
         #region Caching
 
         private RulesCache GetRulesCache()
@@ -289,28 +289,29 @@ namespace Hi.UrlRewrite.Processing
         private void UpdateRulesCache(Item item, Item redirectFolderItem, Action<Item, Item, List<IBaseRule>> action)
         {
             var cache = GetRulesCache();
-            IEnumerable<IBaseRule> rules = null;
+            IEnumerable<IBaseRule> baseRules = null;
             if (item.IsSimpleRedirectItem() || item.IsInboundRuleItem())
             {
-                rules = cache.GetInboundRules();
-                if (rules == null)
+                baseRules = cache.GetInboundRules();
+                if (baseRules == null)
                 {
-                    rules = GetInboundRules();
+                    baseRules = GetInboundRules();
                 }
             }
             else if (item.IsOutboundRuleItem())
             {
-                rules = cache.GetOutboundRules();
-                if (rules == null)
+                baseRules = cache.GetOutboundRules();
+                if (baseRules == null)
                 {
-                    rules = GetOutboundRules();
+                    baseRules = GetOutboundRules();
                 }
             }
 
-
-            if (rules != null)
+            if (baseRules != null)
             {
-                action(item, redirectFolderItem, rules.ToList());
+                var rules = baseRules.ToList();
+
+                action(item, redirectFolderItem, rules);
 
                 Log.Debug(this, item.Database, "Updating Rules Cache - count: {0}", rules.Count());
 
