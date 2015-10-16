@@ -154,26 +154,21 @@ namespace Hi.UrlRewrite.Processing
                 using (new SecurityDisabler())
                 {
 
-                    var redirectFolderItem = item.Axes.GetAncestors()
-                        .FirstOrDefault(a => a.TemplateID.Equals(new ID(RedirectFolderItem.TemplateId)));
-
-                    if (redirectFolderItem != null)
+                    if (item.IsInboundRuleItem() || item.IsSimpleRedirectItem() || item.IsInboundRuleItemChild())
                     {
-                        if (item.IsInboundRuleItem() || item.IsSimpleRedirectItem() || item.IsOutboundRuleItem())
-                        {
-                            Log.Info(this, item.Database, "Removing Rule [{0}] after delete event",
-                                item.Paths.FullPath);
+                        Log.Info(this, item.Database, "Refreshing inbound rules cache after delete event",
+                            item.Paths.FullPath);
 
-                            rulesEngine.DeleteRule(item, redirectFolderItem);
-                        }
-                        else if (item.IsInboundRuleItemChild() || item.IsOutboundRuleItemChild())
-                        {
-                            Log.Info(this, item.Database, "Removing Rule [{0}] after delete event",
-                                item.Parent.Paths.FullPath);
-
-                            rulesEngine.RefreshRule(item.Parent, redirectFolderItem);
-                        }
+                        rulesEngine.GetCachedInboundRules();
                     }
+                    else if (item.IsOutboundRuleItem() || item.IsOutboundRuleItemChild())
+                    {
+                        Log.Info(this, item.Database, "Refreshing outbound rules cache after delete event",
+                            item.Parent.Paths.FullPath);
+
+                        rulesEngine.GetCachedOutboundRules();
+                    }
+
                 }
             }
             catch (Exception ex)
