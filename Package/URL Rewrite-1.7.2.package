@@ -444,8 +444,6 @@ Version 1.0
         <x-item>/sitecore modules/Shell/UrlRewrite/Content/bootstrap-theme.css.map</x-item>
         <x-item>/sitecore modules/Shell/UrlRewrite/Content/bootstrap-theme.min.css</x-item>
         <x-item>/sitecore modules/Shell/UrlRewrite/Default.aspx</x-item>
-        <x-item>/sitecore modules/Shell/UrlRewrite/Default.aspx.cs</x-item>
-        <x-item>/sitecore modules/Shell/UrlRewrite/Default.aspx.designer.cs</x-item>
         <x-item>/sitecore modules/Shell/UrlRewrite/fonts/glyphicons-halflings-regular.eot</x-item>
         <x-item>/sitecore modules/Shell/UrlRewrite/fonts/glyphicons-halflings-regular.svg</x-item>
         <x-item>/sitecore modules/Shell/UrlRewrite/fonts/glyphicons-halflings-regular.ttf</x-item>
