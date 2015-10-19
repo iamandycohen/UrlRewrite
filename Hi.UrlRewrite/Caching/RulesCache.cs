@@ -23,7 +23,14 @@ namespace Hi.UrlRewrite.Caching
 
         public List<InboundRule> GetInboundRules()
         {
-            return (GetObject(inboundRulesKey) as IEnumerable<InboundRule>).ToList();
+            List<InboundRule> returnRules = null;
+            var rules = GetObject(inboundRulesKey) as IEnumerable<InboundRule>;
+            if (rules != null)
+            {
+                returnRules = rules.ToList();
+            }
+
+            return returnRules;
         }
 
         public void SetInboundRules(IEnumerable<InboundRule> inboundRules)
@@ -42,7 +49,14 @@ namespace Hi.UrlRewrite.Caching
 
         public List<OutboundRule> GetOutboundRules()
         {
-            return (GetObject(outboundRulesKey) as IEnumerable<OutboundRule>).ToList();
+            List<OutboundRule> returnRules = null;
+            var rules = GetObject(inboundRulesKey) as IEnumerable<OutboundRule>;
+            if (rules != null)
+            {
+                returnRules = rules.ToList();
+            }
+
+            return returnRules;
         }
 
         public void SetOutboundRules(IEnumerable<OutboundRule> outboundRules)
