@@ -1,4 +1,5 @@
-﻿using Sitecore.Analytics;
+﻿using Hi.UrlRewrite.Processing.Results;
+using Sitecore.Analytics;
 using Sitecore.Analytics.Data;
 using Sitecore.Analytics.Model;
 using Sitecore.Data;
@@ -16,12 +17,12 @@ namespace Hi.UrlRewrite.Processing
 
         private readonly static Tracking tracking = new Tracking();
 
-        public static void TrackRedirect(Guid itemId)
+        public static void TrackRedirect(ProcessInboundRulesResult results)
         {
-            tracking.RegisterEventOnRedirect(itemId);
+            tracking.RegisterEventOnRedirect(results);
         }
 
-        public void RegisterEventOnRedirect(Guid itemId)
+        public void RegisterEventOnRedirect(ProcessInboundRulesResult results)
         {
             if (!Tracker.Enabled)
                 return;
@@ -32,30 +33,37 @@ namespace Hi.UrlRewrite.Processing
             try
             {
 
-                var redirectItem = Sitecore.Context.Database.GetItem(new ID(itemId));
-                if (redirectItem != null)
+                foreach (var result in results.ProcessedResults.Where(e => e.RuleMatched))
                 {
-                    var pageEventModel = new Sitecore.Analytics.Model.PageEventData()
+                    var itemId = result.ItemId;
+
+                    var redirectItem = Sitecore.Context.Database.GetItem(new ID(itemId));
+
+                    if (redirectItem != null)
                     {
-                        PageEventDefinitionId = RedirectEventItemId,
-                        ItemId = itemId,
-                        Name = "UrlRewrite Redirect",
-                        DateTime = DateTime.UtcNow,
-                        Text = string.Format("Redirected using {0} [{1}].", redirectItem.Name, itemId)
-                    };
+                        var pageEventModel = new Sitecore.Analytics.Model.PageEventData()
+                        {
+                            PageEventDefinitionId = RedirectEventItemId,
+                            ItemId = itemId,
+                            Name = "UrlRewrite Redirect",
+                            DateTime = DateTime.UtcNow,
+                            Text = string.Format("Redirected from {0} to {1} using {2} [{3}].", result.OriginalUri, result.RewrittenUri, redirectItem.Name, itemId)
+                        };
 
-                    var pageEventData = new Sitecore.Analytics.Data.PageEventData(pageEventModel);
+                        var pageEventData = new Sitecore.Analytics.Data.PageEventData(pageEventModel);
 
-                    Tracker.Current.CurrentPage.Item = new Sitecore.Analytics.Model.ItemData
-                    {
-                        Id = itemId,
-                        Language = redirectItem.Language.Name,
-                        Version = redirectItem.Version.Number
-                    };
+                        Tracker.Current.CurrentPage.Item = new Sitecore.Analytics.Model.ItemData
+                        {
+                            Id = itemId,
+                            Language = redirectItem.Language.Name,
+                            Version = redirectItem.Version.Number
+                        };
 
-                    Tracker.Current.CurrentPage.Register(pageEventData);
-                    Tracker.Current.Interaction.AcceptModifications();
+                        Tracker.Current.CurrentPage.Register(pageEventData);
+                        Tracker.Current.Interaction.AcceptModifications();
+                    }
                 }
+
             }
             catch (Exception ex)
             {

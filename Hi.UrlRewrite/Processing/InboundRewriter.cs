@@ -122,7 +122,7 @@ namespace Hi.UrlRewrite.Processing
 
             if (ruleResult.FinalAction is IBaseRedirect)
             {
-                Tracking.TrackRedirect(ruleResult.ItemId.Value);
+                Tracking.TrackRedirect(ruleResult);
 
                 var redirectAction = ruleResult.FinalAction as IBaseRedirect;
                 int statusCode;

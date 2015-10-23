@@ -47,7 +47,7 @@ namespace Hi.UrlRewrite.Processing
                 }
                 else
                 {
-                    Log.Warn(this, db, "Unable to find UrlRewriter item {3CF68609-B1F2-4ADE-B7E3-91B5CF74F5B8}.");
+                    Log.Warn(this, db, "Unable to find UrlRewriter item {0}.", Constants.UrlRewriter_ItemId);
                 }
 
                 return;
