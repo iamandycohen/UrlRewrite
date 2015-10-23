@@ -15,13 +15,20 @@ namespace Hi.UrlRewrite.Processing
         {
             Log.Info(this, "Initializing URL Rewrite.");
 
-            using (new SecurityDisabler())
+            try
             {
-                foreach (var db in Factory.GetDatabases().Where(e => e.HasContentItem))
+                using (new SecurityDisabler())
                 {
-                    var rulesEngine = new RulesEngine(db);
-                    rulesEngine.GetCachedInboundRules();
+                    foreach (var db in Factory.GetDatabases().Where(e => e.HasContentItem))
+                    {
+                        var rulesEngine = new RulesEngine(db);
+                        rulesEngine.GetCachedInboundRules();
+                    }
                 }
+            }
+            catch (Exception ex)
+            {
+                Hi.UrlRewrite.Log.Error(this, ex, "Exception during initialization.");
             }
         }
     }

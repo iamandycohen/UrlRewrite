@@ -59,42 +59,46 @@ namespace Hi.UrlRewrite.Processing
 
         public static string ReplaceTokens(Replacements replacements, string input)
         {
-            var tokenRegex = new Regex(@"{(\w+)}");
-            var tokenMatches = tokenRegex.Matches(input);
             string output = input;
 
-            foreach (Match tokenMatch in tokenMatches)
+            if (replacements != null)
             {
-                var wholeToken = tokenMatch.Groups[0].Value;
-                var token = tokenMatch.Groups[1].Value;
-                string tokenReplacement = null;
+                var tokenRegex = new Regex(@"{(\w+)}");
+                var tokenMatches = tokenRegex.Matches(input);
 
-                const string RESPONSE = "RESPONSE_";
-                const string REQUEST = "REQUEST_";
-
-                if (replacements.ResponseHeaders != null && token.StartsWith(RESPONSE))
+                foreach (Match tokenMatch in tokenMatches)
                 {
-                    var tokenKey = token.Remove(0, RESPONSE.Length);
-                    tokenKey = tokenKey.Replace("_", "-");
+                    var wholeToken = tokenMatch.Groups[0].Value;
+                    var token = tokenMatch.Groups[1].Value;
+                    string tokenReplacement = null;
 
-                    tokenReplacement = replacements.ResponseHeaders[tokenKey];
-                }
-                else if (replacements.RequestHeaders != null && token.StartsWith(REQUEST))
-                {
-                    var tokenKey = token.Remove(0, REQUEST.Length);
-                    tokenKey = tokenKey.Replace("_", "-");
+                    const string RESPONSE = "RESPONSE_";
+                    const string REQUEST = "REQUEST_";
 
-                    tokenReplacement = replacements.RequestHeaders[tokenKey];
-                }
-                else if (replacements.RequestServerVariables != null)
-                {
-                    tokenReplacement = replacements.RequestServerVariables[token];
-                }
+                    if (replacements.ResponseHeaders != null && token.StartsWith(RESPONSE))
+                    {
+                        var tokenKey = token.Remove(0, RESPONSE.Length);
+                        tokenKey = tokenKey.Replace("_", "-");
 
-                if (!string.IsNullOrEmpty(tokenReplacement))
-                {
-                    output = output.Replace(wholeToken, tokenReplacement);
-                }
+                        tokenReplacement = replacements.ResponseHeaders[tokenKey];
+                    }
+                    else if (replacements.RequestHeaders != null && token.StartsWith(REQUEST))
+                    {
+                        var tokenKey = token.Remove(0, REQUEST.Length);
+                        tokenKey = tokenKey.Replace("_", "-");
+
+                        tokenReplacement = replacements.RequestHeaders[tokenKey];
+                    }
+                    else if (replacements.RequestServerVariables != null)
+                    {
+                        tokenReplacement = replacements.RequestServerVariables[token];
+                    }
+
+                    if (!string.IsNullOrEmpty(tokenReplacement))
+                    {
+                        output = output.Replace(wholeToken, tokenReplacement);
+                    }
+                } 
             }
 
             return output;
@@ -154,6 +158,11 @@ namespace Hi.UrlRewrite.Processing
                         lastConditionMatch = conditionMatch;
                         conditionMatchResult.MatchedConditions.Add(new MatchedCondition(condition, conditionInput));
                         conditionMatchResult.Matched = true;
+                    }
+                    else
+                    {
+                        conditionMatchResult.Matched = false;
+                        break;
                     }
                 }
             }
