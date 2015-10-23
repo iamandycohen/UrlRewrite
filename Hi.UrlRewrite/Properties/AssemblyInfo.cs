@@ -6,10 +6,11 @@ using System.Runtime.InteropServices;
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
 [assembly: AssemblyTitle("Hi.UrlRewrite")]
-[assembly: AssemblyDescription("")]
+[assembly: AssemblyDescription("Url Rewrite for Sitecore")]
+[assembly: AssemblyInformationalVersion("v1.7.2")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("Microsoft")]
-[assembly: AssemblyProduct("Hi.UrlRewrite")]
+[assembly: AssemblyProduct("Url Rewrite")]
 [assembly: AssemblyCopyright("Copyright © Microsoft 2014")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
