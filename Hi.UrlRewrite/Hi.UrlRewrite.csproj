@@ -42,9 +42,6 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Lucene.Net">
-      <HintPath>..\Assemblies\Lucene.Net.dll</HintPath>
-    </Reference>
     <Reference Include="Sitecore.Analytics">
       <HintPath>..\..\..\inetpub\wwwroot\AndysPlayground\Website\bin\Sitecore.Analytics.dll</HintPath>
     </Reference>
@@ -55,11 +52,11 @@
       <HintPath>..\..\..\inetpub\wwwroot\AndysPlayground\Website\bin\Sitecore.Analytics.Model.dll</HintPath>
     </Reference>
     <Reference Include="Sitecore.Kernel">
-      <HintPath>..\Assemblies\Sitecore.Kernel.dll</HintPath>
+      <HintPath>..\..\..\inetpub\wwwroot\AndysPlayground\Website\bin\Sitecore.Kernel.dll</HintPath>
     </Reference>
     <Reference Include="Sitecore.Logging, Version=1.2.0.30715, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\Assemblies\Sitecore.Logging.dll</HintPath>
+      <HintPath>..\..\..\inetpub\wwwroot\AndysPlayground\Website\bin\Sitecore.Logging.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Configuration" />
