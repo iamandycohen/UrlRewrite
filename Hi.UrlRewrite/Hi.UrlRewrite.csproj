@@ -45,6 +45,15 @@
     <Reference Include="Lucene.Net">
       <HintPath>..\Assemblies\Lucene.Net.dll</HintPath>
     </Reference>
+    <Reference Include="Sitecore.Analytics">
+      <HintPath>..\..\..\inetpub\wwwroot\AndysPlayground\Website\bin\Sitecore.Analytics.dll</HintPath>
+    </Reference>
+    <Reference Include="Sitecore.Analytics.Core">
+      <HintPath>..\..\..\inetpub\wwwroot\AndysPlayground\Website\bin\Sitecore.Analytics.Core.dll</HintPath>
+    </Reference>
+    <Reference Include="Sitecore.Analytics.Model">
+      <HintPath>..\..\..\inetpub\wwwroot\AndysPlayground\Website\bin\Sitecore.Analytics.Model.dll</HintPath>
+    </Reference>
     <Reference Include="Sitecore.Kernel">
       <HintPath>..\Assemblies\Sitecore.Kernel.dll</HintPath>
     </Reference>
@@ -140,6 +149,7 @@
     <Compile Include="Processing\Results\InboundRuleResult.cs" />
     <Compile Include="Processing\RewriteHelper.cs" />
     <Compile Include="Processing\RulesEngine.cs" />
+    <Compile Include="Processing\Tracking.cs" />
     <Compile Include="Processing\UrlRewriteHandler.cs" />
     <Compile Include="Processing\UrlRewriteItemEventHandler.cs" />
     <Compile Include="Processing\InboundRewriteProcessor.cs" />
@@ -151,6 +161,13 @@
     </Compile>
     <Compile Include="sitecore modules\Shell\UrlRewrite\Default.aspx.designer.cs">
       <DependentUpon>Default.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="sitecore modules\Shell\UrlRewrite\UrlRewriter.aspx.cs">
+      <DependentUpon>UrlRewriter.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="sitecore modules\Shell\UrlRewrite\UrlRewriter.aspx.designer.cs">
+      <DependentUpon>UrlRewriter.aspx</DependentUpon>
     </Compile>
     <Compile Include="Templates\Action\Base\BaseAppendQuerystringItem.cs" />
     <Compile Include="Templates\Action\Base\BaseRedirectItem.cs" />
@@ -228,6 +245,7 @@
     <Content Include="sitecore modules\Shell\UrlRewrite\Content\bootstrap-theme.css.map" />
     <Content Include="sitecore modules\Shell\UrlRewrite\Content\bootstrap.css.map" />
     <Content Include="sitecore modules\Shell\UrlRewrite\Scripts\jquery-1.10.2.min.map" />
+    <Content Include="sitecore modules\Shell\UrlRewrite\UrlRewriter.aspx" />
     <None Include="sitecore modules\Shell\UrlRewrite\Scripts\jquery-1.9.0.intellisense.js" />
     <Content Include="sitecore modules\Shell\UrlRewrite\Scripts\app.js" />
     <Content Include="sitecore modules\Shell\UrlRewrite\Scripts\bootstrap.js" />

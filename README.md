@@ -11,6 +11,12 @@ Changelog
 
 Version 1.7.2
 * Fixed potential for a redirect loop if you have a database problem, you are using the html extension on the handler, and you have a custom error page that is pointing to an html page
+* Changed initialization of rules into an initialization pipeline
+* Removed reporting
+* Changed error handling of 404's on a static file redirect
+* Fixed rebuilding of cache on save, publish or delete - no longer need to restart IIS to refresh the rules.
+* Added missing update to Default.aspx for UrlRewrite tester
+* Added reporting via analytics
 
 Version 1.7.1
 * Fixed missing reporting item in the web database that prevented publishing from working after installing the module.

@@ -52,5 +52,7 @@ namespace Hi.UrlRewrite
 
         public const string ReportingFolder_ItemId = "{1D07EFA5-88F6-482D-98EF-5C0AAB2EE4B1}";
 
+        public const string UrlRewriter_ItemId = "{3CF68609-B1F2-4ADE-B7E3-91B5CF74F5B8}";
+
     }
 }

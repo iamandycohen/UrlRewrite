@@ -31,17 +31,26 @@ namespace Hi.UrlRewrite.Processing
                 {
                     return;
                 }
-
+                
                 var urlRewriter = new InboundRewriter(httpContext.Request.ServerVariables, httpContext.Request.Headers);
                 var requestResult = ProcessUri(requestUri, db, urlRewriter);
 
                 if (requestResult == null || !requestResult.MatchedAtLeastOneRule) return;
 
-                //TODO: Curently this only reflects the result of Redirect Actions - make this call to logging reflect all action types
-                Log.Info(this, db, "Redirecting {0} to {1} [{2}]", requestResult.OriginalUri, requestResult.RewrittenUri,
-                    requestResult.StatusCode);
+                httpContext.Items["urlrewrite:db"] = db.Name;
+                httpContext.Items["urlrewrite:result"] = requestResult;
 
-                urlRewriter.ExecuteResult(httpContext, requestResult);
+                var urlRewriterItem = Sitecore.Context.Database.GetItem(new ID(Constants.UrlRewriter_ItemId));
+                if (urlRewriterItem != null)
+                {
+                    Sitecore.Context.Item = urlRewriterItem;
+                }
+                else
+                {
+                    Log.Warn(this, db, "Unable to find UrlRewriter item {3CF68609-B1F2-4ADE-B7E3-91B5CF74F5B8}.");
+                }
+
+                return;
             }
             catch (ThreadAbortException)
             {

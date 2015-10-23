@@ -100,8 +100,6 @@ namespace Hi.UrlRewrite.Processing
             }
         }
 
-
-
         public void ExecuteResult(HttpContextBase httpContext, ProcessInboundRulesResult ruleResult)
         {
             var httpRequest = httpContext.Request;
@@ -124,6 +122,8 @@ namespace Hi.UrlRewrite.Processing
 
             if (ruleResult.FinalAction is IBaseRedirect)
             {
+                Tracking.TrackRedirect(ruleResult.ItemId.Value);
+
                 var redirectAction = ruleResult.FinalAction as IBaseRedirect;
                 int statusCode;
 
@@ -143,8 +143,6 @@ namespace Hi.UrlRewrite.Processing
                 {
                     httpResponse.Cache.SetCacheability(redirectAction.HttpCacheability.Value);
                 }
-
-                //ReportingService.QueueReport(ruleResult.ProcessedResults.Where(e => e.RuleMatched), Sitecore.Context.Database);
             }
             else if (ruleResult.FinalAction is IBaseRewrite)
             {
@@ -553,5 +551,8 @@ namespace Hi.UrlRewrite.Processing
 
             return rewriteUrl;
         }
+
+
+
     }
 }
