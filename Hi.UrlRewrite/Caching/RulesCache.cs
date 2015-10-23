@@ -23,34 +23,28 @@ namespace Hi.UrlRewrite.Caching
 
         public List<InboundRule> GetInboundRules()
         {
-            List<InboundRule> returnRules = null;
-            var rules = GetObject(inboundRulesKey) as IEnumerable<InboundRule>;
-            if (rules != null)
-            {
-                returnRules = rules.ToList();
-            }
-
-            return returnRules;
+            return GetRules<InboundRule>(inboundRulesKey);
         }
 
         public void SetInboundRules(IEnumerable<InboundRule> inboundRules)
         {
-            long size;
-
-            using (var memoryStream = new MemoryStream())
-            {
-                var binaryFormatter = new BinaryFormatter();
-                binaryFormatter.Serialize(memoryStream, inboundRules.ToList());
-                size = memoryStream.Length;
-            }
-
-            SetObject(inboundRulesKey, inboundRules, size);
+            SetRules(inboundRules, inboundRulesKey);
         }
 
         public List<OutboundRule> GetOutboundRules()
         {
-            List<OutboundRule> returnRules = null;
-            var rules = GetObject(inboundRulesKey) as IEnumerable<OutboundRule>;
+            return GetRules<OutboundRule>(outboundRulesKey);
+        }
+
+        public void SetOutboundRules(IEnumerable<OutboundRule> outboundRules)
+        {
+            SetRules(outboundRules, outboundRulesKey);
+        }
+
+        public List<T> GetRules<T>(string key) where T : IBaseRule
+        {
+            List<T> returnRules = null;
+            var rules = GetObject(key) as IEnumerable<T>;
             if (rules != null)
             {
                 returnRules = rules.ToList();
@@ -59,7 +53,7 @@ namespace Hi.UrlRewrite.Caching
             return returnRules;
         }
 
-        public void SetOutboundRules(IEnumerable<OutboundRule> outboundRules)
+        public void SetRules<T>(IEnumerable<T> outboundRules, string key) where T : IBaseRule
         {
             long size;
 
@@ -70,8 +64,10 @@ namespace Hi.UrlRewrite.Caching
                 size = memoryStream.Length;
             }
 
-            SetObject(outboundRulesKey, outboundRules, size);
+            SetObject(key, outboundRules, size);
         }
+
+
 
     }
 }
