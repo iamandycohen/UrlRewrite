@@ -1,4 +1,4 @@
-<project site="andysplayground" format="Zip Package" targetfilefolder="wwwroot">
+<project>
   <Metadata>
     <metadata>
       <PackageName>URL Rewrite</PackageName>
@@ -103,10 +103,8 @@
         <x-item>/master/sitecore/content/Sample Rewrites/Rewrite Sitecore in Response/{61D4183E-9160-477C-8DCC-FA7EF510B2C5}/invariant/0</x-item>
         <x-item>/master/sitecore/content/Sample Rewrites/Rewrite Sitecore in Response/Replacement/{CA4345D3-0098-42D1-9703-22FE8A2A704F}/invariant/0</x-item>
         <x-item>/master/sitecore/system/Modules/Url Rewrite/{76C853FC-AA0B-4412-BA5A-BCF44BF0194C}/invariant/0</x-item>
-        <x-item>/master/sitecore/system/Modules/Url Rewrite/Reporting/{1D07EFA5-88F6-482D-98EF-5C0AAB2EE4B1}/invariant/0</x-item>
         <x-item>/master/sitecore/system/Modules/Url Rewrite/Settings/{CD928F1B-676F-4437-9AD0-7DF80F415946}/invariant/0</x-item>
         <x-item>/web/sitecore/system/Modules/Url Rewrite/{76C853FC-AA0B-4412-BA5A-BCF44BF0194C}/invariant/0</x-item>
-        <x-item>/web/sitecore/system/Modules/Url Rewrite/Reporting/{1D07EFA5-88F6-482D-98EF-5C0AAB2EE4B1}/invariant/0</x-item>
         <x-item>/master/sitecore/system/Modules/Url Rewrite/Settings/Match Tags/{E1514A0A-B668-4FB1-862A-421DCD038BF4}/invariant/0</x-item>
         <x-item>/master/sitecore/system/Modules/Url Rewrite/Settings/Match Tags/a href/{744DCB2C-A935-48CA-A6FD-337285ED24F4}/invariant/0</x-item>
         <x-item>/master/sitecore/system/Modules/Url Rewrite/Settings/Match Tags/Area href/{41B4B73B-24D3-44E2-B936-51C2527FE842}/invariant/0</x-item>
@@ -386,16 +384,6 @@
         <x-item>/master/sitecore/templates/User Defined/UrlRewrite/Templates/Outbound/Outbound Rule/{DC4D631D-E17D-4F18-A19F-3554CD4EB756}/invariant/0</x-item>
         <x-item>/master/sitecore/templates/User Defined/UrlRewrite/Templates/Outbound/Outbound Rule/Action/{ABB34EE1-C0DE-4927-87FB-B96E19769305}/invariant/0</x-item>
         <x-item>/master/sitecore/templates/User Defined/UrlRewrite/Templates/Outbound/Outbound Rule/Action/Action/{B150D114-C7A2-4DFE-BE65-74BE48D3C3B9}/invariant/0</x-item>
-        <x-item>/master/sitecore/templates/User Defined/UrlRewrite/Templates/Reporting/{31446C24-919B-4E79-960A-95587E43965A}/invariant/0</x-item>
-        <x-item>/master/sitecore/templates/User Defined/UrlRewrite/Templates/Reporting/Report Folder/{DB614787-A609-4098-BB32-8E862DB40ED0}/invariant/0</x-item>
-        <x-item>/master/sitecore/templates/User Defined/UrlRewrite/Templates/Reporting/Rewrite Report/__Standard Values/{CAA2A1B7-95D1-4A22-BB67-0883B9F6FB0D}/invariant/0</x-item>
-        <x-item>/master/sitecore/templates/User Defined/UrlRewrite/Templates/Reporting/Rewrite Report/{F5CEB67D-1CE8-48EF-8D2E-39F44A21B52E}/invariant/0</x-item>
-        <x-item>/master/sitecore/templates/User Defined/UrlRewrite/Templates/Reporting/Rewrite Report/Reporting/{5BD9E61D-9B3F-40FB-B0CD-83760F6D5511}/invariant/0</x-item>
-        <x-item>/master/sitecore/templates/User Defined/UrlRewrite/Templates/Reporting/Rewrite Report/Reporting/Database Name/{5980D0E8-1F56-4556-8767-74F0D56F7CC8}/invariant/0</x-item>
-        <x-item>/master/sitecore/templates/User Defined/UrlRewrite/Templates/Reporting/Rewrite Report/Reporting/Original Url/{04E25D7C-79D6-4EBC-98E0-BB52704AEAFB}/invariant/0</x-item>
-        <x-item>/master/sitecore/templates/User Defined/UrlRewrite/Templates/Reporting/Rewrite Report/Reporting/Rewrite Date/{559F07DC-EE31-41C3-8A25-6A487C029752}/invariant/0</x-item>
-        <x-item>/master/sitecore/templates/User Defined/UrlRewrite/Templates/Reporting/Rewrite Report/Reporting/Rewritten Url/{7EA8AAF6-7661-4C90-BDF2-57F5893E2D36}/invariant/0</x-item>
-        <x-item>/master/sitecore/templates/User Defined/UrlRewrite/Templates/Reporting/Rewrite Report/Reporting/Rule/{06D39C80-E72C-466F-9CEC-24D32CB90D2A}/invariant/0</x-item>
         <x-item>/master/sitecore/templates/User Defined/UrlRewrite/Templates/Server Variables/{840C2D21-83C7-4EA6-B5FB-2CFEB16EF084}/invariant/0</x-item>
         <x-item>/master/sitecore/templates/User Defined/UrlRewrite/Templates/Server Variables/Base Server Variable/__Standard Values/{A0D56E8E-FAD7-44DE-93D1-9AE6902909DB}/invariant/0</x-item>
         <x-item>/master/sitecore/templates/User Defined/UrlRewrite/Templates/Server Variables/Base Server Variable/{ED218F0C-2AF5-4D0A-AA45-E089F9862E0C}/invariant/0</x-item>
