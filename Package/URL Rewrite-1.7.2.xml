@@ -92,8 +92,6 @@
         <x-item>/master/sitecore/content/Sample Rewrites/Rewrite Sitecore in Response/{61D4183E-9160-477C-8DCC-FA7EF510B2C5}/invariant/0</x-item>
         <x-item>/master/sitecore/content/Sample Rewrites/Rewrite Sitecore in Response/Replacement/{CA4345D3-0098-42D1-9703-22FE8A2A704F}/invariant/0</x-item>
         <x-item>/master/sitecore/system/Modules/Url Rewrite/{76C853FC-AA0B-4412-BA5A-BCF44BF0194C}/invariant/0</x-item>
-        <x-item>/master/sitecore/system/Modules/Url Rewrite/Events/{C1EC04A9-39B0-4AD5-9231-D71723B9F168}/invariant/0</x-item>
-        <x-item>/master/sitecore/system/Modules/Url Rewrite/Events/Redirect/{1D668F23-EEBA-4BD3-93B3-94861ED42060}/invariant/0</x-item>
         <x-item>/master/sitecore/system/Modules/Url Rewrite/Rendering/{B9C0818B-B6F2-4B55-A90B-E05A94489B0A}/invariant/0</x-item>
         <x-item>/master/sitecore/system/Modules/Url Rewrite/Rendering/UrlRewriter/{3CF68609-B1F2-4ADE-B7E3-91B5CF74F5B8}/invariant/0</x-item>
         <x-item>/master/sitecore/system/Modules/Url Rewrite/Rendering/UrlRewriterLayout/{D00032BE-5F0D-491F-80D3-2F353A0BFB63}/invariant/0</x-item>
@@ -121,6 +119,7 @@
         <x-item>/master/sitecore/system/Modules/Url Rewrite/Settings/Preconditions/IsRedirection/{7AAE490B-530B-415B-BC3B-7A0FC76FCE6D}/invariant/0</x-item>
         <x-item>/master/sitecore/system/Modules/Url Rewrite/Settings/Preconditions/IsRedirection/RESPONSE_STATUS/{4C031644-590B-4E1F-B61D-1F612162D880}/invariant/0</x-item>
         <x-item>/master/sitecore/system/Modules/Url Rewrite/Settings/Settings/{CD887CD4-9837-4929-B68E-366E3A7D1FEA}/invariant/0</x-item>
+        <x-item>/master/sitecore/system/Settings/Analytics/Page Events/UrlRewrite Redirect/{1D668F23-EEBA-4BD3-93B3-94861ED42060}/invariant/0</x-item>
         <x-item>/master/sitecore/system/Settings/Rules/Definitions/Elements/System/Url Rewrite OutboundModule Installed/{293A0E29-EF18-40C3-8766-A53363E5D37C}/invariant/0</x-item>
         <x-item>/master/sitecore/system/Settings/Rules/Insert Options/Rules/Url Rewrite Outbound Rule/{CD21866D-51CA-49D9-A705-FE4B593BC5CD}/invariant/0</x-item>
         <x-item>/master/sitecore/system/Workflows/Redirect Workflow/{30D1BA49-44F5-4A99-8B3A-9815F41A31AA}/invariant/0</x-item>
@@ -413,8 +412,6 @@
         <x-item>/master/sitecore/templates/User Defined/UrlRewrite/Templates/UrlRewriter/__Standard Values/{ABA60985-DB10-4741-A1B5-32DCED090E34}/invariant/0</x-item>
         <x-item>/master/sitecore/templates/User Defined/UrlRewrite/Templates/UrlRewriter/{F4C6D58B-367B-4F54-8C9F-77183D248189}/invariant/0</x-item>
         <x-item>/web/sitecore/system/Modules/Url Rewrite/{76C853FC-AA0B-4412-BA5A-BCF44BF0194C}/invariant/0</x-item>
-        <x-item>/web/sitecore/system/Modules/Url Rewrite/Events/{C1EC04A9-39B0-4AD5-9231-D71723B9F168}/invariant/0</x-item>
-        <x-item>/web/sitecore/system/Modules/Url Rewrite/Events/Redirect/{1D668F23-EEBA-4BD3-93B3-94861ED42060}/invariant/0</x-item>
         <x-item>/web/sitecore/system/Modules/Url Rewrite/Rendering/{B9C0818B-B6F2-4B55-A90B-E05A94489B0A}/invariant/0</x-item>
         <x-item>/web/sitecore/system/Modules/Url Rewrite/Rendering/UrlRewriter/{3CF68609-B1F2-4ADE-B7E3-91B5CF74F5B8}/invariant/0</x-item>
         <x-item>/web/sitecore/system/Modules/Url Rewrite/Rendering/UrlRewriterLayout/{D00032BE-5F0D-491F-80D3-2F353A0BFB63}/invariant/0</x-item>
@@ -442,6 +439,7 @@
         <x-item>/web/sitecore/system/Modules/Url Rewrite/Settings/Preconditions/IsRedirection/{7AAE490B-530B-415B-BC3B-7A0FC76FCE6D}/invariant/0</x-item>
         <x-item>/web/sitecore/system/Modules/Url Rewrite/Settings/Preconditions/IsRedirection/RESPONSE_STATUS/{4C031644-590B-4E1F-B61D-1F612162D880}/invariant/0</x-item>
         <x-item>/web/sitecore/system/Modules/Url Rewrite/Settings/Settings/{CD887CD4-9837-4929-B68E-366E3A7D1FEA}/invariant/0</x-item>
+        <x-item>/web/sitecore/system/Settings/Analytics/Page Events/UrlRewrite Redirect/{1D668F23-EEBA-4BD3-93B3-94861ED42060}/invariant/0</x-item>
         <x-item>/web/sitecore/templates/User Defined/UrlRewrite/{5D183D73-5F71-48D5-B381-47D96E9687B9}/invariant/0</x-item>
         <x-item>/web/sitecore/templates/User Defined/UrlRewrite/Content/{FBD48044-53B0-4DCA-9D3E-E73682E78F9F}/invariant/0</x-item>
         <x-item>/web/sitecore/templates/User Defined/UrlRewrite/Content/Types/{8997D0DE-51EC-4A98-9862-A915AE6FA2C2}/invariant/0</x-item>

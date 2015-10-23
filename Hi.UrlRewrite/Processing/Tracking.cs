@@ -39,7 +39,7 @@ namespace Hi.UrlRewrite.Processing
                     {
                         PageEventDefinitionId = RedirectEventItemId,
                         ItemId = itemId,
-                        Name = "Redirect",
+                        Name = "UrlRewrite Redirect",
                         DateTime = DateTime.UtcNow,
                         Text = string.Format("Redirected using {0} [{1}].", redirectItem.Name, itemId)
                     };
