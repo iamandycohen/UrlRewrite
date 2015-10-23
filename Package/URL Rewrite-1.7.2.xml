@@ -741,6 +741,8 @@
     <xfiles>
       <Entries>
         <x-item>/App_Config/Include/Hi.UrlRewrite.config</x-item>
+        <x-item>/App_Config/Include/Hi.UrlRewrite.Prefetch.Master.config</x-item>
+        <x-item>/App_Config/Include/Hi.UrlRewrite.Prefetch.Web.config</x-item>
         <x-item>/bin/Hi.UrlRewrite.dll</x-item>
         <x-item>/bin/Hi.UrlRewrite.pdb</x-item>
         <x-item>/sitecore modules/Shell/UrlRewrite/Content/app.css</x-item>
