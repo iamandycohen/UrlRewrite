@@ -43,13 +43,16 @@ namespace Hi.UrlRewrite.Processing
                         DateTime = DateTime.UtcNow,
                         Text = string.Format("Redirected using {0} [{1}].", redirectItem.Name, itemId)
                     };
+
                     var pageEventData = new Sitecore.Analytics.Data.PageEventData(pageEventModel);
+
                     Tracker.Current.CurrentPage.Item = new Sitecore.Analytics.Model.ItemData
                     {
                         Id = itemId,
                         Language = redirectItem.Language.Name,
                         Version = redirectItem.Version.Number
                     };
+
                     Tracker.Current.CurrentPage.Register(pageEventData);
                     Tracker.Current.Interaction.AcceptModifications();
                 }
