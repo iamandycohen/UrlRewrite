@@ -14,7 +14,7 @@ namespace Hi.UrlRewrite.Processing.Results
         public ProcessOutboundRulesResult(List<OutboundRuleResult> processedResults)
         {
             _processedResults = processedResults;
-            var lastMatchedResult = _processedResults.FirstOrDefault(r => r.RuleMatched);
+            var lastMatchedResult = _processedResults.LastOrDefault(r => r.RuleMatched);
 
             if (lastMatchedResult != null)
             {
