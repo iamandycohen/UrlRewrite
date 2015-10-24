@@ -718,6 +718,10 @@
         <x-item>/web/sitecore/system/Modules/Url Rewrite/Templates/Settings/Settings/Url Rewrite Settings/Installation Publishing Targets/{64727107-1326-48B7-A428-6E469CB99B47}/invariant/0</x-item>
         <x-item>/web/sitecore/system/Modules/Url Rewrite/Templates/UrlRewriter/__Standard Values/{ABA60985-DB10-4741-A1B5-32DCED090E34}/invariant/0</x-item>
         <x-item>/web/sitecore/system/Modules/Url Rewrite/Templates/UrlRewriter/{F4C6D58B-367B-4F54-8C9F-77183D248189}/invariant/0</x-item>
+        <x-item>/core/sitecore/client/Applications/ExperienceAnalytics/Dashboard/Url Rewrite/{0A94DF1F-7CEB-478C-8C6F-07D000C8D183}/invariant/0</x-item>
+        <x-item>/core/sitecore/client/Applications/ExperienceAnalytics/Dashboard/Url Rewrite/Redirects/{B85E88A1-F0ED-4D66-8CE4-A6ADD88F44F9}/invariant/0</x-item>
+        <x-item>/core/sitecore/client/Applications/ExperienceAnalytics/Dashboard/Url Rewrite/Redirects/PageSettings/{A2475E71-187B-498C-9699-03569B8C4A2F}/invariant/0</x-item>
+        <x-item>/core/sitecore/client/Applications/ExperienceAnalytics/Dashboard/Url Rewrite/Redirects/PageSettings/ExperienceAnalyticsBarChart Parameters/{97ACE74F-4C95-4930-9BA6-D6B832601393}/invariant/0</x-item>
       </Entries>
       <SkipVersions>False</SkipVersions>
       <Converter>

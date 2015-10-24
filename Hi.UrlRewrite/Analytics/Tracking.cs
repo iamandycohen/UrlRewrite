@@ -9,12 +9,11 @@ using System.Linq;
 using System.Threading.Tasks;
 using System.Web;
 
-namespace Hi.UrlRewrite.Processing
+namespace Hi.UrlRewrite.Analytics
 {
     public class Tracking
     {
-        private static Guid RedirectEventItemId = new Guid("{1d668f23-eeba-4bd3-93b3-94861ed42060}");
-
+        private readonly static Guid RedirectEventItemId = new Guid(Constants.RedirectEventItemId);
         private readonly static Tracking tracking = new Tracking();
 
         public static void TrackRedirect(ProcessInboundRulesResult results)

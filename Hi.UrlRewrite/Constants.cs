@@ -51,6 +51,8 @@ namespace Hi.UrlRewrite
         public const string UrlRewriteSettings_ItemId = "{CD887CD4-9837-4929-B68E-366E3A7D1FEA}";
 
         public const string UrlRewriter_ItemId = "{3CF68609-B1F2-4ADE-B7E3-91B5CF74F5B8}";
+        public const string RedirectEventItemId = "{1d668f23-eeba-4bd3-93b3-94861ed42060}";
+
 
     }
 }
