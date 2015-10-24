@@ -9,6 +9,15 @@ In addition to adding Site specific redirect capabilities, I have modeled the da
 Changelog
 =========
 
+Version 1.7.3
+* Added reporting via analytics
+* added Url Rewrite to Experience Analytics Dashboard
+* Added prefetching of UrlRewriter item
+* Moved all templates from User Defined folder to System Modules
+* Removed unused references
+* Fixed logic for allowing multiple rules to be processed during a request when a Redirect field "Stop Processing of Subsequent Rules" is set to false
+* Package now installs to master and web
+
 Version 1.7.2
 * Fixed potential for a redirect loop if you have a database problem, you are using the html extension on the handler, and you have a custom error page that is pointing to an html page
 * Changed initialization of rules into an initialization pipeline
@@ -16,7 +25,6 @@ Version 1.7.2
 * Changed error handling of 404's on a static file redirect
 * Fixed rebuilding of cache on save, publish or delete - no longer need to restart IIS to refresh the rules.
 * Added missing update to Default.aspx for UrlRewrite tester
-* Added reporting via analytics
 
 Version 1.7.1
 * Fixed missing reporting item in the web database that prevented publishing from working after installing the module.
