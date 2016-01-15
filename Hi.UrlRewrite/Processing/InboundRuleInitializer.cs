@@ -11,6 +11,8 @@ namespace Hi.UrlRewrite.Processing
 {
     public class InboundRuleInitializer
     {
+        private string masterDatabaseName = "master";
+
         public void Process(PipelineArgs args)
         {
             Log.Info(this, "Initializing URL Rewrite.");
@@ -40,7 +42,13 @@ namespace Hi.UrlRewrite.Processing
 
         private void DeployEventIfNecessary()
         {
-            var database = Sitecore.Data.Database.GetDatabase("master");
+            if (!Sitecore.Configuration.Factory.GetDatabaseNames().Contains(masterDatabaseName, StringComparer.InvariantCultureIgnoreCase))
+            {
+                Log.Info(this, "Skipping DeployEventIfNecessary() as '{0}' database not present", masterDatabaseName);
+                return;
+            }
+
+            var database = Sitecore.Data.Database.GetDatabase(masterDatabaseName);
             if (database == null)
             {
                 return;
