@@ -216,6 +216,7 @@ namespace Hi.UrlRewrite
             }
 
             inboundRule.SiteNameRestriction = siteNameRestriction;
+            inboundRule.SortOrder = inboundRuleItem.SortOrder;
 
             return inboundRule;
         }

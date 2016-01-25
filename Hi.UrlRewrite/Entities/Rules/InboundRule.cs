@@ -26,6 +26,8 @@ namespace Hi.UrlRewrite.Entities.Rules
         public string Pattern { get; set; }
         public bool IgnoreCase { get; set; }
 
+        public int SortOrder { get; set; }
+
         //public IEnumerable<ServerVariable> ServerVariables { get; set; }
         //public IEnumerable<RequestHeader> RequestHeaders { get; set; }
         public IEnumerable<ResponseHeader> ResponseHeaders { get; set; }
