@@ -104,15 +104,6 @@ namespace Hi.UrlRewrite.Processing
 
             inboundRules.Sort(InboundRuleComparer.Instance);
 
-/// --
-            Log.Info(this, db, "-- Start - SORTED Inbound Rules --");
-            foreach (var v in inboundRules)
-            {
-                Log.Info(this, db, "{1}: {0}", v.Name, v.SortOrder);
-            }
-            Log.Info(this, db, "-- End - SORTED Inbound Rules --");
-/// --
-
             return inboundRules;
         }
 
