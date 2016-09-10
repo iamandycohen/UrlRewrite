@@ -8,6 +8,8 @@ namespace Hi.UrlRewrite.Templates.Inbound
 
         public static readonly string TemplateId = "{E30B15B9-34CD-419C-8671-60FEAAAD5A46}";
 
+        private int? _sortorder;
+
         #region Inherited Base Templates
 
         private readonly BaseUrlRewriteItem _BaseUrlRewriteItem;
@@ -60,6 +62,24 @@ namespace Hi.UrlRewrite.Templates.Inbound
             }
         }
 
+        public int SortOrder
+        {
+            get
+            {
+                if (!_sortorder.HasValue)
+                {
+                    int sortorder;
+                    if (!int.TryParse(base["__sortorder"], out sortorder))
+                    {
+                        sortorder = 0;
+                    }
+
+                    _sortorder = sortorder;
+                }
+
+                return _sortorder.Value;
+            }
+        }
 
         #endregion //Field Instance Methods
     }

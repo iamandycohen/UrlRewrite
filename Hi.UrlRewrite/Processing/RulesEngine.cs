@@ -22,6 +22,15 @@ namespace Hi.UrlRewrite.Processing
 {
     public class RulesEngine
     {
+        private class InboundRuleComparer : IComparer<InboundRule>
+        {
+            public int Compare(InboundRule x, InboundRule y)
+            {
+                return x.SortOrder.CompareTo(y.SortOrder);
+            }
+
+            public static readonly InboundRuleComparer Instance = new InboundRuleComparer();
+        }
 
         private readonly Database db;
 
@@ -92,6 +101,8 @@ namespace Hi.UrlRewrite.Processing
                     }
                 }
             }
+
+            inboundRules.Sort(InboundRuleComparer.Instance);
 
             return inboundRules;
         }
@@ -309,6 +320,11 @@ namespace Hi.UrlRewrite.Processing
 
             if (baseRules != null)
             {
+                if (item.IsSimpleRedirectItem() || item.IsInboundRuleItem())
+                {
+                    (baseRules as List<InboundRule>).Sort(InboundRuleComparer.Instance);
+                }
+
                 var rules = baseRules.ToList();
 
                 action(item, redirectFolderItem, rules);
