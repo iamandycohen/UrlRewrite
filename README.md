@@ -9,6 +9,9 @@ In addition to adding Site specific redirect capabilities, I have modeled the da
 Changelog
 =========
 
+Varsion 1.8.1.3
+* Added support for Sitecore 8.1 Update 3
+
 Version 1.8
 * Added reporting via analytics
 * added Url Rewrite to Experience Analytics Dashboard
