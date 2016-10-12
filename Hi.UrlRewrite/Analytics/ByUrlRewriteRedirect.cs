@@ -21,20 +21,19 @@ namespace Hi.UrlRewrite.Analytics
         {
         }
 
-        protected override string ExtractDimensionKey(PageEventData pageEvent)
+        public override IEnumerable<string> ExtractDimensionKeys(PageEventData pageEvent)
         {
             Assert.IsNotNull(pageEvent, "pageEvent");
-
             var redirectItem = Sitecore.Data.Database.GetDatabase("master").GetItem(pageEvent.ItemId.ToString());
-
-            return redirectItem.Paths.ContentPath;
+            yield return redirectItem.Paths.ContentPath;
         }
 
-        protected override bool Filter(PageEventData pageEvent)
+        public override bool Filter(PageEventData pageEvent)
         {
             Assert.IsNotNull(pageEvent, "pageEvent");
             return pageEvent.PageEventDefinitionId.Equals(this.redirectEventId);
         }
+
 
     }
 }
