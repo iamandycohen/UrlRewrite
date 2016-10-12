@@ -44,28 +44,11 @@ namespace Hi.UrlRewrite
                 return Settings.GetSetting("Hi.UrlRewrite.LogFileLevel", "INFO");
             }
         }
-
-        public static string ItemWebApiHost
+        public static bool AnalyticsTrackingEnabled
         {
             get
             {
-                return Settings.GetSetting("Hi.UrlRewrite.ItemWebApiHost", @"http://andysplayground");
-            }
-        }
-
-        public static string ItemWebApiUser
-        {
-            get
-            {
-                return Settings.GetSetting("Hi.UrlRewrite.ItemWebApiUser", @"sitecore\admin");
-            }
-        }
-
-        public static string ItemWebApiPassword
-        {
-            get
-            {
-                return Settings.GetSetting("Hi.UrlRewrite.ItemWebApiPassword", "b");
+                return Settings.GetBoolSetting("Hi.UrlRewrite.AnalyticsTrackingEnabled", true);
             }
         }
 
