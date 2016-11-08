@@ -1,15 +1,15 @@
-﻿using System.IO;
+﻿using System.Collections.Generic;
+using System.IO;
+using System.Linq;
 using System.Runtime.Serialization.Formatters.Binary;
 using Hi.UrlRewrite.Entities.Rules;
 using Sitecore;
 using Sitecore.Caching;
 using Sitecore.Data;
-using System.Collections.Generic;
-using System.Linq;
 
 namespace Hi.UrlRewrite.Caching
 {
-    public class RulesCache : CustomCache
+	public class RulesCache : CustomCache
     {
         private Database _db;
         private const string inboundRulesKey = "InboundRules";
@@ -65,9 +65,16 @@ namespace Hi.UrlRewrite.Caching
             }
 
             SetObject(key, outboundRules, size);
-        }
+		}
 
+		public void ClearInboundRules()
+		{
+			RemoveKeysContaining(inboundRulesKey);
+		}
 
-
-    }
+		public void ClearOutboundRules()
+		{
+			RemoveKeysContaining(outboundRulesKey);
+		}
+	}
 }

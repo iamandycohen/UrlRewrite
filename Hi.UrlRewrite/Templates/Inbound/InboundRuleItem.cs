@@ -3,12 +3,10 @@ using Sitecore.Data.Items;
 
 namespace Hi.UrlRewrite.Templates.Inbound
 {
-    public class InboundRuleItem : CustomItem
+	public class InboundRuleItem : CustomItem
     {
         public static readonly string TemplateId = "{69DCE9A6-D8C1-463D-AF95-B7FEB326013F}";
-
-        private int? _sortorder;
-
+		
         #region Inherited Base Templates
 
         private readonly BaseRuleItem _BaseRuleItem;
@@ -45,18 +43,7 @@ namespace Hi.UrlRewrite.Templates.Inbound
         {
             get
             {
-                if (!_sortorder.HasValue)
-                {
-                    int sortorder;
-                    if (!int.TryParse(base["__sortorder"], out sortorder))
-                    {
-                        sortorder = 0;
-                    }
-
-                    _sortorder = sortorder;
-                }
-
-                return _sortorder.Value;
+                return this.InnerItem.Appearance.Sortorder;
             }
         }
 
