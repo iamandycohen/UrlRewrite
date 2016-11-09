@@ -10,7 +10,8 @@ Changelog
 =========
 
 Varsion 1.8.1.3
-* Added support for Sitecore 8.1 Update 3
+* Added support for Sitecore 8.1 Update 2 & Update 3
+* Fixed sort order thanks to Dan Sinclair
 
 Version 1.8
 * Added reporting via analytics
