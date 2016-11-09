@@ -1,8 +1,5 @@
-﻿using Sitecore.Analytics.Aggregation.Data.Model;
-using Sitecore.Analytics.Model;
+﻿using Sitecore.Analytics.Model;
 using Sitecore.Diagnostics;
-using Sitecore.ExperienceAnalytics.Aggregation.Data.Model;
-using Sitecore.ExperienceAnalytics.Aggregation.Data.Schema;
 using Sitecore.ExperienceAnalytics.Aggregation.Dimensions;
 using System;
 using System.Collections.Concurrent;
@@ -21,16 +18,16 @@ namespace Hi.UrlRewrite.Analytics
         {
         }
 
-        protected override string ExtractDimensionKey(PageEventData pageEvent)
+        public override IEnumerable<string> ExtractDimensionKeys(PageEventData pageEvent)
         {
             Assert.IsNotNull(pageEvent, "pageEvent");
 
             var redirectItem = Sitecore.Data.Database.GetDatabase("master").GetItem(pageEvent.ItemId.ToString());
 
-            return redirectItem.Paths.ContentPath;
+            yield return redirectItem.Paths.ContentPath;
         }
 
-        protected override bool Filter(PageEventData pageEvent)
+        public override bool Filter(PageEventData pageEvent)
         {
             Assert.IsNotNull(pageEvent, "pageEvent");
             return pageEvent.PageEventDefinitionId.Equals(this.redirectEventId);

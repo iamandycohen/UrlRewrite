@@ -1,13 +1,13 @@
-﻿using Hi.UrlRewrite.Entities.Actions.Base;
+﻿using System;
+using System.Collections.Generic;
+using Hi.UrlRewrite.Entities.Actions.Base;
 using Hi.UrlRewrite.Entities.Conditions;
 using Hi.UrlRewrite.Entities.Match;
 using Hi.UrlRewrite.Entities.ServerVariables;
-using System;
-using System.Collections.Generic;
 
 namespace Hi.UrlRewrite.Entities.Rules
 {
-    [Serializable]
+	[Serializable]
     public class InboundRule : IBaseRule, IConditionList, /*IServerVariableList, IRequestHeaderList,*/ IResponseHeaderList
     {
         public Guid ItemId { get; set; }
@@ -40,7 +40,9 @@ namespace Hi.UrlRewrite.Entities.Rules
             ResponseHeaders = new List<ResponseHeader>();
         }
 
-
-
+	    public override string ToString()
+	    {
+		    return $"{Name} ({Pattern})";
+	    }
     }
 }

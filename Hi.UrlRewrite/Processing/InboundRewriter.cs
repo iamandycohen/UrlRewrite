@@ -123,7 +123,10 @@ namespace Hi.UrlRewrite.Processing
 
             if (ruleResult.FinalAction is IBaseRedirect)
             {
-                Tracking.TrackRedirect(ruleResult);
+                if (Configuration.AnalyticsTrackingEnabled)
+                {
+                    Tracking.TrackRedirect(ruleResult);
+                }
 
                 var redirectAction = ruleResult.FinalAction as IBaseRedirect;
                 int statusCode;

@@ -43,26 +43,18 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="Sitecore.Analytics">
-      <HintPath>..\..\..\inetpub\wwwroot\AndysPlayground\Website\bin\Sitecore.Analytics.dll</HintPath>
     </Reference>
     <Reference Include="Sitecore.Analytics.Aggregation">
-      <HintPath>..\..\..\inetpub\wwwroot\AndysPlayground\Website\bin\Sitecore.Analytics.Aggregation.dll</HintPath>
     </Reference>
     <Reference Include="Sitecore.Analytics.Core">
-      <HintPath>..\..\..\inetpub\wwwroot\AndysPlayground\Website\bin\Sitecore.Analytics.Core.dll</HintPath>
     </Reference>
     <Reference Include="Sitecore.Analytics.Model">
-      <HintPath>..\..\..\inetpub\wwwroot\AndysPlayground\Website\bin\Sitecore.Analytics.Model.dll</HintPath>
     </Reference>
     <Reference Include="Sitecore.ExperienceAnalytics">
-      <HintPath>..\..\..\inetpub\wwwroot\AndysPlayground\Website\bin\Sitecore.ExperienceAnalytics.dll</HintPath>
     </Reference>
     <Reference Include="Sitecore.Kernel">
-      <HintPath>..\..\..\inetpub\wwwroot\AndysPlayground\Website\bin\Sitecore.Kernel.dll</HintPath>
     </Reference>
-    <Reference Include="Sitecore.Logging, Version=1.2.0.30715, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\inetpub\wwwroot\AndysPlayground\Website\bin\Sitecore.Logging.dll</HintPath>
+    <Reference Include="Sitecore.Logging">
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Configuration" />
