@@ -19,10 +19,12 @@ In addition to adding Site specific redirect capabilities, I have modeled the da
 Changelog
 =========
 
-Varsion 1.8.1.3
-* Added support for Sitecore 8.1 Update 3
+Varsion 1.8.1.3 - https://github.com/iamandycohen/UrlRewrite/releases/tag/v1.8.1.3
+* Added support for Sitecore 8.1 Update 2 & Update 3
+* Fixed sort order thanks to Dan Sinclair
+* Fixed RulesEngine.GetRedirectFolderItems so that it only returns Redirect Folder templates
 
-Version 1.8
+Version 1.8 - https://github.com/iamandycohen/UrlRewrite/releases/tag/v1.8
 * Added reporting via analytics
 * added Url Rewrite to Experience Analytics Dashboard
 * Added prefetching of UrlRewriter item
@@ -31,7 +33,7 @@ Version 1.8
 * Fixed logic for allowing multiple rules to be processed during a request when a Redirect field "Stop Processing of Subsequent Rules" is set to false
 * Package now installs to master and web
 
-Version 1.7.2
+Version 1.7.2 - https://github.com/iamandycohen/UrlRewrite/releases/tag/v1.7.2
 * Fixed potential for a redirect loop if you have a database problem, you are using the html extension on the handler, and you have a custom error page that is pointing to an html page
 * Changed initialization of rules into an initialization pipeline
 * Removed reporting
@@ -39,10 +41,10 @@ Version 1.7.2
 * Fixed rebuilding of cache on save, publish or delete - no longer need to restart IIS to refresh the rules.
 * Added missing update to Default.aspx for UrlRewrite tester
 
-Version 1.7.1
+Version 1.7.1 - https://github.com/iamandycohen/UrlRewrite/releases/tag/v1.7.1
 * Fixed missing reporting item in the web database that prevented publishing from working after installing the module.
 
-Version 1.7
+Version 1.7 - https://github.com/iamandycohen/UrlRewrite/releases/tag/v1.7
 * Added outbound rules
 * Added ability to set response headers
 * Added inbound rule rewrite action
@@ -50,7 +52,7 @@ Version 1.7
 * Added Sample Rewrites
 * Added hit count tracking
 
-Version 1.6
+Version 1.6 - https://github.com/iamandycohen/UrlRewrite/releases/tag/v1.6
 * Added information about conditions to the Url Rewrite application in the Sitecore Admin UI
 * Fixed UrlRewriteHandler displaying blank page if the StaticMapHandler didn't find the file. Allowed exceptions to be bubbled up.
 * Added a new type of rediret action - Item Query Redirect which allows you to use a Sitecore Query to find an item.  Ability to utilize back references from conditions.
@@ -72,7 +74,7 @@ Version 1.1
 
 Version 1.0
 * Initial Release
-</Readme>
+      </Readme>
       <Publisher>Andy Cohen</Publisher>
       <PostStep />
       <PackageID />
