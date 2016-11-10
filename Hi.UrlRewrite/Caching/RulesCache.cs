@@ -1,21 +1,21 @@
-﻿using System.Collections.Generic;
-using System.IO;
-using System.Linq;
+﻿using System.IO;
 using System.Runtime.Serialization.Formatters.Binary;
 using Hi.UrlRewrite.Entities.Rules;
 using Sitecore;
 using Sitecore.Caching;
 using Sitecore.Data;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace Hi.UrlRewrite.Caching
 {
-	public class RulesCache : CustomCache
+    public class RulesCache : CustomCache
     {
         private Database _db;
         private const string inboundRulesKey = "InboundRules";
         private const string outboundRulesKey = "OutboundRules";
 
-        public RulesCache(Database db) : 
+        public RulesCache(Database db) :
             base(string.Format("Hi.UrlRewrite[{0}]", db.Name), StringUtil.ParseSizeString(Configuration.CacheSize))
         {
             _db = db;
@@ -44,7 +44,7 @@ namespace Hi.UrlRewrite.Caching
         public List<T> GetRules<T>(string key) where T : IBaseRule
         {
             List<T> returnRules = null;
-            var rules = GetObject(key) as IEnumerable<T>;
+            var rules = InnerCache.GetValue(key) as IEnumerable<T>;
             if (rules != null)
             {
                 returnRules = rules.ToList();
@@ -55,26 +55,18 @@ namespace Hi.UrlRewrite.Caching
 
         public void SetRules<T>(IEnumerable<T> outboundRules, string key) where T : IBaseRule
         {
-            long size;
+            InnerCache.Add(key, outboundRules);
+        }
 
-            using (var memoryStream = new MemoryStream())
-            {
-                var binaryFormatter = new BinaryFormatter();
-                binaryFormatter.Serialize(memoryStream, outboundRules.ToList());
-                size = memoryStream.Length;
-            }
+        public void ClearInboundRules()
+        {
+            RemoveKeysContaining(inboundRulesKey);
+        }
 
-            SetObject(key, outboundRules, size);
-		}
+        public void ClearOutboundRules()
+        {
+            RemoveKeysContaining(outboundRulesKey);
+        }
 
-		public void ClearInboundRules()
-		{
-			RemoveKeysContaining(inboundRulesKey);
-		}
-
-		public void ClearOutboundRules()
-		{
-			RemoveKeysContaining(outboundRulesKey);
-		}
-	}
+    }
 }

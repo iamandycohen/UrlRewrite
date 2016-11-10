@@ -146,6 +146,7 @@ namespace Hi.UrlRewrite.Processing
         private IEnumerable<Item> GetRedirectFolderItems()
         {
             var redirectFolderItems = db.GetItem(RedirectFolderItem.TemplateId).GetReferrers();
+
             return redirectFolderItems;
         }
 

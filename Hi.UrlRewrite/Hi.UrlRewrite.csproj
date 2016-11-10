@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+<Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
@@ -10,7 +10,7 @@
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>Hi.UrlRewrite</RootNamespace>
     <AssemblyName>Hi.UrlRewrite</AssemblyName>
-    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <SccProjectName>SAK</SccProjectName>
     <SccLocalPath>SAK</SccLocalPath>
@@ -23,6 +23,8 @@
     <IISExpressUseClassicPipelineMode />
     <SolutionDir Condition="$(SolutionDir) == '' Or $(SolutionDir) == '*Undefined*'">..\</SolutionDir>
     <RestorePackages>true</RestorePackages>
+    <TargetFrameworkProfile />
+    <UseGlobalApplicationHostFile />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -42,33 +44,61 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Sitecore.Analytics">
+    <Reference Include="Sitecore.Analytics, Version=10.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\Sitecore.Analytics.NoReferences.8.2.160729\lib\NET452\Sitecore.Analytics.dll</HintPath>
+      <Private>True</Private>
     </Reference>
-    <Reference Include="Sitecore.Analytics.Aggregation">
+    <Reference Include="Sitecore.Analytics.Aggregation, Version=10.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\Sitecore.Analytics.Aggregation.NoReferences.8.2.160729\lib\NET452\Sitecore.Analytics.Aggregation.dll</HintPath>
+      <Private>True</Private>
     </Reference>
-    <Reference Include="Sitecore.Analytics.Core">
+    <Reference Include="Sitecore.Analytics.Core, Version=10.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\Sitecore.Analytics.Core.NoReferences.8.2.160729\lib\NET452\Sitecore.Analytics.Core.dll</HintPath>
+      <Private>True</Private>
     </Reference>
-    <Reference Include="Sitecore.Analytics.Model">
+    <Reference Include="Sitecore.Analytics.Model, Version=10.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\Sitecore.Analytics.Model.NoReferences.8.2.160729\lib\NET452\Sitecore.Analytics.Model.dll</HintPath>
+      <Private>True</Private>
     </Reference>
-    <Reference Include="Sitecore.ExperienceAnalytics">
+    <Reference Include="Sitecore.ExperienceAnalytics, Version=2.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\Sitecore.ExperienceAnalytics.NoReferences.8.2.160729\lib\NET452\Sitecore.ExperienceAnalytics.dll</HintPath>
+      <Private>True</Private>
     </Reference>
-    <Reference Include="Sitecore.Kernel">
+    <Reference Include="Sitecore.ExperienceAnalytics.Aggregation, Version=2.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Sitecore.ExperienceAnalytics.Aggregation.NoReferences.8.2.160729\lib\NET452\Sitecore.ExperienceAnalytics.Aggregation.dll</HintPath>
+      <Private>True</Private>
     </Reference>
-    <Reference Include="Sitecore.Logging">
+    <Reference Include="Sitecore.Kernel, Version=10.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\Sitecore.Kernel.NoReferences.8.2.160729\lib\NET452\Sitecore.Kernel.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Sitecore.Logging, Version=10.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\Sitecore.Logging.NoReferences.8.2.160729\lib\NET452\Sitecore.Logging.dll</HintPath>
+      <Private>True</Private>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Configuration" />
-    <Reference Include="System.Core" />
+    <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="System.Drawing" />
     <Reference Include="System.Net.Http" />
     <Reference Include="System.Runtime.Serialization" />
     <Reference Include="System.ServiceModel" />
     <Reference Include="System.Web" />
-    <Reference Include="System.Xml.Linq" />
-    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="System.Web.ApplicationServices" />
+    <Reference Include="System.Web.DynamicData" />
+    <Reference Include="System.Web.Entity" />
+    <Reference Include="System.Web.Extensions" />
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Data" />
     <Reference Include="System.Xml" />
+    <Reference Include="System.Xml.Linq" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Analytics\ByUrlRewriteRedirect.cs" />

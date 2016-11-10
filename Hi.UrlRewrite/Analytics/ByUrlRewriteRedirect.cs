@@ -1,5 +1,8 @@
-﻿using Sitecore.Analytics.Model;
+﻿using Sitecore.Analytics.Aggregation.Data.Model;
+using Sitecore.Analytics.Model;
 using Sitecore.Diagnostics;
+using Sitecore.ExperienceAnalytics.Aggregation.Data.Model;
+using Sitecore.ExperienceAnalytics.Aggregation.Data.Schema;
 using Sitecore.ExperienceAnalytics.Aggregation.Dimensions;
 using System;
 using System.Collections.Concurrent;
