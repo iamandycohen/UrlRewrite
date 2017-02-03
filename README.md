@@ -5,6 +5,9 @@ While there are many Redirect / Rewrite modules available in the Sitecore Market
 
 In addition to adding Site specific redirect capabilities, I have modeled the data structure to closely match the functionality of Microsoft's IIS Url Rewrite plugin.
 
+*** This module is not supported if you are using xDB Cloud Edition ***
+Sitecore Support: "Creation of custom segments is not supported by the Experience Analytics in the xDB Cloud service. This should be fixed in a future service update." https://kb.sitecore.net/articles/966080
+
 
 Changelog
 =========
