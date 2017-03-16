@@ -15,7 +15,7 @@ namespace Hi.UrlRewrite.Caching
         private const string inboundRulesKey = "InboundRules";
         private const string outboundRulesKey = "OutboundRules";
 
-        public RulesCache(Database db) : 
+        public RulesCache(Database db) :
             base(string.Format("Hi.UrlRewrite[{0}]", db.Name), StringUtil.ParseSizeString(Configuration.CacheSize))
         {
             _db = db;
@@ -23,34 +23,28 @@ namespace Hi.UrlRewrite.Caching
 
         public List<InboundRule> GetInboundRules()
         {
-            List<InboundRule> returnRules = null;
-            var rules = GetObject(inboundRulesKey) as IEnumerable<InboundRule>;
-            if (rules != null)
-            {
-                returnRules = rules.ToList();
-            }
-
-            return returnRules;
+            return GetRules<InboundRule>(inboundRulesKey);
         }
 
         public void SetInboundRules(IEnumerable<InboundRule> inboundRules)
         {
-            long size;
-
-            using (var memoryStream = new MemoryStream())
-            {
-                var binaryFormatter = new BinaryFormatter();
-                binaryFormatter.Serialize(memoryStream, inboundRules.ToList());
-                size = memoryStream.Length;
-            }
-
-            SetObject(inboundRulesKey, inboundRules, size);
+            SetRules(inboundRules, inboundRulesKey);
         }
 
         public List<OutboundRule> GetOutboundRules()
         {
-            List<OutboundRule> returnRules = null;
-            var rules = GetObject(inboundRulesKey) as IEnumerable<OutboundRule>;
+            return GetRules<OutboundRule>(outboundRulesKey);
+        }
+
+        public void SetOutboundRules(IEnumerable<OutboundRule> outboundRules)
+        {
+            SetRules(outboundRules, outboundRulesKey);
+        }
+
+        public List<T> GetRules<T>(string key) where T : IBaseRule
+        {
+            List<T> returnRules = null;
+            var rules = InnerCache.GetValue(key) as IEnumerable<T>;
             if (rules != null)
             {
                 returnRules = rules.ToList();
@@ -59,18 +53,29 @@ namespace Hi.UrlRewrite.Caching
             return returnRules;
         }
 
-        public void SetOutboundRules(IEnumerable<OutboundRule> outboundRules)
+        public void SetRules<T>(IEnumerable<T> rules, string key) where T : IBaseRule
         {
+
             long size;
 
             using (var memoryStream = new MemoryStream())
             {
                 var binaryFormatter = new BinaryFormatter();
-                binaryFormatter.Serialize(memoryStream, outboundRules.ToList());
+                binaryFormatter.Serialize(memoryStream, rules.ToList());
                 size = memoryStream.Length;
             }
 
-            SetObject(outboundRulesKey, outboundRules, size);
+            InnerCache.Add(key, rules, size);
+        }
+
+        public void ClearInboundRules()
+        {
+            RemoveKeysContaining(inboundRulesKey);
+        }
+
+        public void ClearOutboundRules()
+        {
+            RemoveKeysContaining(outboundRulesKey);
         }
 
     }

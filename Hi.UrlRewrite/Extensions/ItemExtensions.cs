@@ -1,4 +1,8 @@
-﻿using Hi.UrlRewrite.Entities.Actions;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Web;
+using Hi.UrlRewrite.Entities.Actions;
 using Hi.UrlRewrite.Entities.Actions.Base;
 using Hi.UrlRewrite.Entities.Conditions;
 using Hi.UrlRewrite.Entities.Match;
@@ -17,14 +21,10 @@ using Hi.UrlRewrite.Templates.ServerVariables;
 using Sitecore;
 using Sitecore.Data;
 using Sitecore.Data.Items;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
 
 namespace Hi.UrlRewrite
 {
-    public static class ItemExtensions
+	public static class ItemExtensions
     {
 
         #region Conversions
@@ -216,6 +216,7 @@ namespace Hi.UrlRewrite
             }
 
             inboundRule.SiteNameRestriction = siteNameRestriction;
+            inboundRule.SortOrder = inboundRuleItem.SortOrder;
 
             return inboundRule;
         }
@@ -884,12 +885,23 @@ namespace Hi.UrlRewrite
             return !IsTemplate(item) && item.TemplateID.ToString().Equals(InboundRuleItem.TemplateId, StringComparison.InvariantCultureIgnoreCase);
         }
 
-        public static bool IsInboundRuleItemChild(this Item item)
+	    public static bool IsInboundRuleItemChild(this Item item)
+	    {
+		    return IsInboundRuleItemChild(item, null);
+	    }
+
+	    public static bool IsInboundRuleItemChild(this Item item, ID parentId)
         {
-            if (item.Parent != null)
+	        Item itemParent = item.Parent;
+            if (item.Parent == null && parentId != (ID)null)
             {
-                return !IsTemplate(item) && item.Parent.TemplateID.ToString().Equals(InboundRuleItem.TemplateId, StringComparison.InvariantCultureIgnoreCase);
+	            itemParent = item.Database.GetItem(parentId);
             }
+
+	        if (itemParent != null)
+	        {
+				return !IsTemplate(item) && itemParent.TemplateID.ToString().Equals(InboundRuleItem.TemplateId, StringComparison.InvariantCultureIgnoreCase);
+			}
             return false;
         }
 

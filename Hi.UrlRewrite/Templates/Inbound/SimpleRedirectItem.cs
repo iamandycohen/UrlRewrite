@@ -3,11 +3,11 @@ using Sitecore.Data.Items;
 
 namespace Hi.UrlRewrite.Templates.Inbound
 {
-    public partial class SimpleRedirectItem : CustomItem
+	public partial class SimpleRedirectItem : CustomItem
     {
 
         public static readonly string TemplateId = "{E30B15B9-34CD-419C-8671-60FEAAAD5A46}";
-
+		
         #region Inherited Base Templates
 
         private readonly BaseUrlRewriteItem _BaseUrlRewriteItem;
@@ -60,6 +60,13 @@ namespace Hi.UrlRewrite.Templates.Inbound
             }
         }
 
+        public int SortOrder
+        {
+            get
+            {
+                return this.InnerItem.Appearance.Sortorder;
+            }
+        }
 
         #endregion //Field Instance Methods
     }
