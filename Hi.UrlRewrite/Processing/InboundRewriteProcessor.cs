@@ -37,10 +37,6 @@ namespace Hi.UrlRewrite.Processing
 
                 if (requestResult == null || !requestResult.MatchedAtLeastOneRule) return;
 
-                //TODO: Curently this only reflects the result of Redirect Actions - make this call to logging reflect all action types
-                Log.Info(this, db, "Redirecting {0} to {1} [{2}]", requestResult.OriginalUri, requestResult.RewrittenUri,
-                    requestResult.StatusCode);
-
                 urlRewriter.ExecuteResult(httpContext, requestResult);
             }
             catch (ThreadAbortException)
@@ -72,9 +68,14 @@ namespace Hi.UrlRewrite.Processing
             var cache = RulesCacheManager.GetCache(db);
             var inboundRules = cache.GetInboundRules();
 
-            if (inboundRules == null)
+            if (inboundRules != null) return inboundRules;
+
+            Log.Info(this, db, "Initializing Inbound Rules.");
+
+            using (new SecurityDisabler())
             {
-                Log.Info(this, db, "Url Rewrite cache has not been initialized yet.");
+                var rulesEngine = new RulesEngine(db);
+                inboundRules = rulesEngine.GetCachedInboundRules();
             }
 
             return inboundRules;
