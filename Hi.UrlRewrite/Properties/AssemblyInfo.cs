@@ -7,7 +7,7 @@ using System.Runtime.InteropServices;
 // associated with an assembly.
 [assembly: AssemblyTitle("Hi.UrlRewrite")]
 [assembly: AssemblyDescription("Url Rewrite for Sitecore")]
-[assembly: AssemblyInformationalVersion("v1.8.1.3")]
+[assembly: AssemblyInformationalVersion("v1.8.1.3.1")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("Microsoft")]
 [assembly: AssemblyProduct("Url Rewrite")]

@@ -24,7 +24,9 @@ namespace Hi.UrlRewrite.Analytics
 
             var redirectItem = Sitecore.Data.Database.GetDatabase("master").GetItem(pageEvent.ItemId.ToString());
 
-            yield return redirectItem.Paths.ContentPath;
+            if (null != redirectItem) yield return redirectItem.Paths.ContentPath;
+
+            yield return string.Empty;
         }
 
         public override bool Filter(PageEventData pageEvent)
