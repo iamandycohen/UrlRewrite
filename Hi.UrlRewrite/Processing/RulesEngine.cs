@@ -162,9 +162,10 @@ namespace Hi.UrlRewrite.Processing
             var redirectTo = simpleRedirectItem.Target;
             string actionRewriteUrl;
             Guid? redirectItem;
+            string redirectItemQueryString;
             string redirectItemAnchor;
 
-            GetRedirectUrlOrItemId(redirectTo, out actionRewriteUrl, out redirectItem, out redirectItemAnchor);
+            GetRedirectUrlOrItemId(redirectTo, out actionRewriteUrl, out redirectItem, out redirectItemQueryString, out redirectItemAnchor);
 
             Log.Debug(this, simpleRedirectItem.Database, "Creating Inbound Rule From Simple Redirect Item - {0} - id: {1} actionRewriteUrl: {2} redirectItem: {3}", simpleRedirectItem.Name, simpleRedirectItem.ID.Guid, actionRewriteUrl, redirectItem);
 
@@ -177,6 +178,7 @@ namespace Hi.UrlRewrite.Processing
                     StatusCode = RedirectStatusCode.Permanent,
                     RewriteUrl = actionRewriteUrl,
                     RewriteItemId = redirectItem,
+                    RewriteItemQueryString = redirectItemQueryString,
                     RewriteItemAnchor = redirectItemAnchor,
                     StopProcessingOfSubsequentRules = false,
                     HttpCacheability = HttpCacheability.NoCache
@@ -219,15 +221,17 @@ namespace Hi.UrlRewrite.Processing
             return site;
         }
 
-        internal static void GetRedirectUrlOrItemId(LinkField redirectTo, out string actionRewriteUrl, out Guid? redirectItemId, out string redirectItemAnchor)
+        internal static void GetRedirectUrlOrItemId(LinkField redirectTo, out string actionRewriteUrl, out Guid? redirectItemId, out string redirectItemQueryString, out string redirectItemAnchor)
         {
             actionRewriteUrl = null;
             redirectItemId = null;
+            redirectItemQueryString = null;
             redirectItemAnchor = null;
 
             if (redirectTo.TargetItem != null)
             {
                 redirectItemId = redirectTo.TargetItem.ID.Guid;
+                redirectItemQueryString = redirectTo.QueryString;
                 redirectItemAnchor = redirectTo.Anchor;
             }
             else

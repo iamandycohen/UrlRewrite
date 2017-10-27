@@ -786,10 +786,12 @@ namespace Hi.UrlRewrite
             var redirectTo = baseRewriteUrlItem.RewriteUrl;
             string actionRewriteUrl;
             Guid? redirectItemId;
+            string redirectItemQueryString;
             string redirectItemAnchor;
 
-            RulesEngine.GetRedirectUrlOrItemId(redirectTo, out actionRewriteUrl, out redirectItemId, out redirectItemAnchor);
+            RulesEngine.GetRedirectUrlOrItemId(redirectTo, out actionRewriteUrl, out redirectItemId, out redirectItemQueryString, out redirectItemAnchor);
             redirectAction.RewriteItemId = redirectItemId;
+            redirectAction.RewriteItemQueryString = redirectItemQueryString;
             redirectAction.RewriteItemAnchor = redirectItemAnchor;
             redirectAction.RewriteUrl = actionRewriteUrl;
         }

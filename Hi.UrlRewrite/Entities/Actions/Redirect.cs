@@ -10,6 +10,7 @@ namespace Hi.UrlRewrite.Entities.Actions
         public string Name { get; set; }
         public string RewriteUrl { get; set; }
         public Guid? RewriteItemId { get; set; }
+        public string RewriteItemQueryString { get; set; }
         public string RewriteItemAnchor { get; set; }
         public bool AppendQueryString { get; set; }
 

@@ -388,6 +388,7 @@ namespace Hi.UrlRewrite.Processing
 
             var rewriteUrl = redirectAction.RewriteUrl;
             var rewriteItemId = redirectAction.RewriteItemId;
+            var rewriteItemQueryString = redirectAction.RewriteItemQueryString;
             var rewriteItemAnchor = redirectAction.RewriteItemAnchor;
 
             if (string.IsNullOrEmpty(rewriteUrl) && rewriteItemId == null)
@@ -398,7 +399,7 @@ namespace Hi.UrlRewrite.Processing
 
             if (rewriteItemId.HasValue)
             {
-                rewriteUrl = GetRewriteUrlFromItemId(rewriteItemId.Value, rewriteItemAnchor);
+                rewriteUrl = GetRewriteUrlFromItemId(rewriteItemId.Value, rewriteItemQueryString, rewriteItemAnchor);
             }
 
 
@@ -429,6 +430,7 @@ namespace Hi.UrlRewrite.Processing
 
             var rewriteUrl = redirectAction.RewriteUrl;
             var rewriteItemId = redirectAction.RewriteItemId;
+            var rewriteItemQueryString = redirectAction.RewriteItemQueryString;
             var rewriteItemAnchor = redirectAction.RewriteItemAnchor;
 
             if (string.IsNullOrEmpty(rewriteUrl) && rewriteItemId == null)
@@ -439,7 +441,7 @@ namespace Hi.UrlRewrite.Processing
 
             if (rewriteItemId.HasValue)
             {
-                rewriteUrl = GetRewriteUrlFromItemId(rewriteItemId.Value, rewriteItemAnchor);
+                rewriteUrl = GetRewriteUrlFromItemId(rewriteItemId.Value, rewriteItemQueryString, rewriteItemAnchor);
             }
 
             // process token replacements
@@ -487,7 +489,7 @@ namespace Hi.UrlRewrite.Processing
                 return;
             }
 
-            string rewriteUrl = GetRewriteUrlFromItemId(rewriteItemId.Value, null);
+            string rewriteUrl = GetRewriteUrlFromItemId(rewriteItemId.Value, null, null);
 
 
             // process token replacements
@@ -517,7 +519,7 @@ namespace Hi.UrlRewrite.Processing
             return null;
         }
 
-        private string GetRewriteUrlFromItemId(Guid rewriteItemId, string rewriteItemAnchor)
+        private string GetRewriteUrlFromItemId(Guid rewriteItemId, string rewriteItemQueryString, string rewriteItemAnchor)
         {
             string rewriteUrl = null;
 
@@ -544,6 +546,13 @@ namespace Hi.UrlRewrite.Processing
                         urlOptions.SiteResolving = true;
 
                         rewriteUrl = LinkManager.GetItemUrl(rewriteItem, urlOptions);
+                    }
+
+                    if (!string.IsNullOrEmpty(rewriteItemQueryString))
+                    {
+                        rewriteUrl += rewriteUrl.Contains("?")
+                          ? string.Format("&{0}", rewriteItemQueryString)
+                          : string.Format("?{0}", rewriteItemQueryString);
                     }
 
                     if (!string.IsNullOrEmpty(rewriteItemAnchor))
