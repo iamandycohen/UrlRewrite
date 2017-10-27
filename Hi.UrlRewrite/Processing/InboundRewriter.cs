@@ -414,7 +414,9 @@ namespace Hi.UrlRewrite.Processing
 
             if (redirectAction.AppendQueryString)
             {
-                rewriteUrl += uri.Query;
+                rewriteUrl += rewriteUrl.Contains("?")
+                ? uri.Query.Replace("?", "&")
+                : uri.Query;
             }
 
             rewriteUrl = RewriteHelper.ReplaceRuleBackReferences(inboundRuleMatch, rewriteUrl);
@@ -455,7 +457,9 @@ namespace Hi.UrlRewrite.Processing
 
             if (redirectAction.AppendQueryString)
             {
-                rewriteUrl += uri.Query;
+                rewriteUrl += rewriteUrl.Contains("?")
+                  ? uri.Query.Replace("?", "&")
+                  : uri.Query;
             }
 
             rewriteUrl = RewriteHelper.ReplaceRuleBackReferences(inboundRuleMatch, rewriteUrl);
@@ -550,9 +554,7 @@ namespace Hi.UrlRewrite.Processing
 
                     if (!string.IsNullOrEmpty(rewriteItemQueryString))
                     {
-                        rewriteUrl += rewriteUrl.Contains("?")
-                          ? string.Format("&{0}", rewriteItemQueryString)
-                          : string.Format("?{0}", rewriteItemQueryString);
+                        rewriteUrl += string.Format("?{0}", rewriteItemQueryString);
                     }
 
                     if (!string.IsNullOrEmpty(rewriteItemAnchor))
