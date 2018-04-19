@@ -10,7 +10,7 @@
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>Hi.UrlRewrite</RootNamespace>
     <AssemblyName>Hi.UrlRewrite</AssemblyName>
-    <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.6.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <SccProjectName>SAK</SccProjectName>
     <SccLocalPath>SAK</SccLocalPath>
@@ -25,6 +25,7 @@
     <RestorePackages>true</RestorePackages>
     <TargetFrameworkProfile />
     <UseGlobalApplicationHostFile />
+    <Use64BitIISExpress />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -44,44 +45,29 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Sitecore.Analytics, Version=10.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\packages\Sitecore.Analytics.NoReferences.8.2.160729\lib\NET452\Sitecore.Analytics.dll</HintPath>
-      <Private>True</Private>
+    <Reference Include="Sitecore.Analytics, Version=11.18.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Sitecore.Analytics.NoReferences.9.0.171219\lib\NET462\Sitecore.Analytics.dll</HintPath>
     </Reference>
-    <Reference Include="Sitecore.Analytics.Aggregation, Version=10.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\packages\Sitecore.Analytics.Aggregation.NoReferences.8.2.160729\lib\NET452\Sitecore.Analytics.Aggregation.dll</HintPath>
-      <Private>True</Private>
+    <Reference Include="Sitecore.Analytics.Aggregation, Version=11.40.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Sitecore.Analytics.Aggregation.NoReferences.9.0.171219\lib\NET462\Sitecore.Analytics.Aggregation.dll</HintPath>
     </Reference>
-    <Reference Include="Sitecore.Analytics.Core, Version=10.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\packages\Sitecore.Analytics.Core.NoReferences.8.2.160729\lib\NET452\Sitecore.Analytics.Core.dll</HintPath>
-      <Private>True</Private>
+    <Reference Include="Sitecore.Analytics.Core, Version=11.40.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Sitecore.Analytics.Core.NoReferences.9.0.171219\lib\NET462\Sitecore.Analytics.Core.dll</HintPath>
     </Reference>
-    <Reference Include="Sitecore.Analytics.Model, Version=10.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\packages\Sitecore.Analytics.Model.NoReferences.8.2.160729\lib\NET452\Sitecore.Analytics.Model.dll</HintPath>
-      <Private>True</Private>
+    <Reference Include="Sitecore.Analytics.Model, Version=11.40.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Sitecore.Analytics.Model.NoReferences.9.0.171219\lib\NET462\Sitecore.Analytics.Model.dll</HintPath>
     </Reference>
-    <Reference Include="Sitecore.ExperienceAnalytics, Version=2.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\packages\Sitecore.ExperienceAnalytics.NoReferences.8.2.160729\lib\NET452\Sitecore.ExperienceAnalytics.dll</HintPath>
-      <Private>True</Private>
+    <Reference Include="Sitecore.ExperienceAnalytics, Version=3.1.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Sitecore.ExperienceAnalytics.NoReferences.9.0.171219\lib\NET462\Sitecore.ExperienceAnalytics.dll</HintPath>
     </Reference>
-    <Reference Include="Sitecore.ExperienceAnalytics.Aggregation, Version=2.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\Sitecore.ExperienceAnalytics.Aggregation.NoReferences.8.2.160729\lib\NET452\Sitecore.ExperienceAnalytics.Aggregation.dll</HintPath>
-      <Private>True</Private>
+    <Reference Include="Sitecore.ExperienceAnalytics.Aggregation, Version=3.1.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Sitecore.ExperienceAnalytics.Aggregation.NoReferences.9.0.171219\lib\NET462\Sitecore.ExperienceAnalytics.Aggregation.dll</HintPath>
     </Reference>
-    <Reference Include="Sitecore.Kernel, Version=10.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\packages\Sitecore.Kernel.NoReferences.8.2.160729\lib\NET452\Sitecore.Kernel.dll</HintPath>
-      <Private>True</Private>
+    <Reference Include="Sitecore.Kernel, Version=11.1.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Sitecore.Kernel.NoReferences.9.0.171219\lib\NET462\Sitecore.Kernel.dll</HintPath>
     </Reference>
-    <Reference Include="Sitecore.Logging, Version=10.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\packages\Sitecore.Logging.NoReferences.8.2.160729\lib\NET452\Sitecore.Logging.dll</HintPath>
-      <Private>True</Private>
+    <Reference Include="Sitecore.Logging, Version=11.1.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Sitecore.Logging.NoReferences.9.0.171219\lib\NET462\Sitecore.Logging.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Configuration" />
@@ -94,9 +80,9 @@
     <Reference Include="System.Web.ApplicationServices" />
     <Reference Include="System.Web.DynamicData" />
     <Reference Include="System.Web.Entity" />
-    <Reference Include="System.Web.Extensions" />
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Data" />
+    <Reference Include="System.Web.Extensions" />
     <Reference Include="System.Xml" />
     <Reference Include="System.Xml.Linq" />
   </ItemGroup>
@@ -181,18 +167,18 @@
     <Compile Include="Processing\InboundRewriteProcessor.cs" />
     <Compile Include="Processing\InboundRewriter.cs" />
     <Compile Include="Rules\OutbounModuleIsInstalled.cs" />
-    <Compile Include="sitecore modules\Shell\UrlRewrite\Default.aspx.cs">
+    <Compile Include="layouts\UrlRewrite\Default.aspx.cs">
       <DependentUpon>Default.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
     </Compile>
-    <Compile Include="sitecore modules\Shell\UrlRewrite\Default.aspx.designer.cs">
+    <Compile Include="layouts\UrlRewrite\Default.aspx.designer.cs">
       <DependentUpon>Default.aspx</DependentUpon>
     </Compile>
-    <Compile Include="sitecore modules\Shell\UrlRewrite\UrlRewriter.aspx.cs">
+    <Compile Include="layouts\UrlRewrite\UrlRewriter.aspx.cs">
       <DependentUpon>UrlRewriter.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
     </Compile>
-    <Compile Include="sitecore modules\Shell\UrlRewrite\UrlRewriter.aspx.designer.cs">
+    <Compile Include="layouts\UrlRewrite\UrlRewriter.aspx.designer.cs">
       <DependentUpon>UrlRewriter.aspx</DependentUpon>
     </Compile>
     <Compile Include="Templates\Action\Base\BaseAppendQuerystringItem.cs" />
@@ -258,34 +244,43 @@
     <Content Include="App_Config\Include\Hi.UrlRewrite.config" />
     <Content Include="App_Config\Include\Hi.UrlRewrite.Prefetch.Web.config" />
     <Content Include="Properties\DataSources\System.Xml.Linq.XElement.datasource" />
-    <Content Include="sitecore modules\Shell\UrlRewrite\Content\app.css" />
-    <Content Include="sitecore modules\Shell\UrlRewrite\Content\bootstrap-theme.css" />
-    <Content Include="sitecore modules\Shell\UrlRewrite\Content\bootstrap-theme.min.css" />
-    <Content Include="sitecore modules\Shell\UrlRewrite\Content\bootstrap.css" />
-    <Content Include="sitecore modules\Shell\UrlRewrite\Content\bootstrap.min.css" />
-    <Content Include="sitecore modules\Shell\UrlRewrite\fonts\glyphicons-halflings-regular.svg" />
-    <Content Include="packages.config" />
-    <Content Include="sitecore modules\Shell\UrlRewrite\fonts\glyphicons-halflings-regular.woff" />
-    <Content Include="sitecore modules\Shell\UrlRewrite\fonts\glyphicons-halflings-regular.ttf" />
-    <Content Include="sitecore modules\Shell\UrlRewrite\fonts\glyphicons-halflings-regular.eot" />
-    <Content Include="sitecore modules\Shell\UrlRewrite\Content\bootstrap-theme.css.map" />
-    <Content Include="sitecore modules\Shell\UrlRewrite\Content\bootstrap.css.map" />
-    <Content Include="sitecore modules\Shell\UrlRewrite\Scripts\jquery-1.10.2.min.map" />
-    <Content Include="sitecore modules\Shell\UrlRewrite\UrlRewriter.aspx" />
+    <Content Include="layouts\UrlRewrite\Content\app.css" />
+    <Content Include="layouts\UrlRewrite\Content\bootstrap-theme.css" />
+    <Content Include="layouts\UrlRewrite\Content\bootstrap-theme.min.css" />
+    <Content Include="layouts\UrlRewrite\Content\bootstrap.css" />
+    <Content Include="layouts\UrlRewrite\Content\bootstrap.min.css" />
+    <Content Include="layouts\UrlRewrite\fonts\glyphicons-halflings-regular.svg" />
+    <Content Include="packages.config">
+      <SubType>Designer</SubType>
+    </Content>
+    <Content Include="layouts\UrlRewrite\fonts\glyphicons-halflings-regular.woff" />
+    <Content Include="layouts\UrlRewrite\fonts\glyphicons-halflings-regular.ttf" />
+    <Content Include="layouts\UrlRewrite\fonts\glyphicons-halflings-regular.eot" />
+    <Content Include="layouts\UrlRewrite\Content\bootstrap-theme.css.map" />
+    <Content Include="layouts\UrlRewrite\Content\bootstrap.css.map" />
+    <Content Include="layouts\UrlRewrite\Scripts\jquery-1.10.2.min.map" />
+    <Content Include="layouts\UrlRewrite\UrlRewriter.aspx" />
     <Content Include="App_Config\Include\Hi.UrlRewrite.Prefetch.Master.config" />
     <Content Include="App_Config\Include\Hi.UrlRewrite.Aggregation.config" />
-    <None Include="sitecore modules\Shell\UrlRewrite\Scripts\jquery-1.9.0.intellisense.js" />
-    <Content Include="sitecore modules\Shell\UrlRewrite\Scripts\app.js" />
-    <Content Include="sitecore modules\Shell\UrlRewrite\Scripts\bootstrap.js" />
-    <Content Include="sitecore modules\Shell\UrlRewrite\Scripts\bootstrap.min.js" />
-    <None Include="sitecore modules\Shell\UrlRewrite\Scripts\jquery-1.10.2-vsdoc.js" />
-    <Content Include="sitecore modules\Shell\UrlRewrite\Scripts\jquery-1.10.2.js" />
-    <Content Include="sitecore modules\Shell\UrlRewrite\Scripts\jquery-1.10.2.min.js" />
-    <Content Include="sitecore modules\Shell\UrlRewrite\Scripts\jquery-1.9.0.js" />
-    <Content Include="sitecore modules\Shell\UrlRewrite\Scripts\jquery-1.9.0.min.js" />
-    <Content Include="sitecore modules\Shell\UrlRewrite\Scripts\npm.js" />
-    <Content Include="sitecore modules\Shell\UrlRewrite\Default.aspx" />
-    <Content Include="sitecore modules\Shell\UrlRewrite\Scripts\jquery-1.9.0.min.map" />
+    <None Include="layouts\UrlRewrite\Scripts\jquery-1.9.0.intellisense.js" />
+    <Content Include="layouts\UrlRewrite\Scripts\app.js" />
+    <Content Include="layouts\UrlRewrite\Scripts\bootstrap.js" />
+    <Content Include="layouts\UrlRewrite\Scripts\bootstrap.min.js" />
+    <None Include="layouts\UrlRewrite\Scripts\jquery-1.10.2-vsdoc.js" />
+    <Content Include="layouts\UrlRewrite\Scripts\jquery-1.10.2.js" />
+    <Content Include="layouts\UrlRewrite\Scripts\jquery-1.10.2.min.js" />
+    <Content Include="layouts\UrlRewrite\Scripts\jquery-1.9.0.js" />
+    <Content Include="layouts\UrlRewrite\Scripts\jquery-1.9.0.min.js" />
+    <Content Include="layouts\UrlRewrite\Scripts\npm.js" />
+    <Content Include="layouts\UrlRewrite\Default.aspx" />
+    <Content Include="layouts\UrlRewrite\Scripts\jquery-1.9.0.min.map" />
+    <Content Include="web.config" />
+    <None Include="web.Debug.config">
+      <DependentUpon>web.config</DependentUpon>
+    </None>
+    <None Include="web.Release.config">
+      <DependentUpon>web.config</DependentUpon>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <None Include="Properties\PublishProfiles\Deploy.pubxml" />
