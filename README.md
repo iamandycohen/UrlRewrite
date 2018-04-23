@@ -12,6 +12,9 @@ Sitecore Support: "Creation of custom segments is not supported by the Experienc
 Changelog
 =========
 
+Version 1.9
+* Added support for Sitecore 9
+
 Varsion 1.8.2 - https://github.com/iamandycohen/UrlRewrite/releases/tag/v1.8.2
 * Added support for Sitecore 8.2
 

@@ -275,6 +275,7 @@
     <Content Include="layouts\UrlRewrite\Default.aspx" />
     <Content Include="layouts\UrlRewrite\Scripts\jquery-1.9.0.min.map" />
     <Content Include="web.config" />
+    <None Include="Properties\PublishProfiles\FolderProfile.pubxml" />
     <None Include="web.Debug.config">
       <DependentUpon>web.config</DependentUpon>
     </None>
