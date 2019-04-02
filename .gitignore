@@ -159,3 +159,8 @@ $RECYCLE.BIN/
 ../Assemblies/
 Assemblies/
 /packages
+.vs/Hi.UrlRewrite/v15/Server/sqlite3/storage.ide-shm
+.vs/Hi.UrlRewrite/v15/Server/sqlite3/storage.ide
+.vs/Hi.UrlRewrite/v15/Server/sqlite3/storage.ide-wal
+.vs/Hi.UrlRewrite/v15/Server/sqlite3/db.lock
+.vs/config/applicationhost.config
