@@ -21,7 +21,7 @@ namespace Hi.UrlRewrite.Processing
             try
             {
                 var urlRewriteProcessor = new InboundRewriteProcessor();
-                var requestArgs = new HttpRequestArgs(context, HttpRequestType.Begin);
+                var requestArgs = new HttpRequestArgs(new HttpContextWrapper(context), HttpRequestType.Begin);
                 var requestUri = context.Request.Url;
 
                 var siteContext = SiteContextFactory.GetSiteContext(requestUri.Host, requestUri.AbsolutePath,
@@ -60,7 +60,7 @@ namespace Hi.UrlRewrite.Processing
             // if we have come this far, the url rewrite processor didn't match on anything so the request is passed to the static request handler
 
             // Serve static content:
-            IHttpHandler staticFileHanlder = null;
+            IHttpHandler staticFileHandler = null;
 
             try
             {
@@ -71,7 +71,7 @@ namespace Hi.UrlRewrite.Processing
                 var systemWeb = AppDomain.CurrentDomain.Load(systemWebAssemblyName);
 
                 var staticFileHandlerType = systemWeb.GetType("System.Web.StaticFileHandler", true);
-                staticFileHanlder = Activator.CreateInstance(staticFileHandlerType, true) as IHttpHandler;
+                staticFileHandler = Activator.CreateInstance(staticFileHandlerType, true) as IHttpHandler;
 
             }
             catch (Exception)
@@ -79,11 +79,11 @@ namespace Hi.UrlRewrite.Processing
 
             }
 
-            if (staticFileHanlder != null)
+            if (staticFileHandler != null)
             {
                 try
                 {
-                    staticFileHanlder.ProcessRequest(context);
+                    staticFileHandler.ProcessRequest(context);
                 }
                 catch (HttpException httpException)
                 {

@@ -13,6 +13,9 @@ Sitecore Support: "Creation of custom segments is not supported by the Experienc
 
 Changelog
 =========
+Version 1.9.1 - 
+* Added support for Sitecore 9.1
+
 Version 1.9.0.2 - 
 * Added support for Sitecore 9.0 Update 2
 
