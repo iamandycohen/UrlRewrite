@@ -263,7 +263,16 @@ Version 1.0
       <SkipVersions>False</SkipVersions>
       <Converter>
         <ItemToEntryConverter>
-          <Transforms />
+          <Transforms>
+            <InstallerConfigurationTransform>
+              <Options>
+                <BehaviourOptions>
+                  <ItemMode>Undefined</ItemMode>
+                  <ItemMergeMode>Undefined</ItemMergeMode>
+                </BehaviourOptions>
+              </Options>
+            </InstallerConfigurationTransform>
+          </Transforms>
         </ItemToEntryConverter>
       </Converter>
       <Include>
@@ -311,7 +320,16 @@ Version 1.0
       <SkipVersions>False</SkipVersions>
       <Converter>
         <ItemToEntryConverter>
-          <Transforms />
+          <Transforms>
+            <InstallerConfigurationTransform>
+              <Options>
+                <BehaviourOptions>
+                  <ItemMode>Undefined</ItemMode>
+                  <ItemMergeMode>Undefined</ItemMergeMode>
+                </BehaviourOptions>
+              </Options>
+            </InstallerConfigurationTransform>
+          </Transforms>
         </ItemToEntryConverter>
       </Converter>
       <Include>
@@ -359,7 +377,16 @@ Version 1.0
       <SkipVersions>False</SkipVersions>
       <Converter>
         <ItemToEntryConverter>
-          <Transforms />
+          <Transforms>
+            <InstallerConfigurationTransform>
+              <Options>
+                <BehaviourOptions>
+                  <ItemMode>Undefined</ItemMode>
+                  <ItemMergeMode>Undefined</ItemMergeMode>
+                </BehaviourOptions>
+              </Options>
+            </InstallerConfigurationTransform>
+          </Transforms>
         </ItemToEntryConverter>
       </Converter>
       <Include>
@@ -407,7 +434,16 @@ Version 1.0
       <SkipVersions>False</SkipVersions>
       <Converter>
         <ItemToEntryConverter>
-          <Transforms />
+          <Transforms>
+            <InstallerConfigurationTransform>
+              <Options>
+                <BehaviourOptions>
+                  <ItemMode>Undefined</ItemMode>
+                  <ItemMergeMode>Undefined</ItemMergeMode>
+                </BehaviourOptions>
+              </Options>
+            </InstallerConfigurationTransform>
+          </Transforms>
         </ItemToEntryConverter>
       </Converter>
       <Include>
@@ -455,7 +491,16 @@ Version 1.0
       <SkipVersions>False</SkipVersions>
       <Converter>
         <ItemToEntryConverter>
-          <Transforms />
+          <Transforms>
+            <InstallerConfigurationTransform>
+              <Options>
+                <BehaviourOptions>
+                  <ItemMode>Undefined</ItemMode>
+                  <ItemMergeMode>Undefined</ItemMergeMode>
+                </BehaviourOptions>
+              </Options>
+            </InstallerConfigurationTransform>
+          </Transforms>
         </ItemToEntryConverter>
       </Converter>
       <Include>
@@ -503,7 +548,16 @@ Version 1.0
       <SkipVersions>False</SkipVersions>
       <Converter>
         <ItemToEntryConverter>
-          <Transforms />
+          <Transforms>
+            <InstallerConfigurationTransform>
+              <Options>
+                <BehaviourOptions>
+                  <ItemMode>Undefined</ItemMode>
+                  <ItemMergeMode>Undefined</ItemMergeMode>
+                </BehaviourOptions>
+              </Options>
+            </InstallerConfigurationTransform>
+          </Transforms>
         </ItemToEntryConverter>
       </Converter>
       <Include>
@@ -551,7 +605,16 @@ Version 1.0
       <SkipVersions>False</SkipVersions>
       <Converter>
         <ItemToEntryConverter>
-          <Transforms />
+          <Transforms>
+            <InstallerConfigurationTransform>
+              <Options>
+                <BehaviourOptions>
+                  <ItemMode>Undefined</ItemMode>
+                  <ItemMergeMode>Undefined</ItemMergeMode>
+                </BehaviourOptions>
+              </Options>
+            </InstallerConfigurationTransform>
+          </Transforms>
         </ItemToEntryConverter>
       </Converter>
       <Include>
@@ -599,7 +662,16 @@ Version 1.0
       <SkipVersions>False</SkipVersions>
       <Converter>
         <ItemToEntryConverter>
-          <Transforms />
+          <Transforms>
+            <InstallerConfigurationTransform>
+              <Options>
+                <BehaviourOptions>
+                  <ItemMode>Undefined</ItemMode>
+                  <ItemMergeMode>Undefined</ItemMergeMode>
+                </BehaviourOptions>
+              </Options>
+            </InstallerConfigurationTransform>
+          </Transforms>
         </ItemToEntryConverter>
       </Converter>
       <Include>
@@ -704,7 +776,16 @@ Version 1.0
       <SkipVersions>False</SkipVersions>
       <Converter>
         <ItemToEntryConverter>
-          <Transforms />
+          <Transforms>
+            <InstallerConfigurationTransform>
+              <Options>
+                <BehaviourOptions>
+                  <ItemMode>Undefined</ItemMode>
+                  <ItemMergeMode>Undefined</ItemMergeMode>
+                </BehaviourOptions>
+              </Options>
+            </InstallerConfigurationTransform>
+          </Transforms>
         </ItemToEntryConverter>
       </Converter>
       <Include>
@@ -752,7 +833,16 @@ Version 1.0
       <SkipVersions>False</SkipVersions>
       <Converter>
         <ItemToEntryConverter>
-          <Transforms />
+          <Transforms>
+            <InstallerConfigurationTransform>
+              <Options>
+                <BehaviourOptions>
+                  <ItemMode>Undefined</ItemMode>
+                  <ItemMergeMode>Undefined</ItemMergeMode>
+                </BehaviourOptions>
+              </Options>
+            </InstallerConfigurationTransform>
+          </Transforms>
         </ItemToEntryConverter>
       </Converter>
       <Include>
@@ -914,7 +1004,16 @@ Version 1.0
       <SkipVersions>False</SkipVersions>
       <Converter>
         <ItemToEntryConverter>
-          <Transforms />
+          <Transforms>
+            <InstallerConfigurationTransform>
+              <Options>
+                <BehaviourOptions>
+                  <ItemMode>Undefined</ItemMode>
+                  <ItemMergeMode>Undefined</ItemMergeMode>
+                </BehaviourOptions>
+              </Options>
+            </InstallerConfigurationTransform>
+          </Transforms>
         </ItemToEntryConverter>
       </Converter>
       <Include>
@@ -1019,7 +1118,16 @@ Version 1.0
       <SkipVersions>False</SkipVersions>
       <Converter>
         <ItemToEntryConverter>
-          <Transforms />
+          <Transforms>
+            <InstallerConfigurationTransform>
+              <Options>
+                <BehaviourOptions>
+                  <ItemMode>Undefined</ItemMode>
+                  <ItemMergeMode>Undefined</ItemMergeMode>
+                </BehaviourOptions>
+              </Options>
+            </InstallerConfigurationTransform>
+          </Transforms>
         </ItemToEntryConverter>
       </Converter>
       <Include>
@@ -1061,6 +1169,44 @@ Version 1.0
       <Exclude />
       <Name>web templates</Name>
     </items>
+    <files>
+      <Root>/layouts/UrlRewrite</Root>
+      <Converter>
+        <FileToEntryConverter>
+          <Root>/</Root>
+          <Transforms>
+            <InstallerConfigurationTransform>
+              <Options>
+                <BehaviourOptions>
+                  <ItemMode>Undefined</ItemMode>
+                  <ItemMergeMode>Undefined</ItemMergeMode>
+                </BehaviourOptions>
+              </Options>
+            </InstallerConfigurationTransform>
+          </Transforms>
+        </FileToEntryConverter>
+      </Converter>
+      <Include>
+        <FileNameFilter>
+          <Pattern />
+          <AcceptDirectories>False</AcceptDirectories>
+        </FileNameFilter>
+        <FileDateFilter>
+          <FilterType>CreatedFilter</FilterType>
+          <ActionDateTo />
+          <ActionDateFrom />
+          <NotOlderThan />
+        </FileDateFilter>
+        <FileDateFilter>
+          <FilterType>ModifiedFilter</FilterType>
+          <ActionDateTo />
+          <ActionDateFrom />
+          <NotOlderThan />
+        </FileDateFilter>
+      </Include>
+      <Exclude />
+      <Name>Rewrite Layout</Name>
+    </files>
   </Sources>
   <Converter>
     <TrivialConverter>

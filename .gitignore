@@ -164,3 +164,8 @@ Assemblies/
 .vs/Hi.UrlRewrite/v15/Server/sqlite3/storage.ide-wal
 .vs/Hi.UrlRewrite/v15/Server/sqlite3/db.lock
 .vs/config/applicationhost.config
+.vs/Hi.UrlRewrite/v16/Server/sqlite3/storage.ide
+.vs/Hi.UrlRewrite/config/applicationhost.config
+.vs/Hi.UrlRewrite/v16/Server/sqlite3/db.lock
+.vs/Hi.UrlRewrite/v16/Server/sqlite3/storage.ide-shm
+.vs/Hi.UrlRewrite/v16/Server/sqlite3/storage.ide-wal

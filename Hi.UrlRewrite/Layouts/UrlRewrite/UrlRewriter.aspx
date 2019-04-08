@@ -1,4 +1,4 @@
-﻿<%@ Page Language="C#" AutoEventWireup="true" CodeBehind="UrlRewriter.aspx.cs" Inherits="Hi.UrlRewrite.sitecore_modules.Shell.UrlRewrite.UrlRewriter" %>
+﻿<%@ Page Language="C#" AutoEventWireup="true" CodeBehind="UrlRewriter.aspx.cs" Inherits="Hi.UrlRewrite.Layouts.UrlRewrite.UrlRewriter" %>
 
 <!DOCTYPE html>
 
