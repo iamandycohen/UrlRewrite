@@ -7,7 +7,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace Hi.UrlRewrite.sitecore_modules.Shell.UrlRewrite
+namespace Hi.UrlRewrite.Layouts.UrlRewrite
 {
 
 

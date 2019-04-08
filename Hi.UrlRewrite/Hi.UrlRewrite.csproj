@@ -571,11 +571,11 @@
     <Compile Include="sitecore modules\Shell\UrlRewrite\Default.aspx.designer.cs">
       <DependentUpon>Default.aspx</DependentUpon>
     </Compile>
-    <Compile Include="sitecore modules\Shell\UrlRewrite\UrlRewriter.aspx.cs">
+    <Compile Include="Layouts\UrlRewrite\UrlRewriter.aspx.cs">
       <DependentUpon>UrlRewriter.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
     </Compile>
-    <Compile Include="sitecore modules\Shell\UrlRewrite\UrlRewriter.aspx.designer.cs">
+    <Compile Include="Layouts\UrlRewrite\UrlRewriter.aspx.designer.cs">
       <DependentUpon>UrlRewriter.aspx</DependentUpon>
     </Compile>
     <Compile Include="Templates\Action\Base\BaseAppendQuerystringItem.cs" />
@@ -653,7 +653,7 @@
     <Content Include="sitecore modules\Shell\UrlRewrite\Content\bootstrap-theme.css.map" />
     <Content Include="sitecore modules\Shell\UrlRewrite\Content\bootstrap.css.map" />
     <Content Include="sitecore modules\Shell\UrlRewrite\Scripts\jquery-1.10.2.min.map" />
-    <Content Include="sitecore modules\Shell\UrlRewrite\UrlRewriter.aspx" />
+    <Content Include="Layouts\UrlRewrite\UrlRewriter.aspx" />
     <Content Include="App_Config\Include\Hi.UrlRewrite.Aggregation.config" />
     <Content Include="App_Config\Include\Hi.UrlRewrite.Prefetch.config" />
     <None Include="sitecore modules\Shell\UrlRewrite\Scripts\jquery-1.9.0.intellisense.js" />

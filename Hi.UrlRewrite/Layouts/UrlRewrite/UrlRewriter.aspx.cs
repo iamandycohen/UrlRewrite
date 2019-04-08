@@ -1,17 +1,10 @@
-﻿using Hi.UrlRewrite.Caching;
-using Hi.UrlRewrite.Entities.Rules;
+﻿using System;
+using System.Web;
 using Hi.UrlRewrite.Processing;
 using Hi.UrlRewrite.Processing.Results;
-using Sitecore.Data;
 using Sitecore.SecurityModel;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
-using System.Web.UI;
-using System.Web.UI.WebControls;
 
-namespace Hi.UrlRewrite.sitecore_modules.Shell.UrlRewrite
+namespace Hi.UrlRewrite.Layouts.UrlRewrite
 {
     public partial class UrlRewriter : System.Web.UI.Page
     {
