@@ -1,6 +1,8 @@
 Url Rewrite
 ===========
 
+A fork of Andy Cohen's Url Rewrite Sitecore module updated for Sitecore 9.x.
+
 While there are many Redirect / Rewrite modules available in the Sitecore Marketplace, I created this one to address the fact that most of them cannot create redirects that are Site specific.
 
 In addition to adding Site specific redirect capabilities, I have modeled the data structure to closely match the functionality of Microsoft's IIS Url Rewrite plugin.
@@ -11,11 +13,13 @@ Sitecore Support: "Creation of custom segments is not supported by the Experienc
 
 Changelog
 =========
+Version 1.9.0.2 - 
+* Added support for Sitecore 9.0 Update 2
 
-Varsion 1.8.2 - https://github.com/iamandycohen/UrlRewrite/releases/tag/v1.8.2
+Version 1.8.2 - https://github.com/iamandycohen/UrlRewrite/releases/tag/v1.8.2
 * Added support for Sitecore 8.2
 
-Varsion 1.8.1.3 - https://github.com/iamandycohen/UrlRewrite/releases/tag/v1.8.1.3
+Version 1.8.1.3 - https://github.com/iamandycohen/UrlRewrite/releases/tag/v1.8.1.3
 * Added support for Sitecore 8.1 Update 2 & Update 3
 * Fixed sort order thanks to Dan Sinclair
 * Fixed RulesEngine.GetRedirectFolderItems so that it only returns Redirect Folder templates
